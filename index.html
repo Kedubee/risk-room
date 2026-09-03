@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Risk Room — playable prototypes</title>
+<link rel="icon" href="data:,">
+<!--
+  The collection hub. One screen, one job: pick a game.
+
+  Source of truth for this file is 04_Sandbox/EduGames/ in the workspace repo. The public
+  site is a BUILD ARTIFACT assembled by build.ps1 and force-pushed to a throwaway repo —
+  the same pattern Watershed used (03_Methodology/Deploy_GitHub_Pages.md). Nothing here is
+  edited on the deployed side.
+
+  Adding a game: one entry in GAMES below, one row in build.ps1's $GAMES list. Two kinds of
+  row — a prebuilt file to copy, or a project to compile first (build.ps1 handles both).
+
+  The hub itself stays self-contained: no dependencies, no assets, no external requests, and
+  card art painted rather than loaded. The GAMES it points at do not have to be — the quake
+  prototype ships 38 MB of Poly Haven CC0 scenery, which is fine because that licence permits
+  redistribution and it was verified first-hand (ASSET_MANIFEST.md, 2026-08-14).
+
+  Self-contained: no dependencies, no assets, no external requests. Same rule as the games.
+-->
+<style>
+  :root{ --ink:#0b0d10; --paper:#f7f4ee; --accent:#ff7a2f; --dim:rgba(247,244,238,.55) }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%;background:var(--ink);overflow-x:hidden}
+  body{font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    color:var(--paper);padding:0 20px 70px;
+    background:
+      radial-gradient(1100px 620px at 18% -8%, rgba(87,199,255,.09), transparent 60%),
+      radial-gradient(900px 560px at 88% 4%, rgba(255,122,47,.08), transparent 62%),
+      var(--ink)}
+  .wrap{max-width:1000px;margin:0 auto}
+
+  header{padding:76px 0 12px}
+  h1{font-size:40px;letter-spacing:-.025em;font-weight:800;line-height:1.05}
+  h1 span{color:var(--accent)}
+  .sub{font-size:16px;color:var(--dim);margin-top:14px;max-width:640px;line-height:1.6}
+  .rule{height:1px;background:rgba(255,255,255,.10);margin:34px 0 30px}
+
+  /* min(300px,100%) rather than 300px: a fixed minimum cannot shrink, so on a 320px phone
+     the track stayed 300 wide, the body padding pushed it past the edge and the page
+     scrolled sideways. This lets the track collapse to the container on narrow screens. */
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))}
+  .card{display:block;text-decoration:none;color:inherit;position:relative;
+    background:#14171c;border:1px solid rgba(255,255,255,.11);border-radius:16px;
+    overflow:hidden;transition:transform .12s,border-color .12s,background .12s}
+  a.card:hover{transform:translateY(-4px);border-color:var(--accent);background:#191d23}
+  .card.soon{opacity:.62}
+  .art{height:112px;position:relative;overflow:hidden}
+  .art canvas{display:block;width:100%;height:100%}
+  .art::after{content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(20,23,28,0) 30%,rgba(20,23,28,.96) 100%)}
+  .body{padding:16px 18px 18px}
+  .tag{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--dim);display:flex;gap:8px;align-items:center;margin-bottom:7px}
+  .tag i{width:7px;height:7px;border-radius:2px;font-style:normal;flex:none}
+  h2{font-size:20px;letter-spacing:-.01em;margin-bottom:6px}
+  .card p{font-size:13.5px;color:var(--dim);line-height:1.6}
+  .meta{margin-top:13px;padding-top:11px;border-top:1px solid rgba(255,255,255,.09);
+    font-size:11.5px;color:var(--dim);display:flex;flex-wrap:wrap;gap:6px}
+  .meta b{font-weight:700;padding:2px 9px;border-radius:99px;background:rgba(255,255,255,.08);
+    color:var(--paper);opacity:.8}
+  .note{margin-top:12px;font-size:11.5px;line-height:1.6;color:#ffb3ba}
+
+  .badge{position:absolute;top:12px;right:12px;z-index:2;font-size:10px;font-weight:800;
+    letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;
+    background:rgba(11,13,16,.82);border:1px solid rgba(255,255,255,.2)}
+  .badge.play{color:#7ee787;border-color:rgba(126,231,135,.5)}
+  .badge.local{color:#ffd166;border-color:rgba(255,209,102,.45)}
+
+  footer{margin-top:48px;padding-top:22px;border-top:1px solid rgba(255,255,255,.09);
+    font-size:12px;color:var(--dim);line-height:1.75;max-width:720px}
+  footer b{color:var(--paper);opacity:.85;font-weight:700}
+  @media (max-width:600px){
+    body{padding:0 14px 48px}
+    header{padding:44px 0 10px}
+    h1{font-size:28px}
+    .sub{font-size:14px}
+    .rule{margin:24px 0 22px}
+    .art{height:92px}
+    h2{font-size:18px}
+    footer{font-size:11.5px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Risk <span>Room</span></h1>
+    <p class="sub">Playable prototypes about how disasters get prevented — and about the fact
+      that prevention is invisible when it works. Each one is built around a real body of
+      guidance rather than a quiz bolted onto a game, and each names its sources inside.</p>
+  </header>
+  <div class="rule"></div>
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    <b>These are prototypes, not published material.</b> They are internship work in
+    progress, not an official publication of any organisation, and no organisation has
+    endorsed them. Where a game cites a body of guidance, the citation is to that
+    organisation's own published material and is named on the card or inside the game.<br><br>
+    Everything here runs in the browser with nothing to install and no data collected.
+    Third-party scenery is Poly Haven, CC0. Where a game leans on a body of guidance, the
+    citation is inside the game and names the document rather than the organisation's
+    reputation.
+  </footer>
+</div>
+
+<script>
+(() => {
+'use strict'
+// One entry per game. `href` is relative because the deployed layout is assembled by
+// build.ps1 into exactly this shape; `art` paints the card header so the hub needs no
+// image files, same constraint the games hold themselves to.
+const GAMES = [
+  {
+    id: 'compound', href: 'compound/index.html', status: 'play',
+    kind: 'Bullet-heaven', col: '#ff7a2f',
+    title: 'Compound',
+    desc: 'You are a place that hazards keep arriving at. The upgrades are ten real ' +
+          'disaster-risk measures, and measures that go together offer more. When the run ' +
+          'ends, the place asks whether you can say why — and what you answer carries into ' +
+          'the next one.',
+    meta: ['UNDRR guidance', 'Six places', 'Four difficulties', 'No install'],
+    art: 'compound',
+  },
+  {
+    id: 'quake', href: 'quake/index.html', status: 'play',
+    kind: 'First-person drill · 1 min', col: '#c2703f',
+    title: 'Drop, Cover, Hold On',
+    desc: 'An earthquake, indoors, ten seconds. A drill rather than a quiz: the verdict is ' +
+          'read off where you actually are and what you are actually under when the shaking ' +
+          'stops, never off a button. UNDRR and Italy\u2019s civil protection disagree about ' +
+          'the doorway — both positions are shown and neither is resolved for you.',
+    meta: ['UNDRR + Italy DPC', 'Poly Haven CC0 scenery', '3D, ~38 MB', 'No install'],
+    note: 'Loads about 38 MB of scenery on first open — give it a moment.',
+    art: 'quake',
+  },
+]
+
+// --- card art, painted rather than loaded -------------------------------------------
+// Each one is a glance at the game it fronts: hazards arriving from every side, and a room
+// with the table you are supposed to get under.
+const PAINT = {
+  compound (g, W, H) {
+    g.fillStyle = '#0d1117'; g.fillRect(0, 0, W, H)
+    g.strokeStyle = 'rgba(255,255,255,.05)'
+    for (let x = 0; x < W; x += 26) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, H); g.stroke() }
+    for (let y = 0; y < H; y += 26) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke() }
+    const cx = W / 2, cy = H * 0.62
+    g.fillStyle = 'rgba(255,157,226,.13)'
+    g.beginPath(); g.arc(cx, cy, 46, 0, 6.283); g.fill()
+    const cols = ['#c2703f', '#7f8ea3', '#4f86c6', '#e8763a']
+    for (let i = 0; i < 22; i++) {
+      const a = i * 1.618 * 3.1, d = 52 + (i * 37 % 96)
+      g.fillStyle = cols[i % cols.length]
+      g.globalAlpha = .85
+      g.beginPath(); g.arc(cx + Math.cos(a) * d, cy + Math.sin(a) * d * .62, 4.4, 0, 6.283); g.fill()
+    }
+    g.globalAlpha = 1
+    g.fillStyle = '#f7f4ee'
+    g.beginPath(); g.arc(cx, cy, 8, 0, 6.283); g.fill()
+  },
+  quake (g, W, H) {
+    g.fillStyle = '#100c0a'; g.fillRect(0, 0, W, H)
+    g.fillStyle = 'rgba(140,110,80,.22)'
+    g.fillRect(0, H * .72, W, H * .28)
+    g.fillStyle = 'rgba(190,160,120,.5)'
+    g.fillRect(W * .32, H * .44, W * .36, 9)
+    g.fillRect(W * .34, H * .48, 8, H * .26)
+    g.fillRect(W * .64, H * .48, 8, H * .26)
+    g.fillStyle = '#f7f4ee'
+    g.beginPath(); g.arc(W * .5, H * .64, 8, 0, 6.283); g.fill()
+    g.strokeStyle = 'rgba(196,120,70,.5)'; g.lineWidth = 2.5
+    g.beginPath()
+    let y = H * .16
+    for (let x = 0; x <= W; x += 22) { g.lineTo(x, y); y = y === H * .16 ? H * .1 : H * .16 }
+    g.stroke()
+  },
+}
+
+const grid = document.getElementById('grid')
+for (const G of GAMES) {
+  const el = document.createElement(G.href ? 'a' : 'div')
+  el.className = 'card' + (G.href ? '' : ' soon')
+  if (G.href) el.href = G.href
+  el.innerHTML =
+    `<div class="badge ${G.status === 'play' ? 'play' : 'local'}">` +
+      `${G.status === 'play' ? 'Playable' : 'Local only'}</div>` +
+    `<div class="art"><canvas width="600" height="224"></canvas></div>` +
+    `<div class="body">` +
+      `<div class="tag"><i style="background:${G.col}"></i>${G.kind}</div>` +
+      `<h2>${G.title}</h2><p>${G.desc}</p>` +
+      `<div class="meta">${G.meta.map(m => `<b>${m}</b>`).join('')}</div>` +
+      (G.note ? `<div class="note">${G.note}</div>` : '') +
+    `</div>`
+  grid.appendChild(el)
+  const cv = el.querySelector('canvas')
+  PAINT[G.art](cv.getContext('2d'), cv.width, cv.height)
+}
+})()
+</script>
+</body>
+</html>

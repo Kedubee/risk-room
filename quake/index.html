@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ten Seconds Indoors — Prepare, Shake, After</title>
+<link rel="icon" href="data:,">
+  <script type="module" crossorigin src="./assets/index-B7Zbyg-T.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-B7_qcneW.css">
+</head>
+<body>
+
+<div id="boot"><div id="bar"><i></i></div><p id="boot-msg">Loading environment, materials and models…</p></div>
+<div id="err"></div>
+
+<div id="coverTint"></div>
+<div id="retic"></div>
+<div id="zone"></div>
+<div id="prompt"><span class="kbd">Shift</span><span id="p-text">Cover</span></div>
+<div id="flash"></div>
+<div id="banner"><b id="banner-t"></b><span id="banner-s"></span></div>
+
+<header id="top">
+  <div>
+    <div class="tag"><span id="phase-tag">Prepare</span> · indoor earthquake scenario</div>
+    <div class="sub" id="phase-sub">Answer key: UNDRR + Dipartimento della Protezione Civile</div>
+  </div>
+  <div id="timer">15</div>
+</header>
+
+<button id="tCover">COVER</button>
+<button id="tAct">E</button>
+<div id="lockhint"><span class="dot"></span><span id="lockmsg">Click to lock the pointer — your mouse stays inside the window</span></div>
+
+<aside id="tasks"></aside>
+
+<!-- signs: act 0, a judgement, not a prediction -->
+<div id="signs"><div class="card">
+  <div class="signcount"><span id="s-n"></span><i id="s-dots"></i></div>
+  <h3 id="s-scene"></h3>
+  <div id="s-opts"></div>
+  <div id="s-reveal">
+    <div class="rev"><b id="s-verdict"></b><span class="tagline" id="s-source"></span></div>
+    <p id="s-why"></p>
+    <button class="btn" id="s-next">Next</button>
+  </div>
+</div></div>
+
+<!-- the brief: shown once, before the run starts -->
+<div id="brief"><div class="card">
+  <h3>Four acts, one run</h3>
+  <div class="sub">You go through this once, from the days before to the minutes after. There is no settings screen in between.</div>
+  <div class="steps">
+    <div class="step"><b>0 · Signs</b><p>Six things people take for warnings. Decide what each one is actually worth. <b>You are not being asked to predict.</b></p></div>
+    <div class="step"><b>1 · Prepare <i>15s</i></b><p>Walk the room and fix things with <span class="kbd">E</span>. <b>The earthquake arrives whether or not you finish.</b></p></div>
+    <div class="step"><b>2 · Shaking <i>10s</i></b><p>Move your body to a safe place. Whatever you left undone is what falls here.</p></div>
+    <div class="step"><b>3 · After <i>30s</i></b><p>Do what has to be done and get out before the aftershock. What fell is still on the floor.</p></div>
+  </div>
+  <p class="foot">Every verdict is read from <b>what you actually did</b>. You are asked before anything is revealed.</p>
+  <button class="btn" id="begin">Begin</button>
+</div></div>
+
+<div id="startbar">
+  <button id="go">Start</button>
+  <p id="startnote">The pointer locks on start · <span class="kbd">Esc</span> to release</p>
+</div>
+
+<aside id="keys">
+  <div><span class="kbd">W</span><span class="kbd">A</span><span class="kbd">S</span><span class="kbd">D</span> move</div>
+  <div><span class="kbd">E</span> interact · <span class="kbd">Shift</span> cover</div>
+  <div class="dim"><span class="kbd">Esc</span> release pointer</div>
+</aside>
+
+<aside id="panel">
+  <details id="lights">
+    <summary>Lighting</summary>
+    <div class="sl"><span>Exposure</span><input type="range" id="sl-exp" min="0.25" max="1.40" step="0.01" value="0.70"><b id="v-exp">0.70</b></div>
+    <div class="sl"><span>Ambient</span><input type="range" id="sl-env" min="0.00" max="1.50" step="0.01" value="0.40"><b id="v-env">0.40</b></div>
+    <div class="sl"><span>Window</span><input type="range" id="sl-sun" min="0.00" max="4.00" step="0.05" value="1.45"><b id="v-sun">1.45</b></div>
+  </details>
+</aside>
+
+<div id="credits">Poly Haven CC0</div>
+
+<div id="debrief"><div class="card">
+  <h3 id="d-q"></h3>
+  <div id="d-opts"></div>
+  <p class="foot" id="d-foot">Answer first, see the answer second. Reverse the order and the effect is gone.</p>
+</div></div>
+
+<div id="verdict"><div class="card">
+  <h3 id="v-title"></h3>
+  <div class="sub" id="v-sub"></div>
+  <div id="v-src"></div>
+  <p class="foot" id="v-foot"></p>
+  <button class="btn" id="again">Again</button>
+</div></div>
+
+</body>
+</html>
