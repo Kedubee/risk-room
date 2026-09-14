@@ -274,6 +274,10 @@
     background:rgba(255,255,255,.09)}
   .card .pairs span.ph{background:rgba(255,209,102,.22);color:#ffd166;opacity:1}
   .card .pairs span.pd{background:rgba(126,231,135,.18);color:#7ee787;opacity:1}
+  /* What taking this card actually changes, in numbers. Only the rows that move are printed. */
+  .card .res{margin-top:10px;display:flex;flex-direction:column;gap:3px}
+  .card .res span{font-size:10.5px;letter-spacing:.03em;opacity:.62}
+  .card .res b{font-weight:700;color:#e8eef7;opacity:1}
   .card.syn{border-color:#ffe08a;background:#1c1a14}
   .card.syn:hover{border-color:#ffd166;background:#241f16}
   .card.syn.forced{border-width:2px;border-color:#ffd166;background:#241f14}
@@ -293,6 +297,7 @@
   .opt.right{border-color:#3fb950;background:#132a18}
   .opt.wrong{border-color:#f85149;background:#2a1416}
   .wpn.ms b{color:#7ee787}
+  .wpn.md b{color:#9db4ff}
 
   .rep{max-width:560px!important;text-align:left;margin:auto}
   .rep h2,.rep>p{text-align:center}
@@ -369,6 +374,12 @@
     cursor:pointer;opacity:.55;transition:opacity .12s,border-color .12s,background .12s}
   .dbtn:hover{opacity:.85}
   .dbtn.on{opacity:1;border-width:2px;background:rgba(255,255,255,.06)}
+  /* The playtest door. Green like the panel it opens, and quiet enough not to read as a game mode. */
+  #devwrap{margin-top:18px}
+  .devbtn{font-size:11px;letter-spacing:.06em;opacity:.55;
+    border-color:rgba(126,231,135,.45)!important;color:#7ee787!important}
+  .devbtn:hover{opacity:.9}
+  .devbtn.on{opacity:1;background:rgba(126,231,135,.08)}
   #diffnote{font-size:12px;opacity:.6;margin:10px 0 16px;min-height:2.6em;line-height:1.5}
   .card.place{width:272px;text-align:left}
   .card.place .prev{height:78px;margin:-18px -18px 13px;border-radius:14px 14px 0 0;
@@ -393,6 +404,11 @@
   .card .cost{margin-top:10px;font-size:12.5px;line-height:1.5;color:#ffb3ba;opacity:.92}
 
   /* fusion: two mastered measures run as one named programme */
+  /* A response card is not a measure and must not be mistaken for one: dashed edge, no citation
+     line, and its own label. It tunes how your own response behaves and claims nothing. */
+  .card.mod{border-style:dashed;border-color:rgba(155,180,255,.5);background:#15171d}
+  .card.mod:hover{border-color:#9db4ff;background:#1b1e26}
+  .card.mod .tier{color:#9db4ff}
   .card.fuse{border-width:2px;border-color:#8fe3ff;background:#131a20}
   .card.fuse:hover{border-color:#b9ecff;background:#182129}
   .card.fuse .gate{margin-top:12px;font-size:10.5px;font-weight:800;letter-spacing:.12em;
@@ -624,7 +640,64 @@
     background:#15181d;color:var(--paper);cursor:pointer}
   #devpanel button:hover{background:#1e232b;border-color:rgba(255,255,255,.3)}
   #devpanel button.on{border-color:#7ee787;color:#7ee787;background:rgba(126,231,135,.08)}
+  #devpanel .sep{margin:7px 2px 1px;font-size:9px;font-weight:800;letter-spacing:.12em;
+    text-transform:uppercase;opacity:.45}
   .opt.devright{outline:1px dashed rgba(126,231,135,.55);outline-offset:-1px}
+
+  /* ---- onboarding (2026-09-14): how-to-play overlay, pausing hint cards, Learning glosses ----
+     Both layers are direct children of body, never inside #start or #over, so neither screen-level
+     selector reaches them (the `#start div` / `#over > div` trap recorded above). z-index: the
+     overlay sits over #start (23); a hint card sits over #over (22) and the card screen (20); both
+     stay under the dev pill and panel (30). Nothing here is told apart by colour alone: the current
+     step dot is also wider, the primary button is also filled, a gloss label is also bold. The
+     [hidden] rules are needed because a display:flex rule would otherwise beat the attribute. */
+  .dbtn.howbtn{opacity:1;min-height:44px;padding:10px 22px;margin:0 0 16px;font-size:13.5px;
+    border:2px solid var(--accent);color:var(--accent)}
+  #howto{position:fixed;inset:0;z-index:24;display:flex;align-items:flex-start;justify-content:center;
+    overflow-y:auto;overscroll-behavior:contain;padding:20px 16px;background:rgba(11,13,16,.96);
+    cursor:default;text-align:left}
+  #howto[hidden],#hint[hidden],.howart[hidden]{display:none}
+  .howpanel{width:100%;max-width:540px;margin:auto;padding:18px 20px 0;border-radius:16px;
+    background:#15181d;border:1px solid rgba(255,255,255,.16)}
+  .howart svg{display:block;width:100%;height:auto;border-radius:12px;background:#0d1117}
+  .howdots{display:flex;gap:7px;justify-content:center;align-items:center;margin:14px 0 12px}
+  .howdots i{display:block;width:9px;height:9px;border-radius:99px;border:1.5px solid rgba(255,255,255,.5)}
+  .howdots i.on{width:26px;background:var(--accent);border-color:var(--accent)}
+  #howto-t{font-size:24px;line-height:1.2;letter-spacing:-.01em;margin:0 0 10px;color:var(--accent)}
+  #howto-t:focus{outline:none}
+  #howto-p{font-size:15px;line-height:1.65;opacity:.92}
+  #howto-p b{font-weight:800;color:#fff;background:rgba(255,122,47,.16);
+    border-bottom:2px solid var(--accent);padding:0 2px}
+  /* The button row sticks to the bottom of the scrolling layer, so Skip and Start playing are
+     reachable on a short phone screen without scrolling past the picture first. */
+  .howbar{position:sticky;bottom:0;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;
+    align-items:center;margin-top:18px;padding:14px 0 18px;background:#15181d;
+    border-top:1px solid rgba(255,255,255,.10)}
+  .howbar span{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+  .howbar button{font:inherit;font-size:15px;font-weight:800;min-height:48px;min-width:96px;
+    padding:12px 20px;border-radius:12px;cursor:pointer;color:var(--paper);background:transparent;
+    border:1px solid rgba(255,255,255,.28)}
+  .howbar button#how-next{background:var(--accent);border:2px solid var(--accent);color:#0b0d10}
+  .howbar button:focus-visible,#hint-ok:focus-visible,.dbtn.howbtn:focus-visible{outline:3px solid #fff;
+    outline-offset:2px}
+  #hint{position:fixed;inset:0;z-index:25;display:flex;align-items:center;justify-content:center;
+    overflow-y:auto;overscroll-behavior:contain;padding:20px 16px;background:rgba(6,8,11,.72);cursor:default}
+  .hintcard{width:100%;max-width:420px;margin:auto;padding:20px 20px 18px;border-radius:16px;text-align:left;
+    background:#1c1a14;border:2px solid #ffd166;box-shadow:0 14px 44px rgba(0,0,0,.65)}
+  #hint-t{font-size:19px;line-height:1.25;margin:0 0 8px;color:#ffe08a}
+  #hint-p{font-size:14.5px;line-height:1.6;opacity:.92}
+  #hint-ok{display:block;width:100%;min-height:52px;margin-top:16px;font:inherit;font-size:16px;
+    font-weight:800;border:0;border-radius:12px;background:var(--accent);color:#0b0d10;cursor:pointer}
+  .gloss{margin-top:10px;padding:7px 10px;border-radius:8px;border-left:3px solid #7ee787;
+    background:rgba(126,231,135,.08);font-size:11.5px;line-height:1.5;text-align:left}
+  .gloss b{font-weight:800;margin-right:6px;color:#7ee787}
+  @media (max-width:760px){
+    #howto{padding:12px 10px}
+    .howpanel{padding:14px 14px 0}
+    #howto-t{font-size:20px}
+    #howto-p{font-size:14.5px}
+    .howbar button{flex:1 1 auto}
+  }
 </style>
 </head>
 <body>
@@ -663,10 +736,8 @@
 
 <div id="start"><div class="wide">
   <h1>Compound</h1>
-  <p>You are a place that hazards keep arriving at. You cannot stop them coming — you can
-    only decide what you build, and how fast. Everything fires itself; when you level, take
-    two of four. Measures that go together offer more. When the run ends, the place asks
-    whether you can say why — and what you answer carries into the next one.
+  <button id="howbtn" class="dbtn howbtn" type="button">How to play</button>
+  <p>You are a place that hazards keep arriving at. You cannot stop them coming — you can only decide what you build, and how fast. Aiming and firing are automatic. Each time you level up, pick one card; measures that go together offer more. When the run ends, you can answer questions, and what you answer carries into the next run.
     <span class="keys" id="ctrlkeys"><i class="kbd">W</i><i class="kbd">A</i><i class="kbd">S</i><i class="kbd">D</i></span><span id="ctrltouch"></span>
     to move, <span class="keys" id="ctrlspace"><i class="kbd">SPACE</i></span><span id="ctrlevac"></span>
     to evacuate when something is already on top of you. That is the whole control scheme.<br><br>
@@ -682,7 +753,117 @@
   <div id="metaearn"></div>
   <div id="learnhead"></div>
   <div id="startwrap"></div>
+  <div id="devwrap"></div>
 </div></div>
+
+<!-- How to play (S3) and the pausing hint cards (S4), 2026-09-14. Direct children of body on purpose
+     (see the onboarding CSS). Every word in them is filled in from ONBOARD_COPY in the script. The
+     pictures are decoration for the words beside them, so they are hidden from screen readers. -->
+<div id="howto" hidden role="dialog" aria-modal="true" aria-labelledby="howto-t" aria-describedby="howto-p">
+  <div class="howpanel">
+    <div class="howart" id="howart0" hidden>
+      <svg viewBox="0 0 520 200" aria-hidden="true" focusable="false">
+        <path d="M0 50H260M0 100H260M0 150H260M65 0V200M130 0V200M195 0V200" stroke="rgba(255,255,255,.05)"/>
+        <circle cx="58" cy="48" r="10" fill="#c2703f"/><circle cx="222" cy="40" r="8" fill="#7f8ea3"/>
+        <circle cx="46" cy="160" r="11" fill="#4f86c6"/><circle cx="226" cy="158" r="9" fill="#e8763a"/>
+        <path d="M126 88L68 54M156 88L214 46M128 110L56 152" stroke="rgba(255,209,102,.28)" stroke-width="1.5" stroke-dasharray="2 5"/>
+        <circle cx="104" cy="75" r="3.5" fill="#ffd166"/><circle cx="84" cy="64" r="3.5" fill="#ffd166"/>
+        <circle cx="176" cy="71" r="3.5" fill="#ffd166"/><circle cx="198" cy="57" r="3.5" fill="#ffd166"/>
+        <circle cx="100" cy="128" r="3.5" fill="#ffd166"/>
+        <circle cx="140" cy="96" r="14" fill="#f7f4ee"/>
+        <rect x="108" y="120" width="64" height="7" rx="3.5" fill="rgba(255,255,255,.15)"/>
+        <rect x="108" y="120" width="44" height="7" rx="3.5" fill="#ff4d5e"/>
+        <g font-size="14" font-weight="700" text-anchor="middle" fill="#f7f4ee">
+          <rect x="316" y="14" width="34" height="34" rx="7" fill="rgba(255,255,255,.14)"/><text x="333" y="36">W</text>
+          <rect x="278" y="52" width="34" height="34" rx="7" fill="rgba(255,255,255,.14)"/><text x="295" y="74">A</text>
+          <rect x="316" y="52" width="34" height="34" rx="7" fill="rgba(255,255,255,.14)"/><text x="333" y="74">S</text>
+          <rect x="354" y="52" width="34" height="34" rx="7" fill="rgba(255,255,255,.14)"/><text x="371" y="74">D</text>
+          <rect x="316" y="108" width="34" height="34" rx="7" fill="rgba(255,255,255,.14)"/><path d="M333 118l7 11h-14z"/>
+          <rect x="278" y="146" width="34" height="34" rx="7" fill="rgba(255,255,255,.14)"/><path d="M288 163l11-7v14z"/>
+          <rect x="316" y="146" width="34" height="34" rx="7" fill="rgba(255,255,255,.14)"/><path d="M326 157h14l-7 11z"/>
+          <rect x="354" y="146" width="34" height="34" rx="7" fill="rgba(255,255,255,.14)"/><path d="M378 163l-11-7v14z"/>
+        </g>
+        <circle cx="458" cy="104" r="38" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+        <path d="M458 104L474 88" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-dasharray="3 3"/>
+        <circle cx="476" cy="86" r="15" fill="rgba(255,255,255,.6)"/>
+        <path d="M478 96q20 18 30 54q4 16-10 20q-16 4-24-12l-20-42q-6-14 6-20q12-6 18 0z" fill="#d6b08c" opacity=".85"/>
+      </svg>
+    </div>
+    <div class="howart" id="howart1" hidden>
+      <svg viewBox="0 0 520 200" aria-hidden="true" focusable="false">
+        <rect x="20" y="16" width="400" height="7" rx="3.5" fill="rgba(255,255,255,.12)"/>
+        <rect x="20" y="16" width="270" height="7" rx="3.5" fill="#57c7ff"/>
+        <text x="436" y="26" font-size="14" font-weight="800" fill="#f7f4ee">Lv 2</text>
+        <path d="M84 116L134 92" stroke="rgba(87,199,255,.45)" stroke-width="2" stroke-dasharray="3 4"/>
+        <circle cx="70" cy="122" r="14" fill="#f7f4ee"/>
+        <circle cx="100" cy="109" r="5" fill="#57c7ff"/><circle cx="138" cy="90" r="5" fill="#57c7ff"/>
+        <rect x="170" y="80" width="58" height="84" rx="8" fill="#15181d" stroke="rgba(255,255,255,.25)"/>
+        <rect x="178" y="88" width="14" height="14" rx="3" fill="#ff9de2"/>
+        <rect x="178" y="110" width="40" height="4" rx="2" fill="rgba(255,255,255,.25)"/><rect x="178" y="120" width="30" height="4" rx="2" fill="rgba(255,255,255,.25)"/>
+        <rect x="238" y="62" width="58" height="84" rx="8" fill="#1b1f26" stroke="#ff7a2f" stroke-width="2.5"/>
+        <rect x="246" y="70" width="14" height="14" rx="3" fill="#ffd166"/>
+        <rect x="246" y="92" width="40" height="4" rx="2" fill="rgba(255,255,255,.35)"/><rect x="246" y="102" width="30" height="4" rx="2" fill="rgba(255,255,255,.35)"/>
+        <rect x="306" y="80" width="58" height="84" rx="8" fill="#15181d" stroke="rgba(255,255,255,.25)"/>
+        <rect x="314" y="88" width="14" height="14" rx="3" fill="#9db4ff"/>
+        <rect x="314" y="110" width="40" height="4" rx="2" fill="rgba(255,255,255,.25)"/><rect x="314" y="120" width="30" height="4" rx="2" fill="rgba(255,255,255,.25)"/>
+        <rect x="396" y="50" width="24" height="24" rx="5" fill="#ffd166"/>
+        <path d="M436 54v16M428 62h16" stroke="#f7f4ee" stroke-width="3"/>
+        <rect x="452" y="50" width="24" height="24" rx="5" fill="#9db4ff"/>
+        <path d="M436 82v24M428 98l8 9 8-9" stroke="#ffe08a" stroke-width="2.5" fill="none"/>
+        <rect x="390" y="116" width="92" height="64" rx="9" fill="#1c1a14" stroke="#ffe08a" stroke-width="2.5"/>
+        <rect x="400" y="126" width="14" height="14" rx="3" fill="#ffd166"/><rect x="420" y="126" width="14" height="14" rx="3" fill="#9db4ff"/>
+        <rect x="400" y="150" width="64" height="4" rx="2" fill="rgba(255,255,255,.35)"/><rect x="400" y="160" width="46" height="4" rx="2" fill="rgba(255,255,255,.35)"/>
+      </svg>
+    </div>
+    <div class="howart" id="howart2" hidden>
+      <svg viewBox="0 0 520 200" aria-hidden="true" focusable="false">
+        <circle cx="110" cy="104" r="62" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
+        <circle cx="110" cy="104" r="24" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="4"/>
+        <circle cx="110" cy="104" r="24" fill="none" stroke="#7ee787" stroke-width="4" stroke-dasharray="100 200" transform="rotate(-90 110 104)"/>
+        <rect x="97" y="91" width="26" height="26" rx="6" fill="#ff8a9b"/>
+        <path d="M110 97v14M103 104h14" stroke="#fff" stroke-width="3.5"/>
+        <circle cx="152" cy="136" r="11" fill="#f7f4ee"/>
+        <circle cx="250" cy="80" r="26" fill="rgba(255,157,92,.12)" stroke="#ff9d5c" stroke-width="2.5" stroke-dasharray="5 4"/>
+        <circle cx="292" cy="126" r="22" fill="rgba(255,157,92,.12)" stroke="#ff9d5c" stroke-width="2.5" stroke-dasharray="5 4"/>
+        <circle cx="274" cy="104" r="10" fill="#f7f4ee"/>
+        <path d="M290 96L350 62M336 60l14 2-6 13" stroke="#f7f4ee" stroke-width="3" fill="none"/>
+        <circle cx="440" cy="104" r="44" fill="none" stroke="#c9d1d9" stroke-width="2.5" stroke-dasharray="7 6"/>
+        <circle cx="440" cy="104" r="30" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="6"/>
+        <circle cx="440" cy="104" r="30" fill="none" stroke="#ffd166" stroke-width="6" stroke-dasharray="94 200" transform="rotate(-90 440 104)"/>
+        <circle cx="440" cy="104" r="9" fill="#f7f4ee"/>
+      </svg>
+    </div>
+    <div class="howart" id="howart3" hidden>
+      <svg viewBox="0 0 520 200" aria-hidden="true" focusable="false">
+        <rect x="16" y="14" width="270" height="172" rx="12" fill="#16150f" stroke="rgba(255,224,138,.4)"/>
+        <rect x="32" y="28" width="200" height="6" rx="3" fill="rgba(255,255,255,.35)"/><rect x="32" y="40" width="150" height="6" rx="3" fill="rgba(255,255,255,.35)"/>
+        <rect x="32" y="58" width="200" height="22" rx="6" fill="#1b1f26" stroke="rgba(255,255,255,.14)"/>
+        <rect x="32" y="88" width="200" height="22" rx="6" fill="#132a18" stroke="#3fb950" stroke-width="2"/>
+        <path d="M42 99l5 5 10-11" stroke="#7ee787" stroke-width="3" fill="none"/>
+        <rect x="32" y="118" width="200" height="22" rx="6" fill="#2a1416" stroke="#f85149" stroke-width="2"/>
+        <path d="M43 124l9 10M52 124l-9 10" stroke="#ff9d9d" stroke-width="3"/>
+        <rect x="32" y="148" width="200" height="22" rx="6" fill="#1b1f26" stroke="rgba(255,255,255,.14)"/>
+        <rect x="240" y="88" width="38" height="22" rx="11" fill="rgba(255,224,138,.14)" stroke="#ffe08a"/>
+        <circle cx="259" cy="99" r="5" fill="#ffd166"/>
+        <path d="M282 99C330 99 338 142 372 148M360 140l12 8-13 6" stroke="#ffe08a" stroke-width="2.5" fill="none"/>
+        <rect x="380" y="132" width="40" height="36" rx="7" fill="#15181d" stroke="rgba(255,255,255,.3)"/><circle cx="400" cy="158" r="3.5" fill="#ffd166"/>
+        <rect x="426" y="132" width="40" height="36" rx="7" fill="#15181d" stroke="rgba(255,255,255,.3)"/><circle cx="446" cy="158" r="3.5" fill="#ffd166"/>
+        <rect x="472" y="132" width="40" height="36" rx="7" fill="#15181d" stroke="rgba(255,255,255,.3)"/><circle cx="492" cy="158" r="3.5" fill="#ffd166"/>
+        <rect x="388" y="142" width="24" height="4" rx="2" fill="rgba(255,255,255,.35)"/><rect x="434" y="142" width="24" height="4" rx="2" fill="rgba(255,255,255,.35)"/><rect x="480" y="142" width="24" height="4" rx="2" fill="rgba(255,255,255,.35)"/>
+      </svg>
+    </div>
+    <div class="howdots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <h2 id="howto-t" tabindex="-1"></h2>
+    <p id="howto-p"></p>
+    <div class="howbar">
+      <button id="how-back" type="button"></button>
+      <span><button id="how-skip" type="button"></button><button id="how-next" type="button"></button></span>
+    </div>
+  </div>
+</div>
+<div id="hint" hidden role="dialog" aria-modal="true" aria-labelledby="hint-t" aria-describedby="hint-p">
+  <div class="hintcard"><h3 id="hint-t"></h3><p id="hint-p"></p><div id="hint-g"></div><button id="hint-ok" type="button"></button></div>
+</div>
 
 <script>
 (() => {
@@ -706,6 +887,13 @@ const SMALL = COARSE && Math.min(innerWidth, innerHeight) < 820
 // never sees them. dev.on is the runtime truth: the URL only decides whether initDev()
 // runs at boot, and __surv.devInit() can turn it on from the console when the URL was
 // plain. Declared up here with the other module-init flags (see the TDZ note above).
+// Two different questions, and conflating them is what made the panel awkward to reach (2026-09-04).
+// LOCAL asks *may this machine see the door at all* — the deployed copy runs on kedubee.github.io
+// and this is false there, so the public site still never offers it, while anyone who opened the
+// file to tune it is on localhost, 127.0.0.1 or a bare file:// load. DEV asks *is the panel on from
+// the first frame*, which stays the explicit `?dev=1` / `#dev` opt-in. On a local open the door is
+// a button on the start screen: visible immediately, and it opens nothing until it is pressed.
+const LOCAL = ['localhost', '127.0.0.1', '[::1]', ''].includes(location.hostname)
 const DEV = new URLSearchParams(location.search).has('dev') || location.hash.includes('dev')
 const dev = { on: false, god: false }
 const resize = () => {
@@ -785,11 +973,20 @@ const T = {
   picksPerLevel: 1,                // choices banked per level, spent in one card screen
                                    // (2026-09-02, user direction: two picks a level made the
                                    // screen a shopping list rather than a decision)
-  levelHeal: 0.05,                 // the certain reward: capacity back on every level
+  // A LONGER RUN (user decision 2026-09-04, "런 자체를 그냥 길게할거야"), and it takes all three of
+  // these together. Measured, alarm policy on Steady/delta, n=20 medians: 81.9 s as it was;
+  // 108.8 with capacity alone; 115.3 adding the level heal; 177.9 with the pace as well, and the
+  // level reached goes 9.5 to 16. `pace` on its own does NOTHING (75.7 -> 77.4, and 76.5 even at
+  // pace 8) for the reason worth remembering: the ramp is not what ends the median run, so
+  // stretching it only stretches a part of the curve the player never reaches. Give the player the
+  // capacity to get there and the same knob becomes the dominant one.
+  levelHeal: 0.20,                 // the certain reward: capacity back on every level
+  baseHp: 150,                     // starting capacity - in here so a batch can sweep it
   playerSpeed: 200,
   invuln: 0.42,                    // seconds of grace after a hit
   surgeEvery: 38, surgeSize: 14,   // a ring of them arrives on this beat, from every side
   hardAt: 105, hardMul: 1.9,       // past hardAt the ramps read a clock running this much faster
+  pace: 2,                         // how slowly the difficulty clock walks; see rampTime()
   fxCap: 700,                      // particles alive at once; SMALL screens get less below
   ebulletCap: 240,                 // what hazards have thrown at you and is still in the air
   fuelCap: 40,                     // fires already burning past which there is no unburnt ground
@@ -875,6 +1072,20 @@ const T = {
   lifelineRepair: 11,              // per second, standing with it and nothing else on it
   llTargetP: 0.22,                 // share of chasers that head for a lifeline instead of you
   llReach: 1250,                   // ...but only one close enough that you could get there
+
+  // Defending one, as opposed to owning one (2026-09-04). Every lifeline paid a passive for
+  // STANDING and nothing at all for the act, so going to the alarm bought only not-losing
+  // something you already had, at the price of position and collection time. A walker
+  // measured the consequence: Steady/delta, n=10, ignoring the alarm 75.2 s against 64.2 s
+  // answering it. Two things pay for the act now - you are stronger on a hurt one and the
+  // site fights beside you, and bringing one that was really in danger back to whole makes
+  // the service DO its job across the map for a few seconds.
+  defendMul: 1.35,                 // damage AND rate, at the point of use, while you hold a hurt one
+  defendPulseCd: 0.85,             // the site's own crews hit back on this beat
+  defendPulseDmg: 16,              // ...and only what is sitting on it, so it is not a farming aura
+  serviceDipAt: 65,                // below this it was really in danger, and saving it counts
+  serviceDur: 8,                   // how long a restored service runs at full stretch
+  serviceCd: 20,                   // per lifeline, so one parked hazard cannot be farmed
 }
 
 // ---------------------------------------------------------------- sound
@@ -899,6 +1110,9 @@ const AU = (() => {
   const GAP = {           // seconds a given sound must leave before it may fire again
     shot: 0.075, hit: 0.05, kill: 0.055, hurt: 0.16, pickup: 0.05, eshot: 0.12,
     llhit: 0.2, block: 0.09, ember: 0.2, works: 0.14,
+    // Both of these ride on something that already happens constantly — a relay on every landing
+    // shot, a residual on every death — so both are throttled harder than the event under them.
+    relay: 0.1, resid: 0.12,
   }
 
   function init() {
@@ -966,6 +1180,15 @@ const AU = (() => {
     shot:   () => tone({ type: 'triangle', f: 760, f2: 520, d: 0.055, g: 0.035 }),
     hit:    () => hiss({ f: 2600, f2: 1500, d: 0.045, g: 0.05, q: 0.8 }),
     kill:   () => tone({ type: 'square', f: 300, f2: 120, d: 0.09, g: 0.045 }),
+    // Relay was silent: the only thing that leaves the emitter and makes no sound. A rising sine,
+    // because everything else in the firing chain falls — the shot falls 760 to 520, the hit falls
+    // 2600 to 1500, the kill falls 300 to 120. Going up is the one direction left, and it is what
+    // a hand-off should sound like. One oscillator, so a relay costs a single voice out of sixteen.
+    relay:  () => tone({ type: 'sine', f: 620, f2: 1240, d: 0.07, g: 0.038 }),
+    // Residual used to re-play `kill`, on the same frame as `kill`, which is why nobody could hear
+    // it. Filtered noise settling instead of a pitched drop, and long enough to still be sounding
+    // when the death that set it off has finished — the audible half of separating the two events.
+    resid:  () => hiss({ f: 420, f2: 130, d: 0.34, g: 0.05, type: 'lowpass', q: 1.2 }),
     // the ones about you, which are allowed to be louder because they are rare
     hurt:   () => { tone({ type: 'sawtooth', f: 190, f2: 70, d: 0.22, g: 0.16 })
                     hiss({ f: 700, f2: 200, d: 0.2, g: 0.1, q: 0.6 }) },
@@ -1090,8 +1313,14 @@ if (SMALL) { T.enemyCap = 165; T.ebulletCap = 130; T.fxCap = 300 }
 // actually shortens a run without making it punishing, which is the whole point for the
 // mode where wrong answers cost nothing: hold the gentle window, then end decisively, so the
 // report — where the content is actually read — is reached instead of outlasted.
-const rampTime = () => (t + Math.max(0, t - T.hardAt * (DIFF.len || 1)) *
-                        (DIFF.hard || T.hardMul)) * DIFF.ramp
+// `pace` stretches this clock and nothing else (2026-09-04, user: run length itself should be
+// longer). Because every ramp, the knee and its steepness are all functions of the SAME scaled
+// time, the whole curve keeps its shape exactly and only takes longer to walk — which is what a
+// per-ramp fudge could not have given. Everything keyed to real seconds — works sites, pickups,
+// seasons, events, the boss clock — deliberately does NOT stretch, so a longer run has
+// proportionally more to do in it rather than the same run played slowly.
+const rampTime = () => { const tt = t / T.pace
+  return (tt + Math.max(0, tt - T.hardAt * (DIFF.len || 1)) * (DIFF.hard || T.hardMul)) * DIFF.ramp }
 const TAU = Math.PI * 2
 const rand = (a, b) => a + Math.random() * (b - a)
 const pick = a => a[(Math.random() * a.length) | 0]
@@ -1136,7 +1365,8 @@ const UPGRADES = {
             desc: () => 'The buildings that already exist, strengthened. Less of every hit gets through.',
             src: 'UNDRR: resilient infrastructure returns US$4 for each US$1 invested in low- and middle-income countries.' },
   magnet: { name: 'Risk data',        short: 'Data',     max: 4, kind: 'measure', col: '#57c7ff',
-            desc: () => 'Monitoring and loss records. You see further out, and nothing is collected that was never measured.',
+            desc: l => l >= 1 ? 'Monitoring and loss records. From here on, what you fire turns toward what it was aimed at.'
+                              : 'Monitoring and loss records. You see further out, and nothing is collected that was never measured.',
             src: 'UNDRR asks countries to record, analyse and share disaggregated disaster loss data.' },
   hp:     { name: 'Risk financing',   short: 'Finance',  max: 5, kind: 'measure', col: '#ff4d5e',
             desc: () => 'Reserves and insurance. Capacity to take a hit and still be standing.',
@@ -1160,7 +1390,7 @@ const UPGRADES = {
 // mandatory one; the flow cost was measured and the user retired it).
 const SYNERGIES = [
   { id: 'act', a: 'pulse', b: 'wave', name: 'Warning that is acted on', col: '#ffe08a',
-    gain: 'Warning fires 25% faster, drills reach 30% further.',
+    gain: 'Warning fires 25% faster, drills reach 30% further, and one more leaves the emitter.',
     apply: P => { P.rateMul *= 1.25; P.synWave = (P.synWave || 1) * 1.30 },
     q: 'An early-warning system is installed and it works. Why does pairing it with regular drills multiply what it is worth?',
     opts: ['Because the alert reaches more people at once',
@@ -1171,7 +1401,7 @@ const SYNERGIES = [
     why: 'A warning buys time, and time is only worth something if the action is already known. UNDRR pairs the two deliberately: it asks for early warning <b>and</b> for micro-drills twice a year.' },
 
   { id: 'stock', a: 'field', b: 'armour', name: 'The whole building stock', col: '#e8c7ff',
-    gain: 'Codes cover 35% more ground, retrofitting stops 10% more.',
+    gain: 'Codes cover 35% more ground, retrofitting stops 10% more, and what you stop bursts where it falls.',
     apply: P => { P.synField = (P.synField || 1) * 1.35; P.armour = 1 - (1 - P.armour) * 0.90 },
     q: 'You enforce building codes properly. Why is that still not enough on its own?',
     opts: ['Codes govern what gets built next — the buildings already standing are untouched',
@@ -1215,7 +1445,7 @@ const SYNERGIES = [
     why: 'UNDRR puts <i>resource resilience</i> beside <i>ready systems</i> for exactly this: the measure that is affordable is the measure that gets built.' },
 
   { id: 'who', a: 'wave', b: 'magnet', name: 'Drills that reach everyone', col: '#b9d8ff',
-    gain: 'Drills reach 25% further and you collect from 25% wider.',
+    gain: 'Drills reach 25% further, you collect from 25% wider, and a shot that lands sends one on to the next thing.',
     apply: P => { P.synWave = (P.synWave || 1) * 1.25; P.pickup *= 1.25 },
     q: 'A city runs drills every year and the same people are still the ones who die. What does the risk data add?',
     opts: ['It proves the drills happened',
@@ -1248,7 +1478,7 @@ const SYNERGIES = [
     why: 'Planning is what decides a strip stays empty; maintenance is what keeps it that way, and neither survives the other being absent. UNDRR asks for lifecycle resilience and maintenance pathways for exactly this reason — a corridor, like a defence, is a commitment rather than a purchase.' },
 
   { id: 'keep', a: 'dmg', b: 'rate', name: 'Built and kept', col: '#ffc08a',
-    gain: 'Everything you have hits 15% harder and fires 15% faster.',
+    gain: 'Everything you have hits 15% harder, fires 15% faster, and what you fire bursts where it lands.',
     apply: P => { P.dmgMul *= 1.15; P.rateMul *= 1.15 },
     q: 'A country builds excellent flood defences and twenty years later they fail anyway. What went wrong?',
     opts: ['The defences were built to the wrong standard',
@@ -1791,6 +2021,181 @@ const fused = {}      // fusion id -> taken
 let fuseAcc = 0       // practiced-evacuation clock
 let beamAng = 0       // monitored-horizon sweep angle
 let laneAng = 0       // kept-corridor angle; holds the last heading when you stand still
+let waveEcho = 0      // Volley's second shockwave, counting down to its beat
+let beamOn = null     // Continuous: the lines held this frame, for the renderer
+
+// ---------------------------------------------------------------- response tuning (2026-09-04)
+// What leaves the emitter had almost no vocabulary: `apply` was six branches and all six were
+// multipliers, and seven of the nine synergies were stat lines. So a build could be twice as
+// strong and never once LOOK different, which is the same complaint the map layer had before it
+// started paying for the act - the decisions the game offers did not visibly change what happens.
+//
+// These are NOT measures and they make no claim about the world. A measure card cites UNDRR and
+// teaches something; one of these describes how your own response behaves and cites nothing. They
+// are labelled differently on the card for that reason. The teaching stays where it already is -
+// in the ten measures, the nine pairs and the debrief - and this layer is the game underneath it,
+// which is the order the user set on 2026-09-04: a game that is fun first, with the teaching a
+// spoonful into it rather than a coat of sugar on top.
+//
+// Every one of them also has a synergy that grants its first step for free (see `SHOT` below), so
+// a build reaches these through the measures as well as through the deck. Stacking is the point.
+const MODS = {
+  track:   { name: 'Tracking',    max: 3, col: '#57c7ff',
+             desc: l => l === 0 ? 'What you fire turns toward what it was aimed at.'
+                                : `It turns harder, and gives up later (Lv ${l + 1}).` },
+  volley:  { name: 'Volley',      max: 3, col: '#ffd166',
+             desc: l => l === 0 ? 'One more leaves the emitter every time it fires.'
+                                : `One more again (Lv ${l + 1}).` },
+  through: { name: 'Through',     max: 3, col: '#8ef6c6',
+             desc: l => l === 0 ? 'What you fire passes through one more thing before it stops.'
+                                : `One more again (Lv ${l + 1}).` },
+  frag:    { name: 'Fragmenting', max: 3, col: '#ffa94d',
+             desc: l => l === 0 ? 'What you fire bursts where it lands, reaching what stood next to it.'
+                                : `A wider burst, and harder (Lv ${l + 1}).` },
+  relay:   { name: 'Relay',       max: 3, col: '#9db4ff',
+             desc: l => l === 0 ? 'A shot that lands sends one on to the next thing near it.'
+                                : `It sends one more on (Lv ${l + 1}).` },
+  resid:   { name: 'Residual',    max: 3, col: '#ff9de2',
+             desc: l => l === 0 ? 'What you stop bursts where it falls — whatever stopped it.'
+                                : `A wider burst where it falls (Lv ${l + 1}).` },
+
+  // --- the shape of the thing itself, rather than what it does on arrival (2026-09-04, later)
+  calibre: { name: 'Calibre',     max: 3, col: '#ffb3ba',
+             desc: l => l === 0 ? 'Bigger and harder, and slower for it.'
+                                : `Bigger and harder again, and slower again (Lv ${l + 1}).` },
+  grow:    { name: 'Spreading',   max: 3, col: '#8ef6c6',
+             desc: l => l === 0 ? 'It widens as it travels: thin where you are, broad out where it lands.'
+                                : `It widens faster (Lv ${l + 1}).` },
+  back:    { name: 'Return',      max: 2, col: '#c9d1d9',
+             desc: l => l === 0 ? 'It turns around halfway and comes back through everything it passed.'
+                                : 'It turns later, so it goes further out first (Lv 2).' },
+  gather:  { name: 'Gathering',   max: 3, col: '#e8c7ff',
+             desc: l => l === 0 ? 'What you hit is pulled toward the impact instead of thrown away from it.'
+                                : `It pulls harder (Lv ${l + 1}).` },
+
+  // --- what is laid ON TOP of the emitter. Both are additions, and a build may hold both
+  // (user decision, 2026-09-10 playtest). Neither one takes the aimed shots away any more.
+  beam:    { name: 'Continuous',  max: 1, col: '#57c7ff',
+             desc: () => 'A held beam burns what it crosses, out to where you can see, while your aimed shots keep firing under it. '
+                       + 'Through, Volley, Calibre, Relay and Gathering all reach the beam; Fragmenting, Spreading and Return do not, but they still have your shots to work on.' },
+  fan:     { name: 'Broadside',   max: 1, col: '#ffd166',
+             desc: () => 'A wide sweep on top of your aimed shots: many more, spread across the front, '
+                       + 'each one lighter and none of them going as far.' },
+}
+const MOD_IDS = Object.keys(MODS)
+const mod = {}        // modifier id -> level, this run only
+
+// ONE place decides what leaves the emitter, so a synergy and a card that grant the same behaviour
+// stack instead of overwriting each other, and so the debug probe and the card text cannot drift
+// from what the weapon actually does. Read at the point of use, never written into P.
+//
+// It also answers about a state that does NOT exist yet: pass an override for `lv`, `syn` or `mod`
+// and it resolves for that hypothetical. That is what lets a card say what taking it will actually
+// do — "Projectiles 2 → 3" — instead of describing itself in adjectives, which was the whole
+// complaint about this layer's cards.
+const SHOT = o => {
+  const L = (o && o.lv) || lv, Y = (o && o.syn) || syn, M = (o && o.mod) || mod
+  // Extra projectiles: the streak tier, the "warning that is acted on" pair, and the deck.
+  const extra = streakTier().shots + (Y.act ? 1 : 0) + (M.volley || 0)
+  // `see` is the only thing that ever set P.synPierce, so the flag is read here instead of the
+  // mutated field - one resolver, and no hypothetical has to fake a mutation to be asked.
+  const pierce = (Y.see ? 2 : 0) + (M.through || 0)
+  return {
+    extra, pierce,
+    // The totals a player actually sees, rather than the modifier terms that feed them.
+    shots:   Math.min(1 + Math.floor(((L.pulse || 0) - 1) / 2), 3) + extra,
+    through: 1 + Math.floor((L.pulse || 0) / 2) + pierce,
+    // Turn rate in radians per second. Risk data is the measure that makes aiming possible at all -
+    // you cannot send anything after what nobody is measuring - so it opens the behaviour, and the
+    // deck deepens it.
+    homeRate: ((L.magnet || 0) >= 2 ? 1.7 : 0) + (M.track || 0) * 2.1,
+    homeFor:  0.55 + (M.track || 0) * 0.30,          // seconds of flight it keeps steering for
+    // Burst on impact: "built and kept" already means everything hits harder, and this is that
+    // reaching past the one thing it touched.
+    // Widened 2026-09-10: 54 + 20/level read as too narrow against enemy radii of 9-14 px, and a
+    // level bought 20 px that nobody could see. 70 + 38/level is 70 / 108 / 146 / 184.
+    burstR:   (Y.keep || M.frag) ? 70 + (M.frag || 0) * 38 : 0,
+    burstMul: 0.55 + (M.frag || 0) * 0.20,
+    // A shot that lands passes one on - the shape of a drill reaching the next group along.
+    relay:    (Y.who ? 1 : 0) + (M.relay || 0),
+    // What you stop bursts where it falls. The whole-stock pair opens it. This one sits on the
+    // death itself rather than on the bullet, so it has always covered every weapon - the belt,
+    // the shockwave, the aura and the corridor included.
+    deathR:   (Y.stock || M.resid) ? 60 + (M.resid || 0) * 24 : 0,
+    deathDmg: 9 + (M.resid || 0) * 7,
+
+    // The shape of the thing itself. Calibre trades speed for size and weight, which is the only
+    // one of these that costs you something.
+    size:    1 + (M.calibre || 0) * 0.34,
+    heft:    1 + (M.calibre || 0) * 0.22,
+    slow:    1 - (M.calibre || 0) * 0.13,
+    // Radius gained per second of flight. Level 1 reaches the 4.5x cap at about the end of a
+    // shot's life, which is the point - it has to be thin where you are and broad where it lands,
+    // and a rate that hits the cap in a quarter of a second is just a bigger bullet.
+    grow:    (M.grow || 0) * 17,
+    back:    (M.back || 0) > 0,
+    backAt:  (M.back || 0) >= 2 ? 0.58 : 0.44,   // fraction of its life before it turns around
+    // Knockback becomes a pull. The engine has always taken a knock vector; this makes it negative,
+    // which is the whole implementation - and it is the first modifier that helps the weapons
+    // centred on the player, because it brings the field to them.
+    pull:    (M.gather || 0),
+
+    // What is laid on top of the emitter. Both are additions since 2026-09-10 and a build may
+    // hold both, so neither depends on the other and the aimed shots fire whatever is held.
+    beam:    !!M.beam,
+    fan:     !!M.fan,
+    // The beam's own dial, read from the same modifiers so a build is not thrown away by taking it.
+    beamRange: 430 + (M.through || 0) * 90 + (Y.see ? 90 : 0),
+    beamHalf:  0.10 + (M.volley || 0) * 0.035 + (Y.act ? 0.035 : 0) + (M.calibre || 0) * 0.02,
+    beamTgts:  1 + (Y.who ? 1 : 0) + (M.relay || 0),
+  }
+}
+
+// What a card is allowed to say about itself, in numbers. Only rows that actually change are
+// printed, so a card never pads itself with six lines of "unchanged".
+// Each row formats itself, and the row is printed when its FORMATTED value moves. That is why
+// calibre's three numbers are one row rather than three: they always move together and a card that
+// spent three lines saying so would be read by nobody.
+const SHOT_ROWS = [
+  // The emitters are additive since 2026-09-10, so the aimed shots are always part of the answer
+  // and the two rows below are always meaningful - they used to blank on a beam build.
+  { label: 'Emitter',        get: s => 'aimed shots' + (s.fan ? ' + a wide sweep' : '') + (s.beam ? ' + a held beam' : '') },
+  { label: 'Projectiles',    get: s => String(s.shots) },
+  { label: 'Passes through', get: s => s.through + (s.through === 1 ? ' thing' : ' things') },
+  // The cone width is printed as whole degrees of the FULL cone (beamHalf is the half-angle).
+  // Without it, Volley offered to a beam build moved no row at all and the card printed no
+  // numbers - which is the "Continuous has nothing compatible" the playtest reported.
+  { label: 'Beam',           get: s => s.beam ? `${s.beamRange} px · ${s.beamTgts}${s.beamTgts === 1 ? ' line' : ' lines'} · ${Math.round(s.beamHalf * 2 * 180 / Math.PI)}° wide` : '' },
+  { label: 'Tracking',       get: s => s.homeRate ? s.homeRate.toFixed(1) + ' rad/s' : 'none' },
+  { label: 'Size · damage · speed', get: s => `×${s.size.toFixed(2)} · ×${s.heft.toFixed(2)} · ×${s.slow.toFixed(2)}` },
+  { label: 'Widens in flight', get: s => s.grow ? `+${s.grow} px/s` : 'no' },
+  { label: 'Comes back',     get: s => s.back ? 'yes' : 'no' },
+  { label: 'Pulls what it hits', get: s => s.pull ? 'level ' + s.pull : 'no' },
+  { label: 'Burst on impact', get: s => s.burstR ? s.burstR + ' px' : 'none' },
+  { label: 'Sends on',       get: s => s.relay ? s.relay + (s.relay === 1 ? ' shot' : ' shots') : 'none' },
+  { label: 'Burst on kill',  get: s => s.deathR ? s.deathR + ' px' : 'none' },
+]
+function shotChanges (over) {
+  const a = SHOT(), b = SHOT(over), rows = []
+  for (const r of SHOT_ROWS) {
+    const va = r.get(a), vb = r.get(b)
+    if (va !== vb) rows.push(`<span>${r.label} <b>${va || '—'} → ${vb || '—'}</b></span>`)
+  }
+  return rows.length ? `<div class="res">${rows.join('')}</div>` : ''
+}
+
+// The other half of the question a card has to answer: what ELSE grants this. A player who cannot
+// see that Relay and "drills that reach everyone" are the same behaviour cannot plan a build out of
+// them. Derived from SYNERGIES so the two can never drift apart.
+const MOD_OPENS = { volley: 'act', through: 'see', frag: 'keep', relay: 'who', resid: 'stock' }
+function modOpenedBy (id) {
+  if (id === 'track')
+    return `<div class="pairs">Also opened by <span class="${lv.magnet >= 2 ? 'pd' : lv.magnet ? 'ph' : ''}">Data Lv2</span></div>`
+  const sy = SYNERGIES.find(s => s.id === MOD_OPENS[id])
+  if (!sy) return ''
+  const held = syn[sy.id], part = lv[sy.a] > 0 || lv[sy.b] > 0
+  return `<div class="pairs">Also opened by <span class="${held ? 'pd' : part ? 'ph' : ''}">${UPGRADES[sy.a].short} + ${UPGRADES[sy.b].short}</span></div>`
+}
 
 // ---------------------------------------------------------------- streak
 // Answering right in a row is different from answering right often, and the game already
@@ -2326,8 +2731,9 @@ const banished = {}                       // measure id -> ruled out for this ru
 let rerollsUsed = 0, banishLeft = 0
 
 function reset(placeId) {
+  hintClear()                                        // an open hint card never crosses into the next run
   if (placeId && PLACES[placeId]) PLACE = PLACES[placeId]
-  P = { x: 0, y: 0, r: 11, spd: T.playerSpeed, hp: 100, max: 100, inv: 0, xp: 0, need: 9, level: 1,
+  P = { x: 0, y: 0, r: 11, spd: T.playerSpeed, hp: T.baseHp, max: T.baseHp, inv: 0, xp: 0, need: 9, level: 1,
         pickup: 90, hx: 0, hy: 0, dmgMul: 1, rateMul: 1, armour: 0, ringAng: 0, cd: {},
         xpMul: 1, heatRes: 1, regen: 0, relief: 0, overtop: 1, exposure: 1,
         healMul: 1, cascade: false, slowWorks: false,
@@ -2338,10 +2744,12 @@ function reset(placeId) {
   keys = {}; t = 0; spawnAcc = 0; kills = 0; paused = false; over = false; shake = 0; waveIx = 0
   wetStack = 1; seasonLog = []; seasonIx = 0; prepAcc = 0; bannerT = 0
   pickups = []; works = []; pickAcc = 0; worksAcc = 0
+  onSite = null; SF = { kind: null, t: 0 }   // a service left running must not cross into the next run
   picked = []; worksDone = []; worksMissed = []
   events = []; eventAcc = 0; eventsSeen = []; eventsHit = 0; warnBought = 0
   boss = null; bossAcc = 0; bossesKilled = 0; bossesSurvived = 0; bossSeen = []
   for (const k in UPGRADES) lv[k] = 0
+  for (const k in mod) delete mod[k]
   for (const k in syn) delete syn[k]
   for (const k in mastery) delete mastery[k]
   for (const k in trade) delete trade[k]
@@ -2352,7 +2760,7 @@ function reset(placeId) {
   debrief = null
   picksLeft = 0
   poolBumpRun()
-  fuseAcc = 0; beamAng = 0; laneAng = 0; laneAcc = 0
+  fuseAcc = 0; beamAng = 0; laneAng = 0; laneAcc = 0; waveEcho = 0; beamOn = null
   rerollsUsed = 0; banishLeft = 1
   P.fuseHaste = 0
   lv.pulse = 1
@@ -2473,8 +2881,12 @@ const HAZARD_IDS = Object.keys(HAZARDS)
 const DIFFS = {
   learn: {
     name: 'Learning', short: 'Learn', col: '#7ee787',
-    blurb: 'Very little arrives, and slowly. A short, readable run.',
-    ramp: 0.60, dmg: 0.60, spawn: 0.75, warn: 1.9, len: 2.0, hard: 11, pay: 1.0,
+    blurb: 'Very little arrives, and slowly. A short, readable run. Many cards in plainer English.',
+    // len went 2.0 -> 1.0 when T.pace landed (2026-09-04). pace multiplies the knee's real-time
+    // position by itself, and Learning's knee was already the furthest out, so it compounded twice
+    // and the gentlest mode measured 8:49 against its own blurb's "a short, readable run". At 1.0 it
+    // takes the same ~1.5x every other mode took: 3:35 before, 5:09 after, still the longest mode.
+    ramp: 0.60, dmg: 0.60, spawn: 0.75, warn: 1.9, len: 1.0, hard: 11, pay: 1.0,
     fail: 99, llDmg: 0.5,
   },
   steady: {
@@ -2499,6 +2911,349 @@ const DIFFS = {
 const DIFF_IDS = Object.keys(DIFFS)
 for (const k of DIFF_IDS) DIFFS[k].id = k
 let DIFF = DIFFS.steady
+
+// ---------------------------------------------------------------- onboarding + plain language (2026-09-14)
+// Accessibility feedback on the web demo (Feedback_Accessibility_2026-09-14.md): a player who has never
+// played this kind of game had no way in, and Learning read like the technical version. Four pieces, all
+// built from the adjudicated copy (a11y_2026-09-14/draft_copy.md, final, with adjudication.md) and none of it
+// written fresh: a how-to-play overlay that a first visit has to step through (user decision), six
+// pausing hint cards shown once each, plain versions of in-run text on Learning only, and term glosses on
+// Learning only.
+//
+// TDZ: everything here is read at CALL time, and none of it is reachable from resize() (the note at the
+// top of the script). Only the button wiring and one keydown listener run at module init. The block sits
+// after `let DIFF` because say() and glossHtml() read DIFF.
+
+// The copy, one entry per row id of the draft. A row the Lead revises is a one-line swap here. The two
+// onboarding rows that live in the markup instead are S2.1 (the start paragraph) and S2.2 (the button
+// label), because the start screen is on screen before this script runs.
+const ONBOARD_COPY = {
+  'S3.1': { title: 'You move. You never aim.', body: 'Move with WASD or the arrow keys, or drag on a touch screen. Some measures fire by themselves; others work in the background. Space or EVAC makes you dash the way you move, with a wait between dashes. Touching hazards takes capacity, your red bar.' },
+  'S3.2': { title: 'Level up: pick a card', body: 'Destroyed hazards drop blue dots. Walk near them to collect them and fill the blue bar at the top. At each level the game pauses and you pick one card. Once you own two measures that go together, a synergy card offering more can appear.' },
+  'S3.3': { title: 'The map: defend, dodge, build', body: "Lifelines are services like hospitals. Stand in a hurt one's ring: you hit harder there, and it repairs once nothing sits on it. Ground marks warn of events. Most marked events cannot be shot: move away. Stand in a dashed ring to build a bonus." },
+  'S3.4': { title: 'After the run: questions', body: 'You can answer questions. Right answers keep their share of the recovery budget and grow your streak. Wrong answers lose both. Keep a streak of two or more to power up your next run. Spend the budget on the start screen for permanent upgrades.' },
+  'S3.5': { next: 'Next', back: 'Back', skip: 'Skip', start: 'Start playing' },
+  'S4.1': { title: 'Level up: pick one card', body: 'Play is paused. Click or tap one card to take it. Reroll draws new cards. Banish stops a measure being offered this run. Both are limited for the whole run.', ok: 'Got it' },
+  'S4.2': { title: 'Measures that go together', body: 'You own both of these measures. Take it: an extra effect, some capacity back. When cards close, a line says why they fit, unless another synergy or programme replaces it.', ok: 'Got it' },
+  'S4.3': { title: 'A lifeline is under attack', body: 'Find it on the map; its health is listed bottom-right. Stand inside its ring: you hit harder there, and it repairs once nothing sits on it. Losing it costs you.', ok: 'Got it' },
+  'S4.4': { title: 'Get out of the way', body: "Marks show where it will hit, or a wall's path and direction. It cannot be shot: move away, or press Space or EVAC. Some marks keep hurting after they land.", ok: 'Got it' },
+  'S4.5': { title: 'Build a bonus here', body: 'Stand inside the dashed ring for a few seconds to build it. Leaving drains progress. Once built, its bonus lasts the whole run. Unbuilt sites disappear after 15 seconds.', ok: 'Got it' },
+  'S4.6': { title: 'Questions before the report', body: 'Right answers keep their budget share and grow your streak. Wrong answers lose both. Keep a streak of two or more to power up your next run. Questions are skippable.', ok: 'Got it' },
+}
+
+// ---- the store: one new key, read and written in the same pattern as learnStore ----------------
+// { intro: seen, hints: { <hint id>: seen } }. Storage that is absent or throws falls back to memory,
+// so nothing is shown twice in one page load and nobody is caught in a loop: the first-visit overlay
+// then comes back once per page load, never more. Function declarations, for hoisting, like the others.
+const ONBOARD_KEY = 'compoundOnboardV1'
+const onboardMem = { intro: false, hints: {} }
+function onboardStore() {
+  try { const s = JSON.parse(localStorage.getItem(ONBOARD_KEY) || '{}')
+        return { intro: !!s.intro, hints: s.hints || {} } }
+  catch (e) { return { intro: false, hints: {} } }
+}
+function onboardSave(st) { try { localStorage.setItem(ONBOARD_KEY, JSON.stringify(st)) } catch (e) {} }
+function onboardSeen(id) {
+  return id === 'intro' ? onboardMem.intro || onboardStore().intro
+                        : !!(onboardMem.hints[id] || onboardStore().hints[id])
+}
+function onboardMark(id) {
+  const st = onboardStore()
+  if (id === 'intro') { onboardMem.intro = true; st.intro = true }
+  else { onboardMem.hints[id] = true; st.hints[id] = true }
+  onboardSave(st)
+}
+
+// ---- pausing hint cards (S4) --------------------------------------------------------------------
+// User decision: a card that stops play until it is dismissed, chosen knowing the pause was fragile
+// (fact sheet 8.11). What holds it:
+//   * `hintUnder` is the pause state the game returns to when the card goes. While a card is open every
+//     write to the pause that is not the card's own goes through setPaused() and lands in `hintUnder`
+//     instead of `paused` - closeCards' unconditional unpause, __surv.clearModals, and offerCards'
+//     pause alike. So nothing unpauses under a card, a card over the level-up screen leaves that screen
+//     paused when it goes, and a screen that closed underneath (only a script can do that) does not
+//     leave the game frozen with nothing on screen to unfreeze it.
+//   * held keys are dropped on open and on dismiss (before this only `blur` dropped them, 8.11b)
+//   * one card at a time; another one waits in the queue, and reset() empties both
+// The level-up card fires only from the real level-up openings (offerCards(true)), never from the
+// re-entries for picks, rerolls and banishes (8.4).
+const HINTS = { levelup: 'S4.1', synergy: 'S4.2', lifeline: 'S4.3', event: 'S4.4', works: 'S4.5', debrief: 'S4.6' }
+let hintOpen = null, hintUnder = false, hintFocus = null
+const hintQueue = []
+function setPaused(v) { if (hintOpen) hintUnder = v; else paused = v }
+function hint(id) {
+  if (!HINTS[id] || hintOpen === id || hintQueue.includes(id) || onboardSeen(id)) return
+  if (hintOpen) { hintQueue.push(id); return }
+  hintUnder = paused; paused = true
+  hintFocus = document.activeElement
+  hintRender(id)
+}
+function hintRender(id) {
+  onboardMark(id)
+  hintOpen = id; keys = {}
+  const C = ONBOARD_COPY[HINTS[id]]
+  $('hint-t').textContent = C.title
+  $('hint-p').textContent = C.body
+  $('hint-ok').textContent = C.ok
+  // Learning: the lifeline gloss rides the card that first names a lifeline (S7.LL; placement is the
+  // builder's, and this is the one moment the word is on screen and the game is stopped to read it).
+  $('hint-g').innerHTML = id === 'lifeline' ? glossHtml([['lifeline', 'S7.LL']]) : ''
+  $('hint').hidden = false
+  $('hint-ok').focus()
+}
+function hintDismiss() {
+  if (!hintOpen) return
+  keys = {}
+  while (hintQueue.length) { const next = hintQueue.shift(); if (!onboardSeen(next)) { hintRender(next); return } }
+  hintOpen = null
+  $('hint').hidden = true
+  paused = hintUnder
+  if (hintFocus && hintFocus.focus && document.contains(hintFocus)) hintFocus.focus()
+  hintFocus = null
+}
+function hintClear() {                 // reset(): a card never crosses into the next run
+  hintQueue.length = 0
+  if (!hintOpen) return
+  hintOpen = null; hintFocus = null
+  $('hint').hidden = true
+}
+
+// ---- how-to-play overlay (S3) -------------------------------------------------------------------
+// A direct child of body, not of #start: every div inside #start is capped at 430px (8.2), and html and
+// body never scroll (8.1), so this layer scrolls itself. On a first visit it opens by itself with no Skip
+// and no Escape; the start screen behind it is inert until "Start playing" on the last step, and that
+// press is the only thing that marks it seen (user decision 2026-09-14, feedback record section 2).
+// Back stays available. From the button it opens with Skip and Escape, and every close only closes: a
+// place card still starts the run, so the player still chooses where (copy S3.5).
+const HOW_STEPS = ['S3.1', 'S3.2', 'S3.3', 'S3.4']
+// The one action each step teaches, bolded where the body carries it word for word. A substring, not a
+// sentence index, so a revised row that drops it loses the bold instead of bolding the wrong words.
+const HOW_ACT = { 'S3.1': 'Move with WASD or the arrow keys, or drag on a touch screen.',
+                  'S3.2': 'you pick one card', 'S3.3': "Stand in a hurt one's ring", 'S3.4': 'You can answer questions.' }
+let howStep = 0, howMandatory = false
+function howOpen(mandatory) {
+  howMandatory = mandatory; howStep = 0
+  $('start').inert = true
+  $('howto').hidden = false
+  $('howto').scrollTop = 0
+  howRender()
+}
+function howRender() {
+  const id = HOW_STEPS[howStep], C = ONBOARD_COPY[id], B = ONBOARD_COPY['S3.5']
+  $('howto-t').textContent = C.title
+  const p = $('howto-p'), act = HOW_ACT[id], at = act ? C.body.indexOf(act) : -1
+  if (at < 0) p.textContent = C.body
+  else {
+    const b = document.createElement('b'); b.textContent = act
+    p.textContent = ''; p.append(C.body.slice(0, at), b, C.body.slice(at + act.length))
+  }
+  for (let i = 0; i < HOW_STEPS.length; i++) $('howart' + i).hidden = i !== howStep
+  $('howto').querySelectorAll('.howdots i').forEach((d, i) => d.classList.toggle('on', i === howStep))
+  const back = $('how-back'), skip = $('how-skip'), next = $('how-next')
+  back.textContent = B.back; back.style.visibility = howStep ? 'visible' : 'hidden'
+  skip.textContent = B.skip; skip.hidden = howMandatory
+  next.textContent = howStep === HOW_STEPS.length - 1 ? B.start : B.next
+  $('howto-t').focus()
+}
+function howGo(d) {
+  const n = howStep + d
+  if (n < 0 || n >= HOW_STEPS.length) return
+  howStep = n; howRender()
+}
+function howClose(finished) {
+  if (finished) onboardMark('intro')
+  $('howto').hidden = true
+  $('start').inert = false
+  howMandatory = false
+  $('howbtn').focus()
+}
+$('how-next').onclick = () => { if (howStep < HOW_STEPS.length - 1) howGo(1); else howClose(true) }
+$('how-back').onclick = () => howGo(-1)
+$('how-skip').onclick = () => { if (!howMandatory) howClose(false) }
+$('howbtn').onclick = () => howOpen(false)
+$('hint-ok').onclick = () => hintDismiss()
+
+// Keyboard for both layers. The game's own keydown (registered earlier, so it runs first) cancels Space
+// and the arrows page-wide (8.14) and nothing answered Enter, Escape or Tab, so these are handled here.
+// Enter is taken over too: a focused button is clicked once, by this, and never also by the browser.
+addEventListener('keydown', e => {
+  const k = e.key
+  if (!$('howto').hidden) {
+    if (k === 'Tab') { trapTab(e, $('howto')); return }
+    if (!['Enter', ' ', 'Escape', 'ArrowLeft', 'ArrowRight'].includes(k)) return
+    e.preventDefault()
+    if (e.repeat) return
+    if (k === 'Escape') { if (!howMandatory) howClose(false) }
+    else if (k === 'ArrowRight') howGo(1)
+    else if (k === 'ArrowLeft') howGo(-1)
+    else {
+      const a = document.activeElement
+      if (a && a.tagName === 'BUTTON' && $('howto').contains(a)) a.click()
+      else if (k === 'Enter') $('how-next').click()
+    }
+    return
+  }
+  if (hintOpen) {
+    if (k === 'Tab') { e.preventDefault(); $('hint-ok').focus(); return }
+    // Not Space: Space is Evacuate, and a player pressing it as the card lands would dismiss it unread.
+    if (k !== 'Enter' && k !== 'Escape') return
+    e.preventDefault()
+    if (!e.repeat) hintDismiss()
+  }
+})
+function trapTab(e, box) {
+  const f = [...box.querySelectorAll('button')].filter(b => !b.hidden && b.style.visibility !== 'hidden')
+  if (!f.length) return
+  e.preventDefault()
+  const i = f.indexOf(document.activeElement)
+  f[i < 0 ? (e.shiftKey ? f.length - 1 : 0) : (i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus()
+}
+
+// ---- Learning: plain versions (S6) --------------------------------------------------------------
+// say(id, current, arg) returns `current` untouched on every difficulty but Learning, so the text there
+// is byte-identical to before. On Learning it returns that row's plain version. Rows the copy keeps
+// UNCHANGED have no entry and fall through to `current`: already plain; held by adjudication D3 (UNDRR
+// lines with no support in this round's capture) or D2 (two false game lines); and TRD.growth.src and
+// TRD.levee.src, held by the Builder guard after the delta adjudication. A function entry takes the one
+// argument the current template reads. Keyed by the copy's row ids.
+const PLAIN = {
+  'UPG.field.desc0': 'Building standards, applied to everything standing around you. Nothing dramatic happens. Things simply do not fall.',
+  'UPG.pulse.desc0': 'It finds what is closest. It deals with it before it arrives.',
+  'UPG.pulse.descN': l => `Faster. It also goes past the first thing it meets (Lv ${l + 1}).`,
+  'UPG.wave.desc0': 'Practised regularly. It does not stop the hazard. It moves people out of its way.',
+  'UPG.armour.desc0': 'The buildings that are already there, made stronger. Less of every hit gets through.',
+  'UPG.magnet.desc0': 'Monitoring, and records of losses. You see further out. Nothing is collected that was never measured.',
+  'UPG.magnet.descN': 'Monitoring, and records of losses. From now on, what you fire turns toward what it was aimed at.',
+  'UPG.hp.desc0': 'Money saved up, and insurance. Capacity to take a hit and still be standing.',
+  'UPG.rate.desc0': 'All you have built, working when it is needed.',
+  'UPG.dmg.desc0': 'Money spent making things stronger first, not on rebuilding them after.',
+  'SYN.act.gain': 'Warning fires 25% faster. Drills reach 30% further. And one more shot goes out each time.',
+  'SYN.stock.gain': 'Codes cover 35% more ground. Retrofitting stops 10% more. What you stop bursts where it falls.',
+  'SYN.concrete.gain': '+60 capacity. Retrofitting also stops 8% more.',
+  'SYN.who.gain': 'Drills reach 25% further. You collect from 25% further away. A shot that lands sends another on to the next thing.',
+  'SYN.lane.gain': 'A cleared corridor runs through you, in the direction you are moving. It wears down everything standing in it.',
+  'SYN.keep.gain': 'Everything you have hits 15% harder and fires 15% faster. What you fire bursts where it lands.',
+  'GIST.act': 'A warning buys time. The drill turns that time into action people already know.',
+  'GIST.stock': 'Codes set the rules for what gets built next. Retrofit reaches everything already standing.',
+  'GIST.see': 'You cannot warn about what nobody is measuring. Data is the input.',
+  'GIST.buffer': 'The belt keeps paying only while planning keeps its land empty.',
+  'GIST.concrete': 'The measure that gets the money is the measure that gets built.',
+  'GIST.who': 'Data shows who the drill never reaches. An average is not a plan.',
+  'GIST.plan': 'Codes decide how to build. Planning decides whether to build there at all.',
+  'GIST.keep': 'A defence is an ongoing duty, not a one-time buy. Maintenance is half of it.',
+  'GIST.lane': 'Planning clears the corridor. Maintenance is the only thing that keeps it clear.',
+  'TRD.levee.cost': 'And on the day water does get over it, far more is behind it to hit. Floods and storms take 55% more.',
+  'FUS.act.desc': 'Warning and drills run as one programme. Every few seconds, everything near you is moved out of the way before it lands.',
+  'FUS.act.gain': 'An evacuation pulse fires by itself every 9s. It pushes hazards back, and you move faster right after it.',
+  'FUS.see.desc': 'Data feeds warning all the time. A sweep watches the whole horizon and deals with what it finds.',
+  'FUS.see.gain': 'A monitoring beam circles you. It wears down everything it crosses, reaching a long way out.',
+  'FUS.buffer.desc': 'A buffer that is planned, planted and defended. It is wider and thicker, and it pushes back what touches it.',
+  'FUS.buffer.gain': 'The green belt gets two more shards and reaches 25% further. It throws back what it hits.',
+  'MOD.track.descN': l => `It turns more sharply, and gives up later (Lv ${l + 1}).`,
+  'MOD.volley.desc0': 'One more shot goes out every time it fires.',
+  'MOD.frag.desc0': 'What you fire bursts where it lands. The burst reaches what stood next to it.',
+  'MOD.relay.desc0': 'A shot that lands sends another on to the next thing near it.',
+  'MOD.resid.desc0': 'What you stop bursts where it falls. It does not matter what stopped it.',
+  'MOD.calibre.desc0': 'What you fire is bigger and hits harder, but it is slower.',
+  'MOD.grow.desc0': 'It gets wider as it travels. It is thin near you and broad where it lands.',
+  'MOD.grow.descN': l => `It gets wider faster (Lv ${l + 1}).`,
+  'MOD.gather.desc0': 'What you hit is pulled toward where it was hit. It is not thrown away from it.',
+  'MOD.beam.desc0': 'A beam that stays on burns what it crosses, out to where you can see. Your aimed shots keep firing under it. Through, Volley, Calibre, Relay and Gathering all work on the beam. Fragmenting, Spreading and Return do not, but they still work on your shots.',
+  'MOD.fan.desc0': 'A wide sweep, added on top of your aimed shots. Many more shots spread across the front. Each one is lighter, and none of them goes as far.',
+  'HAZ.quake.src': 'It is sudden, with little warning, and over in seconds. That is why the only thing that works is what was already in place.',
+  'HAZ.flood.src': 'A front, not an event. It comes from one direction and keeps coming.',
+  'HAZ.heat.src': 'It does not come to you. It settles over a place and stays. That is why it kills more people than it looks like it should.',
+  'HAZ.fire.src': 'It multiplies. Every one you leave standing starts the next. It throws embers ahead of itself, onto ground that was not burning.',
+  'EVT.inbound.warned': warn => `Your warning system gives you ${(warn).toFixed(1)}s.`,
+  'LL.lost.more': left => ` If you lose ${left} more, the run ends here.`,
+  'LL.hospital.gain': 'Your capacity comes back slowly while it stands.',
+  'LL.school.cost': 'And 15% less than normal once it is gone.',
+  'LL.power.cost': 'And 12% slower after. Everything else also starts failing faster.',
+  'LL.water.gain': 'Heat hurts you 40% less.',
+  'LL.road.cost': 'And 10% slower after. Works sites take longer to reach and to finish.',
+  'SVC.hospital.line': 'Casualties clear. You get 30% back now, and it keeps giving it back for 8s.',
+  'SVC.school.line': 'It reaches the whole map. Everything left to collect comes to you, worth 50% more for 8s.',
+  'SVC.power.title': 'Power back on',
+  'SVC.power.line': 'Every other service gets 30 back. Everything you have fires 25% harder for 8s.',
+  'SVC.water.title': 'Water pressure',
+  'SVC.water.line': 'It reaches the heat sitting on the map. Heat hurts you 75% less for 8s.',
+  'SVC.road.line': 'Everything half-built is finished now. You move 20% faster for 8s.',
+  'PICK.assess.flash': 'Everything you had not collected is now collected.',
+  'PICK.relief.flash': 'You get a sixth of your capacity back.',
+  'PICK.evac.flash': 'Everything is pushed back, and you get a moment to move.',
+  'WRK.station.gain': 'You collect from 20% further. What you collect is worth 8% more.',
+  'SEA.storm.note': 'The one hazard you are warned about ahead of time.',
+  'SEA.wet.note': 'It comes as a front, and it keeps coming.',
+  'SEA.swarm.note': 'Compound. All of it, and none of it waits.',
+  'SEA.quiet.note': 'Little is arriving. But nothing has stopped. Go and get ready.',
+  'BAN.line': 'Not paid for in this place, this run. A risk plan also includes what you decide not to pay for.',
+}
+function say(id, cur, arg) {
+  if (DIFF.id !== 'learn') return cur
+  const p = PLAIN[id]
+  return p == null ? cur : typeof p === 'function' ? p(arg) : p
+}
+// Which of a card's two description rows is on screen. A desc with no level branch prints its level-0
+// text at every level, which is how the copy keys those rows ("all levels if no level branch").
+const descRow = (pre, id, desc, l) => pre + id + (desc(l) === desc(0) ? '.desc0' : '.descN')
+
+// ---- Learning: term glosses (S7) ----------------------------------------------------------------
+// Shown on cards, which stop play and can be read. (No banner carries one: S7.B10m, "Compound", was dropped
+// in the final copy, adjudication section 2c.) Each gloss is labelled with the term exactly as that surface prints it, so no word reaches the
+// screen that the surface did not already say. A Group B gloss is attached only while the surface's own
+// text carries its label (the copy's hit table: Drills says "hazard" at level 0 and not after). S7.A8
+// carries no source line and no "UNDRR defines" (adjudication section 1). Resilient investment has no
+// gloss (S7.A10 dropped, adjudication section 1).
+const GLOSS = {
+  'S7.A1': 'Official rules for how buildings are designed, built and used. They are meant to keep people safe, including from collapse.',
+  'S7.A2': 'A system that links watching hazards, warning people and being ready. It lets people act in time to reduce risk.',
+  'S7.A3': 'A supervised practice that tests one part of an emergency plan. It is repeated with real resources to improve it.',
+  'S7.A4': 'Working with nature to protect, restore and look after wild or changed ecosystems. This can help against natural hazards.',
+  'S7.A5': 'Making buildings and other structures that already exist stronger. The aim is for hazards to damage them less.',
+  'S7.A6': 'Records of past disaster losses. Also information and maps about hazards and who and what is at risk.',
+  'S7.A7': 'One kind is insurance. You pay an insurer over time, and it pays you after a disaster.',
+  'S7.A8': 'Public authorities deciding what land may be used for. Their plans set out the allowed uses.',
+  'S7.A9': 'Care of infrastructure. Regular upkeep based on checks helps it work better and last longer.',
+  'S7.B1': 'Something in nature or done by people that may cause harm. Harm can mean death, injury, damage or disruption.',
+  'S7.B4': 'Conditions making people, places or systems easier for hazards to harm. They come from physical, social, economic and environmental factors.',
+  'S7.B5': "Being able to resist, absorb, adjust to and adapt to a hazard's effects. And to transform and recover from them.",
+  'S7.B8': 'Moving people and property to safer places for a time. It is done before, during or after a hazard happens.',
+  'S7.B10c': 'A chain reaction. One hazard or failure sets off linked impacts that may spread across systems and sectors.',
+  'S7.LL': 'Services that help you: three at random from hospital, school, power, water, road. One place has four. Losing one hurts.',
+}
+const GLOSS_MEASURE = { field: 'S7.A1', pulse: 'S7.A2', wave: 'S7.A3', ring: 'S7.A4', armour: 'S7.A5',
+                        magnet: 'S7.A6', hp: 'S7.A7', speed: 'S7.A8', rate: 'S7.A9' }
+const GLOSS_TERMS = {
+  wave: [['hazard', 'S7.B1']],            // UPG.wave.desc0
+  speed: [['vulnerability', 'S7.B4']],    // UPG.speed.src
+  armour: [['resilient', 'S7.B5']],       // UPG.armour.src
+  rate: [['resilience', 'S7.B5']],        // UPG.rate.src
+  dmg: [['resilience', 'S7.B5']],         // UPG.dmg.src
+  hp: [['cascading', 'S7.B10c']],         // UPG.hp.src
+  growth: [['hazard', 'S7.B1']],          // trade-off card: TRD.growth.cost and .src
+  act: [['evacuation', 'S7.B8']],         // programme card "Practiced evacuation", the card FUS.act.gain speaks for
+}
+function glossHtml(pairs) {
+  if (DIFF.id !== 'learn' || !pairs.length) return ''
+  return pairs.map(([label, id]) => `<div class="gloss"><b>${label}</b>${GLOSS[id]}</div>`).join('')
+}
+const glossTerms = (key, text) =>
+  (GLOSS_TERMS[key] || []).filter(([label]) => text.toLowerCase().includes(label.toLowerCase()))
+
+// ---- the Hospital-lost heal lines (S5 row 7.32), every difficulty ---------------------------------
+// Once the Hospital is lost every heal() runs at P.healMul 0.3, so a card that says 25% repairs 7.5%.
+// These print the real figure while that holds; otherwise the card keeps its current words. 7.32d (the
+// level-up heal) has no text. On Learning the relief pickup and the relief trade-off have no plain
+// Hospital-lost wording in the copy, so they show these same lines (TRD.relief.desc is held UNCHANGED on
+// Learning anyway, adjudication D2).
+const HOSPITAL_LOST = {
+  'S5.7.32a': 'Repairs 7.5% of capacity',
+  'S5.7.32b': 'Repairs 4.5% of capacity',
+  'S5.7.32c': '5.1% of capacity back.',
+  'S5.7.32e': 'Help arrives after each event: 9% of capacity back on every level.',
+  'S5.7.32f': 'Repair 4.5% of capacity, and raise its ceiling by 8.',
+}
+const healLine = (row, cur) => (P && P.healMul === 0.3) ? HOSPITAL_LOST[row] : cur
 
 // ---------------------------------------------------------------- institutional capacity
 // The accumulating layer (user direction 2026-09-01): what a run PROTECTS becomes the
@@ -2542,7 +3297,7 @@ const META = [
   { id: 'office', name: 'Standing assessment office', max: 2, cost: l => 8 + l * 6,
     fx: '+1 reroll charge per level.',
     src: 'Commissioning a study is paying to change your option menu.',
-    now: l => `+${l} reroll charge on every level-up screen.`,
+    now: l => `+${l} to the reroll charges you get each run.`,   // S5.7.27: one pool per run, not per screen
     of: 'magnet' },
   { id: 'telegraph', name: 'Warning culture', max: 3, cost: l => 6 + l * 5,
     fx: 'Event telegraphs last 6% longer per level.',
@@ -2869,6 +3624,64 @@ const LIFELINE_IDS = Object.keys(LIFELINES)
 // basic services uninterrupted, so the game rewards uninterrupted rather than mostly-fine.
 const servicesIntact = () => lifelines.length > 0 && lifelines.every(L => L.alive)
 const svc = () => servicesIntact() ? T.svcBonus : 1
+
+// ------------------------------------------------- defending one, and what it pays (2026-09-04)
+// The reward for saving a service is the service doing its own job, once, across the whole map.
+// Each line below is the passive that lifeline already holds, fired instead of held: power puts
+// the others back on, water reaches the heat, the school's drill reaches everyone, the road lets
+// what was half-built finish. Nothing here asserts anything about the world that the lifeline's
+// own note did not already say - these are effect descriptions, and the teaching is the mechanic.
+const SERVICE_FIRE = {
+  hospital: { title: 'Hospital holds',
+              line: 'Casualties clear: 30% back now, and it keeps giving it back for 8s.',
+              go: () => { heal(P.max * 0.30) } },
+  school:   { title: 'The drill goes out',
+              line: 'It reaches the whole map: everything collectable comes to you, worth 50% more for 8s.',
+              go: () => { for (const m of motes) m.pull = true } },
+  power:    { title: 'Power back on line',
+              line: 'Every other service takes 30 back, and everything you have fires 25% harder for 8s.',
+              go: L => { for (const O of lifelines) if (O.alive && O !== L) O.hp = Math.min(100, O.hp + 30) } },
+  water:    { title: 'Mains pressure',
+              line: 'It reaches the heat sitting on the map, and heat takes 75% less off you for 8s.',
+              // over a copy: hurtEnemy splices the dead out, and this one kills several at once
+              go: () => { for (const e of enemies.slice()) if (e.behaviour === 'zone') hurtEnemy(e, 45, 0, 0) } },
+  road:     { title: 'Route open',
+              line: 'Everything half-built finishes now, and you move 20% faster for 8s.',
+              // need + 1, not need: the works loop decays progress for anyone standing outside
+              // the ring BEFORE it checks for completion, and you are standing on the lifeline.
+              // Set it exactly to `need` and the site stops one frame short of finishing, forever.
+              go: () => { for (const w of works) w.prog = w.need + 1 } },
+}
+
+// Which lifeline is being defended this frame, and which service is currently running at full
+// stretch. Both are read at the point of use - the file's own rule for anything temporary, because
+// a buff that mutates P.spd or P.rateMul has to remember to put it back and something eventually
+// does not (see the note above `eff`).
+let onSite = null
+let SF = { kind: null, t: 0 }
+const sfOn = k => SF.kind === k && SF.t > 0
+const defMul = () => onSite ? T.defendMul : 1
+
+// The four stats a fired service touches that are not `eff`. Read these, never P.<stat>, at the
+// four places that consume them.
+const heatResNow = () => P.heatRes * (sfOn('water')    ? 0.25 : 1)
+const spdNow     = () => P.spd     * (sfOn('road')     ? 1.20 : 1)
+const xpMulNow   = () => (P.xpMul || 1) * (sfOn('school')   ? 1.50 : 1)
+const regenNow   = () => P.regen   * (sfOn('hospital') ? 3.00 : 1)
+
+function fireService(L) {
+  const K = LIFELINES[L.kind], S = SERVICE_FIRE[L.kind]
+  SF = { kind: L.kind, t: T.serviceDur }
+  L.fireCd = T.serviceCd
+  S.go(L)
+  flash(say('SVC.' + L.kind + '.title', S.title), say('SVC.' + L.kind + '.line', S.line), K.col)
+  AU.play('mastery')
+  burst(L.x, L.y, K.col, 40, 380)
+  fx.push({ ring: true, noHit: true, x: L.x, y: L.y, r: 12, max: 520, life: 0.7, col: K.col, hit: new Set() })
+  shake = Math.max(shake, 10)
+  syncHud()
+}
+
 // Healing runs through here so the hospital's absence can actually be felt at every source.
 const heal = amount => { P.hp = Math.min(P.max, P.hp + amount * (P.healMul == null ? 1 : P.healMul)) }
 
@@ -3090,7 +3903,7 @@ function updateBoss(dt) {
   }
 
   B.x += B.kx * dt; B.y += B.ky * dt
-  B.kx *= 0.86; B.ky *= 0.86
+  B.kx *= knDecay; B.ky *= knDecay
 
   // touching it
   if (P.inv <= 0 && dist2(B, P) < (B.r + P.r) ** 2) {
@@ -3203,7 +4016,13 @@ function fireEvent() {
   const warn = K.warn * (1 + lv.pulse * T.warnPerWarnLevel) * DIFF.warn
     * (PLACE.bite.warnMul || 1)              // some places simply do not get told early
     * (1 + 0.06 * (METALV.telegraph || 0))   // warning culture: institutional seconds
-  warnBought += warn - K.warn
+  // What the report's "Warning bought you" row counts (S5.7.31, adjudication D1): only the seconds Early
+  // warning LEVELS added above the free Lv 1, which is `warn` minus this event's `warn` at Lv 1 and is
+  // never negative. Warning culture, difficulty and place are not counted as the investment - but
+  // telegraph length is multiplicative, so those factors still scale how many seconds each level buys.
+  // (It used to be `warn - K.warn`, which counted them and went negative on Exposed.)
+  warnBought += K.warn * (lv.pulse - 1) * T.warnPerWarnLevel * DIFF.warn
+    * (PLACE.bite.warnMul || 1) * (1 + 0.06 * (METALV.telegraph || 0))
   // Origin fixed HERE, at the moment of the warning, and never touched again. A telegraph
   // you can outrun is the entire mechanic; one anchored to the player is just damage with a
   // countdown on it.
@@ -3211,10 +4030,13 @@ function fireEvent() {
                               ox: P.x, oy: P.y }, K.make(P)))
   eventsSeen.push(id)
   flash(K.name + ' inbound', lv.pulse > 1
-    ? `Your warning system is buying you ${(warn).toFixed(1)}s.`
+    ? say('EVT.inbound.warned', `Your warning system is buying you ${(warn).toFixed(1)}s.`, warn)
     : 'Get out of the way of it.', K.col)
   AU.play('warn')
   shake = Math.max(shake, 6)
+  // First telegraph (S4.4). Siege rockfalls skip fireEvent and never raise this (8.6); the pause freezes
+  // the telegraph with everything else, because events only advance inside step().
+  hint('event')
 }
 
 // Is this point inside the dangerous part of an event that is currently impacting?
@@ -3382,6 +4204,7 @@ function spawnWorks() {
   const a = Math.random() * TAU, d = rand(320, 700)
   works.push({ kind, x: P.x + Math.cos(a) * d, y: P.y + Math.sin(a) * d,
                prog: 0, need: WORKS[kind].need, life: T.worksLife, inside: false })
+  hint('works')   // first works site (S4.5); its 15 s life only runs inside step(), so the pause holds it too
 }
 
 function updateGroundThings(dt) {
@@ -3396,7 +4219,8 @@ function updateGroundThings(dt) {
       k.take()
       picked.push(q.kind)
       burst(q.x, q.y, k.col, 20, 260)
-      flash(k.name, k.flash, k.col)
+      flash(k.name, q.kind === 'relief' ? healLine('S5.7.32c', say('PICK.relief.flash', k.flash))
+                                        : say('PICK.' + q.kind + '.flash', k.flash), k.col)
       AU.play('pickup')
       syncHud()
       pickups.splice(i, 1)
@@ -3426,7 +4250,7 @@ function updateGroundThings(dt) {
       k.apply()
       worksDone.push(w.kind)
       burst(w.x, w.y, k.col, 34, 340)
-      flash(k.name + ' built', k.gain, k.col)
+      flash(k.name + ' built', say('WRK.' + w.kind + '.gain', k.gain), k.col)
       AU.play('worksDone')
       shake = Math.max(shake, 8)
       syncHud()
@@ -3518,7 +4342,7 @@ function startSeason(id, silent) {
   const el = $('season')
   el.firstElementChild.textContent = SEASON.name
   el.firstElementChild.style.color = SEASON.col
-  el.lastElementChild.textContent = SEASON.note
+  el.lastElementChild.textContent = say('SEA.' + id + '.note', SEASON.note)
   el.classList.add('show')
   AU.play('season')
   bannerT = 2.8
@@ -3558,6 +4382,7 @@ function hitLifeline(L, amount) {
     L.warnCd = 9
     flash(LIFELINES[L.kind].name + ' under attack', 'No measure defends it. Being there does.', '#ff9d9d')
     AU.play('warn')
+    hint('lifeline')   // first lifeline under attack (S4.3); the flash waits behind the card, its timer frozen
   }
   L.hp -= amount
   if (L.hp > 0) return
@@ -3574,8 +4399,8 @@ function hitLifeline(L, amount) {
   // cost you could not have acted on; the count belongs on the field, at the moment.
   const cap = failCap()
   const left = cap - lifelinesLost.length
-  flash(K.name + ' lost', K.cost + (left > 0
-    ? ` ${left} more and the run ends here.`
+  flash(K.name + ' lost', say('LL.' + L.kind + '.cost', K.cost) + (left > 0
+    ? say('LL.lost.more', ` ${left} more and the run ends here.`, left)
     : ' That was the last one this place could lose.'), '#ff9d9d')
   syncHud()
   if (lifelinesLost.length >= cap) { endReason = 'services'; die() }
@@ -3587,8 +4412,11 @@ function hitLifeline(L, amount) {
 // crowd that never dies and never leaves took every lifeline in every place inside a
 // minute, which is not a decision, only a tax.
 function updateLifelines(dt) {
+  if (SF.t > 0 && (SF.t -= dt) <= 0) SF = { kind: null, t: 0 }
+  onSite = null
   for (const L of lifelines) {
     if (L.warnCd > 0) L.warnCd -= dt
+    if (L.fireCd > 0) L.fireCd -= dt
     if (!L.alive) continue
     let under = 0, inbound = 0
     for (const e of enemies) {
@@ -3599,11 +4427,38 @@ function updateLifelines(dt) {
       if (dx * dx + dy * dy < rr * rr) under++
     }
     L.under = under; L.inbound = inbound
+    const here = dist2(L, P) < (T.lifelineR + P.r) ** 2
+
+    // THE ACT. Standing on one that is hurt or occupied is the only state that pays for it -
+    // and it pays twice: you fire harder and faster while you are there (`defMul`, read by
+    // `eff`), and the site's own crews hit whatever is sitting on it. The pulse reaches ONLY
+    // the two hazards that grind a lifeline, so this is a defence, never a place to farm.
+    if (here && (under || L.hp < 100)) {
+      onSite = L
+      if ((L.pulseCd = (L.pulseCd || 0) - dt) <= 0) {
+        L.pulseCd = T.defendPulseCd
+        const K = LIFELINES[L.kind]
+        for (const e of enemies.slice()) {   // a copy: hurtEnemy splices the dead out from under it
+          if (e.behaviour !== 'zone' && e.behaviour !== 'front') continue
+          const rr = T.lifelineR + e.r
+          if (dist2(e, L) >= rr * rr) continue
+          const a = Math.atan2(e.y - L.y, e.x - L.x)
+          hurtEnemy(e, T.defendPulseDmg, Math.cos(a) * 90, Math.sin(a) * 90)
+        }
+        fx.push({ ring: true, noHit: true, x: L.x, y: L.y, r: 8, max: T.lifelineR,
+                  life: 0.3, col: K.col, hit: new Set() })
+        AU.play('block')
+      }
+    }
+    // Whether it was ever really in danger. A service that dipped this far and came back is a
+    // save; one you topped up from 98 is not, and must not pay like one.
+    if (L.hp <= T.serviceDipAt) L.dipped = true
+
     // Once power is gone the rest go faster. Not a difficulty knob — it is the mechanic the
     // dense-city compound event is named after, made real on the map.
     const casc = P.cascade && L.kind !== 'power' ? T.cascadeMul : 1
     if (under) hitLifeline(L, T.lifelineDps * (DIFF.llDmg || 1) * Math.min(under, 4) * casc * dt)
-    else if (L.hp < 100 && dist2(L, P) < (T.lifelineR + P.r) ** 2) {
+    else if (L.hp < 100 && here) {
       // Maintenance is the only way one comes back, and the only place in the game where
       // that measure does something you can watch happening.
       L.hp = Math.min(100, L.hp + T.lifelineRepair * (1 + lv.rate * 0.3) * dt)
@@ -3611,9 +4466,11 @@ function updateLifelines(dt) {
       // the defend-repair loop is the lifeline mechanic, and it has to close audibly.
       if (L.hp >= 100) {
         const K = LIFELINES[L.kind]
-        flash(K.name + ' repaired', K.gain, K.col)
-        AU.play('worksDone')
-        burst(L.x, L.y, K.col, 16, 220)
+        // A save pays the service's own function out across the map. A top-up says so and
+        // pays nothing, which is what keeps the first one worth crossing the map for.
+        if (L.dipped && (L.fireCd || 0) <= 0) fireService(L)
+        else { flash(K.name + ' repaired', say('LL.' + L.kind + '.gain', K.gain), K.col); AU.play('worksDone'); burst(L.x, L.y, K.col, 16, 220) }
+        L.dipped = false
       }
     }
   }
@@ -3632,7 +4489,7 @@ function makeHazard(id, x, y, extra) {
   const k = HAZARDS[id]
   // Worked example before any question: the first arrival of each kind this run introduces
   // itself in its own words (guidance-then-struggle — novices get told, then asked).
-  if (!introSeen[id]) { introSeen[id] = true; flash(k.name + ' arrives', k.src, k.col) }
+  if (!introSeen[id]) { introSeen[id] = true; flash(k.name + ' arrives', say('HAZ.' + id + '.src', k.src), k.col) }
   const rt = rampTime()
   const hpS = (1 + rt / T.hpRamp) * (PLACE.bite.hpMul || 1)
   return Object.assign({
@@ -3718,7 +4575,7 @@ function dropPrep() {
 function moveHazard(e, dt) {
   if (e.behaviour === 'zone') {
     e.life -= dt
-    if (e.life <= 0) { const i = enemies.indexOf(e); if (i > -1) enemies.splice(i, 1) }
+    if (e.life <= 0) { e.gone = true; const i = enemies.indexOf(e); if (i > -1) enemies.splice(i, 1) }
     return
   }
   if (e.behaviour === 'front') {
@@ -3728,7 +4585,7 @@ function moveHazard(e, dt) {
     // the player. The old reading deleted any front aimed at anything but the player, and
     // before that deleted every front on a small window.
     if (Math.hypot(e.x - e.ox, e.y - e.oy) > e.range) {
-      const i = enemies.indexOf(e); if (i > -1) enemies.splice(i, 1)
+      e.gone = true; const i = enemies.indexOf(e); if (i > -1) enemies.splice(i, 1)
     }
     return
   }
@@ -3858,12 +4715,51 @@ const RAMP_FOR = { '#8ef6c6': 'green', '#57c7ff': 'water', '#4f86c6': 'water', '
 const burst = (x, y, col, n = 10, sp = 200) =>
   emit('spark', x, y, n, RAMP_FOR[col] || 'ash', { boost: sp / 200 })
 
-function hurtEnemy(e, dmg, kx, ky) {
+// One blast, and both things that make one go through it: a shot bursting where it lands, and a
+// hazard bursting where it fell. Depth is capped at one on purpose - a residual burst that kills
+// something must not set off another residual burst, or a single death clears the field and the
+// modifier stops being a choice.
+let inResidual = false
+function explode (x, y, radius, dmg, col, opts = {}) {
+  const at = { x, y }
+  // `ringLife` is an override, not a new default. Residual is drawn over the death that triggered
+  // it, on the same frame at the same coordinate, so its ring has to outlive the death flash to be
+  // seen as its own event. Fragmenting bursts where a shot lands, with nothing competing, and keeps
+  // the 0.28 it has always had — every caller that does not ask for a longer ring gets the old one.
+  fx.push({ ring: true, noHit: true, x, y, r: 8, max: radius, life: opts.ringLife || 0.28, col, hit: new Set() })
+  emit('spark', x, y, 7, opts.ramp || 'gold', { boost: 1.1 })
+  AU.play(opts.snd || 'block')
+  if (boss && boss.state !== 'arrive' && dist2(boss, at) < (boss.r + radius) ** 2) {
+    const a = Math.atan2(boss.y - y, boss.x - x)
+    hurtBoss(dmg, Math.cos(a) * 30, Math.sin(a) * 30)
+  }
+  for (const e of enemies.slice()) {          // a copy: hurtEnemy splices the dead out from under it
+    if (e === opts.skip || dist2(e, at) >= (e.r + radius) ** 2) continue
+    const a = Math.atan2(e.y - y, e.x - x)
+    const kn = opts.pull ? -opts.pull * 229 : 120
+    hurtEnemy(e, dmg, Math.cos(a) * kn, Math.sin(a) * kn, opts.pull)
+  }
+}
+
+function hurtEnemy(e, dmg, kx, ky, pull) {
   e.hp -= dmg
   e.flash = 0.09
-  if (Math.random() < .5) {
-    const ramp = e.kind === 'flood' ? 'water' : e.kind === 'fire' ? 'fire'
-               : e.kind === 'storm' ? 'cold' : 'rock'
+  const ramp = e.kind === 'flood' ? 'water' : e.kind === 'fire' ? 'fire'
+             : e.kind === 'storm' ? 'cold' : 'rock'
+  if (pull) {
+    // Gathering had no mark of its own, and the one spark that did fire pointed the wrong way.
+    // `-ky, -kx` is right for a push: the body goes one way, the spray comes off the other. Under
+    // a pull, kx and ky already point AT what is doing the pulling, so the old spray flew outward
+    // while the body was hauled inward — the only visual signal the modifier had was contradicting
+    // it. Along the knock instead, started at the body: the motion is the signal, and it says
+    // "drawn in". Tighter, faster and one more particle than the push spray, because a thing being
+    // pulled should read as a streak rather than a scatter. No colour is added — this is the ramp
+    // the hazard's own hits already use.
+    if (pullFx > 0) {
+      pullFx--
+      emit('spark', e.x, e.y, 3, ramp, { dir: Math.atan2(ky, kx), spread: 0.7, boost: 1.4 })
+    }
+  } else if (Math.random() < .5) {
     emit('spark', e.x, e.y, 2, ramp, { dir: Math.atan2(-ky, -kx), spread: 1.5, boost: .6 })
   }
   e.kx += kx; e.ky += ky
@@ -3875,7 +4771,15 @@ function hurtEnemy(e, dmg, kx, ky) {
     hazardTally[e.kind] = (hazardTally[e.kind] || 0) + 1
     ;(DEATH_FX[e.kind] || DEATH_FX.quake)(e.x, e.y)
     motes.push({ x: e.x, y: e.y, v: e.xp, r: 4 + Math.min(3, e.xp) })
-    const i = enemies.indexOf(e); if (i > -1) enemies.splice(i, 1)
+    e.gone = true; const i = enemies.indexOf(e); if (i > -1) enemies.splice(i, 1)
+    // What you stop bursts where it falls. Spliced out first, so the blast cannot hit the corpse.
+    const sh = SHOT()
+    if (sh.deathR && !inResidual) {
+      inResidual = true
+      explode(e.x, e.y, sh.deathR, sh.deathDmg * P.dmgMul * eff(), MODS.resid.col,
+              { ramp: 'fire', snd: 'resid', ringLife: 0.5 })
+      inResidual = false
+    }
     // Fire is the one that answers back. Green defences are what hold it, and so does
     // running out of ground that has not already burned — the same fuel guard the embers
     // use, because it is the same physical fact and one rule should govern both paths.
@@ -3892,7 +4796,9 @@ function hurtEnemy(e, dmg, kx, ky) {
 // Misallocation multiplies at the point of use rather than being written into dmgMul or
 // rateMul. A debuff that mutates the stat has to remember to put it back, and something
 // eventually does not.
-const eff = () => svc()
+// Three things multiply here now: every service still standing (possession), holding a hurt one
+// right now (the act), and power having just come back on (the act, paid out).
+const eff = () => svc() * defMul() * (sfOn('power') ? 1.25 : 1)
 
 function fireWeapons(dt) {
   const cd = P.cd
@@ -3903,31 +4809,27 @@ function fireWeapons(dt) {
     return true
   }
 
-  // pulse — aimed shots at the nearest enemy. The streak tier adds shots, size, trail and
-  // eventually a split on impact; nothing here is bought, all of it is answered for.
-  if (lv.pulse > 0 && step('pulse', 0.55 - lv.pulse * 0.05)) {
-    const ST = streakTier()
-    const n = Math.min(1 + Math.floor((lv.pulse - 1) / 2), 3) + ST.shots
-    let near = null, bd = 1e9
-    for (const e of enemies) { const d = dist2(e, P); if (d < bd) { bd = d; near = e } }
-    if (boss && boss.state === 'active') { const d = dist2(boss, P); if (d < bd) { bd = d; near = boss } }
-    if (near) {
-      const base = Math.atan2(near.y - P.y, near.x - P.x)
-      for (let i = 0; i < n; i++) {
-        const a = base + (i - (n - 1) / 2) * 0.17
-        AU.play('shot')
-        bullets.push({ x: P.x, y: P.y, vx: Math.cos(a) * 520 * (P.bulletSpd || 1), vy: Math.sin(a) * 520 * (P.bulletSpd || 1),
-                       r: 5 * ST.scale, dmg: (10 + lv.pulse * 4) * P.dmgMul * eff(), life: 1.1,
-                       col: ST.col || '#ffd166', trail: ST.trail, split: ST.split,
-                       pierce: 1 + Math.floor(lv.pulse / 2) + (P.synPierce || 0), hits: new Set() })
-      }
-    }
+  const sh = SHOT()          // resolved once a frame, not once a bullet
+
+  // the Volley echo, a beat behind the ring that set it
+  if (waveEcho > 0 && (waveEcho -= dt) <= 0) { waveEcho = 0; if (lv.wave > 0) fireWave(sh, 0.72) }
+
+  // pulse — the early-warning emitter. The two emitter modifiers are LAID ON TOP of it rather
+  // than replacing it (user decision, 2026-09-10 playtest): the aimed shots always fire on their
+  // cooldown, Broadside adds a wide sweep alongside them inside firePulse, and Continuous adds a
+  // held beam over them, handled per frame rather than per cooldown. A build may hold both.
+  if (lv.pulse > 0) {
+    if (step('pulse', 0.55 - lv.pulse * 0.05)) firePulse(sh)
+    if (sh.beam) fireBeam(dt, sh)
   }
 
   // shockwave — expanding ring that knocks back
   if (lv.wave > 0 && step('wave', 2.4 - lv.wave * 0.22)) {
-    fx.push({ ring: true, x: P.x, y: P.y, r: 10, max: (120 + lv.wave * 34) * (P.synWave || 1),
-              dmg: (18 + lv.wave * 9) * P.dmgMul * eff(), life: 0.42, col: '#9db4ff', hit: new Set() })
+    fireWave(sh, 1)
+    // Volley reaches the drills too: a second, smaller ring a beat behind the first. It is the
+    // same mechanic the modifier already means - one more of the thing you fire - and it was
+    // absurd that six response modifiers touched exactly one of the five weapons.
+    if (sh.extra > 0) waveEcho = 0.22
     shake = Math.max(shake, 5)
   }
 
@@ -3943,6 +4845,107 @@ function fireWeapons(dt) {
       }
     }
   }
+}
+
+// The default emitter, and Broadside. One volley emitter, two sets of numbers, and since
+// 2026-09-10 it is called ONCE OR TWICE rather than taking a branch: the default aimed shots -
+// a tight line that reaches - always leave, and Broadside adds a wide short sweep of many light
+// shots ALONGSIDE them. Before that playtest Broadside converted the aimed shots into the sweep,
+// which is why the player read it as "replaces" rather than "adds". Everything else about a shot
+// is still resolved once by SHOT().
+function firePulse (sh) {
+  const ST = streakTier()
+  let near = null, bd = 1e9
+  for (const e of enemies) { const d = dist2(e, P); if (d < bd) { bd = d; near = e } }
+  if (boss && boss.state === 'active') { const d = dist2(boss, P); if (d < bd) { bd = d; near = boss } }
+  if (!near) return
+  const base = Math.atan2(near.y - P.y, near.x - P.x)
+  fireVolley(sh, ST, base, false)      // the aimed shots: always, whatever the build holds
+  if (sh.fan) fireVolley(sh, ST, base, true)   // and the sweep on top of them
+}
+
+// One volley of `fan ? sh.shots + 4 : sh.shots` bullets, fanned about `base`. The two callers
+// differ only in the numbers picked by `fan`.
+function fireVolley (sh, ST, base, fan) {
+  const n = fan ? sh.shots + 4 : sh.shots
+  // The fan has to open as the count climbs or eight shots leave as one thick shot.
+  const spread = fan ? 1.9 / Math.max(1, n - 1) : 0.17 + Math.max(0, n - 3) * 0.035
+  const dmg = (10 + lv.pulse * 4) * P.dmgMul * eff() * sh.heft * (fan ? 0.55 : 1)
+  const spd = 520 * (P.bulletSpd || 1) * sh.slow * (fan ? 0.80 : 1)
+  // The aimed shot has to outlive its own steering, or the "gives up later" half of Tracking's
+  // Lv2 and Lv3 never executes - the bullet was gone at 1.1 s while homeFor ran to 1.45 s. The
+  // +0.25 s is the un-steered stretch the design wants at the end, so a miss is still possible.
+  // The fan's life is its own number and is not covered by that rule.
+  const life = fan ? 0.72 : Math.max(1.1, sh.homeFor + 0.25)
+  const r0 = 5 * ST.scale * sh.size * (fan ? 0.85 : 1)
+  for (let i = 0; i < n; i++) {
+    const a = base + (i - (n - 1) / 2) * spread
+    AU.play('shot')
+    bullets.push({ x: P.x, y: P.y, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd,
+                   r: r0, r0, dmg, life, life0: life,
+                   col: ST.col || '#ffd166', trail: ST.trail, split: ST.split,
+                   pierce: sh.through, pierce0: sh.through,
+                   home: sh.homeRate, homeT: sh.homeFor,
+                   // Its place in the volley. Read by the homing re-acquire so the bullets of one
+                   // volley take DIFFERENT enemies instead of all locking the nearest - see the
+                   // bullet loop. Every bullet in a volley is born at the same coordinate, so
+                   // without this the spread Volley pays for is folded straight back up.
+                   rank: i,
+                   burst: sh.burstR, burstMul: sh.burstMul, relay: sh.relay,
+                   grow: sh.grow, back: sh.back, backAt: sh.backAt, pull: sh.pull,
+                   hits: new Set() })
+  }
+}
+
+// Continuous. A held beam burns what it crosses, laid OVER the aimed shots rather than replacing
+// them since 2026-09-10 - this runs in addition to firePulse, not instead of it. The geometry was already
+// in the file - the `see` programme's monitoring beam has an angle, a half-width, a range and a
+// per-enemy cooldown - so this is that beam AIMED rather than swept, which is why a laser cost a
+// afternoon rather than a subsystem. Damage lands in chunks on `beamCd` rather than every frame:
+// a continuous weapon billing sixty times a second would also make sixty hit sounds and sixty
+// damage numbers, which is what the rotating beam already learned.
+function fireBeam (dt, sh) {
+  beamOn = null
+  const reach = sh.beamRange
+  const near = enemies.filter(e => dist2(e, P) < reach * reach)
+  near.sort((p, q) => dist2(p, P) - dist2(q, P))
+  const tgts = near.slice(0, sh.beamTgts)
+  if (boss && boss.state === 'active' && tgts.length < sh.beamTgts && dist2(boss, P) < reach * reach) tgts.push(boss)
+  if (!tgts.length) return
+  const dps = (26 + lv.pulse * 9) * P.dmgMul * eff() * sh.heft
+  const lines = []
+  for (const T0 of tgts) {
+    const a = Math.atan2(T0.y - P.y, T0.x - P.x)
+    lines.push(a)
+    if (boss && boss.state !== 'arrive' && (boss.beamCd || 0) <= 0) {
+      const d = Math.hypot(boss.x - P.x, boss.y - P.y)
+      let da = Math.atan2(boss.y - P.y, boss.x - P.x) - a
+      da = Math.atan2(Math.sin(da), Math.cos(da))
+      if (d < reach && Math.abs(da) < sh.beamHalf) { boss.beamCd = 0.2; hurtBoss(dps * 0.2, 0, 0) }
+    }
+    for (const e of enemies.slice()) {
+      if ((e.beamCd || 0) > 0) continue
+      const d = Math.hypot(e.x - P.x, e.y - P.y)
+      if (d > reach || d < 16) continue
+      let da = Math.atan2(e.y - P.y, e.x - P.x) - a
+      da = Math.atan2(Math.sin(da), Math.cos(da))
+      if (Math.abs(da) > sh.beamHalf) continue
+      e.beamCd = 0.2
+      // Gathering reaches the beam: what it burns is drawn back down the line instead of held.
+      const kn = sh.pull ? -sh.pull * 111 : 0
+      hurtEnemy(e, dps * 0.2, Math.cos(a) * kn, Math.sin(a) * kn, sh.pull)
+    }
+  }
+  beamOn = { lines, reach, half: sh.beamHalf }
+  AU.loopTick('works')
+}
+
+// The drills' ring, so the echo and the first one are the same code and cannot drift apart.
+function fireWave (sh, scale) {
+  fx.push({ ring: true, x: P.x, y: P.y, r: 10,
+            max: (120 + lv.wave * 34) * (P.synWave || 1) * scale,
+            dmg: (18 + lv.wave * 9) * P.dmgMul * eff() * scale, life: 0.42, col: '#9db4ff',
+            burst: sh.burstR, burstMul: sh.burstMul, pull: sh.pull, hit: new Set() })
 }
 
 // Where the green belt is standing this frame. Read by three things now — the damage it
@@ -4010,12 +5013,29 @@ function updateFusions(dt) {
   // nobody is walking down it today.
   if (P.synLane) {
     if (P.hx || P.hy) laneAng = Math.atan2(P.hy, P.hx)
+    // Tracking reaches the corridor too. It does not aim it — the corridor is the way you are
+    // GOING, and a corridor that ignored your heading would stop being the thing the pair
+    // teaches — but it lets it lean, up to a third of a turn, toward wherever the crowd
+    // actually is. Standing still, the lean is all there is, so a kept corridor stops pointing
+    // at nothing while you hold ground.
+    const trk = SHOT().homeRate
+    if (trk > 0 && enemies.length) {
+      let sx = 0, sy = 0
+      for (const e of enemies) { const d = Math.hypot(e.x - P.x, e.y - P.y) || 1
+                                 if (d < 620) { sx += (e.x - P.x) / d; sy += (e.y - P.y) / d } }
+      if (sx || sy) {
+        let da = Math.atan2(sy, sx) - laneAng
+        da = Math.atan2(Math.sin(da), Math.cos(da))
+        const cap = Math.min(1.05, trk * 0.16)      // a third of a turn at most, and less below that
+        laneAng += Math.max(-cap, Math.min(cap, da)) * Math.min(1, dt * 3)
+      }
+    }
     laneAcc += dt
     if (laneAcc >= T.laneTick) {
       laneAcc = 0
       const ca = Math.cos(laneAng), sa = Math.sin(laneAng), half = T.laneW / 2
       const dmg = (2 + lv.speed * 0.9 + lv.rate * 0.9) * P.dmgMul * eff()
-      for (const e of enemies) {
+      for (const e of enemies.slice()) {
         const dx = e.x - P.x, dy = e.y - P.y
         const along = dx * ca + dy * sa            // distance down the lane, either way
         const across = Math.abs(-dx * sa + dy * ca) // and how far off its centre line
@@ -4130,7 +5150,7 @@ function takeSynergy(sy) {
   heal(P.max * 0.25)                            // the measure pays immediately
   syncHud()
   AU.play('right')
-  pendingGist = { name: sy.name, col: sy.col, text: SYN_GIST[sy.id] }
+  pendingGist = { name: sy.name, col: sy.col, text: say('GIST.' + sy.id, SYN_GIST[sy.id]) }
 }
 
 function renderSynCard(wrap, sy) {
@@ -4138,8 +5158,9 @@ function renderSynCard(wrap, sy) {
   el.className = 'card syn'
   el.innerHTML = `<div class="ic" style="background:${sy.col}"></div>
     <div class="tier">Synergy · ${UPGRADES[sy.a].short} + ${UPGRADES[sy.b].short}</div>
-    <h3>${sy.name}</h3><p>${sy.gain}</p>
-    <div class="gate">Repairs 25% of capacity</div>`
+    <h3>${sy.name}</h3><p>${say('SYN.' + sy.id + '.gain', sy.gain)}</p>
+    ${shotChanges({ syn: Object.assign({}, syn, { [sy.id]: true }) })}
+    <div class="gate">${healLine('S5.7.32a', 'Repairs 25% of capacity')}</div>`
   el.onclick = () => {
     takeSynergy(sy)
     picksLeft = Math.max(0, picksLeft - 1)
@@ -4155,15 +5176,15 @@ function renderFuseCard(wrap, fu) {
   el.className = 'card fuse'
   el.innerHTML = `<div class="ic" style="background:${fu.col}"></div>
     <div class="tier">Compound programme · ${UPGRADES[sy.a].short} + ${UPGRADES[sy.b].short}</div>
-    <h3>${fu.name}</h3><p>${fu.desc}</p>
-    <div class="gate">Repairs 15% of capacity</div>`
+    <h3>${fu.name}</h3><p>${say('FUS.' + fu.id + '.desc', fu.desc)}</p>${glossHtml(glossTerms(fu.id, fu.name + ' ' + fu.desc))}
+    <div class="gate">${healLine('S5.7.32b', 'Repairs 15% of capacity')}</div>`
   el.onclick = () => {
     fused[fu.id] = true
     heal(P.max * 0.15)
     syncHud()
     AU.play('mastery')
     shake = Math.max(shake, 10)
-    pendingGist = { name: fu.name, col: fu.col, text: fu.gain }
+    pendingGist = { name: fu.name, col: fu.col, text: say('FUS.' + fu.id + '.gain', fu.gain) }
     picksLeft = Math.max(0, picksLeft - 1)
     if (picksLeft > 0) offerCards()
     else closeCards()
@@ -4173,8 +5194,10 @@ function renderFuseCard(wrap, fu) {
 
 // The ONE interruption a run has (user decision 2026-09-01): the card screen. Nothing on it
 // asks anything.
-function offerCards() {
-  paused = true
+// `fromLevelUp` is true only at the two places a level-up opens the screen (the motes loop and the dev
+// button); every re-entry for a pick, a reroll or a banish calls it bare, so the level-up hint fires once.
+function offerCards(fromLevelUp) {
+  setPaused(true)
   const wrap = $('cardwrap'); wrap.innerHTML = ''
   $('cards').classList.remove('banish')
 
@@ -4204,11 +5227,41 @@ function offerCards() {
     el.className = 'card trade'
     el.innerHTML = `<div class="ic" style="background:${tr.col}"></div>
       <div class="tier">Trade-off</div>
-      <h3>${tr.name}</h3><p>${tr.desc}</p>
-      <div class="cost">${tr.cost}</div>
-      <div class="src">${tr.src}</div>`
+      <h3>${tr.name}</h3><p>${tr.id === 'relief' ? healLine('S5.7.32e', tr.desc) : tr.desc}</p>
+      <div class="cost">${say('TRD.' + tr.id + '.cost', tr.cost)}</div>
+      <div class="src">${tr.src}</div>${glossHtml(glossTerms(tr.id, tr.cost + ' ' + tr.src))}`
     el.onclick = () => {
       trade[tr.id] = true; tr.apply(P); syncHud()
+      picksLeft--
+      if (picksLeft > 0) offerCards()
+      else closeCards()
+    }
+    wrap.appendChild(el)
+  }
+
+  // A response card takes one of the three slots when nothing more important has. It waits until
+  // level 4 so the first choices a player makes are still measures - the spine goes in first, and
+  // the tuning goes on top of a build that already exists.
+  const modPool = MOD_IDS.filter(k => {
+    if ((mod[k] || 0) >= MODS[k].max) return false
+    // Continuous and Broadside used to lock each other out here. They are both additions now
+    // (user decision, 2026-09-10 playtest), so a build may be offered and hold both. `max: 1`
+    // on each still keeps them on/off rather than levelled.
+    return true
+  })
+  const md = (!tr && !sy && !fu && P.level >= 4 && modPool.length && Math.random() < 0.34)
+    ? pick(modPool) : null
+  if (md) {
+    const M = MODS[md], l = mod[md] || 0
+    const el = document.createElement('div')
+    el.className = 'card mod'
+    el.innerHTML = `<div class="ic" style="background:${M.col}"></div>
+      <div class="tier">${l === 0 ? 'Response' : 'Response · level ' + (l + 1)}</div>
+      <h3>${M.name}</h3><p>${say(descRow('MOD.', md, M.desc, l), M.desc(l), l)}</p>
+      ${modOpenedBy(md)}
+      ${shotChanges({ mod: Object.assign({}, mod, { [md]: l + 1 }) })}`
+    el.onclick = () => {
+      mod[md] = l + 1; syncHud()
       picksLeft--
       if (picksLeft > 0) offerCards()
       else closeCards()
@@ -4219,7 +5272,7 @@ function offerCards() {
   const pool = Object.keys(UPGRADES).filter(k => lv[k] < UPGRADES[k].max && !banished[k])
   // Three on screen, always (2026-09-02, user direction). A special card takes one of the
   // three rather than sitting beside four: fewer options, each one read.
-  const want = (sy || tr || fu) ? 2 : 3
+  const want = (sy || tr || fu || md) ? 2 : 3
   const chosen = []
   while (chosen.length < want && pool.length) chosen.push(pool.splice((Math.random() * pool.length) | 0, 1)[0])
   for (const id of chosen) {
@@ -4230,11 +5283,13 @@ function offerCards() {
       const have = lv[other] > 0, done = syn[sy.id]
       return `<span class="${done ? 'pd' : have ? 'ph' : ''}">${UPGRADES[other].short}</span>`
     }).join('')
+    const d = say(descRow('UPG.', id, u.desc, l), u.desc(l), l)
     el.innerHTML = `<div class="ic" style="background:${u.col}"></div>
       <div class="tier">${l === 0 ? 'New measure' : 'Level ' + (l + 1)}</div>
-      <h3>${u.name}</h3><p>${u.desc(l)}</p>
+      <h3>${u.name}</h3><p>${d}</p>
       ${pw ? `<div class="pairs">Compounds with ${pw}</div>` : ''}
-      <div class="src">${u.src}</div>
+      ${shotChanges({ lv: Object.assign({}, lv, { [id]: l + 1 }) })}
+      <div class="src">${u.src}</div>${glossHtml((GLOSS_MEASURE[id] ? [[u.name, GLOSS_MEASURE[id]]] : []).concat(glossTerms(id, d + ' ' + u.src)))}
       ${banishLeft > 0 ? '<div class="banx" title="Rule this measure out for this run">✕</div>' : ''}`
     el.onclick = () => {
       apply(id)
@@ -4247,7 +5302,7 @@ function offerCards() {
       e.stopPropagation()
       if (banishLeft <= 0) return
       banished[id] = true; banishLeft--
-      flash(u.name + ' ruled out', 'Not funded in this territory, this run. A risk plan is also what you decide not to fund.', '#ff9d9d')
+      flash(u.name + ' ruled out', say('BAN.line', 'Not funded in this territory, this run. A risk plan is also what you decide not to fund.'), '#ff9d9d')
       offerCards()
     }
     wrap.appendChild(el)
@@ -4271,7 +5326,7 @@ function offerCards() {
       }
       wrap.appendChild(el)
     }
-    fb('Shore up the stock', 'Repair 15% of capacity, and raise its ceiling by 8.', '#c9d1d9',
+    fb('Shore up the stock', healLine('S5.7.32f', 'Repair 15% of capacity, and raise its ceiling by 8.'), '#c9d1d9',
        () => { P.max += 8; heal(P.max * 0.15) })
     fb('Run another drill', 'Evacuate comes back 5% sooner, for the rest of the run.', '#9db4ff',
        () => { P.dodgeMeta = (P.dodgeMeta || 1) * 0.95 })
@@ -4301,10 +5356,15 @@ function offerCards() {
 
   $('cards').classList.add('show')
   AU.play('offer')
+  // First-time hint cards, only once the screen is really up (the two returns above skip them). The
+  // level-up card goes first; a synergy card on the same screen waits in the queue behind it.
+  if (fromLevelUp) hint('levelup')
+  if (sy) hint('synergy')
 }
 
 const closeCards = () => {
-  $('cards').classList.remove('show'); $('cards').classList.remove('banish'); paused = false
+  // setPaused, not `paused = false`: under an open hint card the unpause is deferred to its dismissal.
+  $('cards').classList.remove('show'); $('cards').classList.remove('banish'); setPaused(false)
   // The mechanism, said where the player is looking — the field the effect now works on.
   if (pendingGist) { flash(pendingGist.name, pendingGist.text, pendingGist.col); pendingGist = null }
 }
@@ -4471,7 +5531,11 @@ function mountDebrief() {
         const r = learnAnswer(right)
         // The share is named as it is won; the banking happens once, in finish().
         const v = wrap.querySelector('.redo-verdict')
-        v.textContent = right ? 'That is the judgment.' : 'Not this one — read why; it comes back until it sticks.'
+        // S5.7.25: only a field question is recorded and asked again (poolRecord above); a pair or event
+        // question keeps no record, so its verdict does not promise that it comes back.
+        v.textContent = right ? 'That is the judgment.'
+          : Q.kind === 'pool' ? 'Not this one — read why; it comes back until it sticks.'
+          : 'Not this one — read why.'
         v.className = 'redo-verdict ' + (right ? 'good' : 'bad')
         v.style.display = ''
         const why = wrap.querySelector('.redo-why')
@@ -4515,6 +5579,9 @@ function syncHud() {
     `<div class="wpn"><i style="background:${UPGRADES[k].col}"></i><b>${UPGRADES[k].short}</b><span>${lv[k]}</span></div>`)
   for (const sy of SYNERGIES) if (syn[sy.id]) {
     rows.push(`<div class="wpn sy"><i style="background:${sy.col}"></i><b>${sy.name}</b></div>`)
+  }
+  for (const k of MOD_IDS) if (mod[k]) {
+    rows.push(`<div class="wpn md"><i style="background:${MODS[k].col}"></i><b>${MODS[k].name}</b><span>${mod[k]}</span></div>`)
   }
   for (const fu of FUSIONS) if (fused[fu.id]) {
     rows.push(`<div class="wpn ms"><i style="background:${fu.col}"></i><b>${fu.name}</b><span>programme</span></div>`)
@@ -4602,6 +5669,20 @@ function paintAlarm() {
 
 // ---------------------------------------------------------------- loop
 let last = 0
+// Knockback decays per SECOND, not per frame. The old `k *= 0.86` once a frame, against a
+// displacement integrated with dt, made how far a push moved a body depend on the frame rate —
+// four times as far at 30 fps as at 120. The rate chosen here is the one that reproduces the
+// old 60 fps feel exactly: 0.86 per frame at 60 fps is 0.86^60 per second. `Math.pow` is a
+// transcendental call and there can be three hundred bodies, so the frame's factor — which
+// depends on nothing but dt — is computed ONCE here and read by every site that decays a knock.
+// The same shape the particle drag already uses at `Math.pow(f.drag, dt * 60)`.
+let knDecay = 0.86
+// Gathering's inward mark is drawn per body struck, and a blast or a beam can strike every body
+// on the field in one frame. This is the frame's budget of pull marks: four emissions of three
+// particles, so the ceiling is twelve particles a frame whatever happens. `emit` still refuses to
+// pass `T.fxCap` on its own, so this is a courtesy to the other effects, not the only guard.
+const PULL_FX_PER_FRAME = 4
+let pullFx = PULL_FX_PER_FRAME
 function frame(ts) {
   requestAnimationFrame(frame)
   if (!last) last = ts
@@ -4613,6 +5694,8 @@ function frame(ts) {
 
 function step(dt) {
   t += dt
+  knDecay = Math.pow(0.86, 60 * dt)   // one transcendental call a frame, for every knock in the world
+  pullFx = PULL_FX_PER_FRAME
 
   // ---- player
   let ix = (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0)
@@ -4626,16 +5709,16 @@ function step(dt) {
   }
   if (ix || iy) { const m = Math.hypot(ix, iy) || 1; P.hx = ix / m; P.hy = iy / m
     const haste = P.fuseHaste > 0 ? 1.25 : 1   // the evacuation pulse's wake
-    P.x += P.hx * P.spd * haste * throttle * dt; P.y += P.hy * P.spd * haste * throttle * dt }
+    P.x += P.hx * spdNow() * haste * throttle * dt; P.y += P.hy * spdNow() * haste * throttle * dt }
   P.inv = Math.max(0, P.inv - dt)
   if (P.dodgeT > 0) P.dodgeT -= dt
   if (P.dodgeGo > 0) {
     P.dodgeGo -= dt
-    P.x += P.dodgeX * P.spd * T.dodgeSpd * dt
-    P.y += P.dodgeY * P.spd * T.dodgeSpd * dt
+    P.x += P.dodgeX * spdNow() * T.dodgeSpd * dt
+    P.y += P.dodgeY * spdNow() * T.dodgeSpd * dt
     if (Math.random() < .6) emit('spark', P.x, P.y, 1, 'cold', { boost: .5 })
   }
-  if (P.regen) heal(P.regen * dt)
+  if (P.regen) heal(regenNow() * dt)
   if (dev.on && dev.god && P.hp < P.max) P.hp = P.max
 
   // ---- seasons
@@ -4680,7 +5763,7 @@ function step(dt) {
     e.ringCd = Math.max(0, (e.ringCd || 0) - dt)
     e.beamCd = Math.max(0, (e.beamCd || 0) - dt)
     moveHazard(e, dt)
-    e.kx *= 0.86; e.ky *= 0.86
+    e.kx *= knDecay; e.ky *= knDecay
     // A hazard that came for a lifeline spends itself on it: one impact, and it is over.
     // It is an event reaching a thing, not a siege.
     if (e.tgt && e.tgt.alive && e.behaviour !== 'zone' && e.behaviour !== 'front') {
@@ -4689,7 +5772,7 @@ function step(dt) {
       if (dx * dx + dy * dy < rr * rr) {
         hitLifeline(e.tgt, T.lifelineHit); AU.play('llhit')
         burst(e.x, e.y, e.col, 9, 190)
-        enemies.splice(i, 1)
+        e.gone = true; enemies.splice(i, 1)
         continue
       }
     }
@@ -4697,7 +5780,7 @@ function step(dt) {
       // Heat does not need to touch you, only to be where you are. It ignores i-frames,
       // which is what makes standing in it a different mistake from being hit.
       if (dist2(e, P) < (e.r + P.r) ** 2) {
-        P.hp -= e.dmg * (1 - P.armour) * P.exposure * P.heatRes * dt
+        P.hp -= e.dmg * (1 - P.armour) * P.exposure * heatResNow() * dt
         if (P.hp <= 0) return die()
       }
       continue
@@ -4739,6 +5822,57 @@ function step(dt) {
   // ---- bullets
   for (let i = bullets.length - 1; i >= 0; i--) {
     const b = bullets[i]
+    // Tracking. It steers for a fixed stretch of its flight and then stops, so a miss is still
+    // possible and the modifier is a help rather than a guarantee. The target is cached and
+    // re-acquired five times a second: steering is per bullet per frame and the enemy list is
+    // long, and searching it every frame for every bullet is the one way this gets expensive.
+    if (b.home > 0 && (b.homeT -= dt) > 0) {
+      // `gone` as well as dead: three things leave the field alive - a heat zone timing out, a
+      // flood front running past its range, a chaser spending itself on a lifeline - and a bullet
+      // that only checked hp would steer at the ghost until the next re-acquire.
+      if (!b.tgt || b.tgt.gone || b.tgt.hp <= 0 || (b.reacq = (b.reacq || 0) - dt) <= 0) {
+        b.reacq = 0.18
+        // Volley and Tracking used to cancel each other (playtest 2026-09-10). Every bullet in a
+        // volley is born at P.x, P.y, so a single running minimum scored every enemy identically
+        // for all of them and they all locked the SAME one; 0.18 s later they were still together
+        // and picked it again. So each bullet takes the (rank+1)-th nearest instead of the
+        // nearest, where `rank` is its index in the volley: a volley of n steers at up to n
+        // different bodies, and falls back to sharing only when fewer than n are in range.
+        // Still ONE pass over the enemy list - the insertion is into an array bounded by the shot
+        // count, not a sort of a list that can hold 300 bodies - and the 0.18 s cadence is kept.
+        const want = (b.rank || 0) + 1
+        const near = [], nearD = []
+        for (const e of enemies) {
+          if (b.hits.has(e)) continue
+          const d = dist2(e, b)
+          if (near.length === want && d >= nearD[want - 1]) continue
+          let j = near.length < want ? near.length : want - 1
+          while (j > 0 && nearD[j - 1] > d) { near[j] = near[j - 1]; nearD[j] = nearD[j - 1]; j-- }
+          near[j] = e; nearD[j] = d
+        }
+        b.tgt = near.length ? near[near.length - 1] : null
+      }
+      if (b.tgt) {
+        const cur = Math.atan2(b.vy, b.vx)
+        let d = Math.atan2(b.tgt.y - b.y, b.tgt.x - b.x) - cur
+        while (d > Math.PI) d -= TAU
+        while (d < -Math.PI) d += TAU
+        const na = cur + Math.max(-b.home * dt, Math.min(b.home * dt, d))
+        const sp = Math.hypot(b.vx, b.vy)
+        b.vx = Math.cos(na) * sp; b.vy = Math.sin(na) * sp
+      }
+    }
+    // Return: it turns around partway through its flight and comes back along its own line.
+    // Clearing the hit set is what makes the way back a second pass rather than the same one, and
+    // the pierce budget is restored with it or the return would land on nothing.
+    if (b.back && !b.turned && b.life < b.life0 * (1 - b.backAt)) {
+      b.turned = true
+      b.vx = -b.vx; b.vy = -b.vy
+      b.hits.clear(); b.pierce = b.pierce0
+      b.homeT = 0            // and it stops steering, or it simply orbits whatever it turned at
+    }
+    // Spreading: thin where you are, broad out where it lands. Capped, or it eats the screen.
+    if (b.grow) b.r = Math.min(b.r + b.grow * dt, b.r0 * 4.5)
     b.x += b.vx * dt; b.y += b.vy * dt; b.life -= dt
     let gone = b.life <= 0
     if (!gone && boss && boss.state !== 'arrive' && !b.hits.has(boss)
@@ -4753,7 +5887,51 @@ function step(dt) {
       if (dist2(e, b) < (e.r + b.r) ** 2) {
         const a = Math.atan2(b.vy, b.vx)
         b.hits.add(e)
-        hurtEnemy(e, b.dmg, Math.cos(a) * 130, Math.sin(a) * 130)
+        const bx = b.x, by = b.y                 // where it landed, before anything is spliced
+        // Gathering turns the knock into a pull: what you hit is dragged back down the line of
+        // fire instead of thrown off it, which is the first modifier that helps the weapons
+        // centred on you, because it brings the field and the belt their work.
+        const kn = b.pull ? -b.pull * 180 : 130
+        hurtEnemy(e, b.dmg, Math.cos(a) * kn, Math.sin(a) * kn, b.pull)
+        // Fragmenting: it bursts where it lands, reaching what was standing next to it. `skip` is
+        // the thing it just struck, which has already been billed for the direct hit.
+        if (b.burst) explode(bx, by, b.burst, b.dmg * b.burstMul, MODS.frag.col, { skip: e, ramp: 'gold', pull: b.pull })
+        // Relay: a shot that lands sends one on to the NEXT thing - passing it back into what it
+        // just hit would only be a second hit. Once per shot, and what it sends does not relay
+        // again, or one bullet becomes the whole field.
+        if (b.relay > 0 && !b.relayed) {
+          b.relayed = true
+          const taken = new Set([e])
+          let sent = 0
+          for (let k = 0; k < b.relay; k++) {
+            let tgt = null, bd = 430 ** 2
+            for (const o of enemies) {
+              if (taken.has(o) || b.hits.has(o)) continue
+              const d = (o.x - bx) ** 2 + (o.y - by) ** 2
+              if (d < bd) { bd = d; tgt = o }
+            }
+            if (!tgt) break
+            taken.add(tgt)
+            const ra = Math.atan2(tgt.y - by, tgt.x - bx)
+            bullets.push({ x: bx, y: by, vx: Math.cos(ra) * 470, vy: Math.sin(ra) * 470,
+                           r: b.r * 0.72, dmg: b.dmg * 0.5, life: 0.8, col: MODS.relay.col,
+                           trail: 1, split: 0, pierce: 0,
+                           home: Math.max(b.home, 3.4), homeT: 0.7,   // it was sent AT something
+                           burst: 0, burstMul: 0, relay: 0, hits: new Set() })
+            sent++
+          }
+          // The relay's second channel. Its bullet is drawn in `#9db4ff`, which the shockwave ring
+          // already owns, so colour cannot be what tells the two apart — and the palette is not this
+          // batch's to change. A mark at the point it launched FROM is the distinction instead: a
+          // small, brief ring that says "that shot passed something on" as an event in its own right.
+          // Both this and the voice fire once per relay event, not once per bullet sent, and only if
+          // something was actually found to send to — a sound on an empty field would be a lie.
+          if (sent) {
+            AU.play('relay')
+            fx.push({ ring: true, noHit: true, x: bx, y: by, r: 4, max: 26, life: 0.22,
+                      col: MODS.relay.col, hit: new Set() })
+          }
+        }
         if (--b.pierce < 0) {
           gone = true
           if (b.split) {
@@ -4778,13 +5956,22 @@ function step(dt) {
     if (!f.ring) continue
     f.r += (f.max - f.r) * Math.min(1, dt * 9)
     if (f.noHit) continue   // a pulse that pushes rather than strikes draws, but never bills
-    for (const e of enemies) {
+    for (const e of enemies.slice()) {   // a copy: hurtEnemy and explode both splice the dead out
       if (f.hit.has(e)) continue
       const d = Math.hypot(e.x - f.x, e.y - f.y)
       if (Math.abs(d - f.r) < e.r + 14) {
         f.hit.add(e)
         const a = Math.atan2(e.y - f.y, e.x - f.x)
-        hurtEnemy(e, f.dmg, Math.cos(a) * 320, Math.sin(a) * 320)
+        // Gathering reaches the ring too: what it sweeps is drawn back to the centre. Raised with
+        // the other three pull constants by the same 180/55 factor, so their relative weights
+        // survive — the ring's pull was the strongest in the game and must not become the weakest.
+        // The push (320) is not a pull and is not rescaled.
+        const kn = f.pull ? -f.pull * 295 : 320
+        const ex = e.x, ey = e.y
+        hurtEnemy(e, f.dmg, Math.cos(a) * kn, Math.sin(a) * kn, f.pull)
+        // Fragmenting reaches the drills as well: the ring bursts at each thing it strikes.
+        if (f.burst) explode(ex, ey, f.burst * 0.7, f.dmg * f.burstMul * 0.6, MODS.frag.col,
+                             { skip: e, ramp: 'gold', pull: f.pull })
       }
     }
   }
@@ -4797,7 +5984,7 @@ function step(dt) {
       m.x += (P.x - m.x) / d * s * dt; m.y += (P.y - m.y) / d * s * dt
     }
     if (d < P.r + 8) {
-      motes.splice(i, 1); P.xp += m.v * (P.xpMul || 1); AU.play('mote')
+      motes.splice(i, 1); P.xp += m.v * xpMulNow(); AU.play('mote')
       burst(m.x, m.y, '#57c7ff', 4, 90)
       let leveled = false
       while (P.xp >= P.need) {
@@ -4810,7 +5997,7 @@ function step(dt) {
       }
       if (leveled) {
         AU.play('level')
-        offerCards()                          // one screen for however many levels just landed
+        offerCards(true)                      // one screen for however many levels just landed
       }
       syncHud()
     }
@@ -4894,6 +6081,10 @@ function die() {
   if (n) mountDebrief()
   else { releaseFunds(0, 0); renderReport() }   // nothing to ask, so nothing to withhold
   $('over').classList.add('show')
+  // First debrief (S4.6). Never answered is the signal - NOT runsStore().n, which die() has already
+  // bumped, and not the pool store's run counter, which every reset() bumps (8.8).
+  const ls = learnStore()
+  if (n && !ls.right && !ls.wrong) hint('debrief')
 }
 
 // The run report. Same shape as the other prototype's: what you actually invested in, with
@@ -5022,8 +6213,10 @@ function renderReport() {
     html += sec(`What you could only dodge — ${eventsHit} caught you`,
       Object.entries(tally).map(([k, n]) =>
         row(EVENTS[k].col, EVENTS[k].name + (n > 1 ? ' ×' + n : ''), EVENTS[k].note)).join('') +
-      (lv.pulse > 1
-        ? row('#ffd166', 'Warning bought you', `${warnBought.toFixed(1)} extra seconds of notice across ${eventsSeen.length} of them, because you invested in it. That is the whole of what an early-warning system is: not less hazard, more time.`)
+      // S5.7.31: the sum counts only Early warning levels (see fireEvent), so it is 0.0 when the level
+      // came after the last event - the row waits for something to report, not just for the level.
+      (lv.pulse > 1 && warnBought >= 0.05
+        ? row('#ffd166', 'Warning bought you', `${warnBought.toFixed(1)} extra seconds of notice across ${eventsSeen.length} of them, from the Early warning levels you added. That is the whole of what an early-warning system is: not less hazard, more time.`)
         : ''))
   }
 
@@ -5100,7 +6293,7 @@ function renderReport() {
   html += sec(`Understanding — ${LS.right} right across your runs`,
     (quizRight + quizWrong > 0
       ? row('#8ab4c8', `This debrief — ${quizRight} of ${quizRight + quizWrong}`,
-            'One question about a pair you compounded, one about an event you met, and the place’s own field pool for the rest. Missing one costs nothing; a missed field question returns in a later run until it sticks.')
+            'One question about a pair you compounded, one about an event you met, and the place’s own field pool for the rest. Missing one resets your streak and keeps back that question’s share of the recovery budget; a missed field question returns in a later run until it sticks.')
       : row('#3a3f47', 'No debrief this run', 'Nothing compounded, no event met, and the place’s pool already asked — a longer run has more to ask about.')) +
     row(tierFor(LS.streak).col || '#ffd166', LS.streak >= 2 ? `Streak of ${LS.streak} — ${tierFor(LS.streak).name}` : 'No streak carried',
         `Consecutive right answers in the debrief set what you fire from the first second of the next run — more shots, then further, then splitting on impact. It is the only upgrade in the game that cannot be drawn, bought or traded for, and it resets the moment you guess.${LS.best >= 2 ? ` Best ever: ${LS.best}.` : ''}`) +
@@ -5514,6 +6707,16 @@ function draw() {
   ctx.strokeStyle = 'rgba(87,199,255,.10)'
   ctx.beginPath(); ctx.arc(P.x, P.y, P.pickup, 0, TAU); ctx.stroke()
 
+  // A saved service is running at full stretch. It is running on YOU, so it is drawn on you,
+  // in that service's own colour, and it fades as it runs out.
+  if (SF.t > 0 && SF.kind) {
+    ctx.strokeStyle = LIFELINES[SF.kind].col
+    ctx.lineWidth = 2
+    ctx.globalAlpha = Math.min(1, SF.t / T.serviceDur * 2.5) * (.45 + .35 * Math.sin(t * 10))
+    ctx.beginPath(); ctx.arc(P.x, P.y, P.r + 15, 0, TAU); ctx.stroke()
+    ctx.globalAlpha = 1
+  }
+
   // field aura
   if (lv.field > 0) {
     const rad = (85 + lv.field * 18) * (P.synField || 1)
@@ -5545,6 +6748,17 @@ function draw() {
       const hot = L.under ? .3 : .14
       ctx.strokeStyle = `rgba(255,77,94,${hot + .3 * Math.sin(t * 9)})`
       ctx.lineWidth = 2
+      ctx.beginPath(); ctx.arc(L.x, L.y, T.lifelineR, 0, TAU); ctx.stroke()
+    }
+    // You are standing on a hurt one: the crews are working with you, and the ground says so.
+    // The bonus is invisible arithmetic otherwise, and an invisible reward does not change a
+    // decision - which was the whole complaint about this layer.
+    if (onSite === L) {
+      ctx.globalAlpha = .11 + .05 * Math.sin(t * 8)
+      ctx.fillStyle = k.col
+      ctx.beginPath(); ctx.arc(L.x, L.y, T.lifelineR, 0, TAU); ctx.fill()
+      ctx.globalAlpha = 1
+      ctx.strokeStyle = k.col; ctx.lineWidth = 3
       ctx.beginPath(); ctx.arc(L.x, L.y, T.lifelineR, 0, TAU); ctx.stroke()
     }
   }
@@ -5716,6 +6930,26 @@ function draw() {
     ctx.fillStyle = g
     ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, 430, -0.16, 0.16); ctx.closePath(); ctx.fill()
     ctx.restore()
+  }
+
+  // Continuous: the held beam, one wedge per target, brighter and harder-edged than the sweeping
+  // one above so the two are not mistaken for each other on a build that has both.
+  if (beamOn) {
+    for (const a of beamOn.lines) {
+      ctx.save(); ctx.translate(P.x, P.y); ctx.rotate(a)
+      const g = ctx.createLinearGradient(0, 0, beamOn.reach, 0)
+      g.addColorStop(0, 'rgba(87,199,255,.55)')
+      g.addColorStop(.55, 'rgba(160,225,255,.30)')
+      g.addColorStop(1, 'rgba(87,199,255,0)')
+      ctx.fillStyle = g
+      ctx.beginPath(); ctx.moveTo(0, 0)
+      ctx.arc(0, 0, beamOn.reach, -beamOn.half, beamOn.half); ctx.closePath(); ctx.fill()
+      // a hot core down the middle, which is what makes it read as a beam rather than a cone
+      ctx.strokeStyle = 'rgba(226,246,255,.85)'
+      ctx.lineWidth = 2 + beamOn.half * 26
+      ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(beamOn.reach * .96, 0); ctx.stroke()
+      ctx.restore()
+    }
   }
 
   // what has been thrown at you. Debris tumbles and reads grey; an ember glows and is the
@@ -5901,6 +7135,21 @@ function offerDiffs() {
   $('diffnote').textContent = DIFF.blurb
 }
 
+// The door to the playtest panel, on the start screen where it is actually wanted — the panel is
+// for the person tuning the game, and that person is looking at this screen before every run.
+// LOCAL-only, so the public site is unchanged: it renders nothing at all there.
+function offerDev() {
+  const wrap = $('devwrap'); wrap.innerHTML = ''
+  if (!LOCAL && !DEV) return
+  const b = document.createElement('button')
+  b.className = 'dbtn devbtn'
+  const label = () => { b.textContent = dev.on ? 'Dev tools on · ` to toggle the panel' : 'Dev tools' }
+  b.onclick = () => { initDev(); label(); b.classList.add('on') }
+  label()
+  if (dev.on) b.classList.add('on')
+  wrap.appendChild(b)
+}
+
 // Three of the five places, so the choice is a real one and no two sessions open the same.
 function offerPlaces() {
   const wrap = $('startwrap'); wrap.innerHTML = ''
@@ -5954,14 +7203,17 @@ function initDev() {
     P.need = Math.round(P.need * T.xpCurve + T.xpAdd)
     heal(P.max * T.levelHeal)
     picksLeft += T.picksPerLevel
-    AU.play('level'); offerCards(); syncHud()
+    AU.play('level'); offerCards(true); syncHud()
   }
   const B = (label, fn) => {
     const b = document.createElement('button')
     b.textContent = label
     b.onclick = () => fn(b)
     panel.appendChild(b)
+    return b
   }
+  const SEP = label => { const d = document.createElement('div'); d.className = 'sep'
+                         d.textContent = label; panel.appendChild(d) }
   B('God mode: off', b => { dev.god = !dev.god
     b.textContent = 'God mode: ' + (dev.god ? 'ON' : 'off')
     b.classList.toggle('on', dev.god) })
@@ -5982,13 +7234,53 @@ function initDev() {
   B('Next season', () => nextSeason())
   B('Clear field', () => { enemies.length = 0; ebullets.length = 0 })
   B('End run → report', () => { const g = dev.god; dev.god = false; die(); dev.god = g })
+
+  // The two layers built on 2026-09-04 are the ones being tuned, and neither can be reached from
+  // the field on demand: a lifeline only comes under attack on a 22% draw, and a response card is
+  // a 34% roll from level 4. Both are one click here.
+  SEP('Lifelines · defending')
+  B('Hurt a lifeline −55', () => { const up = lifelines.filter(L => L.alive)
+    if (up.length) hitLifeline(pick(up), 55) })
+  B('Heal all lifelines', () => { for (const L of lifelines) if (L.alive) { L.hp = 100; L.dipped = false }
+    syncLifelinePanel() })
+  let sfIx = 0
+  B('Fire a service →', b => { const up = lifelines.filter(L => L.alive)
+    if (!up.length) return
+    const L = up[sfIx++ % up.length]
+    L.fireCd = 0; fireService(L)
+    b.textContent = 'Fire a service → ' + LIFELINES[L.kind].name })
+
+  SEP('Run length')
+  const PACES = [1, 1.5, 2, 3, 4], HPS = [100, 150, 200, 300]
+  B('', b => { const i = (PACES.indexOf(T.pace) + 1) % PACES.length; T.pace = PACES[i]
+               b.textContent = 'Difficulty clock ×' + T.pace + ' slower' })
+    .textContent = 'Difficulty clock ×' + T.pace + ' slower'
+  B('', b => { const i = (HPS.indexOf(T.baseHp) + 1) % HPS.length; T.baseHp = HPS[i]
+               b.textContent = 'Starting capacity ' + T.baseHp + ' · next run' })
+    .textContent = 'Starting capacity ' + T.baseHp + ' · next run'
+
+  SEP('Response · what leaves the emitter')
+  const modBtns = []
+  const syncModBtns = () => { for (const [k, b] of modBtns) {
+    b.textContent = `${MODS[k].name} ${mod[k] || 0}/${MODS[k].max}`
+    b.classList.toggle('on', (mod[k] || 0) > 0) } }
+  for (const k of MOD_IDS) modBtns.push([k, B('', b => {
+    // cycles past its max back to 0, so a setting made to see it can be undone in the same click
+    mod[k] = ((mod[k] || 0) + 1) % (MODS[k].max + 1)
+    syncHud(); syncModBtns()
+  })])
+  B('All response +1', () => { for (const k of MOD_IDS)
+    if ((mod[k] || 0) < MODS[k].max) mod[k] = (mod[k] || 0) + 1
+    syncHud(); syncModBtns() })
+  B('Clear response', () => { for (const k of MOD_IDS) delete mod[k]; syncHud(); syncModBtns() })
+  syncModBtns()
 }
 if (DEV) initDev()
 
 $('again').onclick = () => { AU.start(PLACE.id); $('over').classList.remove('show'); reset(); last = 0 }
 $('elsewhere').onclick = () => {
   $('over').classList.remove('show'); $('start').classList.remove('gone')
-  offerPlaces(); offerDiffs(); offerPressure(); offerMeta(); offerLearn()
+  offerPlaces(); offerDiffs(); offerPressure(); offerMeta(); offerLearn(); offerDev()
   reset(); paused = true
 }
 $('dodge').onclick = e => { e.preventDefault(); doDodge() }
@@ -6002,10 +7294,12 @@ if (COARSE) {
   $('ctrlspace').style.display = 'none'
   $('ctrlevac').innerHTML = '<b>the EVAC button</b>'
 }
-offerPlaces(); offerDiffs(); offerPressure(); offerMeta(); offerLearn()
+offerPlaces(); offerDiffs(); offerPressure(); offerMeta(); offerLearn(); offerDev()
 reset(PLACE_IDS[0])
 paused = true          // the sim idles behind the place-select rather than running a ghost run
 requestAnimationFrame(frame)
+// A first visit opens How to play by itself and has to be stepped through (S3; user decision 2026-09-14).
+if (!onboardSeen('intro')) howOpen(true)
 // Test hook. NOTHING IN THIS FILE HAS EVER BEEN VERIFIED BY EYE: requestAnimationFrame is
 // throttled whenever the page is not compositing, and the pane this was built in does not
 // composite. So the world is stepped through here instead and everything is asserted —
@@ -6018,7 +7312,11 @@ window.__surv = {
                           motes: motes.length, ebullets: ebullets.length, paused, over,
                           place: PLACE.name, season: SEASON.name, seasonLog: seasonLog.slice(),
                           lifelines: lifelines.map(L => ({ k: L.kind, hp: Math.round(L.hp), alive: L.alive, under: L.under,
-                                                           x: Math.round(L.x), y: Math.round(L.y) })),
+                                                           x: Math.round(L.x), y: Math.round(L.y),
+                                                           dipped: !!L.dipped, fireCd: +(L.fireCd || 0).toFixed(1) })),
+                          // the defence layer, so a walker can measure the act and not just the possession
+                          onSite: onSite ? onSite.kind : null,
+                          service: SF.kind ? { kind: SF.kind, t: +SF.t.toFixed(2) } : null,
                           trade: Object.keys(trade), syn: Object.keys(syn),
                           tally: Object.assign({}, hazardTally), quizRight, quizWrong,
                           beltBlocked, emberFires,
@@ -6035,9 +7333,43 @@ window.__surv = {
     dist: Math.round(Math.hypot(boss.x - P.x, boss.y - P.y)) } : null },
   bossTally: () => ({ seen: bossSeen.slice(), killed: bossesKilled, outlasted: bossesSurvived }),
   spawnBoss,
+  // Response-modifier plumbing for scripted checks: set a level directly rather than waiting for
+  // the card to be offered (0.34 of the level-ups from level 4, which no check can wait for).
+  modSet (id, l = 1) { if (!MODS[id]) return null; mod[id] = Math.min(l, MODS[id].max); syncHud(); return mod[id] },
+  modList: () => MOD_IDS.map(k => ({ id: k, name: MODS[k].name, max: MODS[k].max, lv: mod[k] || 0 })),
+  // Put one named hazard exactly where a check needs it, and empty the field first. Projectile
+  // behaviour is about what happens BETWEEN two hazards a known distance apart, and waiting for the
+  // spawner to produce that arrangement is not a check.
+  // A front needs a direction and a range from its spawner or its position goes NaN on the first
+  // frame and it can never be hit by anything. A test hook that did not supply them was a trap
+  // rather than a tool: it silently produced a target that no check could ever land on.
+  spawnAt (kind, x, y, extra) {
+    if (!HAZARDS[kind]) return null
+    const d = Math.hypot(x, y) || 1
+    const base = HAZARDS[kind].behaviour === 'front'
+      ? { fx: -x / d, fy: -y / d, range: d * 2 + 400 } : {}
+    const e = makeHazard(kind, x, y, Object.assign(base, extra || {}))
+    enemies.push(e)
+    return { kind, x: Math.round(x), y: Math.round(y), hp: +e.hp.toFixed(1) }
+  },
+  clearFoes () { const n = enemies.length; for (const e of enemies) e.gone = true; enemies.length = 0; return n },
+  foeHp: () => enemies.map(e => ({ k: e.kind, x: Math.round(e.x), y: Math.round(e.y), hp: +e.hp.toFixed(1), max: +e.max.toFixed(1) })),
+  bulletState: () => bullets.map(b => ({ x: Math.round(b.x), y: Math.round(b.y),
+                                         r: +b.r.toFixed(2), r0: +(b.r0 || 0).toFixed(2),
+                                         turned: !!b.turned, life: +b.life.toFixed(3),
+                                         ang: +Math.atan2(b.vy, b.vx).toFixed(4),
+                                         spd: Math.round(Math.hypot(b.vx, b.vy)),
+                                         home: +(b.home || 0).toFixed(2), homeT: +(b.homeT || 0).toFixed(2),
+                                         pierce: b.pierce, burst: b.burst || 0, relay: b.relay || 0,
+                                         relayed: !!b.relayed, dmg: +b.dmg.toFixed(1), col: b.col })),
   streak: () => ({ n: quizStreak, best: quizBestStreak, tier: streakTier().name || 'none',
     shots: streakTier().shots, split: streakTier().split }),
   fxCount: () => fx.length,
+  // rings apart from particles: the shockwave layer is the only thing that makes them, so this is
+  // how a check counts what the drills actually fired
+  rings: () => fx.filter(f => f.ring && !f.noHit).map(f => ({ r: Math.round(f.r), max: Math.round(f.max),
+                                                              dmg: +f.dmg.toFixed(1), burst: f.burst || 0 })),
+  laneAngle: () => +laneAng.toFixed(3),
   events () { return { live: events.map(e => ({ k: e.kind, phase: e.phase, dist: e.dist })),
     seen: eventsSeen.slice(), hit: eventsHit, warnBought: +warnBought.toFixed(1) } },
   fireEvent,
@@ -6054,6 +7386,24 @@ window.__surv = {
     return out
   },
   probe () { return { eff: eff(),
+    // The defence layer multiplies at the point of use and mutates no stat, which means
+    // nothing outside these getters can see it. A scripted check has to read them here.
+    onSite: onSite ? onSite.kind : null, service: SF.kind, serviceT: +SF.t.toFixed(2),
+    // What actually leaves the emitter, resolved through SHOT rather than re-derived here, so a
+    // scripted check cannot agree with a copy of the arithmetic instead of with the weapon.
+    shot: (() => { const s = SHOT()
+      return { extra: s.extra, shots: s.shots, pierce: s.pierce, through: s.through,
+               homeRate: +s.homeRate.toFixed(2), homeFor: +s.homeFor.toFixed(2),
+               burstR: s.burstR, burstMul: +s.burstMul.toFixed(2), relay: s.relay,
+               deathR: s.deathR, deathDmg: s.deathDmg,
+               size: +s.size.toFixed(2), heft: +s.heft.toFixed(2), slow: +s.slow.toFixed(2),
+               grow: s.grow, back: s.back, backAt: s.backAt, pull: s.pull,
+               beam: s.beam, fan: s.fan, beamRange: s.beamRange,
+               beamHalf: +s.beamHalf.toFixed(3), beamTgts: s.beamTgts } })(),
+    beamOn: beamOn ? { lines: beamOn.lines.length, reach: beamOn.reach } : null,
+    mods: Object.assign({}, mod),
+    heatRes: +heatResNow().toFixed(3), spd: +spdNow().toFixed(1),
+    xpMul: +xpMulNow().toFixed(3), regen: +regenNow().toFixed(3),
     pulseDmg: +((10 + lv.pulse * 4) * P.dmgMul * eff()).toFixed(2),
     pulseCd: +((0.55 - lv.pulse * 0.05) / (P.rateMul * eff())).toFixed(4),
     hardOnField: enemies.reduce((n, e) => n + (e.hard ? 1 : 0), 0),
@@ -6102,13 +7452,16 @@ window.__surv = {
   // the walker only had to survive events; measuring RUN LENGTH means it also has to kite
   // what chases it and go and fetch what it levels on, and neither is reachable from a count.
   foes () { return enemies.map(e => ({ x: e.x, y: e.y, r: e.r, kind: e.kind,
-                                       hard: !!e.hard, beh: e.behaviour })) },
-  xps () { return motes.map(m => ({ x: m.x, y: m.y, v: m.v, prep: !!m.prep })) },
+                                       hard: !!e.hard, beh: e.behaviour,
+                                       // the knock vector, so a check can read a push apart from a
+                                       // pull without inferring it from a position that also moves
+                                       kx: +(e.kx || 0).toFixed(1), ky: +(e.ky || 0).toFixed(1) })) },
+  xps () { return motes.map(m => ({ x: m.x, y: m.y, v: m.v, prep: !!m.prep, pull: !!m.pull })) },
   pos () { return { x: P.x, y: P.y } },
   warp (sec) { t = sec },
   clearModals () {
     $('cards').classList.remove('show')
-    paused = false
+    setPaused(false)          // never unpauses under an open hint card; see setPaused
   },
   key (k, down = true) { keys[k] = down },
   // Damage one lifeline directly — the under-attack alarm and the repair loop cannot be
@@ -6144,7 +7497,8 @@ window.__surv = {
   },
   env: () => ({ coarse: COARSE, small: SMALL, enemyCap: T.enemyCap, fxCap: T.fxCap,
                 ebulletCap: T.ebulletCap }),
-  T,   // the tuning block itself, so a scripted batch can sweep a constant without editing the file
+  T,      // the tuning block itself, so a scripted batch can sweep a constant without editing the file
+  DIFFS,  // and the per-difficulty dials, for the same reason - `hard` is the one that shortens a mode
   die: () => die(),
 }
 })()

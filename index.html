@@ -40,6 +40,12 @@
   h1 span{color:var(--accent)}
   .sub{font-size:16px;color:var(--dim);margin-top:14px;max-width:640px;line-height:1.6}
   .rule{height:1px;background:rgba(255,255,255,.10);margin:34px 0 30px}
+  /* New-here block (2026-09-14, accessibility feedback): the first thing someone who has never
+     played a browser game reads. Same measure as .sub, full ink instead of dim, and an accent
+     edge so it is found by shape as well as by colour. */
+  .new{font-size:15px;color:var(--paper);margin-top:16px;max-width:640px;line-height:1.6;
+    padding:11px 15px;border-left:3px solid var(--accent);border-radius:0 12px 12px 0;
+    background:rgba(255,255,255,.05)}
 
   /* min(300px,100%) rather than 300px: a fixed minimum cannot shrink, so on a 320px phone
      the track stayed 300 wide, the body padding pushed it past the edge and the page
@@ -80,6 +86,7 @@
     header{padding:44px 0 10px}
     h1{font-size:28px}
     .sub{font-size:14px}
+    .new{font-size:14px;padding:10px 12px}
     .rule{margin:24px 0 22px}
     .art{height:92px}
     h2{font-size:18px}
@@ -94,6 +101,7 @@
     <p class="sub">Playable prototypes about how disasters get prevented — and about the fact
       that prevention is invisible when it works. Each one is built around a real body of
       guidance rather than a quiz bolted onto a game, and each names its sources inside.</p>
+    <p class="new">New here? Each card opens a game that runs in your browser, with nothing to install. Compound's start screen has a How to play button. It shows how to move, what the rewards do, and what a right or wrong answer does. On your first visit to Compound, it opens by itself.</p>
   </header>
   <div class="rule"></div>
   <div class="grid" id="grid"></div>
