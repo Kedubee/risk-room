@@ -183,18 +183,27 @@
   end and levels still climb, so it is not the static-run failure the original tuning warned
   about, but it is the number to look at first if one ever does go static.
 
-  Figures and framings are UNDRR's own, read first-hand from undrr.org on 2026-08-14.
-  The three claims added on 2026-08-21 that were tagged unverified WERE VERIFIED first-hand
-  on 2026-08-25, before the collection went public:
+  Figures and framings rest on UNDRR pages (undrr.org, PreventionWeb, the Earthquake Day
+  microsite, GAR 2025), first read between 2026-08-14 and 2026-08-25. The sixteen UNDRR-resting strings and their
+  carriers were re-checked against captured primaries on 2026-09-14 (a live read plus archived
+  snapshots); the ones found overstated or unsupported were corrected on 2026-09-15. Record:
+  04_Sandbox/Survivors_Proto/sweep_2026-09-14/CORRECTION_2026-09-15.md (with correction_copy.md).
+  The three claims added on 2026-08-21 were read first-hand on 2026-08-25; the first two were
+  re-read on 2026-09-14 and corrected:
 
-    levee effect     concrete case read on UNDRR's PreventionWeb — Missouri authorised more
-                     than US$2 billion of new development by 2008 in zones that flooded in
-                     1993. Attributed to the article's author and the platform, NOT to UNDRR:
-                     it is a hosted Conversation piece, not the agency's own analysis, and
-                     the card says so.
-    exposure growth  UNDRR GAR 2025, hazard exploration for earthquakes: risk climbing
-                     "mainly due to demographic growth, urbanization and policy choices",
-                     with "more people and assets ... left in harm's way".
+    levee effect     the mechanism (a defence drawing development in behind it) is in neither
+                     captured article and is no longer claimed; the card now says what it does
+                     in the game. Kept, from Mallea 2019 on UNDRR's PreventionWeb: by 2008
+                     Missouri had authorised more than US$2 billion of new development in zones
+                     that flooded in 1993. Attributed to the author and the platform, NOT to
+                     UNDRR: it is a hosted Conversation piece, not the agency's own analysis,
+                     and the card says so.
+    exposure growth  UNDRR GAR 2025. Landing page: seismic risk rises mainly because human action
+                     (such as unsafe housing construction in seismic zones) puts more people and
+                     assets in harm's way, not because the hazard is getting stronger. Hazard
+                     exploration for earthquakes: a Global Earthquake Model team projection that,
+                     without stepped-up risk reduction, the Dominican Republic's earthquake death
+                     rate rises "mainly due to demographic growth, urbanization and policy choices".
     the lifelines    Sendai Framework Target D, quoted verbatim in the run report. Health and
                      educational facilities are named in the target itself, which is why the
                      hospital and the school are on the map.
@@ -1334,7 +1343,7 @@ const dist2 = (a, b) => { const dx = a.x - b.x, dy = a.y - b.y; return dx * dx +
 //   codes    a constant effect on everything around you, invisible while it works
 //   warning  reaches for the nearest incoming thing and answers it early
 //   drills   periodic, and it moves people out of the way rather than stopping the hazard
-//   nature   a standing perimeter that costs nothing per use
+//   nature   a standing perimeter that wears down and blocks what touches it
 //   retrofit reduces what gets through instead of stopping it arriving
 //   data     extends how far you can see and collect
 //   finance  capacity to absorb a hit
@@ -1342,8 +1351,10 @@ const dist2 = (a, b) => { const dx = a.x - b.x, dy = a.y - b.y; return dx * dx +
 //   upkeep   makes everything you already have work more often
 //   invest   makes everything you already have work harder
 //
-// Figures are UNDRR's own, read first-hand from undrr.org 2026-08-14 (Earthquake Day
-// microsite and the "It pays to invest in DRR" figures on the homepage).
+// Figures rest on UNDRR pages: the Earthquake Day microsite and the homepage "It pays to invest
+// in DRR" figures (first read 2026-08-14), a UNDRR statement and GAR 2025. Every src below was
+// re-checked against captures on 2026-09-14; the 3% / US$4 net-benefit figure is a World Bank
+// estimate that UNDRR repeats. Record: sweep_2026-09-14/CORRECTION_2026-09-15.md.
 const UPGRADES = {
   field:  { name: 'Building codes',   short: 'Codes',    max: 5, kind: 'measure', col: '#ff9de2',
             desc: l => l === 0 ? 'Standards applied to everything standing around you. Nothing dramatic happens; things simply do not fall.'
@@ -1352,13 +1363,15 @@ const UPGRADES = {
   pulse:  { name: 'Early warning',    short: 'Warning',  max: 6, kind: 'measure', col: '#ffd166',
             desc: l => l === 0 ? 'Detects what is closest and answers it before it arrives.'
                                : `Faster, and reaches past the first thing it meets (Lv ${l + 1}).`,
-            src: 'UNDRR: 24 hours of warning ahead of a storm or heatwave cuts the damage that follows by 30%.' },
+            // CORRECTED 2026-09-15: hedge restored, 24h of warning "can cut" damage by 30% (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+            src: 'UNDRR: 24 hours of warning ahead of a storm or heatwave can cut the damage that follows by 30%.' },
   wave:   { name: 'Drills',           short: 'Drills',   max: 5, kind: 'measure', col: '#9db4ff',
             desc: l => l === 0 ? 'Practised regularly. It does not stop the hazard — it moves people out of its way.'
                                : `More often, and further out (Lv ${l + 1}).`,
             src: 'UNDRR asks for micro-drills at least twice a year, including 29 April.' },
   ring:   { name: 'Green defences',   short: 'Nature',   max: 5, kind: 'measure', col: '#8ef6c6',
-            desc: l => l === 0 ? 'Mangroves, dunes, wetlands. A standing perimeter that costs nothing to keep running.'
+            // CORRECTED 2026-09-15: unverifiable "costs nothing" claim replaced by what the belt does in-game (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+            desc: l => l === 0 ? 'Mangroves, dunes, wetlands. A standing perimeter that works every second: it wears down what it touches and blocks thrown things that touch it.'
                                : `A wider belt (Lv ${l + 1}).`,
             src: 'UNDRR: mangrove forests avoid more than US$80 billion of coastal flood losses a year.' },
   armour: { name: 'Retrofitting',     short: 'Retrofit', max: 4, kind: 'measure', col: '#c9d1d9',
@@ -1367,23 +1380,27 @@ const UPGRADES = {
   magnet: { name: 'Risk data',        short: 'Data',     max: 4, kind: 'measure', col: '#57c7ff',
             desc: l => l >= 1 ? 'Monitoring and loss records. From here on, what you fire turns toward what it was aimed at.'
                               : 'Monitoring and loss records. You see further out, and nothing is collected that was never measured.',
-            src: 'UNDRR asks countries to record, analyse and share disaggregated disaster loss data.' },
+            // CORRECTED 2026-09-15: "disaggregated loss data" split into the source's two items (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+            src: 'UNDRR asks countries to record, analyse and share disaster impact data: on affected people, broken down by group, and a full accounting of losses.' },
   hp:     { name: 'Risk financing',   short: 'Finance',  max: 5, kind: 'measure', col: '#ff4d5e',
             desc: () => 'Reserves and insurance. Capacity to take a hit and still be standing.',
-            src: 'UNDRR GAR 2025: disaster costs exceed US$2.3 trillion a year once cascading effects are counted.' },
+            // CORRECTED 2026-09-15: "exceed" became "about" (GAR 2025 SPM body); ecosystem costs added (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+            src: 'UNDRR GAR 2025 estimates disaster costs at about US$2.3 trillion a year. That includes cascading and ecosystem costs.' },
   speed:  { name: 'Land-use planning', short: 'Land use', max: 5, kind: 'measure', col: '#7ee787',
-            desc: () => 'Not building in the path of it. The cheapest measure there is, and the hardest politically.',
+            // CORRECTED 2026-09-15: unverifiable "cheapest measure" claim replaced by the in-game speed effect (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+            desc: () => 'Not building in the path of it. Each level, you move 10% faster.',
             src: 'UNDRR names land-use planning alongside building codes as key to reducing vulnerability.' },
   rate:   { name: 'Maintenance',      short: 'Upkeep',   max: 6, kind: 'measure', col: '#ff7a2f',
             desc: () => 'Everything you have already built, working when it is needed.',
             src: 'UNDRR: lifecycle resilience, maintenance and retrofit pathways for existing assets.' },
   dmg:    { name: 'Resilient investment', short: 'Invest', max: 6, kind: 'measure', col: '#ffa94d',
             desc: () => 'Money spent making things stronger rather than on rebuilding them afterwards.',
-            src: 'UNDRR: building resilience into infrastructure adds about 3% to cost, for US$4 back on every US$1.' },
+            // CORRECTED 2026-09-15: attributed to the World Bank, developing countries, net benefit, "only 3%" (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+            src: 'A World Bank estimate, via UNDRR. In developing countries, building resilience into infrastructure adds only 3% to investment costs. It gives a net benefit of US$4 per US$1.' },
 }
 
 // ---------------------------------------------------------------- synergies
-// Measures compound; that is the argument UNDRR keeps making, and compounding is also the
+// Measures compound (not attributed to UNDRR: unverified in the 2026-09-14 sweep), and compounding is also the
 // best part of this genre. A pair the player owns offers the bonus on a card; the question
 // about WHY the two go together is asked in the debrief once the run ends (2026-09-01 —
 // from 2026-08-21 to then it was the gate on the card itself, and every second level was a
@@ -1936,14 +1953,16 @@ const POOL_Q = {
            'Changed shape: floods are rarer, but the rare overtopping now finds three times the value sitting behind a wall of confidence',
            'Become the river’s problem'],
     correct: 2,
-    why: 'This is the levee effect the game’s own trade-off card documents: protection that holds most years draws development in behind it, so the exceeding event arrives on concentrated exposure. A defence without land-use control converts frequent small losses into rare huge ones. (in-game verified basis + Sendai exposure line, read 2026-08-30)' },
+    // CORRECTED 2026-09-15: unsourced levee mechanism removed; Galloway quote via Mallea; tag corrected (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+    why: 'The risk changed shape: floods reach the district less often, but when one gets over, it finds three times the value behind the levee. An engineer who co-wrote a US government assessment of the 1993 floods warns “there’s no such thing as absolute protection”. (Quoted in Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis. Read 2026-09-14.)' },
   { id: 'Q54', form: 'mechanism', q: 'Equal budgets: a response warehouse, or code enforcement plus retrofits. What can only the second one do?',
     opts: ['Look good at a ribbon-cutting',
            'Arrive quickly after the event',
            'Get spent at all',
            'Shrink the size of the future disaster itself — response, however vital, meets losses it can no longer reduce'],
     correct: 3,
-    why: 'Prevention is decided before the event and reduces what the event can take — the UNDRR figures the game already carries price it at about four dollars returned per dollar invested, for roughly a 3% cost premium. Response spending is necessary and honourable, and it shrinks nothing. (in-game verified basis, UNDRR read 2026-08-14)' },
+    // CORRECTED 2026-09-15: figures re-attributed to the World Bank, scoped, net benefit; tag updated (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+    why: 'Prevention is decided before the event and reduces what the event can take — a World Bank estimate that UNDRR repeats says building resilience into infrastructure in developing countries adds only 3% to investment costs, for a net benefit of four dollars per dollar invested. Response spending is necessary and honourable, and it shrinks nothing. (World Bank estimate on UNDRR’s Earthquake Day microsite, re-read 2026-09-14)' },
   ],
 }
 
@@ -2695,7 +2714,8 @@ const MASTERY = [
   { at: 12, id: 'pays', name: 'Prevention pays', col: '#7ee787',
     gain: 'Everything you collect is worth double, and you pull it in from 30% further.',
     apply: P => { P.xpMul = (P.xpMul || 1) * 2; P.pickup *= 1.30 },
-    why: 'UNDRR’s own figure: resilient infrastructure returns about US$4 for every US$1 put in, and building it that way adds roughly 3% to the cost. Prevention is not the expensive option; it only looks like it because the disaster it avoids never shows up in the accounts.' },
+    // CORRECTED 2026-09-15: "UNDRR's own figure" became a World Bank estimate, scoped, net benefit (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+    why: 'A World Bank estimate that UNDRR repeats: in developing countries, building resilience into infrastructure adds only 3% to investment costs. The net benefit is US$4 for every US$1. Prevention is not the expensive option; it only looks like it because the disaster it avoids never shows up in the accounts.' },
   { at: 20, id: 'invisible', name: 'The invisible record', col: '#8fe3ff',
     gain: 'Hazards arrive 15% slower and hit 15% softer.',
     apply: P => { P.hazSlow = (P.hazSlow || 1) * 0.85 },
@@ -2852,9 +2872,10 @@ const HAZARDS = {
            src: 'Sudden, little warning, and over in seconds — which is why the only thing that works is what was already in place.' },
   storm: { name: 'Storm',      col: '#7f8ea3', behaviour: 'orbit', at: 30,
            r: 9,  hp: 6, spd: 150, dmg: 7, xp: 2,
-           // A storm does its damage with what it picks up and throws, not by touching you.
+           // A storm hurts you by touch (dmg, on contact) and with what it picks up and throws (shoot).
            shoot: { every: 2.9, n: 3, spread: 0.44, spd: 215, dmg: 5, range: 440, r: 4.5, life: 2.4 },
-           src: 'The one hazard where warning time genuinely exists — UNDRR puts 24 hours of it at 30% less damage. It does its damage with what it lifts and throws.' },
+           // CORRECTED 2026-09-15: "the one hazard with warning" cut; hedge restored; storm contact named (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+           src: 'UNDRR: 24 hours of warning before a storm or heatwave can cut damage by 30%. The storm hurts you by touch and by what it lifts and throws.' },
   flood: { name: 'Flood',      col: '#4f86c6', behaviour: 'front', at: 70,
            r: 14, hp: 22, spd: 44, dmg: 11, xp: 3,
            src: 'A front, not an event. It arrives from one direction and keeps arriving.' },
@@ -3142,7 +3163,8 @@ const PLAIN = {
   'GIST.plan': 'Codes decide how to build. Planning decides whether to build there at all.',
   'GIST.keep': 'A defence is an ongoing duty, not a one-time buy. Maintenance is half of it.',
   'GIST.lane': 'Planning clears the corridor. Maintenance is the only thing that keeps it clear.',
-  'TRD.levee.cost': 'And on the day water does get over it, far more is behind it to hit. Floods and storms take 55% more.',
+  // CORRECTED 2026-09-15: Learning plain line states the card's net effect, as TRD levee cost (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+  'TRD.levee.cost': 'When a flood or storm touches you, the hit is only 7% smaller. All other hits are 40% smaller.',
   'FUS.act.desc': 'Warning and drills run as one programme. Every few seconds, everything near you is moved out of the way before it lands.',
   'FUS.act.gain': 'An evacuation pulse fires by itself every 9s. It pushes hazards back, and you move faster right after it.',
   'FUS.see.desc': 'Data feeds warning all the time. A sweep watches the whole horizon and deals with what it finds.',
@@ -3182,7 +3204,8 @@ const PLAIN = {
   'PICK.relief.flash': 'You get a sixth of your capacity back.',
   'PICK.evac.flash': 'Everything is pushed back, and you get a moment to move.',
   'WRK.station.gain': 'You collect from 20% further. What you collect is worth 8% more.',
-  'SEA.storm.note': 'The one hazard you are warned about ahead of time.',
+  // CORRECTED 2026-09-15: Learning plain line no longer says storms are the only warned hazard (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+  'SEA.storm.note': 'A hazard you can be warned about ahead of time.',
   'SEA.wet.note': 'It comes as a front, and it keeps coming.',
   'SEA.swarm.note': 'Compound. All of it, and none of it waits.',
   'SEA.quiet.note': 'Little is arriving. But nothing has stopped. Go and get ready.',
@@ -3545,7 +3568,8 @@ for (const k of PLACE_IDS) PLACES[k].id = k
 // dead time - so the quiet stretch is when preparation motes scatter across the map. Sit
 // still through it and you have wasted it. Drive it and you come out of it ahead.
 const SEASONS = {
-  storm: { name: 'Storm season', note: 'The one hazard you get told about in advance.',
+  // CORRECTED 2026-09-15: storms are no longer "the one hazard" with warning; "can" added (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+  storm: { name: 'Storm season', note: 'A hazard you can get told about in advance.',
            col: '#7f8ea3', rate: 1.10, bias: { storm: 3.2, flood: 1.5 } },
   wet:   { name: 'Wet season', note: 'It arrives as a front, and it keeps arriving.',
            col: '#4f86c6', rate: 1.00, bias: { flood: 3.4, storm: 1.3 } },
@@ -4269,19 +4293,23 @@ function updateGroundThings(dt) {
 const TRADEOFFS = [
   { id: 'levee', name: 'Hard defences', short: 'Levee', col: '#8892a6', from: 3,
     desc: 'A seawall, a levee, a channel. Almost everything stops at it, almost every time.',
-    cost: 'And the day water does get over it, there is far more behind it to hit. Floods and storms take 55% more.',
+    // CORRECTED 2026-09-15: cost line states the net effect, 7% on flood/storm contact, 40% otherwise (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+    cost: 'When a flood or storm touches you, that hit is cut by only 7%. All other hits are cut by 40%.',
     apply: P => { P.armour = 1 - (1 - P.armour) * 0.60; P.overtop = (P.overtop || 1) * 1.55 },
-    src: 'The levee effect: a defence that holds most of the time draws development in behind it, so the day it is overtopped is worse than the day before it was built. After the 1993 Midwest floods some communities were moved off the floodplain — and by 2008 Missouri had authorised more than US$2 billion of new development in zones that had flooded. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not the agency’s own analysis. Read 2026-08-25.)' },
+    // CORRECTED 2026-09-15: unsourced levee-effect mechanism replaced by the card's net game effect (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+    src: 'In this game, hard defences cut the damage you take by 40%, but by only 7% when a flood or storm touches you. After the 1993 Midwest floods some communities were moved off the floodplain — and by 2008 Missouri had authorised more than US$2 billion of new development in zones that had flooded. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not the agency’s own analysis. Re-read 2026-09-14.)' },
   { id: 'growth', name: 'Rapid development', short: 'Growth', col: '#ffa94d', from: 3,
     desc: 'More gets built, faster. Everything you collect is worth 70% more.',
     cost: 'None of it waited for the plan. Every hazard now takes 20% more off you.',
     apply: P => { P.xpMul = (P.xpMul || 1) * 1.7; P.exposure = (P.exposure || 1) * 1.20 },
-    src: 'Risk rises because of what gets built, not because the hazard changed. UNDRR’s GAR 2025 projects seismic deaths climbing “mainly due to demographic growth, urbanization and policy choices”, and says “more people and assets are being left in harm’s way”. (Read first-hand 2026-08-25.)' },
+    // CORRECTED 2026-09-15: opener gives GAR 2025's cause; GEM projection scoped to the Dominican Republic (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+    src: 'GAR 2025: earthquake risk rises mainly because human action, such as unsafe housing construction in seismic zones, puts more people and assets in harm’s way, not because the hazard is getting stronger. Global Earthquake Model analysts project the Dominican Republic’s earthquake death rate rising without stepped-up risk reduction, “mainly due to demographic growth, urbanization and policy choices”. (Re-read 2026-09-14.)' },
   { id: 'relief', name: 'Relief-funded recovery', short: 'Relief', col: '#ff8a9b', from: 4,
     desc: 'Help arrives after each event: 30% of capacity back on every level.',
     cost: 'It arrives afterwards. Everything you collect is worth 25% less.',
     apply: P => { P.relief = (P.relief || 0) + 0.30; P.xpMul = (P.xpMul || 1) * 0.75 },
-    src: 'Money spent rebuilding is money that was not spent making the thing stronger first - the inverse of the measure UNDRR prices at US$4 back on every US$1.' },
+    // CORRECTED 2026-09-15: US$4 scoped to low- and middle-income countries; "back" became "in benefit" (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+    src: 'Money spent rebuilding is money not spent making the thing stronger first - the inverse of the measure UNDRR prices at US$4 in benefit per US$1 in low- and middle-income countries.' },
 ]
 
 // ---- run-level state that the place and season own -------------------------------------
@@ -5786,7 +5814,8 @@ function step(dt) {
       continue
     }
     if (P.inv <= 0 && dist2(e, P) < (e.r + P.r) ** 2) {
-      // Hard defences hold water until they do not, and then there is more behind them.
+      // Hard defences: P.overtop (1.55 with the card) scales flood/storm contact only. With the card that hit is
+      // 0.60 x 1.55 = 0.93 of the no-card hit (a 7% cut); every other hit is 0.60 (a 40% cut). Nothing builds up behind it.
       const over = (e.kind === 'flood' || e.kind === 'storm') ? P.overtop : 1
       P.hp -= e.dmg * (1 - P.armour) * P.exposure * over
       P.inv = T.invuln; shake = Math.max(shake, 9); AU.play('hurt')
@@ -6155,7 +6184,8 @@ function renderReport() {
       `${kills} absorbed against your best of ${runLog.was.kills}, level ${P.level} against ${runLog.was.lv}.`))
   if (hls.length < 3 && beltBlocked)
     hls.push(row('#8ef6c6', `The green belt absorbed ${beltBlocked}`,
-      'A standing perimeter costs nothing per use and works every second. That is the whole case for it.'))
+      // CORRECTED 2026-09-15: real-world cost claim replaced by the belt's in-game behaviour (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+      'In this game the belt has nothing to fire and no wait between blocks: it works every second. That is the whole case for it here.'))
   if (hls.length < 3 && worksMissed.length >= 2)
     hls.push(row('#3a3f47', `${worksMissed.length} works never built`,
       'Each needed four seconds of standing still, and you were somewhere else. The measure that exists is the one somebody stayed for.'))
@@ -6189,7 +6219,8 @@ function renderReport() {
   html += sec(`Measures that compound — ${gotSyn.length} of ${SYNERGIES.length}`,
     (gotSyn.length
       ? gotSyn.map(sy => row(sy.col, sy.name, sy.why)).join('')
-      : `<div class="rrow"><i style="background:#3a3f47"></i><b>None</b><p>Single measures were never combined. UNDRR's own case is that they compound — that is where the four-to-one return comes from.</p></div>`) +
+      // CORRECTED 2026-09-15: unverified UNDRR attribution and four-to-one link removed; game behaviour stated (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+      : `<div class="rrow"><i style="background:#3a3f47"></i><b>None</b><p>Single measures were never combined. In this game, two measures that go together can unlock a bonus neither gives alone.</p></div>`) +
     (gotMast.length
       ? `<div class="rhead">Earned by answering, not by drawing — active from the first second</div>` +
         gotMast.map(m => row(m.col, m.name, m.why)).join('')
