@@ -1078,6 +1078,7 @@ const T = {
   lifelineR: 46,
   lifelineHit: 8,                  // one arriving hazard spends itself on it for this much
   lifelineDps: 5,                  // per second, per heat zone or flood front sitting on it
+  leveeFloodWear: 2,              // Hard defences: each flood front on a lifeline wears it this many times as fast (user decision 2026-09-15)
   lifelineRepair: 11,              // per second, standing with it and nothing else on it
   llTargetP: 0.22,                 // share of chasers that head for a lifeline instead of you
   llReach: 1250,                   // ...but only one close enough that you could get there
@@ -2755,7 +2756,7 @@ function reset(placeId) {
   if (placeId && PLACES[placeId]) PLACE = PLACES[placeId]
   P = { x: 0, y: 0, r: 11, spd: T.playerSpeed, hp: T.baseHp, max: T.baseHp, inv: 0, xp: 0, need: 9, level: 1,
         pickup: 90, hx: 0, hy: 0, dmgMul: 1, rateMul: 1, armour: 0, ringAng: 0, cd: {},
-        xpMul: 1, heatRes: 1, regen: 0, relief: 0, overtop: 1, exposure: 1,
+        xpMul: 1, heatRes: 1, regen: 0, relief: 0, exposure: 1,
         healMul: 1, cascade: false, slowWorks: false,
         dodgeT: 0, dodgeGo: 0, dodgeX: 0, dodgeY: 0 }
   enemies = []; bullets = []; ebullets = []; motes = []; fx = []; nums = []
@@ -3163,8 +3164,8 @@ const PLAIN = {
   'GIST.plan': 'Codes decide how to build. Planning decides whether to build there at all.',
   'GIST.keep': 'A defence is an ongoing duty, not a one-time buy. Maintenance is half of it.',
   'GIST.lane': 'Planning clears the corridor. Maintenance is the only thing that keeps it clear.',
-  // CORRECTED 2026-09-15: Learning plain line states the card's net effect, as TRD levee cost (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-  'TRD.levee.cost': 'When a flood or storm touches you, the hit is only 7% smaller. All other hits are 40% smaller.',
+  // CHANGED 2026-09-15: cost moved from contact damage to lifelines (sweep_2026-09-14 follow-up 1; levee_2026-09-15/)
+  'TRD.levee.cost': 'Every hit on you is 40% smaller. But a flood on a lifeline hurts it twice as fast.',
   'FUS.act.desc': 'Warning and drills run as one programme. Every few seconds, everything near you is moved out of the way before it lands.',
   'FUS.act.gain': 'An evacuation pulse fires by itself every 9s. It pushes hazards back, and you move faster right after it.',
   'FUS.see.desc': 'Data feeds warning all the time. A sweep watches the whole horizon and deals with what it finds.',
@@ -4293,11 +4294,11 @@ function updateGroundThings(dt) {
 const TRADEOFFS = [
   { id: 'levee', name: 'Hard defences', short: 'Levee', col: '#8892a6', from: 3,
     desc: 'A seawall, a levee, a channel. Almost everything stops at it, almost every time.',
-    // CORRECTED 2026-09-15: cost line states the net effect, 7% on flood/storm contact, 40% otherwise (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-    cost: 'When a flood or storm touches you, that hit is cut by only 7%. All other hits are cut by 40%.',
-    apply: P => { P.armour = 1 - (1 - P.armour) * 0.60; P.overtop = (P.overtop || 1) * 1.55 },
-    // CORRECTED 2026-09-15: unsourced levee-effect mechanism replaced by the card's net game effect (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-    src: 'In this game, hard defences cut the damage you take by 40%, but by only 7% when a flood or storm touches you. After the 1993 Midwest floods some communities were moved off the floodplain — and by 2008 Missouri had authorised more than US$2 billion of new development in zones that had flooded. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not the agency’s own analysis. Re-read 2026-09-14.)' },
+    // CHANGED 2026-09-15: cost moved from contact damage to lifelines (sweep_2026-09-14 follow-up 1; levee_2026-09-15/)
+    cost: 'Every hit you take is cut by 40%. But a flood sitting on a lifeline wears it down twice as fast.',
+    apply: P => { P.armour = 1 - (1 - P.armour) * 0.60 },
+    // CHANGED 2026-09-15: cost moved from contact damage to lifelines (sweep_2026-09-14 follow-up 1; levee_2026-09-15/)
+    src: 'In this game, hard defences cut every hit by 40%, but a flood sitting on a lifeline wears it down twice as fast. After the 1993 Midwest floods some communities were moved off the floodplain — and by 2008 Missouri had authorised more than US$2 billion of new development in zones that had flooded. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not the agency’s own analysis. Re-read 2026-09-14.)' },
   { id: 'growth', name: 'Rapid development', short: 'Growth', col: '#ffa94d', from: 3,
     desc: 'More gets built, faster. Everything you collect is worth 70% more.',
     cost: 'None of it waited for the plan. Every hazard now takes 20% more off you.',
@@ -4446,13 +4447,13 @@ function updateLifelines(dt) {
     if (L.warnCd > 0) L.warnCd -= dt
     if (L.fireCd > 0) L.fireCd -= dt
     if (!L.alive) continue
-    let under = 0, inbound = 0
+    let under = 0, inbound = 0, underF = 0
     for (const e of enemies) {
       if (e.tgt === L) inbound++
       if (e.behaviour !== 'zone' && e.behaviour !== 'front') continue
       const rr = T.lifelineR + e.r
       const dx = e.x - L.x, dy = e.y - L.y
-      if (dx * dx + dy * dy < rr * rr) under++
+      if (dx * dx + dy * dy < rr * rr) { under++; if (e.kind === 'flood') underF++ }
     }
     L.under = under; L.inbound = inbound
     const here = dist2(L, P) < (T.lifelineR + P.r) ** 2
@@ -4485,7 +4486,8 @@ function updateLifelines(dt) {
     // Once power is gone the rest go faster. Not a difficulty knob — it is the mechanic the
     // dense-city compound event is named after, made real on the map.
     const casc = P.cascade && L.kind !== 'power' ? T.cascadeMul : 1
-    if (under) hitLifeline(L, T.lifelineDps * (DIFF.llDmg || 1) * Math.min(under, 4) * casc * dt)
+    // Hard defences (2026-09-15): with the card, each flood front here counts leveeFloodWear times (exact up to the 4-occupier cap).
+    if (under) hitLifeline(L, T.lifelineDps * (DIFF.llDmg || 1) * Math.min(under, 4) * casc * dt * (trade.levee ? 1 + (T.leveeFloodWear - 1) * underF / under : 1))
     else if (L.hp < 100 && here) {
       // Maintenance is the only way one comes back, and the only place in the game where
       // that measure does something you can watch happening.
@@ -5814,10 +5816,8 @@ function step(dt) {
       continue
     }
     if (P.inv <= 0 && dist2(e, P) < (e.r + P.r) ** 2) {
-      // Hard defences: P.overtop (1.55 with the card) scales flood/storm contact only. With the card that hit is
-      // 0.60 x 1.55 = 0.93 of the no-card hit (a 7% cut); every other hit is 0.60 (a 40% cut). Nothing builds up behind it.
-      const over = (e.kind === 'flood' || e.kind === 'storm') ? P.overtop : 1
-      P.hp -= e.dmg * (1 - P.armour) * P.exposure * over
+      // Hard defences no longer changes contact damage (2026-09-15): its cost is on lifelines, see updateLifelines.
+      P.hp -= e.dmg * (1 - P.armour) * P.exposure
       P.inv = T.invuln; shake = Math.max(shake, 9); AU.play('hurt')
       if (P.hp <= 0) return die()
     }
