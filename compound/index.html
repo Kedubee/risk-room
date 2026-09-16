@@ -196,7 +196,7 @@
                      in the game. Kept, from Mallea 2019 on UNDRR's PreventionWeb: by 2008
                      Missouri had authorised more than US$2 billion of new development in zones
                      that flooded in 1993. Attributed to the author and the platform, NOT to
-                     UNDRR: it is a hosted Conversation piece, not the agency's own analysis,
+                     UNDRR: it is a hosted Conversation piece, not UNDRR's own analysis,
                      and the card says so.
     exposure growth  UNDRR GAR 2025. Landing page: seismic risk rises mainly because human action
                      (such as unsafe housing construction in seismic zones) puts more people and
@@ -1460,7 +1460,8 @@ const SYNERGIES = [
            'The finance to turn an approved plan into work actually done',
            'A hazard severe enough to justify it'],
     correct: 2,
-    why: 'UNDRR puts <i>resource resilience</i> beside <i>ready systems</i> for exactly this: the measure that is affordable is the measure that gets built.' },
+    // CORRECTED 2026-09-16: the pairing reason now stated as the game's, not UNDRR's (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+    why: 'UNDRR puts <i>resource resilience</i> beside <i>ready systems</i> in its calls to action. Why this game pairs them: the measure that is affordable is the measure that gets built.' },
 
   { id: 'who', a: 'wave', b: 'magnet', name: 'Drills that reach everyone', col: '#b9d8ff',
     gain: 'Drills reach 25% further, you collect from 25% wider, and a shot that lands sends one on to the next thing.',
@@ -1687,7 +1688,8 @@ const POOL_Q = {
            'Nothing: a levee only moves the water downstream',
            'Reduced permanently, and it needs no upkeep to stay that way'],
     correct: 1,
-    why: 'The agency that draws the flood maps says it plainly: levees help reduce the risk of flooding but do not eliminate it, they deteriorate over time and must be maintained to keep working, and when one fails or is overtopped the damage can be greater than if it had never been built. Part of the reason is what the levee invites behind it — more building on ground that is still in the floodplain. (FEMA, Living With Levees, read 2026-09-01)' },
+    // CORRECTED 2026-09-16: FEMA hedge "can help reduce" restored; causal join + development sentence dropped (option A); read date 2026-09-15 (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+    why: 'The agency that draws the flood maps says it plainly: levees can help reduce the risk of flooding, but they do not eliminate it. They deteriorate over time and must be maintained to keep working. When one fails or is overtopped, the damage can be greater than if it had never been built. (FEMA, Living With Levees, read 2026-09-15)' },
   ],
   metro: [
   { id: 'Q20', form: 'mechanism', q: 'Two heatwaves peak at the same daytime temperature, but in the city the nights stay hot. Why does that matter?',
@@ -1831,7 +1833,8 @@ const POOL_Q = {
            'Mainly what was built or substantially renovated since: the older stock waits for retrofitting, which is a separate act',
            'Only government buildings'],
     correct: 2,
-    why: 'A code binds construction from the day it is adopted; everything already standing keeps its original vulnerability until retrofitted. That is why codes and retrofitting are two different measures in this game — one governs the future stock, one reaches the existing. (in-game verified basis)' },
+    // CORRECTED 2026-09-16: placeholder tag became a FEMA source note; explanation rewritten to carry FEMA's exception (renovation / alteration / change of use, as examples) and enforcement; Lead terminal fix restored the hedge (sweep 2, sweep2_2026-09-15/ADJUDICATION_predeploy_2026-09-16.md, F1 resolution)
+    why: 'A code protects what is built after the city adopts and enforces it; a building already standing keeps the code it was designed and built under, unless, for example, it is significantly renovated or altered or changes its use. That is why codes and retrofitting are two different measures in this game — one governs the future stock, one reaches the existing. (FEMA, Seismic Building Codes, read 2026-09-16)' },
   { id: 'Q39', form: 'mechanism', q: 'Two schools teach identical earthquake safety. One also physically drills each term. In a real quake, why does the drilling school fare better?',
     opts: ['Drills scare students into caution',
            'It does not — knowing and doing are the same thing',
@@ -2321,7 +2324,8 @@ const PLACE_Q = {
                     'Speed up the emergency services',
                     'Predict the aftershocks'],
              correct: 1,
-             why: 'With no forecast, the only rehearsal that helps is of the response itself. UNDRR\u2019s micro-drill asks for exactly that: the action practised until it does not need a decision.' },
+             // CORRECTED 2026-09-16: drill purpose in UNDRR's own hedge ("tends to"), scoped to earthquakes; "exactly that" dropped (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+             why: 'With no forecast, the only rehearsal that helps is of the response itself. UNDRR gives the reason for its earthquake micro-drill: under stress, thinking tends to slow or shut down, so the trained reflex has to bypass it.' },
     wui:   { q: 'A fire warning goes out and the road out of the valley jams. What did the drill need to have settled?',
              opts: ['Which way to go, and when it is already too late to go',
                     'How to fight the fire from home',
@@ -2711,16 +2715,19 @@ const MASTERY = [
   { at: 4, id: 'informed', name: 'Risk-informed development', col: '#ffe08a',
     gain: 'Every measure you hold works 20% harder, and 12% less gets through.',
     apply: P => { P.dmgMul *= 1.20; P.armour = 1 - (1 - P.armour) * 0.88 },
-    why: 'Four right answers across your runs means you are not picking measures, you are reasoning about them. UNDRR calls the result risk-informed development: risk considered in the decision rather than repaired afterwards.' },
+    // CORRECTED 2026-09-16: definition marked as the game's gloss; "calls the result" dropped (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+    why: 'Four right answers across your runs means you are not picking measures, you are reasoning about them. UNDRR uses the term risk-informed development. As this game reads it: risk considered in the decision rather than repaired afterwards.' },
   { at: 12, id: 'pays', name: 'Prevention pays', col: '#7ee787',
     gain: 'Everything you collect is worth double, and you pull it in from 30% further.',
     apply: P => { P.xpMul = (P.xpMul || 1) * 2; P.pickup *= 1.30 },
     // CORRECTED 2026-09-15: "UNDRR's own figure" became a World Bank estimate, scoped, net benefit (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-    why: 'A World Bank estimate that UNDRR repeats: in developing countries, building resilience into infrastructure adds only 3% to investment costs. The net benefit is US$4 for every US$1. Prevention is not the expensive option; it only looks like it because the disaster it avoids never shows up in the accounts.' },
+    // CORRECTED 2026-09-16: unsourced "not the expensive option" / "in the accounts" close replaced; World Bank sentences unchanged (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+    why: 'A World Bank estimate that UNDRR repeats: in developing countries, building resilience into infrastructure adds only 3% to investment costs. The net benefit is US$4 for every US$1. That arithmetic is what this card is named for.' },
   { at: 20, id: 'invisible', name: 'The invisible record', col: '#8fe3ff',
     gain: 'Hazards arrive 15% slower and hit 15% softer.',
     apply: P => { P.hazSlow = (P.hazSlow || 1) * 0.85 },
-    why: 'The hardest thing about this work is that success is silent. UNDRR names it directly: the benefits of prevention stay invisible when disasters are avoided, and long gaps between events create a false sense of safety.' },
+    // CORRECTED 2026-09-16: paraphrase replaced by UNDRR's verbatim sentence, hedges and earthquake scope restored (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+    why: 'The hardest thing about this work is that success is silent. UNDRR puts it this way, about earthquake risk: “Long gaps between major earthquakes can create a false sense of safety, while the benefits of prevention remain largely invisible when disasters are avoided.”' },
 ]
 
 // At the start of every run: whatever the debriefs have earned is already on.
@@ -2866,7 +2873,8 @@ addEventListener('blur', () => { keys = {} })
 //
 // The hazard list is UNDRR's own (Earthquake Day microsite, and the hazards named in the
 // Stop Disasters teacher pack: cyclone, earthquake, flood, tsunami, wildfire), read
-// first-hand 2026-08-14.
+// first-hand 2026-08-14. Heatwave is the game's own addition: it is not on that list, but
+// the table below carries it (quake, storm, flood, heat, fire).
 const HAZARDS = {
   quake: { name: 'Earthquake', col: '#c2703f', behaviour: 'chase', at: 0,
            r: 12, hp: 8, spd: 74, dmg: 9, xp: 2, burst: true,
@@ -3565,9 +3573,10 @@ for (const k of PLACE_IDS) PLACES[k].id = k
 //
 // `quiet` is the one that matters. It is not a rest: the ramp keeps climbing while less is
 // arriving, so less XP comes in and the next season lands on a player who is behind. That
-// is the point UNDRR keeps making about the gaps between events, and it is unplayable as
-// dead time - so the quiet stretch is when preparation motes scatter across the map. Sit
-// still through it and you have wasted it. Drive it and you come out of it ahead.
+// reading of the gaps between events is the game's own design reasoning (it was not checked
+// against a UNDRR source), and the gap is unplayable as dead time - so the quiet stretch is
+// when preparation motes scatter across the map. Sit still through it and you have wasted
+// it. Drive it and you come out of it ahead.
 const SEASONS = {
   // CORRECTED 2026-09-15: storms are no longer "the one hazard" with warning; "can" added (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
   storm: { name: 'Storm season', note: 'A hazard you can get told about in advance.',
@@ -3604,8 +3613,8 @@ const SEASONS = {
 //   school    where the drills are run and where this decision gets made next time.
 //   road      not worth anything itself; everything that responds travels on it.
 //
-// And keeping them ALL standing is worth something in itself, because "basic services
-// uninterrupted" is the outcome Sendai's Target D actually asks for - not "most of them".
+// And keeping them ALL standing is worth something in itself: what Sendai's Target D sets out
+// to reduce is the disruption of basic services, so the game scores none down - not most up.
 const LIFELINES = {
   hospital: { name: 'Hospital', col: '#ff8a9b', tag: '+regen',
               gain: 'Capacity recovers slowly while it stands.',
@@ -3645,8 +3654,8 @@ const LIFELINES = {
 }
 const LIFELINE_IDS = Object.keys(LIFELINES)
 
-// Keeping every one of them standing is a state, not a sum of bonuses. Target D asks for
-// basic services uninterrupted, so the game rewards uninterrupted rather than mostly-fine.
+// Keeping every one of them standing is a state, not a sum of bonuses. Target D sets out to
+// reduce the disruption of basic services, so the game rewards uninterrupted, not mostly-fine.
 const servicesIntact = () => lifelines.length > 0 && lifelines.every(L => L.alive)
 const svc = () => servicesIntact() ? T.svcBonus : 1
 
@@ -3968,8 +3977,10 @@ function hurtBoss(dmg, kx, ky) {
 // the difference between mitigation and evacuation and is the reason they are in here.
 //
 // Every event runs warn -> impact. The warning is what makes it fair, and its length scales
-// with Early warning: the measure that buys time literally buys you time. UNDRR's own
-// figure for that is on the card.
+// with Early warning: the measure that buys time literally buys you time. That framing is
+// the game's design reasoning, not checked against a UNDRR source; the Storm card's src
+// line carries the warning figure with its UNDRR attribution in the string itself (24 hours
+// of warning can cut damage by 30%, hedged as the card states it).
 const EVENTS = {
   rockfall: {
     name: 'Rockfall', col: '#c2703f', warn: 1.25, dur: 0.45,
@@ -3987,7 +3998,8 @@ const EVENTS = {
   },
   tsunami: {
     name: 'Tsunami', col: '#4f86c6', warn: 3.6, dur: 7,
-    note: 'The one hazard where the whole answer is the warning and the route. Nothing you build on the shore is the plan; the plan is being uphill before it arrives.',
+    // CORRECTED 2026-09-16: exclusivity and the absolute "Nothing you build" claim removed; vertical evacuation named in NWS's hedge (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+    note: 'The answer here is the warning and the route: the plan is being uphill before it arrives. If high ground cannot be reached in time, some strong, tall buildings may be able to provide protection — a fallback, not the plan.',
     make(P0) {
       const a = Math.random() * TAU
       // span narrow enough that the warning plus the approach is genuinely enough time to
@@ -4298,7 +4310,8 @@ const TRADEOFFS = [
     cost: 'Every hit you take is cut by 40%. But a flood sitting on a lifeline wears it down twice as fast.',
     apply: P => { P.armour = 1 - (1 - P.armour) * 0.60 },
     // CHANGED 2026-09-15: cost moved from contact damage to lifelines (sweep_2026-09-14 follow-up 1; levee_2026-09-15/)
-    src: 'In this game, hard defences cut every hit by 40%, but a flood sitting on a lifeline wears it down twice as fast. After the 1993 Midwest floods some communities were moved off the floodplain — and by 2008 Missouri had authorised more than US$2 billion of new development in zones that had flooded. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not the agency’s own analysis. Re-read 2026-09-14.)' },
+    // CORRECTED 2026-09-16: caveat spelling harmonised to "not UNDRR’s own analysis" (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+    src: 'In this game, hard defences cut every hit by 40%, but a flood sitting on a lifeline wears it down twice as fast. After the 1993 Midwest floods some communities were moved off the floodplain — and by 2008 Missouri had authorised more than US$2 billion of new development in zones that had flooded. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis. Re-read 2026-09-14.)' },
   { id: 'growth', name: 'Rapid development', short: 'Growth', col: '#ffa94d', from: 3,
     desc: 'More gets built, faster. Everything you collect is worth 70% more.',
     cost: 'None of it waited for the plan. Every hazard now takes 20% more off you.',
@@ -6156,7 +6169,8 @@ function renderReport() {
       ' The cost lands after the event, on the recovery — the part a run does not show you.'))
   else if (lifelines.length && standing.length === lifelines.length)
     hls.push(row('#7ee787', 'Every service still running',
-      `+${Math.round((T.svcBonus - 1) * 100)}% to everything, held all run. Target D asks for services uninterrupted — not for most of them working.`))
+      // CORRECTED 2026-09-16: "asks for" modality dropped; scoring rule stated as the game's; target object in plain words (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+      `+${Math.round((T.svcBonus - 1) * 100)}% to everything, held all run. Paid only while every service is up, not most of them — the disruption of basic services is what Target D sets out to reduce.`))
   if (quizRight + quizWrong > 0 && !quizWrong)
     hls.push(row('#7ee787', 'Every debrief question right',
       'Understanding is the one upgrade luck cannot hand you — and it carries: the streak sets what you fire next run, and the count builds toward the mastery tiers.'))
@@ -6270,7 +6284,8 @@ function renderReport() {
   if (lifelines.length) {
     html += sec(`Lifelines — ${standing.length} of ${lifelines.length} still standing`,
       row('#8fe3ff', 'Why these five',
-          'They are the Sendai Framework’s Target D, which asks states to “substantially reduce disaster damage to critical infrastructure and disruption of basic services, among them health and educational facilities, including through developing their resilience by 2030”. Health and educational facilities are named in the target itself — the hospital and the school are not decoration. (Verbatim from UNDRR’s PreventionWeb, read 2026-08-25.)') +
+          // CORRECTED 2026-09-16: Framework modality (its targets "have been agreed", para. 18); quotation matched to the source bytes (capital S); read date 2026-09-15 (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+          'They are the Sendai Framework’s Target D, one of its seven agreed global targets: “Substantially reduce disaster damage to critical infrastructure and disruption of basic services, among them health and educational facilities, including through developing their resilience by 2030”. Health and educational facilities are named in the target itself — the hospital and the school are not decoration. (Verbatim from UNDRR’s PreventionWeb, read 2026-09-15.)') +
       lifelines.map(L => {
         const k = LIFELINES[L.kind]
         // Standing: what it is and what it was doing for you.
@@ -6282,7 +6297,8 @@ function renderReport() {
       }).join('') +
       (lifelines.every(L => L.alive)
         ? row('#7ee787', `Every service still running · +${Math.round((T.svcBonus - 1) * 100)}% held all run`,
-              'Target D asks for services that keep working, not for most of them working. A place that comes through with its hospital, its school, its power, its water and its road intact is a place that can start recovering on the same day rather than after somebody else arrives to help it.')
+              // CORRECTED 2026-09-16: "asks for" modality dropped; rule stated once, as the game's (V5-3 rework r1) (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+              'The game paid the bonus only while every service stayed up, because what Target D sets out to reduce is the disruption of basic services. A place that comes through with its hospital, its school, its power, its water and its road intact is a place that can start recovering on the same day rather than after somebody else arrives to help it.')
         : row('#ff9d9d', `${lifelines.length - standing.length} lost`,
               'Each of these was a decision not to be somewhere. That is not a criticism — you cannot be in five places, and choosing which service to defend under pressure IS the problem this is about. It is only worth noticing that the cost lands after the event, on the recovery, which is the part a run does not show you.')))
   }
@@ -7127,9 +7143,10 @@ function draw() {
 // ---------------------------------------------------------------- boot
 // Growth pressure: the exposure dial, chosen with the place. Self-set, continuous-ish, and
 // paid in both directions — more arrives AND more is worth collecting — because that
-// coupling is UNDRR's risk-creation argument in the genre's own favourite mechanic (the
-// documented basis is the same GAR 2025 exposure-growth reading the Rapid-development
-// trade-off card already carries; no new figures ride on this dial).
+// coupling is the game's own risk-creation reasoning, cast in the genre's favourite mechanic;
+// it was not checked against a UNDRR source (the documented basis is the same GAR 2025
+// exposure-growth reading the Rapid-development trade-off card already carries; no new
+// figures ride on this dial).
 const PRESS = [
   { n: 'Planned',   note: 'Growth follows the plan. Nothing extra arrives, nothing extra to collect.' },
   { n: 'Growing',   note: 'More gets built, faster: more arrives, worth more, and everything takes a little more off you.' },
