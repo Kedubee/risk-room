@@ -46,6 +46,61 @@
   .new{font-size:15px;color:var(--paper);margin-top:16px;max-width:640px;line-height:1.6;
     padding:11px 15px;border-left:3px solid var(--accent);border-radius:0 12px 12px 0;
     background:rgba(255,255,255,.05)}
+  /* The intro (2026-09-25): the New-here box now holds one short line and the button that opens the
+     intro again (user decision). A row that wraps under the line on a narrow screen. The button is
+     Compound's How to play button: an accent outline, so it reads as a button by shape too. */
+  .new.introrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+  .introbtn{font:inherit;font-size:14px;font-weight:800;min-height:44px;padding:10px 18px;border-radius:12px;
+    cursor:pointer;color:var(--accent);background:transparent;border:2px solid var(--accent)}
+  .introbtn:hover{background:rgba(255,122,47,.12)}
+
+  /* The intro popup: Compound's How to play panel (Survivors_Proto/index.html, the onboarding CSS),
+     so the site reads as one thing. A direct child of body, over everything; the page behind is inert
+     while it is open and does not scroll. The [hidden] rules are needed because a display:flex rule
+     would otherwise beat the attribute. Nothing is told apart by colour alone: the current step dot is
+     also wider, and the main button is also filled. */
+  html.introopen{overflow:hidden}
+  #intro{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-start;justify-content:center;
+    overflow-y:auto;overscroll-behavior:contain;padding:20px 16px;background:rgba(11,13,16,.96)}
+  #intro[hidden],.introart[hidden],#intro-new[hidden]{display:none}
+  .intropanel{width:100%;max-width:540px;margin:auto;padding:18px 20px 0;border-radius:16px;
+    background:#15181d;border:1px solid rgba(255,255,255,.16)}
+  .introart svg{display:block;width:100%;height:auto;border-radius:12px;background:#0d1117}
+  .introdots{display:flex;gap:7px;justify-content:center;align-items:center;margin:14px 0 12px}
+  .introdots i{display:block;width:9px;height:9px;border-radius:99px;border:1.5px solid rgba(255,255,255,.5)}
+  .introdots i.on{width:26px;background:var(--accent);border-color:var(--accent)}
+  #intro-t{font-size:24px;line-height:1.2;letter-spacing:-.01em;margin:0 0 10px;color:var(--accent)}
+  #intro-t:focus{outline:none}
+  #intro-p{font-size:15px;line-height:1.65;opacity:.92}
+  #intro-p b{font-weight:800;color:#fff;background:rgba(255,122,47,.16);
+    border-bottom:2px solid var(--accent);padding:0 2px}
+  /* The button row sticks to the bottom of the scrolling layer, so the buttons are reachable on a
+     short phone screen without scrolling past the picture first. */
+  .introbar{position:sticky;bottom:0;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;
+    align-items:center;margin-top:18px;padding:14px 0 18px;background:#15181d;
+    border-top:1px solid rgba(255,255,255,.10)}
+  .introbar span{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+  .introbar button{font:inherit;font-size:15px;font-weight:800;min-height:48px;min-width:96px;
+    padding:12px 20px;border-radius:12px;cursor:pointer;color:var(--paper);background:transparent;
+    border:1px solid rgba(255,255,255,.28)}
+  .introbar button#intro-next{background:var(--accent);border:2px solid var(--accent);color:#0b0d10}
+  .introbar button:focus-visible,.introbtn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+  /* A short screen, such as a phone on its side: at full size the picture pushed the title under the
+     button row (measured at 667x375). The picture shrinks instead, so the words start above the row. */
+  @media (max-height:500px){
+    #intro{padding-top:10px;padding-bottom:10px}
+    .introart svg{height:88px}
+    .introdots{margin:8px 0}
+  }
+  /* Shorter still, as on most phones held on their side (at 667x375 the last line of the longest step
+     sat under the button row, and at 568x320 under three lines were left for the words), and on a small
+     upright phone with its browser bars showing (about 320x460): the picture goes, the words stay. */
+  @media (max-height:480px){
+    .introart svg{display:none}
+  }
+  /* Read by screen readers, not shown: the step position inside the step title. */
+  .sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);
+    white-space:nowrap;border:0}
 
   /* min(300px,100%) rather than 300px: a fixed minimum cannot shrink, so on a 320px phone
      the track stayed 300 wide, the body padding pushed it past the edge and the page
@@ -87,6 +142,11 @@
     h1{font-size:28px}
     .sub{font-size:14px}
     .new{font-size:14px;padding:10px 12px}
+    #intro{padding:12px 10px}
+    .intropanel{padding:14px 14px 0}
+    #intro-t{font-size:20px}
+    #intro-p{font-size:14.5px}
+    .introbar button{flex:1 1 auto}
     .rule{margin:24px 0 22px}
     .art{height:92px}
     h2{font-size:18px}
@@ -101,7 +161,7 @@
     <p class="sub">Playable prototypes about how disasters get prevented — and about the fact
       that prevention is invisible when it works. Each one is built around a real body of
       guidance rather than a quiz bolted onto a game, and each names its sources inside.</p>
-    <p class="new">New here? Each card opens a game that runs in your browser, with nothing to install. Compound's start screen has a How to play button. It shows how to move, what the rewards do, and what a right or wrong answer does. On your first visit to Compound, it opens by itself.</p>
+    <p class="new introrow"><span id="intro-new"></span><button id="intro-open" class="introbtn" type="button"></button></p>
   </header>
   <div class="rule"></div>
   <div class="grid" id="grid"></div>
@@ -116,6 +176,112 @@
     citation is inside the game and names the document rather than the organisation's
     reputation.
   </footer>
+</div>
+
+<!-- The intro (2026-09-25; records in hub_intro_2026-09-25/). Three steps: what Risk Room is
+     about, the games, how it works. Every word in it is filled in from INTRO_COPY in the script. The
+     pictures are decoration for the words beside them, carry no words, and are hidden from screen readers. -->
+<div id="intro" hidden role="dialog" aria-modal="true" aria-labelledby="intro-t" aria-describedby="intro-p">
+  <div class="intropanel">
+    <div class="introart" id="introart0" hidden>
+      <svg viewBox="0 0 520 200" aria-hidden="true" focusable="false">
+        <path d="M0 50H520M0 100H520M0 150H520M65 0V200M130 0V200M195 0V200M260 0V200M325 0V200M390 0V200M455 0V200" stroke="rgba(255,255,255,.05)"/>
+        <!-- a place, a dashed ring around it, and hazards arriving from every side -->
+        <ellipse cx="260" cy="126" rx="104" ry="64" fill="rgba(126,231,135,.05)" stroke="#7ee787" stroke-opacity=".7" stroke-width="2.5" stroke-dasharray="7 6"/>
+        <rect x="200" y="148" width="120" height="4" rx="2" fill="rgba(247,244,238,.25)"/>
+        <path d="M212 148V124l17-15 17 15v24z" fill="#f7f4ee" fill-opacity=".9"/>
+        <rect x="252" y="100" width="26" height="48" rx="2" fill="#f7f4ee" fill-opacity=".75"/>
+        <path d="M284 148V128l14-12 14 12v20z" fill="#f7f4ee" fill-opacity=".9"/>
+        <g fill="#0d1117" fill-opacity=".8">
+          <rect x="224" y="130" width="10" height="10" rx="1"/>
+          <rect x="258" y="108" width="6" height="6"/><rect x="267" y="108" width="6" height="6"/>
+          <rect x="258" y="120" width="6" height="6"/><rect x="267" y="120" width="6" height="6"/>
+          <rect x="258" y="132" width="6" height="6"/><rect x="267" y="132" width="6" height="6"/>
+          <rect x="293" y="132" width="10" height="16" rx="1"/>
+        </g>
+        <g stroke-linecap="round" stroke-width="4" stroke-opacity=".35">
+          <path d="M22 22L60 45" stroke="#c2703f"/><path d="M498 18L458 40" stroke="#4f86c6"/>
+          <path d="M18 188L56 167" stroke="#e8763a"/><path d="M502 186L468 168" stroke="#7f8ea3"/>
+        </g>
+        <circle cx="68" cy="50" r="10" fill="#c2703f"/><circle cx="450" cy="44" r="9" fill="#4f86c6"/>
+        <circle cx="64" cy="162" r="11" fill="#e8763a"/><circle cx="460" cy="165" r="10" fill="#7f8ea3"/>
+        <circle cx="140" cy="118" r="7" fill="#c49a50"/><circle cx="382" cy="104" r="7" fill="#a89f48"/>
+      </svg>
+    </div>
+    <div class="introart" id="introart1" hidden>
+      <svg viewBox="0 0 520 200" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="introclip-c"><rect x="36" y="20" width="206" height="86" rx="8"/></clipPath>
+          <clipPath id="introclip-q"><rect x="278" y="20" width="206" height="86" rx="8"/></clipPath>
+        </defs>
+        <!-- two game cards, each with its own card art from the page (PAINT below) -->
+        <rect x="28" y="12" width="222" height="176" rx="12" fill="#14171c" stroke="rgba(255,255,255,.14)"/>
+        <g clip-path="url(#introclip-c)">
+          <rect x="36" y="20" width="206" height="86" fill="#0d1117"/>
+          <path d="M62 20V106M88 20V106M114 20V106M140 20V106M166 20V106M192 20V106M218 20V106M36 46H242M36 72H242M36 98H242" stroke="rgba(255,255,255,.05)"/>
+          <circle cx="139" cy="66" r="26" fill="rgba(255,157,226,.13)"/>
+          <circle cx="98" cy="46" r="4.4" fill="#c2703f"/><circle cx="182" cy="42" r="4.4" fill="#7f8ea3"/>
+          <circle cx="96" cy="88" r="4.4" fill="#4f86c6"/><circle cx="184" cy="90" r="4.4" fill="#e8763a"/>
+          <circle cx="139" cy="30" r="4.4" fill="#4f86c6"/><circle cx="212" cy="66" r="4.4" fill="#c2703f"/>
+          <circle cx="66" cy="64" r="4.4" fill="#7f8ea3"/><circle cx="150" cy="98" r="4.4" fill="#e8763a"/>
+          <circle cx="139" cy="66" r="7" fill="#f7f4ee"/>
+        </g>
+        <rect x="46" y="118" width="7" height="7" rx="2" fill="#ff7a2f"/><rect x="58" y="119" width="64" height="5" rx="2.5" fill="rgba(255,255,255,.3)"/>
+        <rect x="46" y="134" width="96" height="10" rx="5" fill="rgba(247,244,238,.8)"/>
+        <rect x="46" y="152" width="180" height="5" rx="2.5" fill="rgba(255,255,255,.22)"/><rect x="46" y="162" width="150" height="5" rx="2.5" fill="rgba(255,255,255,.22)"/>
+        <rect x="46" y="175" width="36" height="7" rx="3.5" fill="rgba(255,255,255,.12)"/><rect x="88" y="175" width="36" height="7" rx="3.5" fill="rgba(255,255,255,.12)"/><rect x="130" y="175" width="36" height="7" rx="3.5" fill="rgba(255,255,255,.12)"/>
+        <rect x="270" y="12" width="222" height="176" rx="12" fill="#14171c" stroke="rgba(255,255,255,.14)"/>
+        <g clip-path="url(#introclip-q)">
+          <rect x="278" y="20" width="206" height="86" fill="#100c0a"/>
+          <rect x="278" y="82" width="206" height="24" fill="rgba(140,110,80,.22)"/>
+          <rect x="344" y="58" width="74" height="6" fill="rgba(190,160,120,.6)"/>
+          <rect x="348" y="64" width="5" height="22" fill="rgba(190,160,120,.6)"/><rect x="410" y="64" width="5" height="22" fill="rgba(190,160,120,.6)"/>
+          <circle cx="381" cy="75" r="6" fill="#f7f4ee"/>
+          <path d="M278 34L300 29L322 34L344 29L366 34L388 29L410 34L432 29L454 34L476 29L498 34" fill="none" stroke="rgba(196,120,70,.5)" stroke-width="2"/>
+        </g>
+        <rect x="288" y="118" width="7" height="7" rx="2" fill="#c2703f"/><rect x="300" y="119" width="64" height="5" rx="2.5" fill="rgba(255,255,255,.3)"/>
+        <rect x="288" y="134" width="120" height="10" rx="5" fill="rgba(247,244,238,.8)"/>
+        <rect x="288" y="152" width="180" height="5" rx="2.5" fill="rgba(255,255,255,.22)"/><rect x="288" y="162" width="140" height="5" rx="2.5" fill="rgba(255,255,255,.22)"/>
+        <rect x="288" y="175" width="36" height="7" rx="3.5" fill="rgba(255,255,255,.12)"/><rect x="330" y="175" width="36" height="7" rx="3.5" fill="rgba(255,255,255,.12)"/><rect x="372" y="175" width="36" height="7" rx="3.5" fill="rgba(255,255,255,.12)"/>
+      </svg>
+    </div>
+    <div class="introart" id="introart2" hidden>
+      <svg viewBox="0 0 520 200" aria-hidden="true" focusable="false">
+        <!-- a card being pressed, the game opening in the browser, and keys or a touch screen to play it -->
+        <rect x="24" y="30" width="128" height="140" rx="12" fill="#191d23" stroke="#ff7a2f" stroke-width="2"/>
+        <rect x="32" y="38" width="112" height="54" rx="7" fill="#0d1117"/>
+        <circle cx="88" cy="65" r="15" fill="rgba(255,157,226,.13)"/>
+        <circle cx="62" cy="50" r="3" fill="#c2703f"/><circle cx="116" cy="52" r="3" fill="#4f86c6"/>
+        <circle cx="112" cy="82" r="3" fill="#e8763a"/><circle cx="60" cy="80" r="3" fill="#7f8ea3"/>
+        <circle cx="88" cy="65" r="4.5" fill="#f7f4ee"/>
+        <rect x="36" y="104" width="64" height="8" rx="4" fill="rgba(247,244,238,.8)"/>
+        <rect x="36" y="120" width="100" height="5" rx="2.5" fill="rgba(255,255,255,.22)"/><rect x="36" y="130" width="84" height="5" rx="2.5" fill="rgba(255,255,255,.22)"/>
+        <circle cx="122" cy="142" r="15" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-dasharray="3 4"/>
+        <path d="M122 142v30l8-7 6 13 6-3-6-12h11z" fill="#f7f4ee" stroke="#0b0d10" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M162 100h28M182 92l9 8-9 8" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="202" y="40" width="140" height="120" rx="10" fill="#15181d" stroke="rgba(255,255,255,.25)"/>
+        <path d="M202 62h140" stroke="rgba(255,255,255,.15)"/>
+        <circle cx="214" cy="51" r="3.5" fill="rgba(255,255,255,.35)"/><circle cx="226" cy="51" r="3.5" fill="rgba(255,255,255,.35)"/><circle cx="238" cy="51" r="3.5" fill="rgba(255,255,255,.35)"/>
+        <circle cx="272" cy="111" r="28" fill="rgba(255,122,47,.12)"/>
+        <path d="M262 96l24 15-24 15z" fill="#ff7a2f"/>
+        <g fill="rgba(255,255,255,.14)">
+          <rect x="402" y="66" width="26" height="26" rx="6"/>
+          <rect x="372" y="96" width="26" height="26" rx="6"/><rect x="402" y="96" width="26" height="26" rx="6"/><rect x="432" y="96" width="26" height="26" rx="6"/>
+        </g>
+        <rect x="470" y="60" width="38" height="80" rx="8" fill="#15181d" stroke="rgba(255,255,255,.45)" stroke-width="2"/>
+        <rect x="475" y="70" width="28" height="58" rx="3" fill="#0d1117"/>
+        <path d="M482 122q1-12 7-24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round"/>
+        <circle cx="489" cy="96" r="7" fill="rgba(255,255,255,.3)" stroke="rgba(255,255,255,.75)" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="introdots" aria-hidden="true"><i></i><i></i><i></i></div>
+    <h2 id="intro-t" tabindex="-1"><span class="sr" id="intro-n"></span> <span id="intro-tt"></span></h2>
+    <p id="intro-p"></p>
+    <div class="introbar">
+      <button id="intro-back" type="button"></button>
+      <span><button id="intro-skip" type="button"></button><button id="intro-next" type="button"></button></span>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -210,6 +376,157 @@ for (const G of GAMES) {
   const cv = el.querySelector('canvas')
   PAINT[G.art](cv.getContext('2d'), cv.width, cv.height)
 }
+
+// --- the intro (2026-09-25) ---------------------------------------------------------
+// Three steps: what Risk Room is about, the games, how it works. The pattern is Compound's How to play
+// (Survivors_Proto/index.html, "how-to-play overlay (S3)"): on a first visit it opens by itself with no
+// Skip and no Escape, the page behind is inert, and the finishing button on the last step is the only
+// thing that marks it seen (user decision 2026-09-25: a first visit closes only at the end). Back stays available. From the
+// header button it opens with Skip and Escape, and every close only closes.
+//
+// The copy, one entry per row id. Plain JSON between the two markers, so a script can read it back out of
+// the page. Steps 1 and 2 name the games and say how many there are, and step 3 states their controls:
+// adding a game to GAMES means redrafting all three.
+/* INTRO_COPY:BEGIN */
+const INTRO_COPY = {
+  "HI.1.title": "Games about preventing disasters",
+  "HI.1.body": "Risk Room has two games. Neither game lets you stop the hazards from coming. In each, you choose what to do about them. These games are prototypes, still in progress.",
+  "HI.1.bold": "choose what to do about them",
+  "HI.2.title": "The two games",
+  "HI.2.body": "Compound: you are a place that hazards keep arriving at. You pick which measures to take, and can answer questions after the run. Drop, Cover, Hold On: an earthquake, indoors. First you decide what some signs are actually worth. Then you fix things in the room, find a safe place, and get out.",
+  "HI.2.bold": "",
+  "HI.3.title": "How to start a game",
+  "HI.3.body": "Each card opens a game. Move with the arrow keys or W, A, S and D. On a touch screen, drag on the left half to move. Drop, Cover, Hold On: look around with the mouse, or by dragging on the right half. Open this again with the How it works button at the top.",
+  "HI.3.bold": "Each card opens a game",
+  "HI.btn.next": "Next",
+  "HI.btn.back": "Back",
+  "HI.btn.skip": "Skip",
+  "HI.btn.done": "Choose a game",
+  "HI.open": "How it works",
+  "HI.new": "New here?",
+  "HI.pos": "Step {n} of {total}:"
+}
+/* INTRO_COPY:END */
+const INTRO_STEPS = ['HI.1', 'HI.2', 'HI.3']
+// Its own key. The hub and Compound share one origin, and Compound's is compoundOnboardV1. Storage that is
+// absent or throws falls back to memory, so the intro then opens once per page load and never loops.
+const INTRO_KEY = 'riskroomIntroV1'
+let introMem = false, introStep = 0, introMandatory = false, introHeld = null
+function introSeen() {
+  if (introMem) return true
+  try { return localStorage.getItem(INTRO_KEY) === '1' } catch (e) { return false }
+}
+function introMark() {
+  introMem = true
+  try { localStorage.setItem(INTRO_KEY, '1') } catch (e) {}
+}
+const $ = id => document.getElementById(id)
+const wrap = document.querySelector('.wrap')
+function introOpen(mandatory) {
+  introMandatory = mandatory; introStep = 0; introHeld = null
+  $('intro').hidden = false
+  $('intro').scrollTop = 0
+  // Filled before the page behind is locked: if filling ever failed, introRender closes the popup and
+  // the page stays usable, instead of going inert behind a broken layer.
+  if (!introRender()) return
+  wrap.inert = true
+  document.documentElement.classList.add('introopen')
+}
+function introRender() {
+  try {
+    const id = INTRO_STEPS[introStep], C = INTRO_COPY
+    // The step position is read out with the title and hidden on screen, where the dots carry it.
+    $('intro-n').textContent = (C['HI.pos'] || '').replace('{n}', introStep + 1).replace('{total}', INTRO_STEPS.length)
+    $('intro-tt').textContent = C[id + '.title']
+    // The step's one bold phrase, found as a substring rather than by position, so a revised row that
+    // drops it loses the bold instead of bolding the wrong words.
+    const p = $('intro-p'), body = C[id + '.body'], bold = C[id + '.bold'], at = bold ? body.indexOf(bold) : -1
+    if (at < 0) p.textContent = body
+    else {
+      const b = document.createElement('b'); b.textContent = bold
+      p.textContent = ''; p.append(body.slice(0, at), b, body.slice(at + bold.length))
+    }
+    for (let i = 0; i < INTRO_STEPS.length; i++) $('introart' + i).hidden = i !== introStep
+    document.querySelectorAll('.introdots i').forEach((d, i) => d.classList.toggle('on', i === introStep))
+    const back = $('intro-back'), skip = $('intro-skip'), next = $('intro-next')
+    // Back leaves the layout on step 1 instead of staying as an invisible slot: on a narrow phone that
+    // slot wrapped onto a row of its own and left an empty band in the button row.
+    back.textContent = C['HI.btn.back']; back.hidden = !introStep
+    skip.textContent = C['HI.btn.skip']; skip.hidden = introMandatory
+    next.textContent = introStep === INTRO_STEPS.length - 1 ? C['HI.btn.done'] : C['HI.btn.next']
+  } catch (err) {
+    introClose(false)                    // never leave a visitor behind a broken popup
+    return false
+  }
+  // Blur first. A step changed by Enter on the title or by the arrows would otherwise focus a title that
+  // already has focus: no focus event fires, and a screen reader may not read out the new step.
+  const t = $('intro-t'); t.blur(); t.focus()
+  return true
+}
+function introGo(d) {
+  const n = introStep + d
+  if (n < 0 || n >= INTRO_STEPS.length) return
+  introStep = n; introRender()
+}
+function introClose(finished) {
+  if (finished) introMark()
+  $('intro').hidden = true
+  wrap.inert = false
+  document.documentElement.classList.remove('introopen')
+  introMandatory = false
+  // The finishing button leads to the games, so focus goes to the first game card. Skip and Escape go
+  // back to the button that opened the popup.
+  const first = finished && document.querySelector('#grid a.card')
+  ;(first || $('intro-open')).focus()
+}
+$('intro-next').onclick = () => { if (introStep < INTRO_STEPS.length - 1) introGo(1); else introClose(true) }
+$('intro-back').onclick = () => introGo(-1)
+$('intro-skip').onclick = () => { if (!introMandatory) introClose(false) }
+$('intro-open').onclick = () => introOpen(false)
+$('intro-open').textContent = INTRO_COPY['HI.open']
+if (INTRO_COPY['HI.new']) $('intro-new').textContent = INTRO_COPY['HI.new']
+else $('intro-new').hidden = true
+
+// Keyboard, as in Compound: Tab stays inside, the arrows step, Escape closes unless this is the first
+// visit, and Enter or Space presses the focused button once - a held key repeats neither through the
+// steps nor past the close. With the title focused (where each step puts focus), Enter means the main
+// button.
+addEventListener('keydown', e => {
+  if ($('intro').hidden) {
+    // The key that closed the popup may still be held down. Its repeats must not press whatever has focus
+    // now: the first game card would open, or the header button would open the popup again.
+    if (introHeld === e.key) e.preventDefault()
+    return
+  }
+  // Shortcuts with Ctrl, Alt or Cmd are left to the browser. Cmd+Enter used to close the popup, and some
+  // browsers send no key release for a key let go while Cmd is held, which left that key swallowed once.
+  if (e.ctrlKey || e.altKey || e.metaKey) return
+  const k = e.key
+  if (k === 'Tab') { introTrap(e); return }
+  if (!['Enter', ' ', 'Escape', 'ArrowLeft', 'ArrowRight'].includes(k)) return
+  e.preventDefault()
+  if (e.repeat) return
+  if (k === 'Escape') { if (!introMandatory) introClose(false) }
+  else if (k === 'ArrowRight') introGo(1)
+  else if (k === 'ArrowLeft') introGo(-1)
+  else {
+    const a = document.activeElement
+    if (a && a.tagName === 'BUTTON' && $('intro').contains(a)) a.click()
+    else if (k === 'Enter') $('intro-next').click()
+  }
+  if ($('intro').hidden) introHeld = k
+})
+addEventListener('keyup', e => { if (introHeld === e.key) { e.preventDefault(); introHeld = null } })
+addEventListener('blur', () => { introHeld = null })
+function introTrap(e) {
+  const f = [...$('intro').querySelectorAll('button')].filter(b => !b.hidden && b.style.visibility !== 'hidden')
+  if (!f.length) return
+  e.preventDefault()
+  const i = f.indexOf(document.activeElement)
+  f[i < 0 ? (e.shiftKey ? f.length - 1 : 0) : (i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus()
+}
+
+if (!introSeen()) introOpen(true)
 })()
 </script>
 </body>
