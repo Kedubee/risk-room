@@ -37,6 +37,7 @@
                       the next run with. What you answered last time is what you fire this
                       time; it no longer changes mid-run because nothing mid-run asks.
       // CORRECTED 2026-09-23: comment made true - a skip after right answers keeps their share (finish() calls releaseFunds(debrief.right, list.length)) (section C round 2, section_C_2026-09-22)
+      // P6-B2 2026-09-25: F1 (a) - since this build each right answer banks its share as it is shown (bankShare) and finish() no longer calls releaseFunds; what a skip keeps is unchanged (build_P6_2026-09-25)
       budget          the run sets how big the recovery budget IS; the debrief decides how
                       much of it you keep - right/asked of it; a skipped question counts as not right
                       (2026-09-02). Standing capacity is bought with understanding, not by
@@ -304,6 +305,11 @@
     background:rgba(255,255,255,.09)}
   .card .pairs span.ph{background:rgba(255,209,102,.22);color:#ffd166;opacity:1}
   .card .pairs span.pd{background:rgba(126,231,135,.18);color:#7ee787;opacity:1}
+  /* P6-A4 2026-09-25: F3's non-colour marks, drawn in CSS inside a coloured pill: a half-filled dot on .ph (part-way), a full dot on .pd (complete). An <i>, not a <span>, so the pill rule above does not style it as a pill. The same classes carry the marks on the response card's "Also opened by" pill (build_P6_2026-09-25) */
+  .card .pairs .pm{display:inline-block;width:8px;height:8px;margin-left:5px;border:1px solid currentColor;
+    border-radius:50%;box-sizing:border-box;vertical-align:middle}
+  .card .pairs .ph .pm{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+  .card .pairs .pd .pm{background:currentColor}
   /* What taking this card actually changes, in numbers. Only the rows that move are printed. */
   .card .res{margin-top:10px;display:flex;flex-direction:column;gap:3px}
   .card .res span{font-size:10.5px;letter-spacing:.03em;opacity:.62}
@@ -460,6 +466,10 @@
   .card{position:relative}
   #cards.banish .card:not(.syn):not(.trade):not(.fuse) .banx{opacity:1}
   #cards.banish .card:not(.syn):not(.trade):not(.fuse){border-color:rgba(255,77,94,.5)}
+  /* P6-A1 2026-09-25: the Sources switch on the card bar (T1-1 (a)). Off, the default, the source line of the measure and trade-off cards leaves the face; on (#cards.srcon), it shows exactly as before, the same element and style (build_P6_2026-09-25) */
+  #cards:not(.srcon) .card .src{display:none}
+  /* P6-A2 2026-09-25: a Learning gloss flagged `withsrc` goes with the source line (build_P6_2026-09-25) */
+  #cards:not(.srcon) .card .gloss.withsrc{display:none}
 
   /* growth-pressure dial on the start screen */
   #presswrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
@@ -655,6 +665,39 @@
     border-radius:99px;background:transparent;color:var(--paper);
     border:1px solid rgba(255,255,255,.25);cursor:pointer;opacity:.7}
   .rskip:hover{opacity:1}
+  /* P6-B1 2026-09-25: T2-0 - reduced motion, the OS setting (the Lead's decision: no in-game toggle yet). The one CSS motion this build adds is the streak picture's single pass (P6-B6, .redo-art); under this rule it shows its still, final frame at once. The payout count is driven by script, so the script reads the same setting (reduceMotion) (build_P6_2026-09-25) */
+  @media (prefers-reduced-motion: reduce){ .redo-art *{animation:none!important} }
+  /* P6-B3 2026-09-25: F2 - a mark besides colour on the marked options: the tick or cross and S-B1's label on a line of their own inside the button, and a second pixel of border drawn inside it (an inset ring, so nothing moves), as the how-to picture's marked options have 2 px (build_P6_2026-09-25) */
+  .opt.right{box-shadow:inset 0 0 0 1px #3fb950} .opt.wrong{box-shadow:inset 0 0 0 1px #f85149}
+  .redo-lbl{display:block;margin-top:6px;font-size:11.5px;font-weight:800;letter-spacing:.02em}
+  .redo-lbl.good{color:#7ee787} .redo-lbl.bad{color:#ff9d9d}
+  .redo-mk{font-weight:800}
+  /* P6-B4 2026-09-25: T1-3 - one question at a time. After an answer the block ends in its Next button (no display rule, so its hidden attribute holds); at Next it folds to one row that opens and closes it again. The row shows only on a folded block, and only answered blocks fold (build_P6_2026-09-25) */
+  .redo-next{margin-top:12px;font:inherit;font-size:13px;font-weight:800;padding:9px 18px;border-radius:99px;
+    background:rgba(255,224,138,.14);color:#ffe08a;border:1px solid rgba(255,224,138,.55);cursor:pointer}
+  .redo-row{display:none}
+  .redo-q.done > .redo-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;width:100%;padding:8px 12px;border-radius:10px;
+    font:inherit;font-size:12px;text-align:left;color:var(--paper);background:#1b1f26;border:1px solid rgba(255,255,255,.12);cursor:pointer}
+  .redo-q.done.open > .redo-row{margin-bottom:8px}
+  .redo-q.done:not(.open) > :not(.redo-row){display:none}
+  .redo-row .redo-rtag{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#ffd166}
+  .redo-row .redo-rv{opacity:.8}
+  .redo-row::after{content:'\25B8';margin-left:auto;opacity:.6}
+  .redo-q.open > .redo-row::after{content:'\25BE'}
+  .redo-mk.good{color:#7ee787} .redo-mk.bad{color:#ff9d9d}
+  /* P6-B5 2026-09-25: T2-2 - the payout beat: the verdict grows to 16 px, its mark before the words; the released share has a line of its own, S-B5's `+N budget`, the number at 28 px in tabular figures so the count does not jitter (build_P6_2026-09-25) */
+  .redo-verdict{font-size:16px}
+  .redo-pay{margin-top:4px;font-size:14px;font-weight:800;line-height:1.25;color:#ffe08a}
+  .redo-pay b{font-size:28px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  /* P6-B6 2026-09-25: T2-3 (a) - the streak picture and its tier name. One pass of motion that starts at its beat (.go): the shots fly out from the emitter (.35 s), then, at a tier that splits, the shards fly on (.15 s): 0.5 s, never looping. A click (.still) or reduced motion (P6-B1) shows the last frame (build_P6_2026-09-25) */
+  .redo-streak{display:inline-flex;align-items:center;gap:10px;margin:10px 8px 0 0;vertical-align:middle}
+  .redo-streak b{font-size:13px;font-weight:800;letter-spacing:.04em}
+  .redo-art{display:block;flex:none}
+  .redo-art.go .art-fly{animation:redo-fly .35s ease-out both}
+  .redo-art.go .art-shard{animation:redo-shard .15s ease-out .35s both}
+  .redo-art.still *{animation:none!important}
+  @keyframes redo-fly{from{transform:translate(var(--dx),var(--dy))}}
+  @keyframes redo-shard{from{transform:translate(var(--dx),var(--dy));opacity:0}}
 
   /* ---- lifeline HUD gain tags ---- */
   .ll span.llt{font-size:9.5px;opacity:.45;letter-spacing:.02em}
@@ -921,6 +964,12 @@ let W = 0, H = 0
 let groundPat = null, vignette = null
 const COARSE = matchMedia('(pointer: coarse)').matches
 const SMALL = COARSE && Math.min(innerWidth, innerHeight) < 820
+// P6-B1 2026-09-25: T2-0 - the reduced-motion flag: the OS setting, read at load and again on every change (the Lead's decision: no in-game toggle yet). Every motion this build adds reads it: set, each beat shows at its final state at once, and the sounds keep their order. The CSS rule of the same name covers what CSS animates, which this flag alone could not stop (build_P6_2026-09-25)
+const RM_Q = matchMedia('(prefers-reduced-motion: reduce)')
+let reduceMotion = RM_Q.matches
+const rmSync = e => { reduceMotion = e.matches }
+if (RM_Q.addEventListener) RM_Q.addEventListener('change', rmSync)
+else if (RM_Q.addListener) RM_Q.addListener(rmSync)        // older Safari has only the old name
 // Playtest tools, off unless the URL says ?dev=1 (or #dev) — a player on the public site
 // never sees them. dev.on is the runtime truth: the URL only decides whether initDev()
 // runs at boot, and __surv.devInit() can turn it on from the console when the URL was
@@ -1049,6 +1098,7 @@ const T = {
   // banked. Mid-run question cadences (quizEvery / poolEvery) retired the same day.
   debriefN: 4,
   // CORRECTED 2026-09-23: comment made true - a skip after right answers keeps their share (finish() calls releaseFunds(debrief.right, list.length)) (section C round 2, section_C_2026-09-22)
+  // P6-B2 2026-09-25: F1 (a) - since this build each right answer banks its share as it is shown (bankShare) and finish() no longer calls releaseFunds; what a skip keeps is unchanged (build_P6_2026-09-25)
   // debriefPay retired 2026-09-02 (user): a right answer used to add a flat 3 on top of a
   // budget the run had already banked unconditionally, so the quiz was a tip rather than a
   // gate. The run now decides how BIG the budget is and the debrief decides how much of it
@@ -1223,6 +1273,9 @@ const AU = (() => {
     if (take()) tone({ type: type || 'triangle', f, d, g, at: i * 0.055 })
   })
 
+  // P6-B5 2026-09-25: T2-2 option (c), one sound for now (tiers come with T3): `release`, the debrief's payout. Sine, where `right` is triangle, on a G triad where `right` is C, with a rising top, so it is not the synergy chord; every gain at or under right's 0.085; a chord plus one bare tone, as `evolve` is built, so the voices it takes are all given back. Its length is read by the debrief, so the next sound starts when this one has ended (build_P6_2026-09-25)
+  const REL = { fs: [784, 988, 1175], d: 0.42, g: 0.075, up: [1175, 1568], upD: 0.2, upG: 0.04, upAt: 0.16 }
+
   const SFX = {
     // your own fire: quiet, short, and throttled hard — it happens constantly
     shot:   () => tone({ type: 'triangle', f: 760, f2: 520, d: 0.055, g: 0.035 }),
@@ -1248,6 +1301,8 @@ const AU = (() => {
     wrong:  () => chord([415, 349, 277], 0.42, 0.09, 'sawtooth'),
     mastery:() => chord([392, 523, 659, 784, 1047], 0.8, 0.09),
     evolve: () => { chord([659, 880, 1319], 0.5, 0.1); tone({ type: 'sine', f: 1760, d: 0.3, g: 0.05, at: 0.16 }) },
+    // P6-B5 2026-09-25: the debrief's payout sound; its numbers are REL, above SFX (build_P6_2026-09-25)
+    release: () => { chord(REL.fs, REL.d, REL.g, 'sine'); tone({ type: 'sine', f: REL.up[0], f2: REL.up[1], d: REL.upD, g: REL.upG, at: REL.upAt }) },
     dodge:  () => { hiss({ f: 900, f2: 2600, d: 0.22, g: 0.07, q: 1.4 })
                     tone({ type: 'sine', f: 520, f2: 900, d: 0.18, g: 0.05 }) },
     bossIn: () => { tone({ type: 'sawtooth', f: 70, f2: 44, d: 2.2, g: 0.2 })
@@ -1338,6 +1393,8 @@ const AU = (() => {
                 return muted },
     get muted () { return muted },
     get live () { return !!ac },
+    // P6-B5 2026-09-25: seconds from `release` starting to its last note stopping: chord() starts its notes 0.055 s apart and tone() stops each 0.02 s after its d; the bare top tone ends sooner (build_P6_2026-09-25)
+    get releaseLen () { return Math.max((REL.fs.length - 1) * 0.055 + REL.d, REL.upAt + REL.upD) + 0.02 },
   }
 })()
 
@@ -2329,17 +2386,25 @@ function shotChanges (over) {
   return rows.length ? `<div class="res">${rows.join('')}</div>` : ''
 }
 
+// P6-A4 2026-09-25: F3's non-colour mark inside a coloured pill: a half-filled dot on the part-way class (.ph), a full dot on the complete one (.pd), drawn in CSS. Its accessible name and title are the S-A2 text that is true where the pill sits (ruling R-S1), so each caller passes its own pair of names. A pill with no class gets no mark, as before (build_P6_2026-09-25)
+function pillMark(cls, names) {
+  return cls ? `<i class="pm" role="img" aria-label="${names[cls]}" title="${names[cls]}"></i>` : ''
+}
+
 // The other half of the question a card has to answer: what ELSE grants this. A player who cannot
 // see that Relay and "drills that reach everyone" are the same behaviour cannot plan a build out of
 // them. Derived from SYNERGIES so the two can never drift apart.
 const MOD_OPENS = { volley: 'act', through: 'see', frag: 'keep', relay: 'who', resid: 'stock' }
 function modOpenedBy (id) {
-  if (id === 'track')
-    return `<div class="pairs">Also opened by <span class="${lv.magnet >= 2 ? 'pd' : lv.magnet ? 'ph' : ''}">Data Lv2</span></div>`
+  // P6-A4 2026-09-25: the marks, named per S-A2 for this host. Data Lv2: "Lv1 owned" (.ph: Risk data at level 1) and "reached" (.pd: level 2 or more). A pair: "one or both owned" (.ph) and "pair made" (.pd). The classes are set exactly as before (build_P6_2026-09-25)
+  if (id === 'track') {
+    const c = lv.magnet >= 2 ? 'pd' : lv.magnet ? 'ph' : ''
+    return `<div class="pairs">Also opened by <span class="${c}">Data Lv2${pillMark(c, { ph: 'Lv1 owned', pd: 'reached' })}</span></div>`
+  }
   const sy = SYNERGIES.find(s => s.id === MOD_OPENS[id])
   if (!sy) return ''
-  const held = syn[sy.id], part = lv[sy.a] > 0 || lv[sy.b] > 0
-  return `<div class="pairs">Also opened by <span class="${held ? 'pd' : part ? 'ph' : ''}">${UPGRADES[sy.a].short} + ${UPGRADES[sy.b].short}</span></div>`
+  const held = syn[sy.id], part = lv[sy.a] > 0 || lv[sy.b] > 0, c = held ? 'pd' : part ? 'ph' : ''
+  return `<div class="pairs">Also opened by <span class="${c}">${UPGRADES[sy.a].short} + ${UPGRADES[sy.b].short}${pillMark(c, { ph: 'one or both owned', pd: 'pair made' })}</span></div>`
 }
 
 // ---------------------------------------------------------------- streak
@@ -2882,6 +2947,11 @@ const PRESS_KEY = 'compoundPressureV1'
 function pressStore() { try { return Math.max(0, Math.min(3, +JSON.parse(localStorage.getItem(PRESS_KEY) || '0') | 0)) } catch (e) { return 0 } }
 function pressSave(n) { try { localStorage.setItem(PRESS_KEY, JSON.stringify(n)) } catch (e) {} }
 let PRESSURE = pressStore()               // growth-pressure dial (start screen; survives runs like DIFF)
+// P6-A1 2026-09-25: the card screen's Sources switch is remembered per browser - its own store on the compoundOnboardV1 pattern (JSON under one key, every read and write in try/catch). Not a field of compoundOnboardV1 itself: onboardStore() keeps only intro and hints, and onboardMark() writes that back, so the next hint would erase it. Absent, unreadable or throwing storage gives false (hidden, the default), and the switch then holds for the page load only (build_P6_2026-09-25)
+const SRC_KEY = 'compoundSourcesV1'
+function srcStore() { try { return !!JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown } catch (e) { return false } }
+function srcSave(on) { try { localStorage.setItem(SRC_KEY, JSON.stringify({ shown: on })) } catch (e) {} }
+let srcShown = srcStore()                 // Sources switch on the card bar: true shows every card's source line
 const banished = {}                       // measure id -> ruled out for this run
 let rerollsUsed = 0, banishLeft = 0
 
@@ -3118,6 +3188,7 @@ const ONBOARD_COPY = {
   'S4.4': { title: 'Get out of the way', body: "Marks show where it will hit, or a wall's path and direction. It cannot be shot: move away, or press Space or EVAC. Some marks keep hurting after they land.", ok: 'Got it' },
   'S4.5': { title: 'Build a bonus here', body: 'Stand inside the dashed ring for a few seconds to build it. Leaving drains progress. Once built, its bonus lasts the whole run. Unbuilt sites disappear after 15 seconds.', ok: 'Got it' },
   // CORRECTED 2026-09-23: "Questions are skippable." now says what Skip does - finish() ends every question left, releaseFunds pays right answers only, learnAnswer is not called (section C, section_C_2026-09-22)
+  // P6-B2 2026-09-25: F1 (a) - a right answer's share is now banked when it is shown (bankShare), not by releaseFunds at finish(); the words of S3.4 and S4.6 stay true, and "Only the right answers you already gave keep their share" now also holds for leaving by the end buttons (build_P6_2026-09-25)
   'S4.6': { title: 'Questions before the report', body: 'Right answers keep their budget share and grow your streak. Wrong answers lose both. Keep a streak of two or more to power up your next run. Skip ends all the questions left. Only the right answers you already gave keep their share, and your streak stays.', ok: 'Got it' },
 }
 
@@ -3442,12 +3513,18 @@ const GLOSS_TERMS = {
   growth: [['hazard', 'S7.B1']],          // trade-off card: TRD.growth.cost and .src
   act: [['evacuation', 'S7.B8']],         // programme card "Practiced evacuation", the card FUS.act.gain speaks for
 }
+// P6-A2 2026-09-25: a pair may carry a third item, true when the gloss travels with the card's source line; it is then marked `withsrc` and shows only while the Sources switch is on (CSS). A two-item pair prints exactly as before (build_P6_2026-09-25)
 function glossHtml(pairs) {
   if (DIFF.id !== 'learn' || !pairs.length) return ''
-  return pairs.map(([label, id]) => `<div class="gloss"><b>${label}</b>${GLOSS[id]}</div>`).join('')
+  return pairs.map(([label, id, withSrc]) => `<div class="gloss${withSrc ? ' withsrc' : ''}"><b>${label}</b>${GLOSS[id]}</div>`).join('')
 }
 const glossTerms = (key, text) =>
   (GLOSS_TERMS[key] || []).filter(([label]) => text.toLowerCase().includes(label.toLowerCase()))
+// P6-A2 2026-09-25: T1-1 mechanism 3 - the term glosses a card's face text and source line call for, found as glossTerms finds them in both (the same set, in the same order, as before); one whose label only the source line carries is flagged to travel with that line, per the label rule above (build_P6_2026-09-25)
+const glossWithSrc = (key, face, src) => {
+  const onFace = glossTerms(key, face)
+  return glossTerms(key, face + ' ' + src).map(p => onFace.includes(p) ? p : [p[0], p[1], true])
+}
 
 // ---- the Hospital-lost heal lines (S5 row 7.32), every difficulty ---------------------------------
 // CORRECTED 2026-09-23: comment made true - TRD.relief.desc now has a PLAIN entry; the Hospital-lost line still wins because healLine() is applied to what say() returns (section C round 2, section_C_2026-09-22)
@@ -5638,6 +5715,8 @@ function offerCards(fromLevelUp) {
   setPaused(true)
   const wrap = $('cardwrap'); wrap.innerHTML = ''
   $('cards').classList.remove('banish')
+  // P6-A1 2026-09-25: the screen opens with the Sources switch as the player last left it (off by default) (build_P6_2026-09-25)
+  $('cards').classList.toggle('srcon', srcShown)
 
   if (picksLeft <= 0) { closeCards(); return }
   $('lvlup').textContent = picksLeft > 1 ? `Level up — ${picksLeft} picks` : 'Level up'
@@ -5665,11 +5744,12 @@ function offerCards(fromLevelUp) {
     el.className = 'card trade'
     // C0 2026-09-23: desc and source line go through say() under TRD.<id>.desc and TRD.<id>.src - relief's desc inside healLine, so the Hospital-lost line still wins after a Hospital loss - and the term glosses are read from the cost and source line as displayed (section C plumbing) (build_B_2026-09-22)
     const tDesc = say('TRD.' + tr.id + '.desc', tr.desc), tCost = say('TRD.' + tr.id + '.cost', tr.cost), tSrc = say('TRD.' + tr.id + '.src', tr.src)
+    // P6-A2 2026-09-25: the source line below is hidden while the Sources switch is off (CSS), and a term gloss that only it calls for goes with it; one the cost calls for stays. The cost stays on the face (build_P6_2026-09-25)
     el.innerHTML = `<div class="ic" style="background:${tr.col}"></div>
       <div class="tier">Trade-off</div>
       <h3>${tr.name}</h3><p>${tr.id === 'relief' ? healLine('S5.7.32e', tDesc) : tDesc}</p>
       <div class="cost">${tCost}</div>
-      <div class="src">${tSrc}</div>${glossHtml(glossTerms(tr.id, tCost + ' ' + tSrc))}`
+      <div class="src">${tSrc}</div>${glossHtml(glossWithSrc(tr.id, tCost, tSrc))}`
     el.onclick = () => {
       trade[tr.id] = true; tr.apply(P); syncHud()
       picksLeft--
@@ -5720,18 +5800,21 @@ function offerCards(fromLevelUp) {
     const el = document.createElement('div')
     el.className = 'card'
     const pw = pairsWith(id).map(({ other, sy }) => {
-      const have = lv[other] > 0, done = syn[sy.id]
-      return `<span class="${done ? 'pd' : have ? 'ph' : ''}">${UPGRADES[other].short}</span>`
+      // P6-A4 2026-09-25: the marks, named per S-A2 for this host: "owned" (.ph: the partner is owned) and "pair made" (.pd). The class is set exactly as before (build_P6_2026-09-25)
+      const have = lv[other] > 0, done = syn[sy.id], c = done ? 'pd' : have ? 'ph' : ''
+      return `<span class="${c}">${UPGRADES[other].short}${pillMark(c, { ph: 'owned', pd: 'pair made' })}</span>`
     }).join('')
     const d = say(descRow('UPG.', id, u.desc, l), u.desc(l), l)
     // C0 2026-09-23: the source line goes through say() under UPG.<id>.src, and the term glosses are read from it as displayed, as they already were from d (section C plumbing) (build_B_2026-09-22)
     const uSrc = say('UPG.' + id + '.src', u.src)
+    // P6-A2 2026-09-25: the source line below is hidden while the Sources switch is off (CSS), and a term gloss that only it calls for goes with it; one the description calls for stays (build_P6_2026-09-25)
+    // P6-A3 2026-09-25: B-02 counted per run (the Lead, BUILD_PLAN_P6) - on Learning the measure's own definition box shows on its "New measure" card (l === 0; lv is zeroed at every reset()) and on a "Level N" card goes with the source line, behind the Sources switch (build_P6_2026-09-25)
     el.innerHTML = `<div class="ic" style="background:${u.col}"></div>
       <div class="tier">${l === 0 ? 'New measure' : 'Level ' + (l + 1)}</div>
       <h3>${u.name}</h3><p>${d}</p>
       ${pw ? `<div class="pairs">Compounds with ${pw}</div>` : ''}
       ${shotChanges({ lv: Object.assign({}, lv, { [id]: l + 1 }) })}
-      <div class="src">${uSrc}</div>${glossHtml((GLOSS_MEASURE[id] ? [[u.name, GLOSS_MEASURE[id]]] : []).concat(glossTerms(id, d + ' ' + uSrc)))}
+      <div class="src">${uSrc}</div>${glossHtml((GLOSS_MEASURE[id] ? [[u.name, GLOSS_MEASURE[id], l > 0]] : []).concat(glossWithSrc(id, d, uSrc)))}
       ${banishLeft > 0 ? '<div class="banx" title="Rule this measure out for this run">✕</div>' : ''}`
     el.onclick = () => {
       apply(id)
@@ -5792,6 +5875,15 @@ function offerCards(fromLevelUp) {
   bb.title = 'Rule one measure out for this run.'
   bb.onclick = () => { $('cards').classList.toggle('banish'); bb.classList.toggle('armed') }
   bar.appendChild(bb)
+  // P6-A1 2026-09-25: the Sources switch (T1-1 (a); text S-A1 as ruled in R-S7: "▸ Sources" off, "▾ Sources" on, accessible name "Sources", no tooltip). The glyph sits in its own aria-hidden span, so the name is the word. It sets one class on #cards and never redraws the cards: off, the default, the source line of the measure and trade-off cards is hidden; on, it shows as before (build_P6_2026-09-25)
+  const sb = document.createElement('button')
+  const sbSet = () => {
+    sb.innerHTML = `<span aria-hidden="true">${srcShown ? '▾' : '▸'}</span> Sources`
+    sb.setAttribute('aria-pressed', srcShown ? 'true' : 'false')
+  }
+  sbSet()
+  sb.onclick = () => { srcShown = !srcShown; srcSave(srcShown); $('cards').classList.toggle('srcon', srcShown); sbSet() }
+  bar.appendChild(sb)
   wrap.appendChild(bar)
 
   // Belt and braces: a card screen with nothing takeable must never show.
@@ -5879,10 +5971,17 @@ function nextPoolQuestion() {
 // The banking, in one place, called once when the debrief ends or is skipped. A run with
 // no questions to ask - the pool can run dry - pays in full rather than punishing the
 // player for the scheduler's state.
+// P6-B2 2026-09-25: F1 (a) - since this build releaseFunds() is called only by die()'s no-question path; the debrief banks each share as it is shown (bankShare, below), and finish() no longer banks (build_P6_2026-09-25)
 function releaseFunds(right, asked) {
   learnFunds = asked ? Math.round(runFunds * right / asked) : runFunds
   if (learnFunds <= 0) return
   const ms = metaStore(); ms.funds += learnFunds; metaSave(ms); METALV = ms.lv
+}
+// P6-B2 2026-09-25: F1 (a) - bank each share as it is shown. A right answer banks at once the step it shows (mountDebrief's handler), into learnFunds and the store's funds, so leaving the debrief by any path - Same place again, Somewhere else, the door, Skip, Finish, a tab close - keeps every share already shown. The steps telescope: after R right of n asked they sum to Math.round(runFunds * R / n), what releaseFunds(R, n) banked at finish() before this build, so a finished or skipped debrief banks the same total (build_P6_2026-09-25)
+function bankShare(n) {
+  if (n <= 0) return
+  learnFunds += n
+  const ms = metaStore(); ms.funds += n; metaSave(ms); METALV = ms.lv
 }
 
 function buildDebrief() {
@@ -5909,18 +6008,117 @@ function buildDebrief() {
   return list
 }
 
+// P6-B3 2026-09-25: F2 - the mark and label on a marked option: a tick (U+2713) or a cross (U+2717), hidden from screen readers because the label says it in words, then S-B1's label, in one span appended after the option text; the option text is never set again (build_P6_2026-09-25)
+function optMark(btn, ok, label) {
+  const s = document.createElement('span')
+  s.className = 'redo-lbl ' + (ok ? 'good' : 'bad')
+  s.innerHTML = `<span class="redo-mk" aria-hidden="true">${ok ? '✓' : '✗'}</span> `
+  s.appendChild(document.createTextNode(label))
+  btn.appendChild(s)
+}
+
+// P6-B6 2026-09-25: T2-3 (a) - the streak moment's picture: the emitter and one volley at the new tier S, drawn from the numbers play reads. From S, that STREAKS row: shots, scale, split, col. From the code around it: SHOT()'s base shot count at a run's start (Early warning Lv1 and nothing else), the player's radius P.r and look (the player draw), fireVolley's aimed spread and shot radius, the landing code's split fan (0.85) and shard radius (x .7), and the field's smear behind each shot (2.6 r by .9 r, speed x .012 behind). The row's `trail` is not drawn: nothing in play reads a shot's trail (the D7 note at the bullet draw). The view box holds the largest row, so every tier is drawn at one scale. Its motion is CSS: .go starts one pass, .still shows the last frame (build_P6_2026-09-25)
+function streakArt(S) {
+  const s0 = SHOT({ lv: { pulse: 1 }, syn: {}, mod: {} })
+  const FLY = 78, SHARD = 17, SMEAR = 520 * .012        // the flight shown for a shot and for a shard; the smear's distance behind a shot
+  const shapes = T => {
+    const n = s0.shots - s0.extra + T.shots, r = 5 * T.scale * s0.size
+    const sp = 0.17 + Math.max(0, n - 3) * 0.035
+    const out = []
+    for (let i = 0; i < n; i++) {
+      const a = (i - (n - 1) / 2) * sp, x = FLY * Math.cos(a), y = FLY * Math.sin(a)
+      const sm = { x: x - Math.cos(a) * SMEAR, y: y - Math.sin(a) * SMEAR, rx: r * 2.6, ry: r * .9 }
+      sm.hw = Math.hypot(sm.rx * Math.cos(a), sm.ry * Math.sin(a)); sm.hh = Math.hypot(sm.rx * Math.sin(a), sm.ry * Math.cos(a))
+      const shards = []
+      for (let k = 0; k < T.split; k++) {
+        const b = a + (k - (T.split - 1) / 2) * 0.85
+        shards.push({ x: x + SHARD * Math.cos(b), y: y + SHARD * Math.sin(b), r: r * .7 })
+      }
+      out.push({ a, x, y, r, sm, shards })
+    }
+    return out
+  }
+  const halo = P.r * 2.05
+  let x1 = halo, y1 = halo
+  for (const T of STREAKS) for (const s of shapes(T)) {
+    x1 = Math.max(x1, s.x + s.r, s.sm.x + s.sm.hw); y1 = Math.max(y1, Math.abs(s.y) + s.r, Math.abs(s.sm.y) + s.sm.hh)
+    for (const h of s.shards) { x1 = Math.max(x1, h.x + h.r); y1 = Math.max(y1, Math.abs(h.y) + h.r) }
+  }
+  const f = v => v.toFixed(1), W = halo + x1 + 4, H = 2 * y1 + 4, HPX = 56
+  let g = ''
+  for (const s of shapes(S)) {
+    g += `<g class="art-fly" style="--dx:${f(-s.x)}px;--dy:${f(-s.y)}px">` +
+      `<ellipse cx="${f(s.sm.x)}" cy="${f(s.sm.y)}" rx="${f(s.sm.rx)}" ry="${f(s.sm.ry)}" transform="rotate(${f(s.a * 180 / Math.PI)} ${f(s.sm.x)} ${f(s.sm.y)})" fill="${S.col}" fill-opacity=".22"/>` +
+      `<circle cx="${f(s.x)}" cy="${f(s.y)}" r="${f(s.r)}" fill="${S.col}"/></g>`
+    for (const h of s.shards)
+      g += `<g class="art-shard" style="--dx:${f(s.x - h.x)}px;--dy:${f(s.y - h.y)}px"><circle cx="${f(h.x)}" cy="${f(h.y)}" r="${f(h.r)}" fill="${S.col}"/></g>`
+  }
+  return `<svg class="redo-art" viewBox="${f(-halo - 2)} ${f(-H / 2)} ${f(W)} ${f(H)}" width="${f(HPX * W / H)}" height="${HPX}" aria-hidden="true" focusable="false">` +
+    `<circle r="${f(halo)}" fill="rgba(247,244,238,.09)"/><circle r="${f(P.r)}" fill="#f7f4ee"/><circle r="${f(P.r * .42)}" fill="rgba(11,13,16,.5)"/>` +
+    g + `</svg>`
+}
+
 // Renders the debrief one question at a time into #redo-body; each answer reveals its why,
 // says what it earned, and appends the next. When the list ends or the player skips, the
 // report is built (renderReport) with the debrief's results already in it.
+// P6-B4 2026-09-25: T1-3 - the next question is appended when the player presses Next ("Next question", "Finish" on the last: S-B4, R-S4), not at once, and the answered block then folds to one row (build_P6_2026-09-25)
 function mountDebrief() {
   const box = $('redo-body')
   if (!box || !debrief) return
   const list = debrief.list
+  // P6-B4 2026-09-25: T1-3 mechanism 5 - the game cancels Space page-wide (its first keydown listener), so a button made here clicks on Space itself; Enter already clicks a focused button (build_P6_2026-09-25)
+  const spaceClicks = btn => btn.addEventListener('keydown', e => { if (e.key === ' ') { e.preventDefault(); if (!e.repeat) btn.click() } })
+  // P6-B4 2026-09-25: T1-3 mechanism 2, option (a) - an answered block folds to one row: its tick or cross, its tag, and the verdict's words before its dash ("That is the judgment.", "Not this one"), all words already on screen; a click on the row opens the block again, and closes it (build_P6_2026-09-25)
+  const fold = (wrap, right, vt) => {
+    const row = document.createElement('button')
+    row.className = 'redo-row'
+    row.setAttribute('aria-expanded', 'false')
+    row.innerHTML = `<span class="redo-mk ${right ? 'good' : 'bad'}" aria-hidden="true">${right ? '✓' : '✗'}</span><span class="redo-rtag"></span><span class="redo-rv"></span>`
+    row.querySelector('.redo-rtag').textContent = wrap.querySelector('.qpair').textContent
+    row.querySelector('.redo-rv').textContent = vt.split(' — ')[0]
+    spaceClicks(row)
+    row.onclick = () => row.setAttribute('aria-expanded', String(wrap.classList.toggle('open')))
+    wrap.insertBefore(row, wrap.firstChild)
+    wrap.classList.add('done')
+  }
+  // P6-B5 2026-09-25: T2-2 - the reward beats of one answer. The visual beats run in order, each starting when the one before it ends; under reduced motion (P6-B1) each shows its final state at once. The sounds run one after another, whatever the motion setting. settle() - a click on Next, on Skip, or anywhere in the box - completes every running beat and clears every timer not yet run, so a sound not yet started never starts. A timer acts only while its answer's beats are live and this debrief is the one on screen, so leaving by an end button (reset() drops the debrief) stops them all (build_P6_2026-09-25)
+  const D = debrief, COUNT_MS = 500, ART_MS = 500     // ART_MS: the streak picture's pass, .35 s + .15 s in its CSS (P6-B6)
+  let beat = null
+  const settle = () => {
+    const B = beat
+    if (!B || !B.live) return
+    B.live = false
+    for (const id of B.timers) clearTimeout(id)
+    for (; B.i < B.seq.length; B.i++) B.seq[B.i].end()
+  }
+  const runBeats = (ev, seq, sounds) => {
+    settle()
+    const B = beat = { ev, seq, i: 0, timers: [], live: true }
+    const later = (ms, f) => B.timers.push(setTimeout(() => { if (B.live && debrief === D) f() }, ms))
+    let at = 0
+    for (const s of sounds) { if (at > 0) later(at * 1000, () => AU.play(s.name)); else AU.play(s.name); at += s.len }
+    const go = () => {
+      for (; B.i < seq.length; B.i++) {
+        const s = seq[B.i]
+        s.start(later)
+        if (reduceMotion || !s.ms) { s.end(); continue }
+        later(s.ms, () => { s.end(); B.i++; go() })
+        return
+      }
+    }
+    go()
+  }
+  // the click that answered is still on its way up when the beats start, so it is let through
+  const redo = $('redo')
+  if (redo) redo.onclick = e => { if (beat && e !== beat.ev) settle() }
   const finish = () => {
     if (debrief.done) return
     debrief.done = true
+    settle()        // P6-B5 2026-09-25: a skip completes the running beats (build_P6_2026-09-25)
     const skip = $('redo-skip'); if (skip) skip.style.display = 'none'
-    releaseFunds(debrief.right, list.length)
+    // P6-B4 2026-09-25: T1-3 mechanism 4 - Skip disables Next by the same path as the options, and hides it, since nothing is asked after this; a Finish not yet pressed goes the same way (build_P6_2026-09-25)
+    for (const nx of box.querySelectorAll('.redo-next')) { nx.disabled = true; nx.hidden = true }
+    // P6-B2 2026-09-25: F1 (a) - no banking here: `releaseFunds(debrief.right, list.length)` stood on this line, and each share is now banked at its answer (bankShare), so banking here too would bank twice (build_P6_2026-09-25)
     if (debrief.ix >= list.length)
       box.insertAdjacentHTML('beforeend',
         `<p class="redo-done">${debrief.right} of ${list.length} right. What you just read is the run's lesson; what you answered is the next run's start.</p>`)
@@ -5941,6 +6139,7 @@ function mountDebrief() {
     }
     renderReport()
     // P01 2026-09-23: this run's budget is banked now (releaseFunds above), so the door is set from what is unspent (build_F_2026-09-23)
+    // P6-B2 2026-09-25: F1 (a) - the shares were banked at their answers, not above; the door still opens here, when the debrief ends, and reads the store, which holds them all (build_P6_2026-09-25)
     syncDoor(true)
   }
   const skip = $('redo-skip')
@@ -5950,8 +6149,12 @@ function mountDebrief() {
     const Q = list[debrief.ix]
     const wrap = document.createElement('div')
     wrap.className = 'redo-q'
-    wrap.innerHTML = `<div class="qpair">${Q.tag}</div><h3></h3><div class="redo-opts"></div>` +
-      `<div class="redo-verdict" style="display:none"></div><p class="redo-why" style="display:none"></p><div class="redo-earnwrap"></div>`
+    // P6-B4 2026-09-25: the heading takes focus when Next brings the question (T1-3 mechanism 3), so it is focusable by script only (tabindex -1) (build_P6_2026-09-25)
+    wrap.innerHTML = `<div class="qpair">${Q.tag}</div><h3 tabindex="-1"></h3><div class="redo-opts"></div>` +
+      `<div class="redo-verdict" style="display:none"></div>` +
+      // P6-B5 2026-09-25: T2-2 - the payout line, S-B5's `+N budget`; shown only for a right answer whose share is above 0 (R-S5) (build_P6_2026-09-25)
+      `<div class="redo-pay" style="display:none"><b>+0</b> budget</div>` +
+      `<p class="redo-why" style="display:none"></p><div class="redo-earnwrap"></div>`
     wrap.querySelector('h3').textContent = Q.q
     box.appendChild(wrap)
     const ob = wrap.querySelector('.redo-opts')
@@ -5967,41 +6170,97 @@ function mountDebrief() {
       const b = document.createElement('button')
       b.className = 'opt'; b.textContent = Q.opts[oi]
       if (dev.on) b.classList.toggle('devright', oi === Q.correct)
-      b.onclick = () => {
+      b.onclick = e => {
         for (const c of ob.children) c.disabled = true
         const right = oi === Q.correct
         b.classList.add(right ? 'right' : 'wrong')
         if (!right) ob.children[debrief.disp].classList.add('right')
+        // P6-B3 2026-09-25: F2 - a mark besides colour, placed by ruling R-S6: a right pick shows a tick and "Right answer"; a wrong pick shows a cross and "Your pick", and the right option a tick and "Right answer" (S-B1). The option text is untouched: two of the protected strings are option texts (build_P6_2026-09-25)
+        optMark(b, right, right ? 'Right answer' : 'Your pick')
+        if (!right) optMark(ob.children[debrief.disp], true, 'Right answer')
         // Record: this run's tally, the pool scheduler, the cumulative store, the budget.
         if (right) { quizRight++; debrief.right++ } else quizWrong++
         if (Q.kind === 'pool') { poolRecord(Q.id, right); if (right) poolRight++; else poolWrong++ }
         const r = learnAnswer(right)
-        // The share is named as it is won; the banking happens once, in finish().
+        // P6-B2 2026-09-25: F1 (a) - the share is banked as it is shown: the B15 step below (unchanged), banked now by bankShare. This line read "The share is named as it is won; the banking happens once, in finish()." (build_P6_2026-09-25)
+        const share = right ? Math.round(runFunds * debrief.right / list.length) - Math.round(runFunds * (debrief.right - 1) / list.length) : 0
+        if (share > 0) bankShare(share)
         const v = wrap.querySelector('.redo-verdict')
         // S5.7.25: only a field question is recorded and asked again (poolRecord above); a pair or event
         // question keeps no record, so its verdict does not promise that it comes back.
-        v.textContent = right ? 'That is the judgment.'
+        const vt = right ? 'That is the judgment.'
           : Q.kind === 'pool' ? 'Not this one — read why; it comes back until it sticks.'
           : 'Not this one — read why.'
+        v.textContent = vt
+        // P6-B5 2026-09-25: T2-2 mechanism 2 - the verdict carries its mark (F2's tick or cross) before the words, and grows to 16 px (CSS) (build_P6_2026-09-25)
+        v.insertAdjacentHTML('afterbegin', `<span class="redo-mk" aria-hidden="true">${right ? '✓' : '✗'}</span> `)
         v.className = 'redo-verdict ' + (right ? 'good' : 'bad')
         v.style.display = ''
         const why = wrap.querySelector('.redo-why')
         why.innerHTML = Q.why
         why.style.display = ''
         const earn = []
-        // B15 2026-09-22: each pill is the step this right answer adds to the banked total (releaseFunds rounds runFunds * right / asked once, at the end), so the pills sum to exactly what is banked at any point the debrief ends; rounded per answer they could over- or under-sum (a11y 7.30) (build_B_2026-09-22)
-        if (right && runFunds > 0) earn.push(`+${Math.round(runFunds * debrief.right / list.length) - Math.round(runFunds * (debrief.right - 1) / list.length)} recovery budget released`)
-        if (r.tierUp) earn.push(`${r.tierUp.name} — you start the next run firing this way`)
+        // P6-B5 2026-09-25: T2-2 - the pill "+N recovery budget released" and its B15 note (the step per answer, so the pills summed to what is banked) left this list: that same step, `share` above, now has its own payout line, S-B5's `+N budget` (build_P6_2026-09-25)
+        // P6-B6 2026-09-25: T2-3 (a) - a streak tier crossed no longer shows as the pill `${r.tierUp.name} — you start the next run firing this way`: it becomes a small picture of the next run's volley at that tier (streakArt), with the tier's name in text; the pill's words stay as the picture's accessible name. No `why` line and no mastery card (both wait) (build_P6_2026-09-25)
+        const art = r.tierUp ? `<span class="redo-streak" role="img" aria-label="${r.tierUp.name} — you start the next run firing this way" style="visibility:hidden">` +
+          `${streakArt(r.tierUp)}<b aria-hidden="true" style="color:${r.tierUp.col}">${r.tierUp.name}</b></span>` : ''
         if (r.tierLost) earn.push(`Streak broken — next run starts with a single shot`)
         for (const m of r.earned) earn.push(`Earned: ${m.name} — ${m.gain} Active from your next run.`)
         if (right && !r.tierUp && !r.earned.length) {
           const nxt = MASTERY.find(m => r.st.right < m.at)
           if (nxt) earn.push(`${r.st.right} right across your runs · ${nxt.at - r.st.right} more for ${nxt.name}`)
         }
-        wrap.querySelector('.redo-earnwrap').innerHTML = earn.map(e => `<span class="redo-earn">${e}</span>`).join(' ')
-        AU.play(right ? 'right' : 'wrong')
+        wrap.querySelector('.redo-earnwrap').innerHTML = art + earn.map(e => `<span class="redo-earn">${e}</span>`).join(' ')
+        // P6-B5 2026-09-25: T2-2 mechanism 1 and 3 - the payout: the line counts from 0 to the share over COUNT_MS (0.5 s; one duration until T3's tiers), eased out, and a click completes it; `release` plays with it, in place of `right` (which stays as it is in play). A share of 0 gets no line and no sound (R-S5). A wrong answer keeps `wrong` and nothing louder (mechanism 4) (build_P6_2026-09-25)
+        const seq = [], sounds = []
+        if (share > 0) {
+          const pay = wrap.querySelector('.redo-pay'), num = pay.querySelector('b')
+          seq.push({ ms: COUNT_MS,
+            start: later => {
+              pay.style.display = ''
+              if (reduceMotion) return
+              const t0 = performance.now()
+              const tick = () => {
+                const p = Math.min(1, (performance.now() - t0) / COUNT_MS)
+                num.textContent = '+' + Math.round(share * (1 - (1 - p) * (1 - p)))
+                if (p < 1) later(40, tick)
+              }
+              tick()
+            },
+            end: () => { pay.style.display = ''; num.textContent = '+' + share } })
+          sounds.push({ name: 'release', len: AU.releaseLen })
+        }
+        // P6-B6 2026-09-25: T2-3 (a) - the streak picture's beat follows the count: shown (space was kept for it) and its one pass started, ART_MS long, or its last frame at once under reduced motion or on a click. `evolve`, defined and never played until now, plays when `release` has ended, or at once when there was no payout (build_P6_2026-09-25)
+        if (r.tierUp) {
+          const st = wrap.querySelector('.redo-streak'), svg = st.querySelector('svg')
+          seq.push({ ms: ART_MS,
+            start: () => { st.style.visibility = ''; svg.classList.add('go') },
+            end: () => { st.style.visibility = ''; svg.classList.add('still') } })
+          sounds.push({ name: 'evolve', len: 0 })
+        }
+        if (!right) sounds.push({ name: 'wrong', len: 0 })
+        // P6-B7 2026-09-25: the right-answer order (the spec's end): 1. the marks, the verdict and the explanation, above, at once; 2. the count, with `release` (P6-B5); 3. the streak picture, with `evolve` once `release` has ended (P6-B6); 4. the pills, the existing mastery pill among them, last - their space kept meanwhile, so nothing below them moves. Next shows at once (P6-B4). A click on Next, Skip or anywhere in the box completes every running beat and cancels the sounds not yet started (settle); the sounds never overlap. After a wrong answer the pills show at once, with `wrong` (build_P6_2026-09-25)
+        const pills = [...wrap.querySelectorAll('.redo-earn')]
+        for (const el of pills) el.style.visibility = 'hidden'
+        const showPills = () => { for (const el of pills) el.style.visibility = '' }
+        seq.push({ ms: 0, start: showPills, end: showPills })
+        runBeats(e, seq, sounds)
         debrief.ix++
-        step()
+        // P6-B4 2026-09-25: T1-3 mechanism 1 - step() runs on this button, not at once. It shows with the verdict and works at any time. "Finish" when the click will reach finish(), else "Next question" (S-B4, R-S4). On its click the block folds and the next question's heading takes the focus and is scrolled into view (mechanism 3). An answer given from the keyboard (a click with detail 0) moves the focus to it, without scrolling (build_P6_2026-09-25)
+        const nx = document.createElement('button')
+        nx.className = 'redo-next'
+        nx.textContent = debrief.ix >= list.length ? 'Finish' : 'Next question'
+        spaceClicks(nx)
+        nx.onclick = () => {
+          settle()        // P6-B5 2026-09-25: Next completes the running beats first (build_P6_2026-09-25)
+          nx.remove()
+          fold(wrap, right, vt)
+          step()
+          const nq = box.lastElementChild
+          if (nq && nq.classList.contains('redo-q')) { nq.scrollIntoView({ block: 'start' }); nq.querySelector('h3').focus({ preventScroll: true }) }
+        }
+        wrap.appendChild(nx)
+        if (e.detail === 0) nx.focus({ preventScroll: true })
       }
       ob.appendChild(b)
     })
@@ -6563,12 +6822,14 @@ function die() {
   // surviving alone. releaseFunds() does the banking, from the debrief's finish() - or, when there
   // are no questions to ask, from this function itself below: releaseFunds(0, 0) banks the whole budget.
   // D10 2026-09-22: the two lines above now name die()'s own releaseFunds(0, 0) call (section C final check, F5); comment only (build_D_2026-09-22)
+  // P6-B2 2026-09-25: F1 (a) - with questions, the banking is no longer done from finish(): each right answer banks its share when it is shown (bankShare). What a skip keeps is unchanged: Math.round(runFunds * right / asked). releaseFunds(0, 0) below is still the no-question path (build_P6_2026-09-25)
   learnFunds = 0
   // Read the previous best and bank this run, before anything renders.
   runLog = runsRecord()
 
   $('over-t').textContent = (endReason === 'services' ? 'Services gone at ' : 'Down at ') + $('clock').textContent
-  $('over-p').textContent = `${PLACE.name} · ${DIFF.name} · ${kills} events absorbed · level ${P.level}`
+  // P6-B9 2026-09-25: F6 - S-B3 verbatim: the count is `kills` (hazards killed, raised only in hurtEnemy), the HUD's word for it, with the singular at 1; it read "${kills} events absorbed" (build_P6_2026-09-25)
+  $('over-p').textContent = `${PLACE.name} · ${DIFF.name} · ${kills} hazard${kills === 1 ? '' : 's'} killed · level ${P.level}`
 
   // The debrief comes first; the report is built once it ends or is skipped, so the
   // report can carry what the debrief earned.
@@ -6581,6 +6842,7 @@ function die() {
   if (n) mountDebrief()
   else { releaseFunds(0, 0); renderReport() }   // nothing to ask, so nothing to withhold
   // P01 2026-09-23: the door is set every time this screen opens - with no questions the budget was banked just above; with a debrief the budget is still held, so the door stays shut until finish() banks it (build_F_2026-09-23)
+  // P6-B2 2026-09-25: F1 (a) - with a debrief, the shares are banked as they are shown; the door still stays shut until finish(), which opens it (build_P6_2026-09-25)
   syncDoor(!n)
   $('over').classList.add('show')
   // First debrief (S4.6). Never answered is the signal - NOT runsStore().n, which die() has already
@@ -6633,6 +6895,7 @@ function renderReport() {
       // CORRECTED 2026-09-22: was "+15% to everything"; svc() feeds eff(), which multiplies damage and fire rate only (sweep 3, sweep3_2026-09-22/source_verification.md n/a, code; Lead F7)
       `+${Math.round((T.svcBonus - 1) * 100)}% damage and fire rate, held all run. Paid only while every service is up, not most of them — the disruption of basic services is what Target D sets out to reduce.`))
   // FX2 2026-09-23: shown only when every question asked was answered right - "asked" is the debrief's list, the count releaseFunds banks against (a skipped question counts as asked and not right, as the comment under debriefN in T says); it was `quizRight + quizWrong > 0 && !quizWrong`, true after one right answer and a skip (review_F.md, pre-existing). No questions: not shown, as before (build_F_2026-09-23 fix round)
+  // P6-B2 2026-09-25: F1 (a) - "the count releaseFunds banks against" is now the count each share is banked against (bankShare's step divides by list.length); the condition is unchanged (build_P6_2026-09-25)
   if (debrief && debrief.list.length && quizRight === debrief.list.length)
     hls.push(row('#7ee787', 'Every debrief question right',
       'Understanding is the one upgrade luck cannot hand you — and it carries: the streak sets what you fire next run, and the count builds toward the mastery tiers.'))
@@ -6644,11 +6907,13 @@ function renderReport() {
   // third only fills a slot the educational rows did not want.
   if (runLog && runLog.first)
     hls.push(row('#8fe3ff', `First run in ${PLACE.name}`,
-      `${kills} absorbed, level ${P.level}. That is the mark every later run here is read `+
+      // P6-B9 2026-09-25: R-S3 cascade - S-B3b 1 verbatim; it read "${kills} absorbed, level ..." (build_P6_2026-09-25)
+      `${kills} hazard${kills === 1 ? '' : 's'} killed, level ${P.level}. That is the mark every later run here is read `+
       `against — your own, and in this place, because a delta and a fault do not hand you the same run.`))
   else if (runLog && runLog.beatKills)
     hls.push(row('#8fe3ff', `Best run yet in ${PLACE.name}`,
-      `${kills} absorbed against ${runLog.was.kills}` +
+      // P6-B9 2026-09-25: R-S3 cascade - S-B3b 2 verbatim; it read "${kills} absorbed against ..." (build_P6_2026-09-25)
+      `${kills} hazard${kills === 1 ? '' : 's'} killed against ${runLog.was.kills}` +
       // Only claim the level when the level was actually beaten: 'best run yet' over
       // 'level 15 against 18' reads as a contradiction, and the headline is keyed on what
       // this place is measured in, which is what a run could hold.
@@ -6665,7 +6930,8 @@ function renderReport() {
   }
   if (hls.length < 3 && runLog && !runLog.first && !runLog.beatKills)
     hls.push(row('#6e6e73', `Run ${runLog.placeN} in ${PLACE.name}`,
-      `${kills} absorbed against your best of ${runLog.was.kills}, level ${P.level} against ${runLog.was.lv}.`))
+      // P6-B9 2026-09-25: R-S3 cascade - S-B3b 3 verbatim; it read "${kills} absorbed against your best of ..." (build_P6_2026-09-25)
+      `${kills} hazard${kills === 1 ? '' : 's'} killed against your best of ${runLog.was.kills}, level ${P.level} against ${runLog.was.lv}.`))
   if (hls.length < 3 && beltBlocked)
     hls.push(row('#8ef6c6', `The green belt absorbed ${beltBlocked}`,
       // CORRECTED 2026-09-15: real-world cost claim replaced by the belt's in-game behaviour (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
@@ -6802,7 +7068,9 @@ function renderReport() {
           const dN = debrief ? debrief.list.length : 0
           return row('#ffd166', `Recovery budget — ${learnFunds} of ${runFunds} released` +
             (DIFF.pay && DIFF.pay !== 1 ? ` · ${DIFF.name} ×${DIFF.pay}` : ''),
-            `Time held, lifelines standing and works built set the SIZE of it: <b>${runFunds}</b>. ` +
+            // P6-B8 2026-09-25: F4 - S-B2 verbatim (ruling R-S2): the sentence names all four terms runFunds adds in die() (time, lifelines standing, works built, compound events absorbed); a second sentence names the DIFFICULTY setting's multiplier, shown only when DIFF.pay is set and not 1, the title's own condition above. It read "Time held, lifelines standing and works built set the SIZE of it: <b>${runFunds}</b>. " (build_P6_2026-09-25)
+            `Time held, lifelines still standing, works built and compound events absorbed set the SIZE of it` +
+            (DIFF.pay && DIFF.pay !== 1 ? `. ${DIFF.name} pays ${DIFF.pay} times that: <b>${runFunds}</b>. ` : `: <b>${runFunds}</b>. `) +
             (dN && quizRight
               ? `What you keep is what you could explain — <b>${quizRight} of ${dN}</b> right released <b>${learnFunds}</b>. `
               // CORRECTED 2026-09-23: was "the questions went unanswered" - this branch runs whenever quizRight is 0 and questions were asked, including a debrief answered in full and all wrong (if (right) { quizRight++; debrief.right++ } else quizWrong++); the closing citation sentence is unchanged (section C round 2, section_C_2026-09-22)
@@ -7998,6 +8266,7 @@ function offerPlaces(keep) {
     const hist = runsStore().place[id]
     const el = document.createElement('div')
     el.className = 'card place'
+    // P6-B9 2026-09-25: R-S3 cascade - the history line at the end of this card is S-B3b 4 verbatim: the stored best `kills` now reads "hazards killed" (singular at 1); it read "best <b>${hist.kills}</b> absorbed" (build_P6_2026-09-25)
     el.innerHTML = `<div class="prev" style="background-image:url(${groundPreview(id, 240, 78)})">
         <span style="background:${pl.col}"></span></div>
       <div class="tier">Where you are</div>
@@ -8007,7 +8276,7 @@ function offerPlaces(keep) {
         <div class="up"><em>+</em><span>${pl.boon.text}</span></div>
         <div class="dn"><em>−</em><span>${pl.bite.text}</span></div>
       </div>
-      <div class="phist">${hist ? `${hist.n} run${hist.n > 1 ? 's' : ''} here · best <b>${hist.kills}</b> absorbed · <b>lv ${hist.lv}</b>` : 'no runs here yet'}</div>`
+      <div class="phist">${hist ? `${hist.n} run${hist.n > 1 ? 's' : ''} here · best <b>${hist.kills}</b> hazard${hist.kills === 1 ? '' : 's'} killed · <b>lv ${hist.lv}</b>` : 'no runs here yet'}</div>`
     el.onclick = () => { AU.start(id); $('start').classList.add('gone'); reset(id); last = 0 }
     wrap.appendChild(el)
   }
