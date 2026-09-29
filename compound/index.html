@@ -127,8 +127,9 @@
     reasoning was sound for a game that asked mid-run; the game no longer does.
 
   // CORRECTED 2026-09-23: comment made true - Learning is not the shortest run; the len note in DIFFS.learn records it measured 5:09, "still the longest mode" (section C round 2, section_C_2026-09-22)
-  // D10 2026-09-22: "the gentlest ramp" below now says for how long - its rampTime() knee is at 3:30, after which its clock grows faster than every other setting's and passes all three, the last at 4:14.3 (section C round 5); comment only (build_D_2026-09-22)
+  // D10 2026-09-22: "the gentlest ramp" below now says for how long - its rampTime() knee is at 3:30, after which its clock grows faster than every other setting's and passes all three, the last at 4:26.5 (section C round 5); comment only (build_D_2026-09-22)
   // DX9 2026-09-23: the last of the three, Exposed's, is passed at 254.312 s = 4:14.312 - "by 4:14" was 0.312 s early (review F12; build_D_2026-09-22/fix/check_x9.js); comment only (build_D_2026-09-22 fix round)
+  // GP 2026-09-29: Pressed's and Exposed's ramp and len changed (GP-M2), so the D10 line's "the last at 4:14.3" is now 4:26.5 - Exposed's is still the last passed, at 266.538 s = 4:26.538; the DX9 line above keeps the pre-GP figure as its record (scratchpad gp_build/gp_ramp.js, the check_x9.js method); comment only (build_GP_2026-09-29)
   FOUR DIFFICULTIES, and only three of them are difficulties. LEARNING is the gentlest ramp
   for the first 3:30 of a run (after that its clock grows faster than every other setting's)
   and, by the measurement noted in DIFFS.learn, the longest run — it exists for somebody meeting the content for the first time.
@@ -350,6 +351,8 @@
   #lvlup{position:fixed;top:26%;left:0;right:0;text-align:center;z-index:21;pointer-events:none;
     font-size:12px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;opacity:.5;display:none}
   #cards.show ~ #lvlup{display:block}
+  /* SY-FIX 2026-09-29: on a phone the card screen scrolls (the Combos panel made it long), and the label, fixed at 26% from the top, sat over the cards as they scrolled past (ADJUDICATION_SY L1). At 480 px and below the card screen keeps a 32 px band at its top as a transparent top border - outside its scroll area, so no card ever passes under it, and still dimmed and blurred by the screen's own background - and the label sits in that band. Same element, same text and look; layout only (build_SY_2026-09-29 fix round) */
+  @media (max-width:480px){#cards{border-top:32px solid transparent}#lvlup{top:8px}}
 
   #over{position:fixed;inset:0;z-index:22;display:none;align-items:flex-start;
     justify-content:center;overflow-y:auto;overscroll-behavior:contain;padding:20px;
@@ -472,10 +475,36 @@
   #cards:not(.srcon) .card .src{display:none}
   /* P6-A2 2026-09-25: a Learning gloss flagged `withsrc` goes with the source line (build_P6_2026-09-25) */
   #cards:not(.srcon) .card .gloss.withsrc{display:none}
+  /* SY-M4 2026-09-29: the Combos panel, under the card bar, full width of the card row (one column on a phone). Rows are <details>: the summary (first line, status, what the pair opens or what the programme needs) always shows and wraps, never truncates; the gain opens under it. The status pill and its mark take the measure card's pill colours (.ph gold, .pd green, the mark drawn the same way); "ruled out" the ruled-out red (build_SY_2026-09-29) */
+  #cardbar{flex-wrap:wrap}   /* SY-M4 2026-09-29: four switches no longer fit one row at 375 px (about 390 px wide, estimated), so the bar may wrap to a second row rather than run off the screen (build_SY_2026-09-29) */
+  #combos{width:100%;max-width:640px;margin:2px auto 0;padding:14px 16px 10px;background:#15181d;border:1px solid rgba(255,255,255,.14);
+    border-radius:14px;text-align:left;font-size:12px;line-height:1.45;pointer-events:auto}
+  #combos[hidden]{display:none}
+  #combos h3{font-size:15px;margin:0 0 3px}
+  #combos .cb-intro{font-size:12px;opacity:.75;margin:0 0 6px}
+  #combos h4{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin:12px 0 2px}
+  #combos details{border-top:1px solid rgba(255,255,255,.08)}
+  #combos summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;align-items:center;gap:3px 8px;padding:7px 0 7px 16px;position:relative}
+  #combos summary::-webkit-details-marker{display:none}
+  #combos summary::before{content:'\25B8';position:absolute;left:2px;top:7px;opacity:.6}
+  #combos details[open] summary::before{content:'\25BE'}
+  #combos summary:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-radius:4px}
+  #combos .cb-l1{flex:1 1 12em;font-weight:700}
+  #combos .cb-op{flex:1 1 100%;font-size:11.5px;opacity:.7}
+  #combos details p{margin:0 0 8px 16px;font-size:11.5px;opacity:.75}
+  #combos .cb-st{flex:none;font-size:10.5px;letter-spacing:.04em;padding:1px 7px;border-radius:99px;background:rgba(255,255,255,.09)}
+  #combos .cb-st.ph{background:rgba(255,209,102,.22);color:#ffd166}
+  #combos .cb-st.pd{background:rgba(126,231,135,.18);color:#7ee787}
+  #combos .cb-st.rx{background:rgba(255,77,94,.16);color:#ff9d9d}
+  #combos .pm{display:inline-block;width:8px;height:8px;margin-left:5px;border:1px solid currentColor;border-radius:50%;box-sizing:border-box;vertical-align:middle}
+  #combos .ph .pm{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+  #combos .pd .pm{background:currentColor}
 
   /* growth-pressure dial on the start screen */
   #presswrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
   #pressnote{font-size:11.5px;opacity:.55;margin:6px 0 14px;min-height:2.4em;line-height:1.5}
+  /* GP-FIX 2026-09-29 (the Lead, design layer; verify_GP F6): at 375 px three of the four notes take 3 lines and Planned 2, so the start screen moved by a line when the dial changed; room for 3 lines below 480 px (build_GP_2026-09-29) */
+  @media (max-width:480px){#pressnote{min-height:4.5em}}
 
   /* institutional capacity: the bounded meta layer, bought with recovery budget */
   /* The capacity layer folds (2026-09-01). On a phone the start screen ran 2039px before
@@ -707,6 +736,13 @@
   .ll span.llback{font-size:11.5px;font-weight:700;letter-spacing:.02em;font-variant-numeric:tabular-nums;text-shadow:0 1px 6px rgba(0,0,0,.85)}
   .ll span.llback:empty{display:none}
   .ll.away{opacity:1}
+  /* SY-M1 2026-09-29: the save counter under the lifeline rows - the words, then three pips (hollow; filled per save), in the hold's colour (HOLD_COL); the hold's seconds left on their own row, in the alarm strip's weight and shadow like the away countdown, hidden when empty (build_SY_2026-09-29) */
+  .ll.sec .pips{display:flex;gap:3px}
+  .ll.sec .pips i{display:block;width:8px;height:8px;border-radius:50%;border:1.5px solid #cfe3ff;box-sizing:border-box}
+  .ll.sec .pips i.on{background:#cfe3ff}
+  .ll.hold{font-weight:800;letter-spacing:.02em;font-variant-numeric:tabular-nums;color:#cfe3ff;opacity:1;text-shadow:0 1px 6px rgba(0,0,0,.85)}
+  .ll.hold:empty{display:none}
+  .ll.sec[hidden]{display:none}   /* SY-FIX 2026-09-29: the counter row waits for the run's first save; `.ll`'s display:flex would otherwise beat the hidden attribute (ADJUDICATION_SY F11) (build_SY_2026-09-29 fix round) */
 
   /* ---- dev / playtest panel (?dev=1 only) ---- */
   #devpill{position:fixed;top:52px;left:12px;z-index:30;padding:4px 10px;border-radius:99px;
@@ -1198,6 +1234,9 @@ const T = {
   lifelineMoveMin: 300,            // a new site (a rebuild, or a return after a save) is at least this far from the old one
   // LL-M3 2026-09-25: a lifeline saved from below serviceDipAt leaves the map for this long, on its own countdown (the user's decision 2026-09-25: 15 seconds, PLAN_LL); the secured flash states "15s", so a change here changes that text too (build_LL_2026-09-25)
   lifelineAwayT: 15,
+  // SY-M1 2026-09-29: the save streak and the hold (PLAN_SY Y1; the user's choice there, 3 saves -> 3 s): this many saves in a row, with no lifeline lost, stop every hazard on the field for holdT seconds. The counter ("Secured n/3"), the hold line ("For 3s, ...") and hint S4.7 ("Do this 3 times ... hazards stop for 3s") state both numbers, so a change here changes that text too (build_SY_2026-09-29)
+  holdAt: 3,
+  holdT: 3,
 }
 
 // ---------------------------------------------------------------- sound
@@ -1500,6 +1539,12 @@ const PAL = {
 const RGB_OF = new Map()
 const rgbOf = h => { let v = RGB_OF.get(h)
   if (!v) { v = [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)).join(','); RGB_OF.set(h, v) }
+  return v }
+// SY-M1 2026-09-29: a held hazard's colour - its own '#rrggbb' taken 70% of the way to its grey (the same luminance), cached; drawing only (build_SY_2026-09-29)
+const HELD_OF = new Map()
+const heldCol = h => { let v = HELD_OF.get(h)
+  if (!v) { const c = rgbOf(h).split(',').map(Number), l = c[0] * .3 + c[1] * .59 + c[2] * .11
+            v = `rgb(${c.map(x => Math.round(l + (x - l) * .3)).join(',')})`; HELD_OF.set(h, v) }
   return v }
 
 // ---------------------------------------------------------------- measures
@@ -2212,18 +2257,20 @@ const EVENT_Q = {
 // honestly). Taken from the card like anything else since 2026-09-01 (it used to carry its
 // own question gate). Three programmes for now; the other five pairs can join on the same
 // rail once each has an honest visible effect.
+// SY-M4 2026-09-29: each programme's level needs are a data field, `needs` (measure id -> level, in the order the old closure tested them), and every `need()` is derived from it by fuseReady (ruling RS7) - so the Combos panel and the card offer read one source and cannot drift. fuseReady returns what the old closures returned, value for value: `syn[id]` itself when the synergy is not held, else whether every level is met (build_SY_2026-09-29 tests: sy_test.js, RS7 proof). The old closures, for the record: act `syn.act && lv.pulse >= 3 && lv.wave >= 3`; see `syn.see && lv.magnet >= 2 && lv.pulse >= 3`; buffer `syn.buffer && lv.ring >= 3 && lv.speed >= 2` (build_SY_2026-09-29)
+const fuseReady = f => syn[f.id] && Object.keys(f.needs).every(k => lv[k] >= f.needs[k])
 const FUSIONS = [
   { id: 'act', name: 'Practiced evacuation', col: '#8fe3ff',
-    need: () => syn.act && lv.pulse >= 3 && lv.wave >= 3,
+    needs: { pulse: 3, wave: 3 }, need () { return fuseReady(this) },
     desc: 'Warning and drills run as one programme: every few seconds, everything near you is moved out of the way before it lands.',
     gain: 'An evacuation pulse fires itself every 9s — pushing hazards back, and you move faster in its wake.',
     every: 9 },
   { id: 'see', name: 'Monitored horizon', col: '#57c7ff',
-    need: () => syn.see && lv.magnet >= 2 && lv.pulse >= 3,
+    needs: { magnet: 2, pulse: 3 }, need () { return fuseReady(this) },
     desc: 'Data feeding warning, continuously: a sweep that watches the whole horizon and answers what it finds.',
     gain: 'A monitoring beam circles you, wearing down everything it crosses at long range.' },
   { id: 'buffer', name: 'Living shoreline', col: '#8ef6c6',
-    need: () => syn.buffer && lv.ring >= 3 && lv.speed >= 2,
+    needs: { ring: 3, speed: 2 }, need () { return fuseReady(this) },
     desc: 'A planned, planted, defended buffer: wider, denser, and it pushes back what touches it.',
     gain: 'The green belt gains two shards, reaches 25% further, and throws back what it strikes.' },
 ]
@@ -2958,10 +3005,18 @@ let learnFunds = 0                                    // ...and what its debrief
 let METALV = {}                                       // institutional-capacity levels, cached from storage (hot paths read this)
 let introSeen = {}                        // hazard kinds already introduced this run
 // F3d 2026-09-23: growth pressure is remembered between sessions (part 4 P11a) - its own store on the learnStore pattern; absent, unreadable or throwing storage gives 0 (Planned), the old start, and a stored value is clamped to the four settings as the dev hook's setPressure clamps it. The multipliers are untouched (build_F_2026-09-23)
+// GP-FIX 2026-09-29: "The multipliers are untouched" above is true of build F only; GP-M1 below replaced them with PRESS_MUL (verify_GP F9; build_GP_2026-09-29 fix round)
 const PRESS_KEY = 'compoundPressureV1'
 function pressStore() { try { return Math.max(0, Math.min(3, +JSON.parse(localStorage.getItem(PRESS_KEY) || '0') | 0)) } catch (e) { return 0 } }
 function pressSave(n) { try { localStorage.setItem(PRESS_KEY, JSON.stringify(n)) } catch (e) {} }
 let PRESSURE = pressStore()               // growth-pressure dial (start screen; survives runs like DIFF)
+// GP-M1 2026-09-29: growth pressure's three multipliers, one row per setting (PRESS order), replacing the three linear formulas (1 + 0.18 / 0.22 / 0.10 * PRESSURE) - Planned stays 1 on all three, Growing keeps the old formulas' values at PRESSURE 1, Booming and Unchecked are the user's values (PLAN_GP G1, final table); read by reset (xp, exposure) and the spawn rate in update (spawn) (build_GP_2026-09-29; GP-FIX 2026-09-29: "resetRun" became "reset", the function that reads them, function reset(placeId) - verify_GP F7)
+const PRESS_MUL = [
+  { spawn: 1,    xp: 1,    exposure: 1 },      // Planned
+  { spawn: 1.18, xp: 1.22, exposure: 1.10 },   // Growing
+  { spawn: 1.4,  xp: 1.5,  exposure: 1.25 },   // Booming
+  { spawn: 2,    xp: 2.1,  exposure: 2 },      // Unchecked
+]
 // P6-A1 2026-09-25: the card screen's Sources switch is remembered per browser - its own store on the compoundOnboardV1 pattern (JSON under one key, every read and write in try/catch). Not a field of compoundOnboardV1 itself: onboardStore() keeps only intro and hints, and onboardMark() writes that back, so the next hint would erase it. Absent, unreadable or throwing storage gives false (hidden, the default), and the switch then holds for the page load only (build_P6_2026-09-25)
 const SRC_KEY = 'compoundSourcesV1'
 function srcStore() { try { return !!JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown } catch (e) { return false } }
@@ -3007,13 +3062,18 @@ function reset(placeId) {
   poolBumpRun()
   fuseAcc = 0; beamAng = 0; laneAng = 0; laneAcc = 0; waveEcho = 0; beamOn = null
   rerollsUsed = 0; banishLeft = 1
+  // SY-M1 / SY-M3 2026-09-29: the save count and the hold, and the synergy taken last and its unplayed burst, do not cross into the next run (build_SY_2026-09-29)
+  secCount = 0; holdLeft = 0; holdFrom = 0; synLast = null; synBurst = null
+  // SY-FIX 2026-09-29: nor do a season kept for a hold's end, the counter row's first save, or the special slot's turn (F2, F11, F7) (build_SY_2026-09-29 fix round)
+  seasonPend = null; seasonRest = 0; secSeen = false; specLast = null
   P.fuseHaste = 0
   lv.pulse = 1
   // The dial pays out the same way the place does: what the pressure built (more to
   // collect), and what it costs (more arrives, and everything takes more off you).
+  // GP-M1 2026-09-29: the two multipliers read the setting's row of PRESS_MUL (was 1 + 0.22 * PRESSURE and 1 + 0.10 * PRESSURE) (build_GP_2026-09-29)
   if (PRESSURE > 0) {
-    P.xpMul = (P.xpMul || 1) * (1 + 0.22 * PRESSURE)
-    P.exposure = (P.exposure || 1) * (1 + 0.10 * PRESSURE)
+    P.xpMul = (P.xpMul || 1) * PRESS_MUL[PRESSURE].xp
+    P.exposure = (P.exposure || 1) * PRESS_MUL[PRESSURE].exposure
   }
   // Institutional capacity: bounded, bought between runs with what earlier runs protected.
   P.max += 8 * (METALV.reserves || 0); P.hp = P.max
@@ -3124,8 +3184,9 @@ const HAZARD_IDS = Object.keys(HAZARDS)
 
 // ---------------------------------------------------------------- difficulty
 // CORRECTED 2026-09-23: comment made true - Learning is not the shortest run (the len note in DIFFS.learn below: "still the longest mode") (section C round 2, section_C_2026-09-22)
-// D10 2026-09-22: "the gentlest ramp" now says for how long - Learning's rampTime() knee is at 3:30 (T.hardAt * len * T.pace), after which DIFF.hard 11 makes its clock grow faster than every other setting's; it passes Steady's at 3:43.5, Pressed's at 3:56.9 and Exposed's at 4:14.3 (section C round 5); comment only (build_D_2026-09-22)
+// D10 2026-09-22: "the gentlest ramp" now says for how long - Learning's rampTime() knee is at 3:30 (T.hardAt * len * T.pace), after which DIFF.hard 11 makes its clock grow faster than every other setting's; it passes Steady's at 3:43.5, Pressed's at 4:03.2 and Exposed's at 4:26.5 (section C round 5); comment only (build_D_2026-09-22)
 // DX9 2026-09-23: Steady's crossing is 223.548 s = 3:43.548, so 3:43.5 to a tenth (review F12; build_D_2026-09-22/fix/check_x9.js); comment only (build_D_2026-09-22 fix round)
+// GP 2026-09-29: Pressed's and Exposed's crossings in the D10 line recomputed after GP-M2 changed their ramp and len - Pressed's 3:56.9 -> 4:03.2 (243.158 s), Exposed's 4:14.3 -> 4:26.5 (266.538 s); Steady's 3:43.5 is unchanged, and Learning's late clock (7.2 per scaled second) still outgrows Exposed's (5.8), the steepest other (scratchpad gp_build/gp_ramp.js, the check_x9.js method); comment only (build_GP_2026-09-29)
 // Four settings. LEARNING is the gentlest ramp for the first 3:30 of a run (after that its clock grows faster
 // than every other setting's) and, by the len note below, the longest run, for somebody meeting
 // the content for the first time. (Until 2026-09-01 it was also the setting where a wrong
@@ -3141,8 +3202,9 @@ const DIFFS = {
     // CORRECTED 2026-09-23: "you get more warning" now names its exception - DIFF.warn scales only fireEvent's warnings; a compound event's arrival (T.bossWarn), its charge wind-up (T.bossWind) and its siege strikes (warn: 1.05) keep their times on every difficulty (section C round 2, section_C_2026-09-22)
     // CORRECTED 2026-09-23: "compound events" became the game's own words for them - in play a compound event is announced as "Several hazards, arriving together." (spawnBoss), and the term is defined only in the run report ("The word for several of them arriving together is a compound event"), while this blurb is on the start screen before any run (section C round 3, section_C_2026-09-22)
     // CORRECTED 2026-09-23: was "Very little arrives, and slowly." - true only of the ordinary trickle: surges (hazardSurge(T.surgeSize + waveIx * 3) on T.surgeEvery), events (T.eventFirst, T.eventEvery) and compound events (T.bossFirst, T.bossEvery) come at the same times on every difficulty, and the surge size has no difficulty factor; DIFF.spawn scales the trickle rate, and DIFF.ramp enters rampTime() (the Exposed note below); now "Hazards build up more slowly.", the counterpart of Exposed's "Hazards build up faster"; the rest of the blurb unchanged (section C round 4, section_C_2026-09-22)
-    // CORRECTED 2026-09-23: "Hazards build up more slowly." and "Hits are softer" held only for the first part of a run - Learning's rampTime() knee is at 210 s (3:30; T.hardAt * DIFF.len * T.pace), after which DIFF.hard 11 makes its clock grow faster than any other setting's (it passes Steady's at 3:43.5 and Exposed's at 4:14.3), and its hit multiplier (1 + rampTime() / T.dmgRamp) * DIFF.dmg passes Steady's at 4:38.4 (never Pressed's or Exposed's); both now sit under "At first,", "Later, it gets hard quickly." says what follows, and the warning clause (now its own sentence) and "Many cards in plainer English." are unchanged (section C round 5, section_C_2026-09-22)
+    // CORRECTED 2026-09-23: "Hazards build up more slowly." and "Hits are softer" held only for the first part of a run - Learning's rampTime() knee is at 210 s (3:30; T.hardAt * DIFF.len * T.pace), after which DIFF.hard 11 makes its clock grow faster than any other setting's (it passes Steady's at 3:43.5 and Exposed's at 4:26.5), and its hit multiplier (1 + rampTime() / T.dmgRamp) * DIFF.dmg passes Steady's at 4:38.4 (never Pressed's or Exposed's); both now sit under "At first,", "Later, it gets hard quickly." says what follows, and the warning clause (now its own sentence) and "Many cards in plainer English." are unchanged (section C round 5, section_C_2026-09-22)
     // DX9 2026-09-23: Steady's crossing in the line above corrected to 3:43.5 (223.548 s), the same figure as the D10 comment on DIFFS - a cascade of review F12; the line's other figures are not part of this round; comment only (build_D_2026-09-22 fix round)
+    // GP 2026-09-29: Exposed's crossing in the line two above recomputed after GP-M2 changed Exposed's ramp and len - 4:14.3 -> 4:26.5 (266.538 s); "never Pressed's or Exposed's" rechecked and still holds at their GP-M2 dmg 1.5 and 2 (no crossing in 0-3600 s, and both grow faster than Learning's after that) (scratchpad gp_build/gp_ramp.js); the Steady figures are not part of GP; comment only (build_GP_2026-09-29)
     blurb: 'At first, hazards build up more slowly and hits are softer. Later, it gets hard quickly. You get more warning, except from several hazards arriving together. Many cards in plainer English.',
     // len went 2.0 -> 1.0 when T.pace landed (2026-09-04). pace multiplies the knee's real-time
     // position by itself, and Learning's knee was already the furthest out, so it compounded twice
@@ -3161,15 +3223,17 @@ const DIFFS = {
     name: 'Pressed', short: 'Pressed', col: '#ffd166',
     // CORRECTED 2026-09-23: "less warning" now names its exception, as the Learning blurb does - DIFF.warn scales only fireEvent's warnings; a compound event's arrival (T.bossWarn), its charge wind-up (T.bossWind) and its siege strikes (warn: 1.05) keep their times on every difficulty (section C round 3, section_C_2026-09-22)
     blurb: 'Faster, harder, and a longer haul before the late clock bites. You get less warning, except from several hazards arriving together.',
-    ramp: 1.35, dmg: 1.20, spawn: 1.15, warn: 0.78, len: 1.55, pay: 1.7,
-    fail: 3, llDmg: 1.2,
+    // GP-M2 2026-09-29: ramp 1.35 -> 1.5, dmg 1.20 -> 1.5, spawn 1.15 -> 1.35, warn 0.78 -> 0.7, len 1.55 -> 1.6, llDmg 1.2 -> 1.25 (the user's list, PLAN_GP G3); pay 1.7 and fail 3 kept (build_GP_2026-09-29)
+    ramp: 1.5, dmg: 1.5, spawn: 1.35, warn: 0.7, len: 1.6, pay: 1.7,
+    fail: 3, llDmg: 1.25,
   },
   exposed: {
     name: 'Exposed', short: 'Exposed', col: '#ff4d5e',
     // CORRECTED 2026-09-23: "Everything arrives sooner" became "Hazards build up faster" - arrivals (liveHazards, events, compound events, works, pickups, surges) run on the unscaled clock t, and DIFF.ramp enters only rampTime(), which drives the spawn rate and hazard health, speed and damage; "tells you later" became "You get less warning", with the exception the other blurbs name (section C round 3, section_C_2026-09-22)
     blurb: 'Hazards build up faster and hit harder, for as long as you can hold it. You get less warning, except from several hazards arriving together.',
-    ramp: 1.75, dmg: 1.45, spawn: 1.30, warn: 0.58, len: 1.9, pay: 2.2,
-    fail: 2, llDmg: 1.4,
+    // GP-M2 2026-09-29: ramp 1.75 -> 2, dmg 1.45 -> 2, spawn 1.30 -> 2, warn 0.58 -> 0.5, len 1.9 -> 2, llDmg 1.4 -> 1.5 (the user's list, PLAN_GP G3); pay 2.2 and fail 2 kept (build_GP_2026-09-29)
+    ramp: 2, dmg: 2, spawn: 2, warn: 0.5, len: 2, pay: 2.2,
+    fail: 2, llDmg: 1.5,
   },
 }
 const DIFF_IDS = Object.keys(DIFFS)
@@ -3205,6 +3269,8 @@ const ONBOARD_COPY = {
   // CORRECTED 2026-09-23: "Questions are skippable." now says what Skip does - finish() ends every question left, releaseFunds pays right answers only, learnAnswer is not called (section C, section_C_2026-09-22)
   // P6-B2 2026-09-25: F1 (a) - a right answer's share is now banked when it is shown (bankShare), not by releaseFunds at finish(); the words of S3.4 and S4.6 stay true, and "Only the right answers you already gave keep their share" now also holds for leaving by the end buttons (build_P6_2026-09-25)
   'S4.6': { title: 'Questions before the report', body: 'Right answers keep their budget share and grow your streak. Wrong answers lose both. Keep a streak of two or more to power up your next run. Skip ends all the questions left. Only the right answers you already gave keep their share, and your streak stays.', ok: 'Got it' },
+  // SY-M1 2026-09-29: S-Y1 Y1-f verbatim (ruling RS8) - raised at the first save (llSecure); "65%" is T.serviceDipAt and "3" / "3s" are T.holdAt / T.holdT (build_SY_2026-09-29)
+  'S4.7': { title: 'Secure 3 to stop hazards', body: 'You repaired a lifeline to full after it fell to 65% or less. That secures it. Do this 3 times without losing a lifeline, and hazards stop for 3s. Losing one sets the count back to 0.', ok: 'Got it' },
 }
 
 // ---- the store: one new key, read and written in the same pattern as learnStore ----------------
@@ -3243,7 +3309,8 @@ function onboardMark(id) {
 //   * one card at a time; another one waits in the queue, and reset() empties both
 // The level-up card fires only from the real level-up openings (offerCards(true)), never from the
 // re-entries for picks, rerolls and banishes (8.4).
-const HINTS = { levelup: 'S4.1', synergy: 'S4.2', lifeline: 'S4.3', event: 'S4.4', works: 'S4.5', debrief: 'S4.6' }
+// SY-M1 2026-09-29: `secure` (S4.7), the first save (build_SY_2026-09-29)
+const HINTS = { levelup: 'S4.1', synergy: 'S4.2', lifeline: 'S4.3', event: 'S4.4', works: 'S4.5', debrief: 'S4.6', secure: 'S4.7' }
 let hintOpen = null, hintUnder = false, hintFocus = null
 const hintQueue = []
 function setPaused(v) { if (hintOpen) hintUnder = v; else paused = v }
@@ -3365,7 +3432,10 @@ addEventListener('keydown', e => {
     if (k !== 'Enter' && k !== 'Escape') return
     e.preventDefault()
     if (!e.repeat) hintDismiss()
+    return   // SY-M4 2026-09-29: a key the hint card took goes no further (build_SY_2026-09-29)
   }
+  // SY-M4 2026-09-29: Escape on the card screen closes the Combos panel, when it is open, and nothing else (PLAN_SY Y4) (build_SY_2026-09-29)
+  if (k === 'Escape' && combosShown && $('cards').classList.contains('show')) { e.preventDefault(); combosClose() }
 })
 function trapTab(e, box) {
   const f = [...box.querySelectorAll('button')].filter(b => !b.hidden && b.style.visibility !== 'hidden')
@@ -4129,9 +4199,12 @@ function updateBoss(dt) {
   B.flash = Math.max(0, B.flash - dt)
   // BF4 2026-09-23: the held beam's per-boss cooldown counts down here, with the boss's other timers and in the enemies' beamCd idiom - fireBeam set it to 0.2 and nothing lowered it, so the beam billed a boss once per boss (build_B_2026-09-22)
   B.beamCd = Math.max(0, (B.beamCd || 0) - dt)
-  B.phase += dt
+  // SY-M1 2026-09-29: while a hold runs the compound event is held (PLAN_SY Y1): no movement, no charge, no shots, no strikes, no touch; its own timers (phase, arrival, shot and charge cooldowns, the charge) wait with it, and a knock it takes fades without moving it. Its withdrawal timer (B.life) keeps running, so it can pass during a hold. The clock that brings the next one runs, and one that arrives during a hold waits where it appeared (build_SY_2026-09-29)
+  const held = holdOn()
+  if (!held) B.phase += dt
 
   if (B.state === 'arrive') {
+    if (held) { B.kx *= knDecay; B.ky *= knDecay; return }   // SY-M1 2026-09-29 (build_SY_2026-09-29)
     // walks in, cannot be hurt, and is impossible to miss
     B.tState -= dt
     const a = Math.atan2(P.y - B.y, P.x - B.x)
@@ -4153,6 +4226,7 @@ function updateBoss(dt) {
     syncHud()
     return
   }
+  if (held) { B.kx *= knDecay; B.ky *= knDecay; return }   // SY-M1 2026-09-29: held - nothing below runs (build_SY_2026-09-29)
 
   const toP = Math.atan2(P.y - B.y, P.x - B.x)
   const d = Math.hypot(P.x - B.x, P.y - B.y)
@@ -4211,8 +4285,9 @@ function updateBoss(dt) {
         const pts = []
         for (let k = 0; k < 4; k++)
           pts.push({ x: P.x + rand(-130, 130), y: P.y + rand(-130, 130), r: 46, off: rand(0, .5) })
+        // SY-FIX 2026-09-29: `byBoss` marks a strike as the compound event's, so a hold holds it (updateEvents; ADJUDICATION_SY F3); the place's own scheduled events carry no mark and are not held (build_SY_2026-09-29 fix round)
         events.push({ kind: 'rockfall', phase: 'warn', tw: 1.05, warn: 1.05, td: .45,
-                      pts, dmg: T.bossShot * 1.6 })
+                      pts, dmg: T.bossShot * 1.6, byBoss: true })
         AU.play('warn')
       } else if (B.how === 'swarm') {
         // it calls the place's own hazards in around itself, except a flood: that starts at spawn()'s
@@ -4483,6 +4558,8 @@ function updateEvents(dt) {
   for (let i = events.length - 1; i >= 0; i--) {
     const ev = events[i]
     const K = EVENTS[ev.kind]
+    // SY-FIX 2026-09-29: a strike the compound event marked (byBoss) waits out a hold (ADJUDICATION_SY F3; PLAN_SY Y1 "no strikes"): its warning clock, its circles' own landing clocks and its hit window all pause, so it neither lands, hurts you or a lifeline, nor shoves a body during the hold; after it, it carries on from where it was. Scheduled place events carry no mark and run on (build_SY_2026-09-29 fix round)
+    if (ev.byBoss && holdOn()) continue
     if (ev.phase === 'warn') {
       ev.tw -= dt
       if (ev.tw <= 0) {
@@ -4739,6 +4816,14 @@ let PLACE = PLACES.delta, SEASON = SEASONS.quiet, seasonT = 0, seasonIx = 0, sea
 let lifelines = [], lifelinesLost = [], prepAcc = 0, bannerT = 0, wetStack = 1
 // LL-M2 2026-09-25: rebuilds taken this run (zeroed with the lifelines in placeLifelines) - the report's "held since your last rebuild" and its "intact" sentence read it (ruling RL2) (build_LL_2026-09-25)
 let llRebuilds = 0
+// SY-M1 2026-09-29: the save streak and the hold (PLAN_SY Y1, rulings RS1, RS2). secCount: saves counted since the last loss or the last hold (llSecure adds, a lost lifeline zeroes it, reaching T.holdAt starts a hold and zeroes it). holdLeft: seconds of the hold still to run, 0 when none - one clock for the whole field, so a body that spawns during the hold is held as well. holdFrom: the run clock `t` when the hold began; hazards are drawn by it while the hold runs (hazClock), so they stand still on screen too. HOLD_COL: the hold's own pale colour (banner title, counter pips, the outline on held bodies). All zeroed in reset() (build_SY_2026-09-29)
+let secCount = 0, holdLeft = 0, holdFrom = 0
+// SY-FIX 2026-09-29: seasonPend: the id of a season that began during a hold, announced when it ends; seasonRest: the seconds a season banner had left when a hold cut it short, shown again when it ends (both ADJUDICATION_SY F2; endHold). secSeen: this run has had its first save, so the counter row shows (F11). specLast: which card last took the special slot, 'sy' or 'fu:' + a programme's id, so a declined programme and an untaken synergy alternate (F7; offerCards). All zeroed in reset() (build_SY_2026-09-29 fix round)
+let seasonPend = null, seasonRest = 0, secSeen = false, specLast = null
+let secEls = null   // SY-M1 2026-09-29: the counter's elements on the lifeline panel, made by syncLifelinePanel (build_SY_2026-09-29)
+const holdOn = () => holdLeft > 0
+const hazClock = () => holdLeft > 0 ? holdFrom : t
+const HOLD_COL = '#cfe3ff'
 // LL-M3 2026-09-25: standing AND on the map - false while a saved lifeline is secured (L.away, its own countdown). Every path that attacks, targets, alarms or points at a lifeline reads this; every path that counts it as standing (servicesIntact, the HUD, runFunds, the report) keeps reading L.alive, so a secured one still counts (build_LL_2026-09-25)
 const llUp = L => L.alive && !(L.away > 0)
 let alarmSig = ''    // the alarm strip is rebuilt only when the threatened SET changes
@@ -4818,13 +4903,40 @@ function startSeason(id, silent) {
   if (id === 'wet') wetStack *= (PLACE.bite.wetStack || 1)
   if (seasonLog[seasonLog.length - 1] !== id) seasonLog.push(id)
   if (silent) return
-  const el = $('season')
-  el.firstElementChild.textContent = SEASON.name
-  el.firstElementChild.style.color = SEASON.col
-  el.lastElementChild.textContent = say('SEA.' + id + '.note', SEASON.note)
+  // SY-M1 2026-09-29: while a hold runs, the banner is the hold's (ruling RS2): a new season still begins, but its banner is not shown (build_SY_2026-09-29)
+  // SY-FIX 2026-09-29: the SY-M1 line above is superseded (ADJUDICATION_SY F2, RS2 re-ruled): the banner is not shown DURING the hold, but it is kept (seasonPend) and shown, with its sound, when the hold ends (endHold) (build_SY_2026-09-29 fix round)
+  if (holdOn()) { seasonPend = id; return }
+  seasonBanner(id, 2.8, true)
+}
+// SY-FIX 2026-09-29: the season banner, written as startSeason wrote it (unchanged text, colour and 2.8 s), made callable so endHold can show it too; `sound` false only for a banner shown again after a hold, whose sound was already played (build_SY_2026-09-29 fix round)
+function seasonBanner(id, dur, sound) {
+  const S = SEASONS[id], el = $('season')
+  el.firstElementChild.textContent = S.name
+  el.firstElementChild.style.color = S.col
+  el.lastElementChild.textContent = say('SEA.' + id + '.note', S.note)
   el.classList.add('show')
-  AU.play('season')
-  bannerT = 2.8
+  if (sound) AU.play('season')
+  bannerT = dur
+}
+
+// SY-M1 2026-09-29: the hold begins (PLAN_SY Y1). Every body in `enemies` and the compound event stop for T.holdT seconds (step, enemyFire, updateBoss, updateLifelines read holdOn()); a hold that begins while one runs starts the 3 s again. Its title and line go in the season banner's element, not the flash queue (ruling RS2): the "secured" line raised at the same save keeps its place, and the hold is announced at once; a season banner on screen is replaced for the hold's length and not shown again. Text S-Y1 Y1-c verbatim (build_SY_2026-09-29)
+// SY-FIX 2026-09-29: "and not shown again" above is superseded (ADJUDICATION_SY F2): a season banner on screen when a hold begins is kept with the seconds it had left (seasonRest, taken only when no hold was running - then the banner can only be a season's) and shown again for them when the hold ends (endHold). Since F1, F3 and F4 the hold also stops everything already thrown, the compound event's marked strikes and its telegraphs. The hold plays `evolve`, an existing sound, not the season chord (F16) (build_SY_2026-09-29 fix round)
+function startHold() {
+  if (!holdOn()) { holdFrom = t; seasonRest = bannerT > 0 ? bannerT : 0 }
+  holdLeft = T.holdT
+  const el = $('season')
+  el.firstElementChild.textContent = 'Hazards stop'
+  el.firstElementChild.style.color = HOLD_COL
+  el.lastElementChild.textContent = 'For 3s, they cannot move or attack. Marked events still come.'
+  el.classList.add('show')
+  AU.play('evolve')
+  bannerT = T.holdT
+}
+// SY-FIX 2026-09-29: the hold ends (called by step when holdLeft reaches 0; ADJUDICATION_SY F2). A season that began during the hold is announced now, banner and sound, for its full 2.8 s; if none began, a season banner the hold cut short is shown again, without its sound, for the seconds it had left. The newer season wins when both apply. Otherwise the hold's banner simply ends, in the same step, as before (build_SY_2026-09-29 fix round)
+function endHold() {
+  if (seasonPend) seasonBanner(seasonPend, 2.8, true)
+  else if (seasonRest > 0) seasonBanner(Object.keys(SEASONS).find(k => SEASONS[k] === SEASON), seasonRest, false)
+  seasonPend = null; seasonRest = 0
 }
 
 function nextSeason() {
@@ -4892,6 +5004,7 @@ function hitLifeline(L, amount) {
   L.hp -= amount
   if (L.hp > 0) return
   L.hp = 0; L.alive = false; L.under = 0; L.inbound = 0
+  secCount = 0   // SY-M1 2026-09-29: losing any lifeline sets the save count back to 0 (PLAN_SY Y1); a hold already running runs on (build_SY_2026-09-29)
   const K = LIFELINES[L.kind]
   K.off(P)          // the bonus goes
   K.lost(P)         // and then it costs you, which is the part that was missing
@@ -4939,6 +5052,11 @@ function llSecure(L) {
   const K = LIFELINES[L.kind]
   // LL-FIX1 2026-09-25: shown at once, with the priority the flash queue gives event warnings ({ now: true }, BF1 and D12 above flash()), so the queue can no longer drop it: it is the only on-screen explanation of a lifeline leaving the map; the line it displaces waits once or is dropped, as for those two, and the service line raised just before it waits (verify_LL F1) (build_LL_2026-09-25)
   flash(`${K.name} secured`, 'It leaves the map for 15s and comes back somewhere new. Its bonus stays.', K.col, { now: true })
+  // SY-M1 2026-09-29: a save counts here, where a lifeline is secured after a real save, whether or not its service fired (ruling RS1) - never at a top-up, a Power service top-up (it never calls this) or a rebuild. The first one raises hint S4.7 (ruling RS8; once per browser, as every hint). The T.holdAt-th starts the hold and the count begins again at 0 (build_SY_2026-09-29)
+  secCount++
+  secSeen = true   // SY-FIX 2026-09-29: the counter row shows from here, the run's first save (F11) (build_SY_2026-09-29 fix round)
+  hint('secure')
+  if (secCount >= T.holdAt) { secCount = 0; startHold() }
 }
 
 // LL-M3 2026-09-25: its own countdown over, a secured lifeline comes back (PLAN_LL D3): at a new site in the placement band, at least T.lifelineMoveMin from where it stood (llNewSite), at 100 and not dipped, open to hazards again. Each lifeline runs its own countdown (L.away). The flash is S-L3 (b) (build_LL_2026-09-25)
@@ -5009,7 +5127,8 @@ function updateLifelines(dt) {
     // dense-city compound event is named after, made real on the map.
     const casc = P.cascade && L.kind !== 'power' ? T.cascadeMul : 1
     // Hard defences (2026-09-15): with the card, each flood front here counts leveeFloodWear times (exact up to the 4-occupier cap).
-    if (under) hitLifeline(L, T.lifelineDps * (DIFF.llDmg || 1) * Math.min(under, 4) * casc * dt * (trade.levee ? 1 + (T.leveeFloodWear - 1) * underF / under : 1))
+    // SY-M1 2026-09-29: held zones and fronts wear nothing while a hold runs, but they still count as sitting on it (`under`), so it is not repaired under them: the repair rule is unchanged (ruling RS5) (build_SY_2026-09-29)
+    if (under) { if (!holdOn()) hitLifeline(L, T.lifelineDps * (DIFF.llDmg || 1) * Math.min(under, 4) * casc * dt * (trade.levee ? 1 + (T.leveeFloodWear - 1) * underF / under : 1)) }
     else if (L.hp < 100 && here) {
       // Maintenance is the only way one comes back, and the only place in the game where
       // that measure does something you can watch happening.
@@ -5694,6 +5813,7 @@ function updateFusions(dt) {
 // hazards now reach across it. Both only throw at YOU — one that is on its way to a
 // lifeline has somewhere else to be.
 function enemyFire(dt) {
+  if (holdOn()) return   // SY-M1 2026-09-29: held bodies throw nothing, and their shot clocks wait (build_SY_2026-09-29)
   for (const e of enemies) {
     const sh = HAZARDS[e.kind].shoot
     // LL-M3 2026-09-25: "on its way to a lifeline" means one on the map (llUp) (build_LL_2026-09-25)
@@ -5717,6 +5837,8 @@ function enemyFire(dt) {
 }
 
 function updateEbullets(dt) {
+  // SY-FIX 2026-09-29: held (ADJUDICATION_SY F1) - while a hold runs, everything already thrown (storm shots, embers, the compound event's streams: every entry of `ebullets`) stays where it is: it does not move, tumble, age, hit you, meet the green belt or land (no new fire). Its flight clock (`life`) waits too, so after the hold each one flies on from where it stood, with the time it had left, and nothing fires at once. Your own shots (`bullets`) are not in this list and are not held (build_SY_2026-09-29 fix round)
+  if (holdOn()) return
   const shards = ringPoints()
   for (let i = ebullets.length - 1; i >= 0; i--) {
     const b = ebullets[i]
@@ -5773,12 +5895,65 @@ function availableSynergy() {
                               && !banished[sy.a] && !banished[sy.b]) || null
 }
 
+// SY-M3 2026-09-29: the sentence S-Y3 adds after a synergy's gist, and the Combos panel prints under its pair - " This pair opens " + the name of the modifier it opens (MOD_OPENS) + "." - or '' for the four that open none (ruling RS3) (build_SY_2026-09-29)
+const pairOpens = id => { const k = Object.keys(MOD_OPENS).find(m => MOD_OPENS[m] === id); return k ? ' This pair opens ' + MODS[k].name + '.' : '' }
+// SY-M3 2026-09-29: the aimed shots' trail colour - the synergy taken most recently (synLast); a synergy granted another way (the dev panel, a test hook) falls back to the last one held in SYNERGIES order; null when none is held (build_SY_2026-09-29)
+function synTrailCol() {
+  if (synLast && syn[synLast]) return SYNERGIES.find(s => s.id === synLast).col
+  let c = null
+  for (const sy of SYNERGIES) if (syn[sy.id]) c = sy.col
+  return c
+}
+
+// SY-M4 2026-09-29: the Combos panel on the card screen (PLAN_SY Y4; S-Y4 verbatim; rulings RS4, RS6, RS7). Read from the live data every time the screen opens - SYNERGIES, FUSIONS (and their `needs`), MOD_OPENS (through pairOpens), MODS, UPGRADES[*].short, lv, syn, fused, banished - so it cannot drift from the game. Rows: the 9 pairs in SYNERGIES order, the 3 programmes in FUSIONS order, and Tracking. Each row is a <details> (RS6): its summary - always visible, keyboard-reachable - holds the first line, the status and, for a pair, the sentence naming what it opens (for a programme, its "Needs" line); the gain, or what the programme or Tracking does, is behind the disclosure, collapsed, never truncated. Status words with the existing marks (pillMark, named per S-Y4: .ph "part-way", .pd "owned"); "ruled out" (RS4) only where it is true of the code: a pair with a banished measure is never offered (availableSynergy), and a programme whose synergy is not held and whose pair has a banished measure can never be ready; it has no mark, as "not started" has none (build_SY_2026-09-29)
+const CB_MARK = { ph: 'part-way', pd: 'owned' }
+// SY-FIX 2026-09-29: the pill's mark sits in an aria-hidden span, so a screen reader reads the pill's word once ("owned", not "owned owned"); the mark and its title stay on screen as before (ADJUDICATION_SY F10). `noReach` (F9): true when a measure ruled out this run can never reach `need` - a banished measure is never offered again (the measure pool, offerCards), and the one other way a level is gained in a run is the Planting works site, which adds one level of the green belt (`ring`) once per run (WORKS.planting.apply; spawnWorks never offers a site already built) (build_SY_2026-09-29 fix round)
+const noReach = (k, need) => !!banished[k] && lv[k] + (k === 'ring' && !worksDone.includes('planting') ? 1 : 0) < need
+function combosHtml() {
+  const pill = (c, word) => `<span class="cb-st${c ? ' ' + c : ''}">${word}${!c || c === 'rx' ? '' : '<span aria-hidden="true">' + pillMark(c, CB_MARK) + '</span>'}</span>`
+  const status = (own, out, part) => own ? pill('pd', 'owned') : out ? pill('rx', 'ruled out') : part ? pill('ph', 'part-way') : pill('', 'not started')
+  const row = (sum, body) => `<details class="cb"><summary>${sum}</summary><p>${body}</p></details>`
+  let h = '<h3 id="combos-t">Combos</h3><p class="cb-intro">Own both measures of a pair. Then its synergy card can appear when you level up.</p>'
+  h += '<h4>Synergies</h4>'
+  for (const sy of SYNERGIES) {
+    const op = pairOpens(sy.id).trim()
+    h += row(`<span class="cb-l1">${UPGRADES[sy.a].short} + ${UPGRADES[sy.b].short} → ${sy.name}</span>`
+      + status(syn[sy.id], banished[sy.a] || banished[sy.b], lv[sy.a] > 0 || lv[sy.b] > 0)
+      + (op ? `<span class="cb-op">${op}</span>` : ''),
+      say('SYN.' + sy.id + '.gain', sy.gain))
+  }
+  h += '<h4>Compound programmes</h4>'
+  for (const fu of FUSIONS) {
+    const sy = SYNERGIES.find(s => s.id === fu.id), [kA, kB] = Object.keys(fu.needs)
+    // SY-FIX 2026-09-29: "ruled out" also when a needed measure is banished below its level and can never reach it (noReach; ADJUDICATION_SY F9), and the "Needs" line names the synergy by its existing name, sy.name, in quotation marks, where it said "its synergy" (F8); with the name in, one sentence ran to 21-22 words, so the levels go in a second sentence, "It also needs ..." (build_SY_2026-09-29 fix round)
+    h += row(`<span class="cb-l1">${fu.name} · ${UPGRADES[sy.a].short} + ${UPGRADES[sy.b].short}</span>`
+      + status(fused[fu.id], (!syn[fu.id] && (banished[sy.a] || banished[sy.b])) || noReach(kA, fu.needs[kA]) || noReach(kB, fu.needs[kB]), syn[fu.id] || lv[kA] > 0 || lv[kB] > 0)
+      + `<span class="cb-op">Needs the synergy “${sy.name}” (you: ${syn[fu.id] ? 'yes' : 'no'}). It also needs ${UPGRADES[kA].short} Lv ${fu.needs[kA]} (you: ${lv[kA]}) and ${UPGRADES[kB].short} Lv ${fu.needs[kB]} (you: ${lv[kB]}).</span>`,
+      say('FUS.' + fu.id + '.gain', fu.gain))
+  }
+  h += '<h4>From one measure</h4>'
+  // SY-FIX 2026-09-29: Tracking is "ruled out" when Risk data is banished below Lv 2 (noReach; ADJUDICATION_SY F9) (build_SY_2026-09-29 fix round)
+  h += row(`<span class="cb-l1">${UPGRADES.magnet.short} Lv 2 (you: ${lv.magnet}) → ${MODS.track.name}</span>`
+    + status(lv.magnet >= 2, noReach('magnet', 2), lv.magnet === 1),
+    MODS.track.desc(0))
+  return h
+}
+// SY-M4 2026-09-29: Escape closes the Combos panel and nothing else; focus inside it goes back to its switch (build_SY_2026-09-29)
+function combosClose() {
+  if (!combosUi) return
+  const inside = combosUi.panel.contains && combosUi.panel.contains(document.activeElement)
+  combosShown = false; combosUi.panel.hidden = true; combosUi.set()
+  if (inside) combosUi.btn.focus()
+}
+
 function takeSynergy(sy) {
   syn[sy.id] = true; sy.apply(P)
   heal(P.max * 0.25)                            // the measure pays immediately
   syncHud()
   AU.play('right')
-  pendingGist = { name: sy.name, col: sy.col, text: say('GIST.' + sy.id, SYN_GIST[sy.id]) }
+  // SY-M3 2026-09-29: the banner line also names the modifier the pair opens (pairOpens, on Steady and Learning alike); this synergy is now the latest (the trail's colour) and its burst waits for the cards to close (build_SY_2026-09-29)
+  pendingGist = { name: sy.name, col: sy.col, text: say('GIST.' + sy.id, SYN_GIST[sy.id]) + pairOpens(sy.id) }
+  synLast = sy.id; synBurst = sy.col
 }
 
 function renderSynCard(wrap, sy) {
@@ -5841,14 +6016,20 @@ function offerCards(fromLevelUp) {
   const trPool = TRADEOFFS.filter(x => !trade[x.id] && P.level >= x.from)
   const tr = (!rbKind && trPool.length && Math.random() < 0.30) ? pick(trPool) : null
 
-  const sy = tr ? null : availableSynergy()
+  // SY-M2 2026-09-29: a ready compound programme now comes before an untaken synergy (PLAN_SY Y2, the user's choice): it is found first and takes the special slot, and the synergy waits for a later level-up. The rebuild card and the trade-off roll keep their place ahead of both (the roll above; `tr` still shuts out both). The two are still rendered in their old order, synergy then programme, and only one of them is ever on screen (build_SY_2026-09-29)
+  // SY-FIX 2026-09-29: with a limit (ADJUDICATION_SY F7): when both a ready programme and an untaken synergy could take the slot, the programme still comes first - unless it was the card in the slot at the last opening and was not taken (specLast is still that programme): then the synergy has this opening. specLast records who had the slot, so after that the two alternate and neither blocks the other for good. Every call of offerCards is an opening: a pick, a reroll, a banish and a level-up all draw the screen again. A trade-off (`tr`) still shuts out both, and leaves specLast as it was (build_SY_2026-09-29 fix round)
+  const fuR = tr ? null : FUSIONS.find(f => !fused[f.id] && f.need())
+  const syR = tr ? null : availableSynergy()
+  const fu = (fuR && syR && specLast === 'fu:' + fuR.id) ? null : fuR
+  const sy = fu ? null : syR
+  if (fu) specLast = 'fu:' + fu.id
+  else if (sy) specLast = 'sy'
   if (sy) renderSynCard(wrap, sy)
 
-  // A ready compound programme takes the special slot when nothing else has: fresh pairs
-  // and trade-offs outrank it, and one hard decision at a time still holds.
-  const fu = (!tr && !sy)
-    ? FUSIONS.find(f => !fused[f.id] && f.need())
-    : null
+  // SY-M2 2026-09-29: the comment below made true (ruling RS10) - it said "A ready compound programme takes the special slot when nothing else has: fresh pairs and trade-offs outrank it"; since Y2 only a trade-off outranks it (build_SY_2026-09-29)
+  // A ready compound programme takes the special slot unless a trade-off has it: it outranks a
+  // fresh pair, which waits, and one hard decision at a time still holds.
+  // SY-FIX 2026-09-29: the two lines above hold only until the programme is declined; after that it and the pair alternate (F7, the SY-FIX line above `fuR`) (build_SY_2026-09-29 fix round)
   if (fu) renderFuseCard(wrap, fu)
 
   // A trade-off takes one of the three slots. It is the only card that charges for what it
@@ -6021,7 +6202,24 @@ function offerCards(fromLevelUp) {
   sbSet()
   sb.onclick = () => { srcShown = !srcShown; srcSave(srcShown); $('cards').classList.toggle('srcon', srcShown); sbSet() }
   bar.appendChild(sb)
+  // SY-M4 2026-09-29: the Combos switch, beside Sources and in its pattern (PLAN_SY Y4; S-Y4 Y4-a verbatim: "▸ Combos" off, "▾ Combos" on, accessible name "Combos", the glyph in an aria-hidden span, aria-pressed, no tooltip); aria-controls names the panel. The panel follows the bar, rebuilt from the live data at every opening of this screen (combosHtml), shown or hidden as the player last left it; Escape closes it and nothing else (combosClose, called from the onboarding keydown listener) (build_SY_2026-09-29)
+  const cb = document.createElement('button')
+  const cbSet = () => {
+    cb.innerHTML = `<span aria-hidden="true">${combosShown ? '▾' : '▸'}</span> Combos`
+    cb.setAttribute('aria-pressed', combosShown ? 'true' : 'false')
+  }
+  cbSet()
+  cb.setAttribute('aria-controls', 'combos')
+  const cp = document.createElement('div')
+  cp.id = 'combos'
+  cp.setAttribute('role', 'region'); cp.setAttribute('aria-labelledby', 'combos-t')
+  cp.innerHTML = combosHtml()
+  cp.hidden = !combosShown
+  cb.onclick = () => { combosShown = !combosShown; cp.hidden = !combosShown; cbSet() }
+  bar.appendChild(cb)
+  combosUi = { btn: cb, panel: cp, set: cbSet }
   wrap.appendChild(bar)
+  wrap.appendChild(cp)
 
   // Belt and braces: a card screen with nothing takeable must never show.
   if (!wrap.querySelector('.card')) { closeCards(); return }
@@ -6041,6 +6239,15 @@ const closeCards = () => {
   flashEndBan()
   // The mechanism, said where the player is looking — the field the effect now works on.
   if (pendingGist) { flash(pendingGist.name, pendingGist.text, pendingGist.col); pendingGist = null }
+  // SY-M3 2026-09-29: the synergy moment, on the field once the cards close (PLAN_SY Y3): a ring bursting out from you in the synergy's colour (its own form, `syn` in RING_STYLE: the widest solid ring in the game) and a short shake. Under reduced motion (P6-B1) neither is played; the banner line above still is. Played even when a later pick on the same screen replaced the banner line (build_SY_2026-09-29)
+  if (synBurst) {
+    if (!reduceMotion) {
+      // SY-FIX 2026-09-29: the ring obeys the effects cap as emit() does - it is pushed only while fx is not past T.fxCap (ADJUDICATION_SY F15); the shake below is not an effect and plays either way (build_SY_2026-09-29 fix round)
+      if (fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, x: P.x, y: P.y, r: 12, max: 240, life: 0.6, col: synBurst, style: 'syn', hit: new Set() })
+      shake = Math.max(shake, 8)
+    }
+    synBurst = null
+  }
 }
 
 // Which measures this one compounds with. Shown on the card so a pair is something the
@@ -6052,6 +6259,10 @@ function pairsWith(id) {
 
 // The mechanism line waiting to be said out loud on the field, once the card screen closes.
 let pendingGist = null
+// SY-M3 2026-09-29: synLast - the id of the synergy taken most recently this run (its colour is the aimed shots' trail, synTrailCol); synBurst - the colour of a synergy taken on the card screen now open, whose ring burst closeCards plays. Both zeroed in reset() (build_SY_2026-09-29)
+let synLast = null, synBurst = null
+// SY-M4 2026-09-29: whether the Combos panel is open on the card screen (the player's last choice, this page load; closed at first), and the switch and panel of the screen now open, for Escape (build_SY_2026-09-29)
+let combosShown = false, combosUi = null
 
 // ---------------------------------------------------------------- field questions
 // Cross-run question memory. localStorage can be absent or throwing (private modes, the
@@ -6458,6 +6669,17 @@ function syncLifelinePanel() {
     L.row = row; L.bar = row.querySelector('u i')
     L.backEl = row.querySelector('.llback')   // LL-FIX4 2026-09-25: the countdown's own span; the tag span (.llt) keeps the bonus tag, and LL-M3's L.tagEl, which pointed at it, is gone (build_LL_2026-09-25)
   }
+  // SY-M1 2026-09-29: the save counter, under the lifeline rows (PLAN_SY Y1 "Shown"; S-Y1 Y1-b, Y1-d): the words "Secured n/3" and three pips filled per save, so colour is never the only signal; the pips carry the accessible name "Secured n of 3" and the words are hidden from screen readers, so the count is read once. Under it, its own row for the hold's seconds left ("Hazards stopped · Ns"), empty and so hidden when no hold runs. Both are written by paintLifelines, only when they change (build_SY_2026-09-29)
+  const sr = document.createElement('div')
+  sr.className = 'll sec'
+  sr.innerHTML = '<b aria-hidden="true"></b><span class="pips" role="img"></span>'
+  // SY-FIX 2026-09-29: the row is hidden until this run's first save (secSeen), when hint S4.7 explains it, and it is a polite live region, read whole, so a screen reader hears "Secured n of 3" when the count changes (ADJUDICATION_SY F11) (build_SY_2026-09-29 fix round)
+  sr.hidden = !secSeen
+  sr.setAttribute('aria-live', 'polite'); sr.setAttribute('aria-atomic', 'true')
+  const hr = document.createElement('div')
+  hr.className = 'll hold'
+  box.appendChild(sr); box.appendChild(hr)
+  secEls = { text: sr.querySelector('b'), pips: sr.querySelector('.pips'), hold: hr, n: -1, row: sr }   // SY-FIX 2026-09-29: `row`, so paintLifelines can show it at the first save (F11) (build_SY_2026-09-29 fix round)
   paintLifelines()
 }
 
@@ -6469,6 +6691,20 @@ function paintLifelines() {
     L.row.className = 'll' + (!L.alive ? ' dead' : L.hp < 34 ? ' crit' : L.hp < 80 ? ' hurt' : '') + (L.away > 0 ? ' away' : '')
     const back = L.away > 0 ? `back in ${Math.ceil(L.away)}s` : ''
     if (L.backEl && L.backEl.textContent !== back) L.backEl.textContent = back
+  }
+  // SY-M1 2026-09-29: the counter and the hold's seconds left, S-Y1 Y1-b and Y1-d verbatim (build_SY_2026-09-29)
+  if (secEls) {
+    if (secEls.row.hidden === secSeen) secEls.row.hidden = !secSeen   // SY-FIX 2026-09-29: shown from the run's first save (F11) (build_SY_2026-09-29 fix round)
+    if (secEls.n !== secCount) {
+      secEls.n = secCount
+      secEls.text.textContent = `Secured ${secCount}/3`
+      secEls.pips.setAttribute('aria-label', `Secured ${secCount} of 3`)
+      let pips = ''
+      for (let i = 0; i < T.holdAt; i++) pips += i < secCount ? '<i class="on"></i>' : '<i></i>'
+      secEls.pips.innerHTML = pips
+    }
+    const hl = holdLeft > 0 ? `Hazards stopped · ${Math.ceil(holdLeft)}s` : ''
+    if (secEls.hold.textContent !== hl) secEls.hold.textContent = hl
   }
   paintAlarm()
 }
@@ -6546,6 +6782,9 @@ function step(dt) {
   t += dt
   knDecay = Math.pow(0.86, 60 * dt)   // one transcendental call a frame, for every knock in the world
   pullFx = PULL_FX_PER_FRAME
+  // SY-M1 2026-09-29: the hold runs on the run clock, so a pause (the card screen, a hint card) holds it too (build_SY_2026-09-29)
+  // SY-FIX 2026-09-29: and the step in which it runs out ends it (endHold: a season kept for the end, ADJUDICATION_SY F2) (build_SY_2026-09-29 fix round)
+  if (holdLeft > 0) { holdLeft = Math.max(0, holdLeft - dt); if (holdLeft === 0) endHold() }
 
   // ---- player
   let ix = (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0)
@@ -6593,7 +6832,7 @@ function step(dt) {
   // because the player was walled in. The cause was not the ramp alone: player damage never
   // scaled against enemy health, so weapon damage and the XP curve moved with this.
   const rate = (T.spawnBase + rampTime() / T.spawnRamp) * SEASON.rate * (PLACE.bite.rateMul || 1) * DIFF.spawn
-    * (1 + 0.18 * PRESSURE)   // growth pressure: more gets built, so more is in the way
+    * PRESS_MUL[PRESSURE].spawn   // growth pressure: more gets built, so more is in the way (GP-M1 2026-09-29: was 1 + 0.18 * PRESSURE; build_GP_2026-09-29)
   spawnAcc += dt * rate
   while (spawnAcc >= 1 && enemies.length < T.enemyCap) { spawnAcc--; spawn() }
 
@@ -6618,6 +6857,8 @@ function step(dt) {
     e.beamCd = Math.max(0, (e.beamCd || 0) - dt)
     // B7 2026-09-22: the rotating sweep's own cooldown, counted down beside the beam's (build_B_2026-09-22)
     e.sweepCd = Math.max(0, (e.sweepCd || 0) - dt)
+    // SY-M1 2026-09-29: held (PLAN_SY Y1) - it does not move, does not reach or wear a lifeline, and deals no contact or zone damage; its own clocks (age, a heat zone's life, a front's travel) wait. The four cooldowns above keep running: they are YOUR weapons' per-body clocks, so a held body can still be hit and killed. A knock it takes fades without moving it (build_SY_2026-09-29)
+    if (holdOn()) { e.kx *= knDecay; e.ky *= knDecay; continue }
     // B10 2026-09-22: the per-body clock (seconds alive) advances here, where every body steps (build_B_2026-09-22)
     e.age += dt
     moveHazard(e, dt)
@@ -6660,7 +6901,8 @@ function step(dt) {
   updateBoss(dt)
   if (over) return
   // cheap separation so they read as a crowd rather than a stack
-  for (let i = 0; i < enemies.length; i++) {
+  // SY-M1 2026-09-29: not while a hold runs - it moves bodies, and held bodies do not move (build_SY_2026-09-29)
+  if (!holdOn()) for (let i = 0; i < enemies.length; i++) {
     const a = enemies[i]
     if (a.behaviour === 'zone') continue
     for (let j = i + 1; j < Math.min(enemies.length, i + 9); j++) {
@@ -6955,6 +7197,7 @@ function die() {
   // standing capacity was to stop playing the game at pressure. Measured that day: Learning
   // banked a median 81 against Exposed's 32. The multiplier restores the intended reading —
   // the same lifeline held under more pressure is worth more, not less.
+  // GP 2026-09-29: the medians above (81 against Exposed's 32) were measured on 2026-09-01 and predate GP-M2's Exposed values; they were not re-measured, and pay was kept at 2.2 (PLAN_GP G3); comment only (build_GP_2026-09-29)
   runFunds = Math.round((Math.round(t / 15) + lifelines.filter(L => L.alive).length * 3 +
                          worksDone.length * 2 + bossesKilled * 2) * (DIFF.pay || 1))
   // CORRECTED 2026-09-23: comment made true - a skip after right answers keeps their share (finish() calls releaseFunds(debrief.right, list.length), which pays Math.round(runFunds * right / asked)); a skip pays nothing only if it comes before any right answer (section C round 3, section_C_2026-09-22)
@@ -7095,7 +7338,10 @@ function renderReport() {
     row(PLACE.col, PLACE.name, PLACE.blurb) +
     (PRESSURE > 0
       ? row('#ffa94d', 'Growth pressure — ' + PRESS[PRESSURE].n,
-            PRESS[PRESSURE].note + ' Growth and exposure moved together — more arrived, worth more, and all of it took more off you. That coupling is the choice the dial exists to make visible.')
+            // GP-G2 2026-09-29: "more arrived, worth more, and all of it took more off you" now names XP the way the PRESS notes do (blue dots) (build_GP_2026-09-29)
+            // GP-FIX 2026-09-29: the GP-G2 line above describes the row before this fix. The note already gives each effect with its figure, so the past-tense list after it ("blue dots were worth more, more hazards arrived, and each one took more off you") was cut; each effect is now stated once (verify_GP F5; build_GP_2026-09-29 fix round)
+            // SY-FIX 2026-09-29: one tense (ADJUDICATION_SY F14): the note is in the present, so the tail is too - "moved" became "move", a statement of how the setting works, which the note beside it also is; nothing else changed (build_SY_2026-09-29 fix round)
+            PRESS[PRESSURE].note + ' Growth and exposure move together. That coupling is the choice the dial exists to make visible.')
       : '') +
     row('#7ee787', 'In your favour', PLACE.boon.text) +
     row('#ff9d9d', 'Against you', PLACE.bite.text))
@@ -7440,12 +7686,13 @@ function buildVignette() {
 // The shape carries the behaviour, which is the only reason to have shapes at all here: a
 // quake is angular and arrives in threes, a storm is a swirl that never closes, a flood is
 // a squared mass with a crest on the edge that is moving, a fire leans and flickers.
+// SY-M1 2026-09-29: the sprites' own motion reads hazClock() (`tk`), not `t`: it is `t`, except while a hold runs, when it stays at the moment the hold began - so a held body stops turning, bobbing and flickering on screen as well (build_SY_2026-09-29)
 function hazardSprite(e, col) {
   ctx.fillStyle = col
-  const r = e.r, lit = e.flash > 0
+  const r = e.r, lit = e.flash > 0, tk = hazClock()
   if (e.kind === 'quake') {
     // a chunk of something that used to be a building: fractured, with one lit facet
-    ctx.save(); ctx.translate(e.x, e.y); ctx.rotate(e.ang + t * 0.5)
+    ctx.save(); ctx.translate(e.x, e.y); ctx.rotate(e.ang + tk * 0.5)
     ctx.beginPath()
     ctx.moveTo(r, 0); ctx.lineTo(r * .30, r * .52); ctx.lineTo(-r * .58, r * .84)
     ctx.lineTo(-r * .92, 0); ctx.lineTo(-r * .38, -r * .64); ctx.lineTo(r * .40, -r * .80)
@@ -7486,11 +7733,11 @@ function hazardSprite(e, col) {
       ctx.fillStyle = 'rgba(12,32,54,.42)'
       ctx.fillRect(-r, r * .18, r * 2, r * .82)
       ctx.fillStyle = 'rgba(150,200,240,.28)'
-      const bob = Math.sin(t * 4 + e.phase) * r * .12
+      const bob = Math.sin(tk * 4 + e.phase) * r * .12
       ctx.fillRect(r * .22, -r + bob * .5, r * .62, r * 2)
       ctx.fillStyle = 'rgba(232,246,255,.55)'
       for (let i = 0; i < 3; i++) {
-        const yy = -r * .7 + i * r * .7 + Math.sin(t * 5 + i + e.phase) * 2
+        const yy = -r * .7 + i * r * .7 + Math.sin(tk * 5 + i + e.phase) * 2
         ctx.beginPath(); ctx.arc(r * .72, yy, 1.7, 0, TAU); ctx.fill()
       }
     }
@@ -7499,7 +7746,7 @@ function hazardSprite(e, col) {
     ctx.restore(); return
   }
   if (e.kind === 'fire') {
-    const f = 1 + Math.sin(t * 11 + e.phase) * .14
+    const f = 1 + Math.sin(tk * 11 + e.phase) * .14
     ctx.save(); ctx.translate(e.x, e.y)
     ctx.beginPath()
     ctx.moveTo(0, -r * 1.35 * f)
@@ -7517,7 +7764,7 @@ function hazardSprite(e, col) {
     if (!lit) {
       // it sheds embers, which is also what it does mechanically
       for (let i = 0; i < 2; i++) {
-        const ph = (t * 0.9 + i * .5 + e.phase) % 1
+        const ph = (tk * 0.9 + i * .5 + e.phase) % 1
         ctx.fillStyle = `rgba(255,178,87,${(1 - ph) * .7})`
         ctx.beginPath()
         ctx.arc(Math.sin(ph * 6 + e.phase) * r * .4, -r * 1.2 - ph * r * 1.5, 1.6, 0, TAU)
@@ -7664,18 +7911,20 @@ function drawEvents(layer) {
     ctx.restore()
   }
   // DX5 2026-09-23: the compound event's two warnings - its arrival ring and its charge lane - are drawn in this layer with every other warning, after all of your paint; they were drawn in the hazards pass, under your rings, shots and particles (review F6; S01: player paint must never draw over a live telegraph). Moved from the compound event's block in draw(), drawn as they were (build_D_2026-09-22 fix round)
+  // SY-FIX 2026-09-29: held with the compound event (ADJUDICATION_SY F4): during a hold the arrival ring stops pulsing and crawling - it is drawn by the hazards' clock (hazClock, frozen at the hold's start, as the held bodies are), and its size already waits with B.tState - and the charge lane stops turning after you: it keeps the heading it had when the hold began (B.laneA, written here only while no hold runs) and follows you again after it (build_SY_2026-09-29 fix round)
   if (tele && boss) {
-    const B = boss
+    const B = boss, hk = hazClock()
     if (B.state === 'arrive') {
       const k = 1 - B.tState / T.bossWarn
-      ctx.strokeStyle = `rgba(255,77,94,${.3 + .4 * Math.sin(t * 14)})`
-      ctx.lineWidth = 3; ctx.setLineDash([14, 12]); ctx.lineDashOffset = -t * 50
+      ctx.strokeStyle = `rgba(255,77,94,${.3 + .4 * Math.sin(hk * 14)})`
+      ctx.lineWidth = 3; ctx.setLineDash([14, 12]); ctx.lineDashOffset = -hk * 50
       ctx.beginPath(); ctx.arc(B.x, B.y, B.r + 40 * (1 - k), 0, TAU); ctx.stroke()
       ctx.setLineDash([])
     }
     if (B.state === 'wind') {
       // the charge telegraph: a lane pointing at where you are standing
-      const a = Math.atan2(P.y - B.y, P.x - B.x)
+      if (!holdOn() || B.laneA == null) B.laneA = Math.atan2(P.y - B.y, P.x - B.x)
+      const a = B.laneA
       const k = 1 - B.tState / T.bossWind
       ctx.save(); ctx.translate(B.x, B.y); ctx.rotate(a)
       ctx.fillStyle = `rgba(255,77,94,${.10 + .16 * k})`
@@ -7776,6 +8025,7 @@ const RING_STYLE = {
   dash:   { w: 3,   dash: [14, 8] },     // the service ring: long dashes
   dot:    { w: 2,   dash: [2, 5] },      // the relay's launch mark: dots
   square: { w: 3,   dash: [] },          // a lifeline's strike-back: the lifeline's own rounded square
+  syn:    { w: 6,   dash: [] },          // SY-M3 2026-09-29: a synergy taken - the widest solid ring, once, in the synergy's colour (build_SY_2026-09-29)
 }
 function ringPath(f) {
   const s = f.style
@@ -8000,6 +8250,8 @@ function draw() {
 
   // hazards. Zones are drawn as places rather than bodies — no outline you can shoot,
   // just ground you should not be standing on.
+  // SY-M1 2026-09-29: while a hold runs every hazard is drawn held (PLAN_SY Y1 "Shown"): its body in a greyed version of its colour (heldCol), its motion stopped (hazClock), and one steady two-tone outline in the hold's colour round every held body, zone and the compound event - never blinking. The outlines are one path, stroked twice, after the loop (build_SY_2026-09-29)
+  const hld = holdOn(), tk = hazClock()
   for (const e of enemies) {
     if (e.behaviour === 'zone') {
       const fade = clamp(e.life / 2, 0, 1)
@@ -8008,23 +8260,23 @@ function draw() {
       g.addColorStop(1, 'rgba(210,85,79,0)')
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, TAU); ctx.fill()
       ctx.strokeStyle = `rgba(255,140,120,${.5 * fade})`; ctx.lineWidth = 2
-      ctx.setLineDash([7, 7]); ctx.lineDashOffset = -t * 22
+      ctx.setLineDash([7, 7]); ctx.lineDashOffset = -tk * 22
       ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, TAU); ctx.stroke(); ctx.setLineDash([])
       // shimmer: two rings breathing out of it, so a heatwave looks like air and not a pond
       ctx.setLineDash([])
       for (let i = 0; i < 2; i++) {
-        const ph = (t * 0.32 + i * 0.5 + e.phase) % 1
+        const ph = (tk * 0.32 + i * 0.5 + e.phase) % 1
         ctx.strokeStyle = `rgba(255,170,140,${(1 - ph) * .16 * fade})`
         ctx.lineWidth = 1.5
         ctx.beginPath(); ctx.arc(e.x, e.y, e.r * (0.35 + ph * 0.62), 0, TAU); ctx.stroke()
       }
       continue
     }
-    hazardSprite(e, e.flash > 0 ? '#fff' : e.col)
+    hazardSprite(e, e.flash > 0 ? '#fff' : hld ? heldCol(e.col) : e.col)   // SY-M1 2026-09-29: greyed while held (build_SY_2026-09-29)
     if (e.hard) {
       // bought by a wrong answer: outlined so it is legible as a consequence and not as
       // bad luck
-      ctx.strokeStyle = `rgba(255,120,120,${.45 + .25 * Math.sin(t * 6 + e.phase)})`
+      ctx.strokeStyle = `rgba(255,120,120,${.45 + .25 * Math.sin(tk * 6 + e.phase)})`
       ctx.lineWidth = 1.6
       ctx.beginPath(); ctx.arc(e.x, e.y, e.r + 4, 0, TAU); ctx.stroke()
     }
@@ -8044,7 +8296,7 @@ function draw() {
     glow.addColorStop(0, B.col + '55'); glow.addColorStop(1, B.col + '00')
     ctx.fillStyle = glow
     ctx.beginPath(); ctx.arc(B.x, B.y, B.r * 2.2, 0, TAU); ctx.fill()
-    ctx.fillStyle = B.flash > 0 ? '#fff' : B.col
+    ctx.fillStyle = B.flash > 0 ? '#fff' : hld ? heldCol(B.col) : B.col   // SY-M1 2026-09-29: greyed while held; its arcs turn with B.phase, which waits while held (build_SY_2026-09-29)
     ctx.beginPath(); ctx.arc(B.x, B.y, B.r, 0, TAU); ctx.fill()
     ctx.strokeStyle = 'rgba(11,13,16,.5)'; ctx.lineWidth = 3
     for (let i = 0; i < 3; i++) {
@@ -8053,6 +8305,16 @@ function draw() {
     }
     ctx.fillStyle = 'rgba(11,13,16,.72)'
     ctx.beginPath(); ctx.arc(B.x, B.y, B.r * .26, 0, TAU); ctx.fill()
+  }
+
+  // SY-M1 2026-09-29: the held outline - one path round every body (3 px out), zone (on its edge) and the compound event (5 px out), stroked dark and wide, then thin in the hold's colour: steady, no dash, no pulse (build_SY_2026-09-29)
+  if (hld) {
+    ctx.beginPath()
+    for (const e of enemies) { const rr = e.behaviour === 'zone' ? e.r : e.r + 3; ctx.moveTo(e.x + rr, e.y); ctx.arc(e.x, e.y, rr, 0, TAU) }
+    if (boss) { ctx.moveTo(boss.x + boss.r + 5, boss.y); ctx.arc(boss.x, boss.y, boss.r + 5, 0, TAU) }
+    ctx.setLineDash([])
+    ctx.strokeStyle = 'rgba(8,10,13,.55)'; ctx.lineWidth = 3.5; ctx.stroke()
+    ctx.strokeStyle = HOLD_COL; ctx.lineWidth = 1.5; ctx.stroke()
   }
 
   // rings
@@ -8176,6 +8438,17 @@ function draw() {
     let list = bulletLooks.get(key); if (!list) bulletLooks.set(key, list = []); list.push(b)
     let sl = smearCols.get(b.col); if (!sl) smearCols.set(b.col, sl = []); sl.push(b)
   }
+  // SY-M3 2026-09-29: while any synergy is held, the aimed shots (src 'aim') draw a short trail in the colour of the synergy taken most recently (synTrailCol), under their smear and body - the body keeps its streak-tier colour, so the tier stays readable. One path, one stroke a frame: a line from the back of the shot, five radii long (PLAN_SY Y3) (build_SY_2026-09-29)
+  const trailCol = synTrailCol()
+  if (trailCol) {
+    ctx.strokeStyle = `rgba(${rgbOf(trailCol)},.8)`; ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.beginPath()
+    for (const b of bullets) {
+      if (b.src !== 'aim') continue
+      const sp = Math.hypot(b.vx, b.vy) || 1, ux = b.vx / sp, uy = b.vy / sp
+      ctx.moveTo(b.x - ux * b.r, b.y - uy * b.r); ctx.lineTo(b.x - ux * b.r * 6, b.y - uy * b.r * 6)
+    }
+    ctx.stroke(); ctx.lineCap = 'butt'
+  }
   for (const [col, list] of smearCols) {
     ctx.fillStyle = `rgba(${rgbOf(col)},.22)`; ctx.beginPath()
     for (const b of list) {
@@ -8249,6 +8522,18 @@ function draw() {
   ctx.beginPath(); ctx.arc(P.x, P.y, P.r, 0, TAU); ctx.fill()
   ctx.fillStyle = 'rgba(11,13,16,.5)'
   ctx.beginPath(); ctx.arc(P.x, P.y, P.r * .42, 0, TAU); ctx.fill()
+  // SY-M3 2026-09-29: one mark per synergy held, circling you in that synergy's colour (PLAN_SY Y3 "What stays"), so a build that has compounded looks different at a glance: separate diamonds, so the count reads without colour, each with a dark edge so it stands out on every ground. Evenly spaced on a circle 22 px out from your disc, turning slowly; under reduced motion (P6-B1) they stand still (build_SY_2026-09-29)
+  const synHeld = SYNERGIES.filter(sy => syn[sy.id])
+  if (synHeld.length) {
+    const R = P.r + 22, a0 = reduceMotion ? -Math.PI / 2 : t * 0.8, s = 4.5
+    ctx.strokeStyle = 'rgba(8,10,13,.7)'; ctx.lineWidth = 1.5
+    synHeld.forEach((sy, i) => {
+      const a = a0 + i * TAU / synHeld.length, x = P.x + Math.cos(a) * R, y = P.y + Math.sin(a) * R
+      ctx.fillStyle = sy.col; ctx.beginPath()
+      ctx.moveTo(x, y - s); ctx.lineTo(x + s, y); ctx.lineTo(x, y + s); ctx.lineTo(x - s, y); ctx.closePath()
+      ctx.fill(); ctx.stroke()
+    })
+  }
   ctx.restore()
 
   if (vignette) { ctx.fillStyle = vignette; ctx.fillRect(0, 0, W, H) }
@@ -8353,11 +8638,14 @@ function draw() {
 // it was not checked against a UNDRR source (the documented basis is the same GAR 2025
 // exposure-growth reading the Rapid-development trade-off card already carries; no new
 // figures ride on this dial).
+// GP-G2 2026-09-29: the four notes name XP in the game's own words - "blue dots" (the how-to, ONBOARD_COPY S3.2) and "worth N% more" (the Rapid development card, TRADEOFFS growth, and the School lifeline) - and give PRESS_MUL's xp and exposure figures; the spawn figure is left in words ("More / Many more / Far more hazards arrive"), because it scales only the ordinary stream, below T.enemyCap, and not surges, events or compound events (strings_GP.md) (build_GP_2026-09-29)
+// GP-FIX 2026-09-29: the GP-G2 line above describes the notes before this fix. The notes now say "XP" (the user asked for it by name) and use the game's own phrase for the same multiplier, "Everything you collect is worth ..." (the Rapid development card and the School lifeline), because xpMulNow() scales every mote, the preparation squares included (P.xp += m.v * xpMulNow(), the motes loop in step); the hazard clause says only that the usual (ordinary) stream comes faster (PRESS_MUL spawn scales the trickle rate below T.enemyCap, not surges, events or compound events); "every hit" because every "P.hp -=" line multiplies by P.exposure; Planned names what it is the baseline of (verify_GP F1-F4, F10, F11; build_GP_2026-09-29 fix round)
+// SY-FIX 2026-09-29: the GP-FIX line above describes the notes before this fix. "Everything you collect is worth ..." was not true of pickups, which give no XP (ADJUDICATION_SY F5), and "XP" was tied to nothing a player sees (F6). Each note now says "XP (the blue bar)": everything that gives XP fills the blue bar (#xpbar, drawn from P.xp / P.need), the blue dots and the preparation squares alike (P.xp += m.v * xpMulNow() is the only line that adds XP), and nothing else fills it - so the wording holds for every XP source and for nothing else. The parenthesis follows the how-to's own "capacity, your red bar" (ONBOARD_COPY S3.1). "You get N% more XP" is true of every mote: PRESS_MUL xp multiplies P.xpMul at reset, and xpMulNow() multiplies every mote's value. The numbers are PRESS_MUL's, unchanged (build_SY_2026-09-29 fix round)
 const PRESS = [
-  { n: 'Planned',   note: 'Growth follows the plan. Nothing extra arrives, nothing extra to collect.' },
-  { n: 'Growing',   note: 'More gets built, faster: more arrives, worth more, and everything takes a little more off you.' },
-  { n: 'Booming',   note: 'The boom is real and so is the exposure: much more arrives, worth much more, and it hits harder.' },
-  { n: 'Unchecked', note: 'Nothing waited for the plan. The map pays like a boom town and bites like one.' },
+  { n: 'Planned',   note: 'Growth follows the plan. XP (the blue bar), hazards and hits stay normal. The other settings\' numbers are measured from here.' },
+  { n: 'Growing',   note: 'You get 22% more XP (the blue bar). The usual stream of hazards comes faster, and every hit hurts 10% more.' },
+  { n: 'Booming',   note: 'You get 50% more XP (the blue bar). The usual stream of hazards comes much faster, and every hit hurts 25% more.' },
+  { n: 'Unchecked', note: 'You get 2.1 times as much XP (the blue bar). The usual stream of hazards comes far faster, and every hit hurts twice as much.' },
 ]
 function offerPressure() {
   const wrap = $('presswrap'); wrap.innerHTML = ''
