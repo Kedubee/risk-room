@@ -455,6 +455,14 @@
   .card.fuse:hover{border-color:#b9ecff;background:#182129}
   .card.fuse .gate{margin-top:12px;font-size:10.5px;font-weight:800;letter-spacing:.12em;
     text-transform:uppercase;color:#8fe3ff;opacity:.9}
+  /* GR-M6 2026-09-29: compound and grand programme cards glow - a halo outside the 2 px border that swells and eases on a slow 2.4 s pulse, so they stand apart from every other card at a glance; under reduced motion the glow holds still at its middle strength. The grand card (GR-M1, class "fuse grand") glows violet, wider, and its tier line takes the same colour; its border is 3 px. Shape as well as colour: only these cards have a halo (PLAN_GR X6) (build_GR_2026-09-29) */
+  .card.fuse{box-shadow:0 0 14px 2px rgba(143,227,255,.45);animation:gr-glow 2.4s ease-in-out infinite}
+  .card.grand{border-width:3px;border-color:#c4b5ff;background:#17152a;animation-name:gr-glow-g}
+  .card.grand:hover{border-color:#e4deff;background:#1d1a33}
+  .card.grand .tier,.card.grand .gate{color:#c4b5ff}
+  @keyframes gr-glow{0%,100%{box-shadow:0 0 8px 1px rgba(143,227,255,.30)}50%{box-shadow:0 0 22px 5px rgba(143,227,255,.62)}}
+  @keyframes gr-glow-g{0%,100%{box-shadow:0 0 12px 2px rgba(196,181,255,.40)}50%{box-shadow:0 0 30px 8px rgba(196,181,255,.75)}}
+  @media (prefers-reduced-motion: reduce){ .card.fuse{animation:none} .card.grand{box-shadow:0 0 22px 5px rgba(196,181,255,.58)} }
 
   /* card-screen economy: reroll + banish */
   #cardbar{width:100%;display:flex;gap:8px;justify-content:center;margin-top:2px;pointer-events:auto}
@@ -568,6 +576,8 @@
   #flash.show{opacity:1}
   #flash b{display:block;font-size:17px;font-weight:800;text-shadow:0 2px 12px rgba(0,0,0,.95)}
   #flash span{font-size:12px;opacity:.7;text-shadow:0 2px 10px rgba(0,0,0,.9)}
+  /* GR-M6 2026-09-29: a take moment's line (flash(..., { big: true }) from closeCards) - the title larger, 17 -> 26 px (22 px on a phone, below) (PLAN_GR X6) (build_GR_2026-09-29) */
+  #flash.big b{font-size:26px;letter-spacing:-.01em}
 
   #snd{font-size:11px;opacity:.35;font-weight:700;letter-spacing:.06em}
 
@@ -633,6 +643,7 @@
     .dbtn{padding:7px 13px;font-size:12px}
     #season b{font-size:19px}
     #flash b{font-size:15px}
+    #flash.big b{font-size:22px}   /* GR-M6 2026-09-29: the take moment's title on a phone (build_GR_2026-09-29) */
   }
 
   #place{font-size:12px;opacity:.5;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
@@ -1237,6 +1248,16 @@ const T = {
   // SY-M1 2026-09-29: the save streak and the hold (PLAN_SY Y1; the user's choice there, 3 saves -> 3 s): this many saves in a row, with no lifeline lost, stop every hazard on the field for holdT seconds. The counter ("Secured n/3"), the hold line ("For 3s, ...") and hint S4.7 ("Do this 3 times ... hazards stop for 3s") state both numbers, so a change here changes that text too (build_SY_2026-09-29)
   holdAt: 3,
   holdT: 3,
+  // GR-M1 2026-09-29: grand programmes taken per run, at most (PLAN_GR X1, the user's cap of 2); the card's tier line and the Combos heading and cap reason print it from here, so 1 or 3 is this one line (build_GR_2026-09-29)
+  grandCap: 2,
+  // GR-M2 2026-09-29: chain lightning (PLAN_GR X2, ruling RG4): a jump reaches the nearest hazard not yet struck within grChainR px (centre to centre), up to grChainJumps jumps; the first deals grChainFirst of the shot's damage and each later one grChainFall of the one before; at most grChainPerSec chains start in any second of run time (a chain counts when it makes its first jump); each jump's arc is drawn for grChainArcT s. The card and the Combos row state 4, 60% and 20% (= 1 - 0.8), so a change here changes that text too (build_GR_2026-09-29)
+  grChainR: 150, grChainJumps: 4, grChainFirst: 0.60, grChainFall: 0.8, grChainPerSec: 12, grChainArcT: 0.12,
+  // GR-M3 2026-09-29: the laser (PLAN_GR X3): the held beam's damage multiplier and the targets it adds (SHOT().beamTgts). The card states "50% harder" and "one more target", so a change here changes that text too (build_GR_2026-09-29)
+  grLaserDmg: 1.5, grLaserTgts: 1,
+  // GR-M4 2026-09-29: the reflect shield (PLAN_GR X4): block chance = grShieldBase + grShieldPerLv x Green defences level; a blocked thrown thing flies back as your shot for grShieldBack x its damage x P.dmgMul, at the speed it came, for grShieldLife s. The Combos row states 20%, 8%, 60% at Lv 5 and "double", so a change here changes that text too (build_GR_2026-09-29)
+  grShieldBase: 0.20, grShieldPerLv: 0.08, grShieldBack: 2, grShieldLife: 2.5,
+  // GR-M6 2026-09-29: the take moment's screen tint (PLAN_GR X6): one flash, this many seconds, starting at this alpha and fading to 0; never under reduced motion. Drawing only (build_GR_2026-09-29)
+  grTintT: 0.15, grTintA: 0.25,
 }
 
 // ---------------------------------------------------------------- sound
@@ -2275,6 +2296,26 @@ const FUSIONS = [
     gain: 'The green belt gains two shards, reaches 25% further, and throws back what it strikes.' },
 ]
 const fused = {}      // fusion id -> taken
+// GR-M1 2026-09-29: the grand programmes (PLAN_GR X1-X4; strings_GR.md S-G1 verbatim as ruled, RG3 names; B5: a list of its own, never appended to FUSIONS). Each needs two synergies held (`needs`, synergy ids) and no levels; taken from the special card slot, at most T.grandCap a run (grandReady). `take` is the banner line on taking (RG2), which goes through pendingGist; `desc` and `gain` have Learning entries (PLAIN 'GRD.<id>.desc' / '.gain'). Colours are in the YOURS band (PAL, above: cool, chroma >= 0.025); `arc` is the lightning's own paint (build_GR_2026-09-29)
+const GRANDS = [
+  { id: 'chain', name: 'Warning chain', col: '#c4b5ff', arc: '#e4deff', needs: ['who', 'see'],
+    desc: 'Your aimed shots and the wide sweep set off chain lightning. It jumps from the hazard they hit to others close by, up to 4 times.',
+    gain: 'Your aimed shots and the wide sweep set off lightning. It jumps to the nearest hazard close by that it has not struck, up to 4 times. The first jump deals 60% of the shot\'s damage; each later jump deals 20% less than the one before.',
+    take: 'Lightning now jumps from hazard to hazard.' },
+  { id: 'laser', name: 'Line of sight', col: '#7fe0ff', needs: ['see', 'act'],
+    desc: 'A laser fires alongside your aimed shots, which keep firing. You get the Continuous beam if you lack it. It hits 50% harder and aims at one more target.',
+    gain: 'Your held beam becomes a laser: it hits 50% harder and aims at one more target. You get the beam if you lack it. Your aimed shots are unchanged.',
+    take: 'Your beam is now a laser. Your shots still fire.' },
+  { id: 'shield', name: 'Layered defence', col: '#a8f5d8', needs: ['buffer', 'stock'],
+    desc: 'Some thrown things that would hit you are blocked and sent back as your own shots. The chance grows with each Green defences level. Only thrown things are blocked.',
+    gain: 'Blocks a thrown thing that would hit you: a 20% chance, plus 8% per Green defences level (60% at Lv 5). A blocked one flies back toward where it came from as your shot, with double its damage.',
+    take: 'Thrown things can now be blocked and sent back.' },
+]
+const grand = {}      // GR-M1 2026-09-29: grand programme id -> taken, this run only (reset) (build_GR_2026-09-29)
+const grandTaken = () => GRANDS.filter(g => grand[g.id]).length
+const grandReady = g => !grand[g.id] && grandTaken() < T.grandCap && g.needs.every(id => syn[id])
+const grChainTimes = []   // GR-M2 2026-09-29: run-clock times of the chains started in the last second (at most T.grChainPerSec) (build_GR_2026-09-29)
+let grTint = 0, grTintCol = null   // GR-M6 2026-09-29: the take moment's tint - seconds left and its colour (build_GR_2026-09-29)
 let fuseAcc = 0       // practiced-evacuation clock
 let beamAng = 0       // monitored-horizon sweep angle
 let laneAng = 0       // kept-corridor angle; holds the last heading when you stand still
@@ -2355,6 +2396,7 @@ const mod = {}        // modifier id -> level, this run only
 // complaint about this layer's cards.
 const SHOT = o => {
   const L = (o && o.lv) || lv, Y = (o && o.syn) || syn, M = (o && o.mod) || mod
+  const G = (o && o.grand) || grand   // GR-M3 2026-09-29: the grand programmes held, for the laser's extra target (build_GR_2026-09-29)
   // Extra projectiles: the streak tier, the "warning that is acted on" pair, and the deck.
   const extra = streakTier().shots + (Y.act ? 1 : 0) + (M.volley || 0)
   // `see` is the only thing that ever set P.synPierce, so the flag is read here instead of the
@@ -2410,7 +2452,8 @@ const SHOT = o => {
     // The beam's own dial, read from the same modifiers so a build is not thrown away by taking it.
     beamRange: 430 + (M.through || 0) * 90 + (Y.see ? 90 : 0),
     beamHalf:  0.10 + (M.volley || 0) * 0.035 + (Y.act ? 0.035 : 0) + (M.calibre || 0) * 0.02,
-    beamTgts:  1 + (Y.who ? 1 : 0) + (M.relay || 0),
+    // GR-M3 2026-09-29: the laser adds T.grLaserTgts targets here, so the card's Beam row counts them (ruling RG6, B2); `grand` is read like `syn` and `mod`, and a hypothetical may pass its own (build_GR_2026-09-29)
+    beamTgts:  1 + (Y.who ? 1 : 0) + (M.relay || 0) + (G.laser ? T.grLaserTgts : 0),
   }
 }
 
@@ -3054,6 +3097,9 @@ function reset(placeId) {
   for (const k in mastery) delete mastery[k]
   for (const k in trade) delete trade[k]
   for (const k in fused) delete fused[k]
+  // GR-M1 / GR-M2 / GR-M6 2026-09-29: the grand programmes taken (so the cap's count starts at 0), the chain clock and the take moment's tint do not cross into the next run (build_GR_2026-09-29)
+  for (const k in grand) delete grand[k]
+  grChainTimes.length = 0; grTint = 0
   for (const k in banished) delete banished[k]
   introSeen = {}
   poolAskedRun = {}; poolRight = 0; poolWrong = 0
@@ -3492,6 +3538,13 @@ const PLAIN = {
   'FUS.see.gain': 'A monitoring beam circles you. It wears down everything it crosses, reaching a long way out.',
   'FUS.buffer.desc': 'A buffer that is planned, planted and defended. It is wider and thicker, and it pushes back what touches it.',
   'FUS.buffer.gain': 'The green belt gets two more shards and reaches 25% further. It throws back what it hits.',
+  // GR-M1 2026-09-29: the grand programmes' Learning desc and gain, strings_GR.md S-G1 verbatim (keys GRD.<id>.desc / .gain, the FUS pattern); names and the banner's `take` have none, so they fall through to the Steady text (build_GR_2026-09-29)
+  'GRD.chain.desc': 'Your aimed shots and the wide sweep set off lightning. It jumps from the hazard they hit to others close by. It can jump up to 4 times.',
+  'GRD.chain.gain': 'Your aimed shots and the wide sweep set off lightning. It jumps to the nearest hazard close by that it has not hit yet. It can jump up to 4 times. The first jump does 60% of the shot\'s damage. Each jump after that does 20% less than the one before.',
+  'GRD.laser.desc': 'Your aimed shots keep firing. A laser fires too. If you do not have Continuous, you get its beam. The beam hits 50% harder and aims at one more target.',
+  'GRD.laser.gain': 'Your beam becomes a laser. It hits 50% harder and aims at one more target. If you have no beam, you get one. Your aimed shots stay the same.',
+  'GRD.shield.desc': 'Some thrown things that would hit you are stopped. They fly back as your own shots. The chance grows with each Green defences level. Only thrown things are stopped.',
+  'GRD.shield.gain': 'It can block a thrown thing that would hit you. The chance is 20%, plus 8% for each Green defences level. At Lv 5 it is 60%. A blocked one flies back toward where it came from, as your shot. It does double its damage.',
   'MOD.track.descN': l => `It turns more sharply, and gives up later (Lv ${l + 1}).`,
   'MOD.volley.desc0': 'One more shot goes out every time it fires.',
   // CORRECTED 2026-09-23: was "What you fire bursts where it lands. The burst reaches what stood next to it." - since F3a a shot bursts once, where it stops - on the hit that spends its last pierce (a body or the boss), or in mid-air when its life runs out - so "lands" was untrue of a shot that missed (section F text, build_F_2026-09-23); CORRECTED again 2026-09-23: was "What you fire bursts where it stops. The burst reaches what stood next to it." - since FX1 a shot bursts once, when it stops, on the last body it struck (a body or the boss), at that body's position at that moment (its last position if it has gone), and not at all if it struck nothing - so "where it stops" was untrue of a shot that struck a body and flew on, and "What you fire bursts" was untrue of a shot that struck nothing (section F text 2, build_F_2026-09-23)
@@ -4881,6 +4934,7 @@ function flash(title, sub, col, opt) {
   el.firstElementChild.textContent = title
   el.firstElementChild.style.color = col
   el.lastElementChild.textContent = sub || ''
+  el.classList.toggle('big', !!(opt && opt.big))   // GR-M6 2026-09-29: a take moment's line (closeCards) shows its title larger; every other line as before (build_GR_2026-09-29)
   el.classList.add('show')
   flashT = 2.2
   flashCur = [title, sub, col, opt]
@@ -5645,7 +5699,8 @@ function fireBeam (dt, sh) {
   const tgts = near.slice(0, sh.beamTgts)
   if (boss && boss.state === 'active' && tgts.length < sh.beamTgts && dist2(boss, P) < reach * reach) tgts.push(boss)
   if (!tgts.length) return
-  const dps = (26 + lv.pulse * 9) * P.dmgMul * eff() * sh.heft
+  // GR-M3 2026-09-29: the laser multiplies the beam's damage by T.grLaserDmg (PLAN_GR X3); the hit test below (reach, beamHalf) is unchanged - the laser is only drawn wider (build_GR_2026-09-29)
+  const dps = (26 + lv.pulse * 9) * P.dmgMul * eff() * sh.heft * (grand.laser ? T.grLaserDmg : 1)
   const lines = []
   for (const T0 of tgts) {
     const a = Math.atan2(T0.y - P.y, T0.x - P.x)
@@ -5671,7 +5726,7 @@ function fireBeam (dt, sh) {
       hurtEnemy(e, dps * 0.2, Math.cos(a) * kn, Math.sin(a) * kn, sh.pull)
     }
   }
-  beamOn = { lines, reach, half: sh.beamHalf }
+  beamOn = { lines, reach, half: sh.beamHalf, laser: !!grand.laser }   // GR-M3 2026-09-29: `laser` tells the renderer to draw it as one (build_GR_2026-09-29)
   AU.loopTick('works')
 }
 
@@ -5855,6 +5910,10 @@ function updateEbullets(dt) {
       }
     }
 
+    // GR-M4 2026-09-29: the reflect shield (PLAN_GR X4) - a thrown thing that would hit you (the same test as the line below: past the belt, you not in your grace, touching you) is blocked with chance grShieldChance(): no damage, a shimmer where it touched, and it flies back as your shot (grReflect). Not counted in beltBlocked (ruling RG6, B3): that count stays the belt's. Bodies' contact damage never reaches this list, so it is not blocked (build_GR_2026-09-29)
+    if (!gone && grand.shield && P.inv <= 0 && dist2(b, P) < (b.r + P.r) ** 2 && Math.random() < grShieldChance()) {
+      grReflect(b); gone = true
+    }
     if (!gone && P.inv <= 0 && dist2(b, P) < (b.r + P.r) ** 2) {
       P.hp -= b.dmg * (1 - P.armour) * P.exposure
       P.inv = T.invuln; shake = Math.max(shake, 7); AU.play('hurt')
@@ -5882,6 +5941,63 @@ function updateEbullets(dt) {
     }
     if (gone) ebullets.splice(i, 1)
   }
+}
+
+// GR-M4 2026-09-29: the shield's block chance at the current Green defences level: 20% + 8% per level, 60% at Lv 5 (T.grShieldBase, T.grShieldPerLv) (build_GR_2026-09-29)
+const grShieldChance = () => T.grShieldBase + T.grShieldPerLv * (lv.ring || 0)
+// GR-M4 2026-09-29: a blocked thrown thing - a shimmer at the point of contact (a short dashed ring and a few sparks, within T.fxCap; the belt's `block` sound) and the thing itself sent back the way it came (its velocity reversed, so it flies toward the point it was thrown from) as your shot: src 'reflect' (it starts no chain, relay, burst or split), damage T.grShieldBack x its own x P.dmgMul (build_GR_2026-09-29)
+function grReflect(b) {
+  const g = GRANDS.find(x => x.id === 'shield')
+  AU.play('block')
+  if (fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, x: b.x, y: b.y, r: 6, max: 30, life: 0.35, col: g.col, style: 'shim', hit: new Set() })
+  burst(b.x, b.y, '#8ef6c6', 6, 160)
+  addBullet({ src: 'reflect', x: b.x, y: b.y, vx: -b.vx, vy: -b.vy, r: Math.max(4, b.r), r0: Math.max(4, b.r),
+              dmg: T.grShieldBack * b.dmg * P.dmgMul, life: T.grShieldLife, life0: T.grShieldLife,
+              col: g.col, trail: 1, split: 0, pierce: 0, pierce0: 0, burst: 0, burstMul: 0, relay: 0, home: 0, homeT: 0,
+              hits: new Set() })
+}
+
+// GR-M2 2026-09-29: chain lightning (PLAN_GR X2 as ruling RG4 reads it). Called at each hit of a shot on a body or the compound event, after the shot's own mechanics. Only the aimed shots and the wide sweep (src 'aim', 'fan') start a chain: Relay's shots, split shards and shield returns do not, and a jump starts nothing - it bills through hurtEnemy / hurtBoss only, so no relay, no Fragmenting burst and no new chain comes of it (a body it kills still bursts if Residual is held: that burst sits on the death, whatever stopped it, MODS.resid). From the struck body the lightning jumps to the nearest hazard - a body or the compound event - it has not yet struck, within T.grChainR px, up to T.grChainJumps jumps; jump k deals b.dmg x T.grChainFirst x T.grChainFall^(k-1) (b.dmg carries P.dmgMul, ruling RG6 B7). At most T.grChainPerSec chains start in any second of run time; a chain that finds no hazard in reach is not counted. The shot's own state is not touched: not lastHit (B6), not its hit set, not its pierce. Each jump is drawn as a jagged arc (fx, within T.fxCap) and a chain that jumps plays the `ember` crackle once (build_GR_2026-09-29)
+function grChain(b, from) {
+  if (!grand.chain || !from || (b.src !== 'aim' && b.src !== 'fan')) return
+  const near = (x, y, struck) => {
+    let tgt = null, bd = T.grChainR * T.grChainR
+    for (const o of enemies) {
+      if (o.gone || struck.has(o)) continue
+      const d = (o.x - x) ** 2 + (o.y - y) ** 2
+      if (d <= bd) { bd = d; tgt = o }
+    }
+    if (boss && boss.state !== 'arrive' && !struck.has(boss) && (boss.x - x) ** 2 + (boss.y - y) ** 2 <= bd) tgt = boss
+    return tgt
+  }
+  const struck = new Set([from])
+  let x = from.x, y = from.y, tgt = near(x, y, struck)
+  if (!tgt) return
+  while (grChainTimes.length && grChainTimes[0] <= t - 1) grChainTimes.shift()
+  if (grChainTimes.length >= T.grChainPerSec) return
+  grChainTimes.push(t)
+  const G0 = GRANDS.find(g => g.id === 'chain')
+  let dmg = b.dmg * T.grChainFirst
+  for (let k = 0; k < T.grChainJumps && tgt; k++) {
+    struck.add(tgt)
+    const tx = tgt.x, ty = tgt.y
+    if (fx.length <= T.fxCap) fx.push({ arc: true, pts: grArcPts(x, y, tx, ty), x: tx, y: ty, vx: 0, vy: 0,
+                                        life: T.grChainArcT, max: T.grChainArcT, col: G0.col, core: G0.arc })
+    if (tgt === boss) hurtBoss(dmg, 0, 0)
+    else hurtEnemy(tgt, dmg, 0, 0)
+    x = tx; y = ty
+    dmg *= T.grChainFall
+    tgt = near(x, y, struck)
+  }
+  AU.play('ember')
+}
+// GR-M2 2026-09-29: the points of one jagged arc from (x0, y0) to (x1, y1) - a segment about every 16 px, each inner point pushed off the line by up to 7 px (less on a short jump), fixed when the arc is made so it does not flicker (build_GR_2026-09-29)
+function grArcPts(x0, y0, x1, y1) {
+  const dx = x1 - x0, dy = y1 - y0, d = Math.hypot(dx, dy) || 1, n = Math.max(3, Math.round(d / 16))
+  const nx = -dy / d, ny = dx / d, amp = Math.min(7, d * 0.12), pts = [x0, y0]
+  for (let i = 1; i < n; i++) { const o = (Math.random() * 2 - 1) * amp; pts.push(x0 + dx * i / n + nx * o, y0 + dy * i / n + ny * o) }
+  pts.push(x1, y1)
+  return pts
 }
 
 // ---------------------------------------------------------------- level up
@@ -5930,6 +6046,18 @@ function combosHtml() {
       + status(fused[fu.id], (!syn[fu.id] && (banished[sy.a] || banished[sy.b])) || noReach(kA, fu.needs[kA]) || noReach(kB, fu.needs[kB]), syn[fu.id] || lv[kA] > 0 || lv[kB] > 0)
       + `<span class="cb-op">Needs the synergy “${sy.name}” (you: ${syn[fu.id] ? 'yes' : 'no'}). It also needs ${UPGRADES[kA].short} Lv ${fu.needs[kA]} (you: ${lv[kA]}) and ${UPGRADES[kB].short} Lv ${fu.needs[kB]} (you: ${lv[kB]}).</span>`,
       say('FUS.' + fu.id + '.gain', fu.gain))
+  }
+  // GR-M1 2026-09-29: the grand programmes' section (PLAN_GR X1; strings_GR.md S-G3a-g verbatim; ruling RG5, the Drafter's status rules): the heading carries the cap and your count; each row names the programme, its status and the two synergies it needs, with the gain behind the disclosure. Status: owned = taken; ruled out = not taken and either the cap is reached (then the cap reason S-G3f follows the needs line) or a needed synergy is not held and its pair has a banished measure (never offered again, availableSynergy); part-way = at least one of the two held; not started = otherwise (build_GR_2026-09-29)
+  const gTaken = grandTaken(), gFull = gTaken >= T.grandCap
+  h += `<h4>Grand programmes · ${T.grandCap} per run (you: ${gTaken})</h4><p class="cb-intro">Own both synergies a programme needs. Then its card can appear when you level up.</p>`
+  for (const g of GRANDS) {
+    const [A, B] = g.needs.map(id => SYNERGIES.find(s => s.id === id))
+    const lost = [A, B].some(s => !syn[s.id] && (banished[s.a] || banished[s.b]))
+    const capOut = !grand[g.id] && gFull
+    h += row(`<span class="cb-l1">${g.name}</span>`
+      + status(grand[g.id], capOut || lost, syn[A.id] || syn[B.id])
+      + `<span class="cb-op">Needs the synergies “${A.name}” (you: ${syn[A.id] ? 'yes' : 'no'}) and “${B.name}” (you: ${syn[B.id] ? 'yes' : 'no'}).${capOut ? ` You already have ${T.grandCap}, the most a run allows.` : ''}</span>`,
+      say('GRD.' + g.id + '.gain', g.gain))
   }
   h += '<h4>From one measure</h4>'
   // SY-FIX 2026-09-29: Tracking is "ruled out" when Risk data is banished below Lv 2 (noReach; ADJUDICATION_SY F9) (build_SY_2026-09-29 fix round)
@@ -5995,6 +6123,30 @@ function renderFuseCard(wrap, fu) {
   wrap.appendChild(el)
 }
 
+// GR-M1 2026-09-29: a grand programme's card (PLAN_GR X1; strings_GR.md S-G1, S-G2 "as placed"; rulings RG1, RG2). Built as the compound programme's card is: the tier line names the kind and its place in the cap (k = taken + 1, of T.grandCap), the desc goes through say(), and the gate is the compound card's own heal line and 15% heal (RG1). Taking it: the laser grants Continuous by setting mod.beam (B1; already held, nothing changes); the banner is the name and `take`, through pendingGist (RG2, B4); and the take moment's ring and tint play when the cards close, as a synergy's do (synBurst; PLAN_GR X6 "drawn to this standard") (build_GR_2026-09-29)
+function renderGrandCard(wrap, g) {
+  const el = document.createElement('div')
+  el.className = 'card fuse grand'
+  el.innerHTML = `<div class="ic" style="background:${g.col}"></div>
+    <div class="tier">Grand programme · ${grandTaken() + 1} of ${T.grandCap} this run</div>
+    <h3>${g.name}</h3><p>${say('GRD.' + g.id + '.desc', g.desc)}</p>
+    <div class="gate">${healLine('S5.7.32b', 'Repairs 15% of capacity')}</div>`
+  el.onclick = () => {
+    grand[g.id] = true
+    if (g.id === 'laser' && !mod.beam) mod.beam = 1
+    heal(P.max * 0.15)
+    syncHud()
+    AU.play('mastery')
+    shake = Math.max(shake, 10)
+    pendingGist = { name: g.name, col: g.col, text: g.take }
+    synBurst = g.col
+    picksLeft = Math.max(0, picksLeft - 1)
+    if (picksLeft > 0) offerCards()
+    else closeCards()
+  }
+  wrap.appendChild(el)
+}
+
 // The ONE interruption a run has (user decision 2026-09-01): the card screen. Nothing on it
 // asks anything.
 // `fromLevelUp` is true only at the two places a level-up opens the screen (the motes loop and the dev
@@ -6020,11 +6172,19 @@ function offerCards(fromLevelUp) {
   // SY-FIX 2026-09-29: with a limit (ADJUDICATION_SY F7): when both a ready programme and an untaken synergy could take the slot, the programme still comes first - unless it was the card in the slot at the last opening and was not taken (specLast is still that programme): then the synergy has this opening. specLast records who had the slot, so after that the two alternate and neither blocks the other for good. Every call of offerCards is an opening: a pick, a reroll, a banish and a level-up all draw the screen again. A trade-off (`tr`) still shuts out both, and leaves specLast as it was (build_SY_2026-09-29 fix round)
   const fuR = tr ? null : FUSIONS.find(f => !fused[f.id] && f.need())
   const syR = tr ? null : availableSynergy()
-  const fu = (fuR && syR && specLast === 'fu:' + fuR.id) ? null : fuR
-  const sy = fu ? null : syR
-  if (fu) specLast = 'fu:' + fu.id
+  // GR-M1 2026-09-29: a ready grand programme joins the special slot under the SY rule above (PLAN_GR X1): the ready candidates in the order grand, compound, synergy; the first takes the slot, unless it had the slot at the last opening and was not taken (specLast), in which case the next one in that order does (round to the first after the last), so no one of the three blocks the others for good. With only a compound programme and a synergy ready this gives what the SY lines it replaces gave (`fu` = the programme unless specLast is that programme and a synergy is ready; `sy` otherwise): the programme, unless it was declined last time. At the cap (T.grandCap) grandReady is false for all, and none is offered. A trade-off (`tr`) still shuts out all three and leaves specLast as it was (build_GR_2026-09-29)
+  const grR = tr ? null : (GRANDS.find(grandReady) || null)
+  const cand = [grR && 'gr:' + grR.id, fuR && 'fu:' + fuR.id, syR && 'sy'].filter(Boolean)
+  const last = cand.indexOf(specLast)
+  const pickK = cand.length ? cand[last >= 0 && cand.length > 1 ? (last + 1) % cand.length : 0] : null
+  const gr = pickK && pickK === 'gr:' + (grR && grR.id) ? grR : null
+  const fu = gr ? null : (pickK === 'fu:' + (fuR && fuR.id) ? fuR : null)
+  const sy = (gr || fu) ? null : syR
+  if (gr) specLast = 'gr:' + gr.id
+  else if (fu) specLast = 'fu:' + fu.id
   else if (sy) specLast = 'sy'
   if (sy) renderSynCard(wrap, sy)
+  if (gr) renderGrandCard(wrap, gr)
 
   // SY-M2 2026-09-29: the comment below made true (ruling RS10) - it said "A ready compound programme takes the special slot when nothing else has: fresh pairs and trade-offs outrank it"; since Y2 only a trade-off outranks it (build_SY_2026-09-29)
   // A ready compound programme takes the special slot unless a trade-off has it: it outranks a
@@ -6083,7 +6243,7 @@ function offerCards(fromLevelUp) {
     // on each still keeps them on/off rather than levelled.
     return true
   })
-  const md = (!tr && !sy && !fu && P.level >= 4 && modPool.length && Math.random() < 0.34)
+  const md = (!tr && !sy && !fu && !gr && P.level >= 4 && modPool.length && Math.random() < 0.34)   // GR-M1 2026-09-29: `!gr` - a grand programme holds the special slot as a compound programme does (build_GR_2026-09-29)
     ? pick(modPool) : null
   if (md) {
     const M = MODS[md], l = mod[md] || 0
@@ -6107,7 +6267,7 @@ function offerCards(fromLevelUp) {
   // Three on screen, always (2026-09-02, user direction). A special card takes one of the
   // three rather than sitting beside four: fewer options, each one read.
   // LL-M2 2026-09-25: the rebuild card takes one of these slots (build_LL_2026-09-25)
-  const want = ((sy || tr || fu || md) ? 2 : 3) - (rbKind ? 1 : 0)
+  const want = ((sy || tr || fu || gr || md) ? 2 : 3) - (rbKind ? 1 : 0)   // GR-M1 2026-09-29: `gr` takes one of the three, as `fu` does (build_GR_2026-09-29)
   const chosen = []
   while (chosen.length < want && pool.length) chosen.push(pool.splice((Math.random() * pool.length) | 0, 1)[0])
   for (const id of chosen) {
@@ -6238,13 +6398,16 @@ const closeCards = () => {
   // BF9 2026-09-23: a "ruled out" confirmation ends with the card screen it confirms, before the mechanism line is raised (review_B F6) (build_B_2026-09-22)
   flashEndBan()
   // The mechanism, said where the player is looking — the field the effect now works on.
-  if (pendingGist) { flash(pendingGist.name, pendingGist.text, pendingGist.col); pendingGist = null }
+  // GR-M6 2026-09-29: the line goes up with { big: true } - its title drawn larger (#flash.big, CSS), for a synergy's and a programme's take moment alike (PLAN_GR X6); every other flash line is unchanged (build_GR_2026-09-29)
+  if (pendingGist) { flash(pendingGist.name, pendingGist.text, pendingGist.col, { big: true }); pendingGist = null }
   // SY-M3 2026-09-29: the synergy moment, on the field once the cards close (PLAN_SY Y3): a ring bursting out from you in the synergy's colour (its own form, `syn` in RING_STYLE: the widest solid ring in the game) and a short shake. Under reduced motion (P6-B1) neither is played; the banner line above still is. Played even when a later pick on the same screen replaced the banner line (build_SY_2026-09-29)
   if (synBurst) {
     if (!reduceMotion) {
       // SY-FIX 2026-09-29: the ring obeys the effects cap as emit() does - it is pushed only while fx is not past T.fxCap (ADJUDICATION_SY F15); the shake below is not an effect and plays either way (build_SY_2026-09-29 fix round)
-      if (fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, x: P.x, y: P.y, r: 12, max: 240, life: 0.6, col: synBurst, style: 'syn', hit: new Set() })
+      // GR-M6 2026-09-29: the ring about twice the radius (max 240 -> 480; its line width doubles in RING_STYLE.syn) and brighter - it stays at full strength longer (life 0.6 -> 0.9: the ring pass draws at full alpha while life > 0.5) and gets a light core (draw); and one short tint of the screen in the same colour (grTint, T.grTintT s from alpha T.grTintA to 0, once) (PLAN_GR X6) (build_GR_2026-09-29)
+      if (fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, x: P.x, y: P.y, r: 12, max: 480, life: 0.9, col: synBurst, style: 'syn', hit: new Set() })
       shake = Math.max(shake, 8)
+      grTint = T.grTintT; grTintCol = synBurst
     }
     synBurst = null
   }
@@ -6641,6 +6804,10 @@ function syncHud() {
   for (const fu of FUSIONS) if (fused[fu.id]) {
     rows.push(`<div class="wpn ms"><i style="background:${fu.col}"></i><b>${fu.name}</b><span>programme</span></div>`)
   }
+  // GR-M1 2026-09-29: a grand programme held, with its chip `grand` (strings_GR.md S-G2c), after the compound programmes (build_GR_2026-09-29)
+  for (const g of GRANDS) if (grand[g.id]) {
+    rows.push(`<div class="wpn ms"><i style="background:${g.col}"></i><b>${g.name}</b><span>grand</span></div>`)
+  }
   for (const m of MASTERY) if (mastery[m.id]) {
     rows.push(`<div class="wpn ms"><i style="background:${m.col}"></i><b>${m.name}</b></div>`)
   }
@@ -6785,6 +6952,7 @@ function step(dt) {
   // SY-M1 2026-09-29: the hold runs on the run clock, so a pause (the card screen, a hint card) holds it too (build_SY_2026-09-29)
   // SY-FIX 2026-09-29: and the step in which it runs out ends it (endHold: a season kept for the end, ADJUDICATION_SY F2) (build_SY_2026-09-29 fix round)
   if (holdLeft > 0) { holdLeft = Math.max(0, holdLeft - dt); if (holdLeft === 0) endHold() }
+  if (grTint > 0) grTint = Math.max(0, grTint - dt)   // GR-M6 2026-09-29: the take moment's tint runs out (build_GR_2026-09-29)
 
   // ---- player
   let ix = (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0)
@@ -6995,6 +7163,7 @@ function step(dt) {
         // FX1 2026-09-23: supersedes the F3a line above on where - the burst goes off at the boss's own position (its centre; its last position if this hit killed it), not at the shot's; `skip` is the boss object kept in b.lastHit, so the boss is still billed once (build_F_2026-09-23 fix round)
         if (b.burst) explode(b.lastHit.x, b.lastHit.y, b.burst, b.dmg * b.burstMul, PAL.yours.ring.frag, { skip: b.lastHit, ramp: 'gold', pull: b.pull, style: 'frag', n })
       }
+      grChain(b, b.lastHit)   // GR-M2 2026-09-29: the compound event struck can start a chain (ruling RG4) (build_GR_2026-09-29)
     }
     if (!gone) for (const e of enemies) {
       if (b.hits.has(e)) continue
@@ -7080,6 +7249,7 @@ function step(dt) {
             emit('spark', b.x, b.y, 6, 'gold', { boost: .8 })
           }
         }
+        grChain(b, e)   // GR-M2 2026-09-29: after the shot's own burst, relay and split, which it leaves as they were (build_GR_2026-09-29)
         break
       }
     }
@@ -7362,6 +7532,8 @@ function renderReport() {
   html += sec(`Measures that compound — ${gotSyn.length} of ${SYNERGIES.length}`,
     (gotSyn.length
       ? gotSyn.map(sy => row(sy.col, sy.name, sy.why)).join('')
+        // GR-M1 2026-09-29: the grand programmes taken, listed as the compound programmes' rows are - name, then desc + ' ' + gain (ruling RG7, no new string) - in this section, straight after the synergies they are made of and before any sub-heading, so none sits under "Compound programmes — two measures run as one", which is not true of them (B5) (build_GR_2026-09-29)
+        + GRANDS.filter(g => grand[g.id]).map(g => row(g.col, g.name, g.desc + ' ' + g.gain)).join('')
       // CORRECTED 2026-09-15: unverified UNDRR attribution and four-to-one link removed; game behaviour stated (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
       : `<div class="rrow"><i style="background:#3a3f47"></i><b>None</b><p>Single measures were never combined. In this game, two measures that go together can unlock a bonus neither gives alone.</p></div>`) +
     (gotMast.length
@@ -8025,7 +8197,9 @@ const RING_STYLE = {
   dash:   { w: 3,   dash: [14, 8] },     // the service ring: long dashes
   dot:    { w: 2,   dash: [2, 5] },      // the relay's launch mark: dots
   square: { w: 3,   dash: [] },          // a lifeline's strike-back: the lifeline's own rounded square
-  syn:    { w: 6,   dash: [] },          // SY-M3 2026-09-29: a synergy taken - the widest solid ring, once, in the synergy's colour (build_SY_2026-09-29)
+  // GR-M6 2026-09-29: the synergy ring's line width doubled, 6 -> 12, with its radius (closeCards) - still the widest solid ring in the game (PLAN_GR X6) (build_GR_2026-09-29)
+  syn:    { w: 12,  dash: [] },          // SY-M3 2026-09-29: a synergy taken - the widest solid ring, once, in the synergy's colour (build_SY_2026-09-29)
+  shim:   { w: 2.5, dash: [4, 3] },      // GR-M4 2026-09-29: the shield's shimmer where a thrown thing is blocked - short dashes, small (build_GR_2026-09-29)
 }
 function ringPath(f) {
   const s = f.style
@@ -8336,6 +8510,8 @@ function draw() {
     for (const f of list) ringPath(f)
     ctx.strokeStyle = `rgba(8,10,13,${(a * .55).toFixed(3)})`; ctx.lineWidth = S.w + 3; ctx.stroke()
     ctx.strokeStyle = `rgba(${rgbOf(col)},${a})`; ctx.lineWidth = S.w; ctx.stroke()
+    // GR-M6 2026-09-29: the synergy ring (and a grand programme's, which uses it) gets a light core down its middle (232,236,255: in the YOURS band, OKLCH C 0.026 H 276), so it reads brighter than its colour alone (PLAN_GR X6) (build_GR_2026-09-29)
+    if (style === 'syn') { ctx.strokeStyle = `rgba(232,236,255,${(a * .75).toFixed(3)})`; ctx.lineWidth = 3; ctx.stroke() }
   }
   ctx.setLineDash([])
 
@@ -8388,6 +8564,18 @@ function draw() {
       ctx.arc(0, 0, beamOn.reach, -beamOn.half, beamOn.half); ctx.closePath(); ctx.fill()
       // a hot core down the middle, which is what makes it read as a beam rather than a cone
       // D2 2026-09-22: the core a shade more cyan (226,246,255 -> 214,242,255) - the old near-white sat in no family's band (build_D_2026-09-22)
+      // GR-M3 2026-09-29: as a laser (PLAN_GR X3) it is drawn wider, with a bright core: a wide soft glow line, the core at 2.2x its width and full strength, and a thin light centre line (222,247,255: in the YOURS band, OKLCH C 0.028 H 219). Every GR colour is in the YOURS band (PAL, above). Drawing only - what it hits is still the wedge of beamHalf above (build_GR_2026-09-29)
+      if (beamOn.laser) {
+        const w = 2 + beamOn.half * 26
+        ctx.lineCap = 'round'
+        ctx.strokeStyle = 'rgba(127,224,255,.28)'; ctx.lineWidth = w * 4.5
+        ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(beamOn.reach * .96, 0); ctx.stroke()
+        ctx.strokeStyle = 'rgba(214,242,255,1)'; ctx.lineWidth = w * 2.2; ctx.stroke()
+        ctx.strokeStyle = 'rgba(222,247,255,.95)'; ctx.lineWidth = Math.max(1.5, w * .6); ctx.stroke()
+        ctx.lineCap = 'butt'
+        ctx.restore()
+        continue
+      }
       ctx.strokeStyle = 'rgba(214,242,255,.85)'
       ctx.lineWidth = 2 + beamOn.half * 26
       ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(beamOn.reach * .96, 0); ctx.stroke()
@@ -8441,11 +8629,12 @@ function draw() {
   // SY-M3 2026-09-29: while any synergy is held, the aimed shots (src 'aim') draw a short trail in the colour of the synergy taken most recently (synTrailCol), under their smear and body - the body keeps its streak-tier colour, so the tier stays readable. One path, one stroke a frame: a line from the back of the shot, five radii long (PLAN_SY Y3) (build_SY_2026-09-29)
   const trailCol = synTrailCol()
   if (trailCol) {
-    ctx.strokeStyle = `rgba(${rgbOf(trailCol)},.8)`; ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.beginPath()
+    // GR-M6 2026-09-29: supersedes the SY-M3 line above on size - the trail is now twice as wide (2.5 -> 5) and 1.6x as long (five radii -> eight: from r to 9r) (PLAN_GR X6) (build_GR_2026-09-29)
+    ctx.strokeStyle = `rgba(${rgbOf(trailCol)},.8)`; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath()
     for (const b of bullets) {
       if (b.src !== 'aim') continue
       const sp = Math.hypot(b.vx, b.vy) || 1, ux = b.vx / sp, uy = b.vy / sp
-      ctx.moveTo(b.x - ux * b.r, b.y - uy * b.r); ctx.lineTo(b.x - ux * b.r * 6, b.y - uy * b.r * 6)
+      ctx.moveTo(b.x - ux * b.r, b.y - uy * b.r); ctx.lineTo(b.x - ux * b.r * 9, b.y - uy * b.r * 9)
     }
     ctx.stroke(); ctx.lineCap = 'butt'
   }
@@ -8472,7 +8661,7 @@ function draw() {
   for (let pass = 0; pass < 2; pass++) {
     if (pass) ctx.globalCompositeOperation = 'lighter'
     for (const f of fx) {
-      if (f.ring) continue
+      if (f.ring || f.arc) continue   // GR-M2 2026-09-29: a lightning arc is drawn in its own pass, below (build_GR_2026-09-29)
       if (!f.p) {
         if (pass) continue
         ctx.globalAlpha = Math.max(0, f.life * 2.4)
@@ -8500,6 +8689,21 @@ function draw() {
   ctx.globalCompositeOperation = 'source-over'
   ctx.globalAlpha = 1
 
+  // GR-M2 2026-09-29: chain lightning - each jump a jagged line from where it left to what it struck, fading over its T.grChainArcT s: a wide dark pass under it (so it reads on every ground, as the rings do), a bright pass in the programme's colour, and a thin light core (its `arc` colour). Its shape - a zig-zag line between two bodies - is its non-colour mark; nothing else on the field is drawn so (build_GR_2026-09-29)
+  const arcs = fx.filter(f => f.arc)
+  if (arcs.length) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round'
+    for (const f of arcs) {
+      const a = clamp(f.life / f.max, 0, 1)
+      ctx.beginPath(); ctx.moveTo(f.pts[0], f.pts[1])
+      for (let i = 2; i < f.pts.length; i += 2) ctx.lineTo(f.pts[i], f.pts[i + 1])
+      ctx.strokeStyle = `rgba(8,10,13,${(a * .6).toFixed(3)})`; ctx.lineWidth = SMALL ? 5 : 6; ctx.stroke()
+      ctx.strokeStyle = `rgba(${rgbOf(f.col)},${a.toFixed(3)})`; ctx.lineWidth = SMALL ? 2.6 : 3.2; ctx.stroke()
+      ctx.strokeStyle = `rgba(${rgbOf(f.core)},${(a * .9).toFixed(3)})`; ctx.lineWidth = 1.2; ctx.stroke()
+    }
+    ctx.lineJoin = 'miter'; ctx.lineCap = 'butt'
+  }
+
   // damage numbers
   // DX5 2026-09-23: drawn here, before the telegraph layer - they are yours (PAL.yours.num), and were the one piece of your paint drawn after it, over live warnings (review F6). Moved from after the player disc, drawn as they were (build_D_2026-09-22 fix round)
   ctx.textAlign = 'center'
@@ -8525,10 +8729,13 @@ function draw() {
   // SY-M3 2026-09-29: one mark per synergy held, circling you in that synergy's colour (PLAN_SY Y3 "What stays"), so a build that has compounded looks different at a glance: separate diamonds, so the count reads without colour, each with a dark edge so it stands out on every ground. Evenly spaced on a circle 22 px out from your disc, turning slowly; under reduced motion (P6-B1) they stand still (build_SY_2026-09-29)
   const synHeld = SYNERGIES.filter(sy => syn[sy.id])
   if (synHeld.length) {
-    const R = P.r + 22, a0 = reduceMotion ? -Math.PI / 2 : t * 0.8, s = 4.5
-    ctx.strokeStyle = 'rgba(8,10,13,.7)'; ctx.lineWidth = 1.5
+    // GR-M6 2026-09-29: supersedes the SY-M3 line above on size and radius - the marks are 2.5x larger (half-size 4.5 -> 11.25), on a circle 34 px out (was 22) so nine still stand apart (about 30 px centre to centre) and clear your disc, each on a soft halo drawn as two translucent discs of its colour (no shadowBlur, for phones); the dark edge 2 px. Count and spacing unchanged, so the count still reads without colour (PLAN_GR X6) (build_GR_2026-09-29)
+    const R = P.r + 34, a0 = reduceMotion ? -Math.PI / 2 : t * 0.8, s = 11.25
+    ctx.strokeStyle = 'rgba(8,10,13,.7)'; ctx.lineWidth = 2
     synHeld.forEach((sy, i) => {
       const a = a0 + i * TAU / synHeld.length, x = P.x + Math.cos(a) * R, y = P.y + Math.sin(a) * R
+      ctx.fillStyle = `rgba(${rgbOf(sy.col)},.14)`; ctx.beginPath(); ctx.arc(x, y, s * 1.55, 0, TAU); ctx.fill()
+      ctx.fillStyle = `rgba(${rgbOf(sy.col)},.22)`; ctx.beginPath(); ctx.arc(x, y, s * 1.15, 0, TAU); ctx.fill()
       ctx.fillStyle = sy.col; ctx.beginPath()
       ctx.moveTo(x, y - s); ctx.lineTo(x + s, y); ctx.lineTo(x, y + s); ctx.lineTo(x - s, y); ctx.closePath()
       ctx.fill(); ctx.stroke()
@@ -8537,6 +8744,8 @@ function draw() {
   ctx.restore()
 
   if (vignette) { ctx.fillStyle = vignette; ctx.fillRect(0, 0, W, H) }
+  // GR-M6 2026-09-29: the take moment's tint - the whole screen in the synergy's (or grand programme's) colour, once, fading from T.grTintA to 0 over T.grTintT s (set in closeCards, never under reduced motion; counted down in step) (PLAN_GR X6) (build_GR_2026-09-29)
+  if (grTint > 0 && grTintCol) { ctx.fillStyle = `rgba(${rgbOf(grTintCol)},${(T.grTintA * clamp(grTint / T.grTintT, 0, 1)).toFixed(3)})`; ctx.fillRect(0, 0, W, H) }
 
   // Everything off-screen that you might want to go to, marked at the edge in screen space.
   // Going or not going is the decision all of this exists for, and you cannot decide about
