@@ -371,8 +371,9 @@
   #cards.show ~ #lvlup{display:block}
   /* SY-FIX 2026-09-29: on a phone the card screen scrolls (the Combos panel made it long), and the label, fixed at 26% from the top, sat over the cards as they scrolled past (ADJUDICATION_SY L1). At 480 px and below the card screen keeps a 32 px band at its top as a transparent top border - outside its scroll area, so no card ever passes under it, and still dimmed and blurred by the screen's own background - and the label sits in that band. Same element, same text and look; layout only (build_SY_2026-09-29 fix round) */
   @media (max-width:480px){#cards{border-top:32px solid transparent}#lvlup{top:8px}}
-  /* CB-M5 2026-09-30: the same band and place for the label on a phone held sideways - 900 px wide or less and 500 px tall or less - where the label, at 26% from the top, covered the scrolled cards (PLAN_CB C5; ADJUDICATION_SY G5). Layout only (build_CB_2026-09-30) */
-  @media (max-width:900px) and (max-height:500px){#cards{border-top:32px solid transparent}#lvlup{top:8px}}
+  /* CB-M5 2026-09-30: the same band and place for the label on a phone held sideways, where the label, at 26% from the top, covered the scrolled cards (PLAN_CB C5; ADJUDICATION_SY G5). Layout only (build_CB_2026-09-30). GR2-FIX 2026-09-30: this note corrected (ADJUDICATION_GR2 F10) - CB-M5's rule, @media (max-width:900px) and (max-height:500px), is no longer in the file: GR2-M5 removed it and the rule below replaced it; the note had described it as if it stood here (build_GR2_2026-09-30 fix round) */
+  /* GR2-M5 2026-09-30: supersedes the CB-M5 bound above - the band and the label's place now apply whenever the window is 700 px tall or less, at any width: a phone held sideways (500 px tall or less) of any width (ADJUDICATION_CB H1), and a short desktop window, where at 800 x 600 the label covered the top card (L-CB1). One rule serves both; layout only (build_GR2_2026-09-30) */
+  @media (max-height:700px){#cards{border-top:32px solid transparent}#lvlup{top:8px}}
 
   #over{position:fixed;inset:0;z-index:22;display:none;align-items:flex-start;
     justify-content:center;overflow-y:auto;overscroll-behavior:contain;padding:20px;
@@ -635,6 +636,9 @@
     #lvl{font-size:11px}
     #place{font-size:10px}
     #weapons{left:8px;bottom:14px;gap:3px;max-height:38vh;overflow:hidden}
+    /* GR2-M5 2026-09-30: room for a fresh row's glow inside the list's clip (ADJUDICATION_CB H4): the glow reaches 24 px past a row's left edge and its right edge (the panel's 6 px, then 4 px spread and 14 px blur) and 20 px above and below it, so the list gets that much padding - 24 px left and right, 20 px above and below - and moves out by it, left 8 -> 0 and bottom 14 -> -6, with its height cap raised by the 40 px of padding (box-sizing is border-box): the rows keep their 38vh and their bottom edge; they sit 16 px further right, where the whole glow fits on the screen. pointer-events:none, so the larger box does not take touches from the field (the rows are not controls). The list scrolls to a new synergy row by script (mergeMoment, H3); it stays overflow:hidden, so there is no scrollbar and no swipe (build_GR2_2026-09-30) */
+    /* GR2-FIX 2026-09-30: right padding 20 -> 24 px, so the glow's 24 px reach on the right is not clipped either (ADJUDICATION_GR2 F9); the note above said "24 px left, 20 px on the other sides". The list's width is its content's (a fixed box with no width set), so it grows 4 px to the right and the rows do not move (build_GR2_2026-09-30 fix round) */
+    #weapons{left:0;bottom:-6px;padding:20px 24px 20px 24px;max-height:calc(38vh + 40px);pointer-events:none}
     .wpn{font-size:10px;gap:5px}
     .wpn i{width:7px;height:7px}
     #lifelines{right:8px;bottom:14px;gap:4px}
@@ -1278,6 +1282,13 @@ const T = {
   grShieldBase: 0.20, grShieldPerLv: 0.08, grShieldBack: 2, grShieldLife: 2.5,
   // GR-M6 2026-09-29: the take moment's screen tint (PLAN_GR X6): one flash, this many seconds, starting at this alpha and fading to 0; never under reduced motion. Drawing only (build_GR_2026-09-29)
   grTintT: 0.15, grTintA: 0.25,
+  // GR2-M2 2026-09-30: the slowing veil (PLAN_GR2 W2, ruling RW2): within grVeilR px of you (centre to centre) a thrown thing moves at grVeilThrown and a hazard body (the compound event's included) at grVeilBody of the speed it has without the veil - multiplied on top of any other slowing (RW2). The card and the Combos row state 40% (= 1 - 0.60) and 25% (= 1 - 0.75), so a change here changes that text too; grVeilR is not stated ("a ring around you") (build_GR2_2026-09-30)
+  grVeilR: 220, grVeilThrown: 0.60, grVeilBody: 0.75,
+  // GR2-M3 2026-09-30: the aftershock (PLAN_GR2 W3, ruling RW3): when a burst kills a body, lightning jumps from it to the nearest hazard within grAsR px for grAsShare of that burst's damage; at most grAsDepth jumps in one line from the first burst, at most grAsPerSec jumps start in any second of run time; each jump's arc is drawn for grAsArcT s. The card states "twice in a row" (= grAsDepth 2) and the Combos row 35%, 8 a second and "not a third time", so a change here changes that text too; grAsR is not stated ("close by") (build_GR2_2026-09-30)
+  grAsR: 120, grAsShare: 0.35, grAsDepth: 2, grAsPerSec: 8, grAsArcT: 0.12,
+  // GR2-M4 2026-09-30: the patrol orbit (PLAN_GR2 W4, rulings RW1, RW4): grOrbitN pieces on a circle grOrbitR px out, one turn every grOrbitTurn s; a piece touching a hazard deals grOrbitDps x P.dmgMul a second (no eff(), RW4) as one hit of grOrbitDps x grOrbitCd x P.dmgMul (9 at P.dmgMul 1) per body every grOrbitCd s, with a knock of grOrbitPush outward (heat zones: the GR2-FIX line below). A piece's touch radius is grOrbitPieceR px. The numbers the texts state: the GR2-FIX line below (build_GR2_2026-09-30)
+  // GR2-FIX 2026-09-30: this note corrected (ADJUDICATION_GR2 F3, F5). It said "(a heat zone takes the hit and never moves, RW1)" and "The texts state three pieces, 2.4s and 30 damage a second, so a change here changes that text too; grOrbitR, grOrbitCd, grOrbitPush are not stated". Now heat zones are skipped entirely, neither hit nor pushed (F3, RW1 re-ruled), and the texts state the damage per hit, not per second (F5): three pieces (grOrbitN), 2.4s (grOrbitTurn), 9 damage a hit (grOrbitDps x grOrbitCd) and at most one hit on the same hazard every 0.3s (grOrbitCd), so a change to any of these changes that text too; grOrbitR and grOrbitPush are not stated (build_GR2_2026-09-30 fix round)
+  grOrbitN: 3, grOrbitR: 90, grOrbitTurn: 2.4, grOrbitDps: 30, grOrbitCd: 0.3, grOrbitPush: 300, grOrbitPieceR: 11,
 }
 
 // ---------------------------------------------------------------- sound
@@ -2331,12 +2342,30 @@ const GRANDS = [
     desc: 'Some thrown things that would hit you are blocked and sent back as your own shots. The chance grows with each Green defences level. Only thrown things are blocked.',
     gain: 'Blocks a thrown thing that would hit you: a 20% chance, plus 8% per Green defences level (60% at Lv 5). A blocked one flies back toward where it came from as your shot. It does at least double its damage, more with Resilient investment.',   // CB-M4 2026-09-30: S-C4 C4-5 (build_CB_2026-09-30)
     take: 'Thrown things can now be blocked and sent back.' },
+  // GR2-M1 2026-09-30: wave 2 (PLAN_GR2 W1-W4; strings_GR2.md S-W1 verbatim as ruled; RW7 ids and order: after wave 1). Colours in the YOURS band (OKLCH: veil C 0.129 H 349, aftershock C 0.159 H 258, orbit C 0.162 H 155; the aftershock's arc core C 0.033 H 263). Each shares T.grandCap with wave 1 through grandReady (build_GR2_2026-09-30)
+  // GR2-FIX 2026-09-30: the note above corrected (ADJUDICATION_GR2 F1, F2). It said "after wave 1, so the offer order and the rail's rotation are unchanged" and "The orbit's desc is the RW1 wording ("but not heat")". Now every ready grand programme takes its turn in the rail's rotation, in GRANDS order (offerCards, F1), and the orbit's texts are the fix round's (F2, F4, F5; the GR2-FIX line above the orbit) (build_GR2_2026-09-30 fix round)
+  { id: 'veil', name: 'Buffer of time', col: '#ff9ecf', needs: ['act', 'buffer'],
+    desc: 'Inside a ring around you, thrown things fly 40% slower and hazards move 25% slower. Your own shots and marked events are not slowed.',
+    gain: 'Inside a ring around you, thrown things fly 40% slower and hazards move 25% slower. So does the event that arrives with the words \u201cSeveral hazards, arriving together.\u201d Nothing outside the ring is slowed. Your own shots and events marked on the ground are not slowed.',
+    take: 'Hazards and thrown things slow down near you.' },
+  { id: 'aftershock', name: 'Built to last', col: '#5c9dff', arc: '#dde9ff', needs: ['keep', 'stock'],
+    desc: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it to another close by. This can happen twice in a row, but not more.',
+    gain: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it to the nearest hazard close by. It does 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, the burst that follows can send lightning once more, but not a third time.',   // GR2-FIX 2026-09-30: first sentence split (ADJUDICATION_GR2 F8): was "... to the nearest hazard close by, for 35% of the burst\'s damage."; the new second sentence is the Learning gain's own (build_GR2_2026-09-30 fix round)
+    take: 'A burst that kills can now set off lightning.' },
+  { id: 'orbit', name: 'Ground kept clear', col: '#62e89a', needs: ['plan', 'lane'],
+    // GR2-FIX 2026-09-30: the orbit's desc, gain and take reworded (ADJUDICATION_GR2 F2, F4, F5, with F3's code): every surface says heat is left alone, in one form, "They leave heat alone." (grOrbit skips heat zones: no hit, no push); the damage is stated per hit - 9 (T.grOrbitDps x T.grOrbitCd x P.dmgMul), at most once every 0.3s on the same hazard (T.grOrbitCd, the hazard's own clock orbT) - not as a rate a second. Were: desc "Three pieces circle close around you. A hazard they touch is hurt and pushed away, but not heat. They do not block thrown things."; gain "Three pieces circle close around you, once every 2.4s. A hazard they touch takes 30 damage a second, more with Resilient investment, and is pushed away from you. They do not block thrown things."; take "Three pieces now circle you and push hazards away." (build_GR2_2026-09-30 fix round)
+    desc: 'Three pieces circle close around you. A hazard they touch is hurt and pushed away. They leave heat alone. They do not block thrown things.',
+    gain: 'Three pieces circle close around you, once every 2.4s. A hazard they touch takes 9 damage, more with Resilient investment, and is pushed away from you. The pieces hit the same hazard at most once every 0.3s. They leave heat alone. They do not block thrown things.',
+    take: 'Three pieces now circle you. They push hazards away but leave heat alone.' },
 ]
 const grand = {}      // GR-M1 2026-09-29: grand programme id -> taken, this run only (reset) (build_GR_2026-09-29)
 const grandTaken = () => GRANDS.filter(g => grand[g.id]).length
 const grandReady = g => !grand[g.id] && grandTaken() < T.grandCap && g.needs.every(id => syn[id])
 const grChainTimes = []   // GR-M2 2026-09-29: run-clock times of the chains started in the last second (at most T.grChainPerSec) (build_GR_2026-09-29)
 let grTint = 0, grTintCol = null   // GR-M6 2026-09-29: the take moment's tint - seconds left and its colour (build_GR_2026-09-29)
+// GR2-M3 / GR2-M4 2026-09-30: wave 2's run state - the aftershock's clock (run-clock times of the jumps started in the last second, at most T.grAsPerSec); the burst whose hits are being billed (grAsBurst: its damage, set by explode while it bills, null everywhere else); how many aftershock jumps stand above the code now running (grAsLine: RW3's own depth counter, 0 outside a line); and the orbit's angle (build_GR2_2026-09-30)
+const grAsTimes = []
+let grAsBurst = null, grAsLine = 0, grOrbAng = 0
 let fuseAcc = 0       // practiced-evacuation clock
 let beamAng = 0       // monitored-horizon sweep angle
 let laneAng = 0       // kept-corridor angle; holds the last heading when you stand still
@@ -3121,6 +3150,7 @@ function reset(placeId) {
   // GR-M1 / GR-M2 / GR-M6 2026-09-29: the grand programmes taken (so the cap's count starts at 0), the chain clock and the take moment's tint do not cross into the next run (build_GR_2026-09-29)
   for (const k in grand) delete grand[k]
   grChainTimes.length = 0; grTint = 0
+  grAsTimes.length = 0; grAsBurst = null; grAsLine = 0; grOrbAng = 0   // GR2-M3 / GR2-M4 2026-09-30: the aftershock's clock and line and the orbit's angle do not cross into the next run (build_GR2_2026-09-30)
   for (const k in banished) delete banished[k]
   introSeen = {}
   poolAskedRun = {}; poolRight = 0; poolWrong = 0
@@ -3568,6 +3598,14 @@ const PLAIN = {
   'GRD.laser.gain': 'Your beam becomes a laser. It hits 50% harder and aims at one more target. If you have no beam, you get one. Your aimed shots stay the same.',
   'GRD.shield.desc': 'Some thrown things that would hit you are stopped. They fly back as your own shots. The chance grows with each Green defences level. Only thrown things are stopped.',
   'GRD.shield.gain': 'It can block a thrown thing that would hit you. The chance is 20%, plus 8% for each Green defences level. At Lv 5 it is 60%. A blocked one flies back toward where it came from, as your shot. It does at least double its damage. Resilient investment makes it do more.',
+  // GR2-M1 2026-09-30: wave 2's Learning desc and gain, strings_GR2.md S-W1 verbatim (keys GRD.<id>.desc / .gain); names and `take` have none (build_GR2_2026-09-30)
+  'GRD.veil.desc': 'There is a ring around you. Inside it, thrown things fly 40% slower. Hazards inside it move 25% slower. Your own shots are not slowed. Marked events are not slowed.',   // GR2-FIX 2026-09-30: "Hazards move 25% slower." -> "Hazards inside it move 25% slower." - the scope kept (ADJUDICATION_GR2 F6) (build_GR2_2026-09-30 fix round)
+  'GRD.veil.gain': 'There is a ring around you. Inside it, thrown things fly 40% slower. Hazards move 25% slower. So does the event that arrives with the words \u201cSeveral hazards, arriving together.\u201d Nothing outside the ring is slowed. Your own shots are not slowed. Events marked on the ground are not slowed.',
+  'GRD.aftershock.desc': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it. It jumps to another hazard close by. This can happen twice in a row, but not more.',
+  'GRD.aftershock.gain': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it. It goes to the nearest hazard close by. It does 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, there can be another burst. That burst can send lightning once more. It does not go on after that.',
+  // GR2-FIX 2026-09-30: the orbit's Learning desc and gain reworded as the Steady ones (ADJUDICATION_GR2 F2, F5): "They leave heat alone."; 9 damage a hit, at most once every 0.3s on the same hazard. Were: desc "Three pieces go round close to you. They hurt any hazard they touch and push it away. They do not stop thrown things."; gain "Three pieces circle close around you. They go round once every 2.4s. A hazard they touch takes 30 damage a second. Resilient investment makes it more. The pieces push the hazard away from you. They do not stop thrown things." (build_GR2_2026-09-30 fix round)
+  'GRD.orbit.desc': 'Three pieces go round close to you. They hurt hazards they touch and push them away. They leave heat alone. They do not stop thrown things.',
+  'GRD.orbit.gain': 'Three pieces circle close around you. They go round once every 2.4s. A hazard they touch takes 9 damage. Resilient investment makes it more. The pieces push the hazard away from you. They hit the same hazard at most once every 0.3s. They leave heat alone. They do not stop thrown things.',
   'MOD.track.descN': l => `It turns more sharply, and gives up later (Lv ${l + 1}).`,
   'MOD.volley.desc0': 'One more shot goes out every time it fires.',
   // CORRECTED 2026-09-23: was "What you fire bursts where it lands. The burst reaches what stood next to it." - since F3a a shot bursts once, where it stops - on the hit that spends its last pierce (a body or the boss), or in mid-air when its life runs out - so "lands" was untrue of a shot that missed (section F text, build_F_2026-09-23); CORRECTED again 2026-09-23: was "What you fire bursts where it stops. The burst reaches what stood next to it." - since FX1 a shot bursts once, when it stops, on the last body it struck (a body or the boss), at that body's position at that moment (its last position if it has gone), and not at all if it struck nothing - so "where it stops" was untrue of a shot that struck a body and flew on, and "What you fire bursts" was untrue of a shot that struck nothing (section F text 2, build_F_2026-09-23)
@@ -4278,13 +4316,15 @@ function updateBoss(dt) {
   // SY-M1 2026-09-29: while a hold runs the compound event is held (PLAN_SY Y1): no movement, no charge, no shots, no strikes, no touch; its own timers (phase, arrival, shot and charge cooldowns, the charge) wait with it, and a knock it takes fades without moving it. Its withdrawal timer (B.life) keeps running, so it can pass during a hold. The clock that brings the next one runs, and one that arrives during a hold waits where it appeared (build_SY_2026-09-29)
   const held = holdOn()
   if (!held) B.phase += dt
+  // GR2-M2 2026-09-30: the veil slows the compound event's body (PLAN_GR2 W2): its walk in, its charge, its approach and its strafe below move at bvk of their speed (T.grVeilBody inside the veil, else 1, so each line is as it was); its knock and every timer are not scaled, so its shots, charges and strikes come when they would (build_GR2_2026-09-30)
+  const bvk = grVeilK(B, T.grVeilBody)
 
   if (B.state === 'arrive') {
     if (held) { B.kx *= knDecay; B.ky *= knDecay; return }   // SY-M1 2026-09-29 (build_SY_2026-09-29)
     // walks in, cannot be hurt, and is impossible to miss
     B.tState -= dt
     const a = Math.atan2(P.y - B.y, P.x - B.x)
-    B.x += Math.cos(a) * 140 * dt; B.y += Math.sin(a) * 140 * dt
+    B.x += Math.cos(a) * 140 * dt * bvk; B.y += Math.sin(a) * 140 * dt * bvk   // GR2-M2 2026-09-30: * bvk (build_GR2_2026-09-30)
     emit('smoke', B.x, B.y, 1, B.ramp, { scale: 1.6 })
     if (B.tState <= 0) B.state = 'active'
     return
@@ -4309,7 +4349,7 @@ function updateBoss(dt) {
 
   if (B.state === 'charge') {
     B.tState -= dt
-    B.x += B.chargeVx * dt; B.y += B.chargeVy * dt
+    B.x += B.chargeVx * dt * bvk; B.y += B.chargeVy * dt * bvk   // GR2-M2 2026-09-30: * bvk (build_GR2_2026-09-30)
     emit('dust', B.x, B.y, 2, B.ramp, { scale: 1.2 })
     if (B.tState <= 0) { B.state = 'active'; B.cdCharge = T.bossChargeEvery }
   } else if (B.state === 'wind') {
@@ -4342,11 +4382,12 @@ function updateBoss(dt) {
     const hold = B.how === 'siege' ? 400 : B.how === 'spiral' ? 240 : B.how === 'swarm' ? 60 : 210
     const push = d > hold ? 1 : d < hold * .7 ? -1 : 0
     const spd = B.how === 'swarm' ? T.bossSpd * .55 : T.bossSpd
-    B.x += Math.cos(toP) * push * spd * dt
-    B.y += Math.sin(toP) * push * spd * dt
+    // GR2-M2 2026-09-30: the four lines below * bvk (build_GR2_2026-09-30)
+    B.x += Math.cos(toP) * push * spd * dt * bvk
+    B.y += Math.sin(toP) * push * spd * dt * bvk
     const strafe = B.how === 'spiral' ? 210 : 60
-    B.x += Math.cos(toP + Math.PI / 2) * Math.sin(B.phase * (B.how === 'spiral' ? 1.5 : .7)) * strafe * dt
-    B.y += Math.sin(toP + Math.PI / 2) * Math.sin(B.phase * (B.how === 'spiral' ? 1.5 : .7)) * strafe * dt
+    B.x += Math.cos(toP + Math.PI / 2) * Math.sin(B.phase * (B.how === 'spiral' ? 1.5 : .7)) * strafe * dt * bvk
+    B.y += Math.sin(toP + Math.PI / 2) * Math.sin(B.phase * (B.how === 'spiral' ? 1.5 : .7)) * strafe * dt * bvk
 
     B.cdShoot -= dt
     if (B.cdShoot <= 0) {
@@ -5500,7 +5541,8 @@ function explode (x, y, radius, dmg, col, opts = {}) {
   // pierce also kills that body, the burst is drawn on that frame at the body's coordinate, as its
   // death is - the situation the Residual sentence above describes, at the old ring life.
   // D3 2026-09-22: the blast's ring carries its caller's stroke form (`opts.style`: 'frag' or 'resid') as well as its colour (S01) (build_D_2026-09-22)
-  fx.push({ ring: true, noHit: true, x, y, r: 8, max: radius, life: opts.ringLife || 0.28, col, style: opts.style || 'frag', hit: new Set() })
+  // GR2-M3 2026-09-30: `opts.capFx` - the aftershock's burst pushes its ring only while fx is not past T.fxCap (W3: every link counts toward the cap); every other caller pushes it as before (build_GR2_2026-09-30)
+  if (!opts.capFx || fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, x, y, r: 8, max: radius, life: opts.ringLife || 0.28, col, style: opts.style || 'frag', hit: new Set() })
   emit('spark', x, y, 7, opts.ramp || 'gold', { boost: 1.1 })
   AU.play(opts.snd || 'block')
   // DX2 2026-09-23: `opts.n` - a burst from a shot standing for n shots (mergeN) knocks or pulls as n bursts do; its damage already arrives combined (build_D_2026-09-22 fix round)
@@ -5511,6 +5553,8 @@ function explode (x, y, radius, dmg, col, opts = {}) {
     hurtBoss(dmg, Math.cos(a) * 30 * kN, Math.sin(a) * 30 * kN)
   }
   // BF3 2026-09-23: skips a body already gone - over a copy, a body a Residual burst killed earlier in this loop was billed again (measured: 5 kills from 3 bodies) (build_B_2026-09-22)
+  // GR2-M3 2026-09-30: while this burst bills the bodies, grAsBurst holds its damage, so a death it causes can set off the aftershock (hurtEnemy); restored after, so a burst inside a burst hands back the outer one's (build_GR2_2026-09-30)
+  const asOuter = grAsBurst; grAsBurst = dmg
   for (const e of enemies.slice()) {          // a copy: hurtEnemy splices the dead out from under it
     if (e.gone) continue
     if (e === opts.skip || dist2(e, at) >= (e.r + radius) ** 2) continue
@@ -5518,6 +5562,7 @@ function explode (x, y, radius, dmg, col, opts = {}) {
     const kn = (opts.pull ? -opts.pull * 229 : 120) * kN
     hurtEnemy(e, dmg, Math.cos(a) * kn, Math.sin(a) * kn, opts.pull)
   }
+  grAsBurst = asOuter   // GR2-M3 2026-09-30: the outer burst's (or none) again (build_GR2_2026-09-30)
 }
 
 function hurtEnemy(e, dmg, kx, ky, pull) {
@@ -5569,6 +5614,8 @@ function hurtEnemy(e, dmg, kx, ky, pull) {
       const a = Math.random() * TAU
       enemies.push(makeHazard('fire', e.x + Math.cos(a) * 60, e.y + Math.sin(a) * 60))
     }
+    // GR2-M3 2026-09-30: a body a burst killed (grAsBurst set by explode) can set off the aftershock - after everything above, which is as it was (build_GR2_2026-09-30)
+    if (grand.aftershock && grAsBurst !== null) grAftershock(e, grAsBurst)
   }
 }
 
@@ -5921,7 +5968,9 @@ function updateEbullets(dt) {
   const shards = ringPoints()
   for (let i = ebullets.length - 1; i >= 0; i--) {
     const b = ebullets[i]
-    b.x += b.vx * dt; b.y += b.vy * dt; b.life -= dt
+    // GR2-M2 2026-09-30: inside the veil a thrown thing flies at T.grVeilThrown of its speed (grVeilK; 1 without the veil, so the line below is as it was); its flight clock is not slowed (build_GR2_2026-09-30)
+    const vk = grVeilK(b, T.grVeilThrown)
+    b.x += b.vx * dt * vk; b.y += b.vy * dt * vk; b.life -= dt
     b.ang += dt * 9
 
     // The green belt eats it. Mangroves and dunes exist to absorb what is thrown.
@@ -6022,6 +6071,63 @@ function grArcPts(x0, y0, x1, y1) {
   for (let i = 1; i < n; i++) { const o = (Math.random() * 2 - 1) * amp; pts.push(x0 + dx * i / n + nx * o, y0 + dy * i / n + ny * o) }
   pts.push(x1, y1)
   return pts
+}
+
+// GR2-M2 2026-09-30: the slowing veil (PLAN_GR2 W2, ruling RW2): the factor on a thing's own movement this frame - k while the veil is held and its centre is within T.grVeilR px of yours, 1 otherwise. Callers: a body's step (T.grVeilBody, on its own speed only - its knock is not slowed), the compound event (updateBoss, T.grVeilBody, on its walk, strafe and charge - not its knock, not a timer, so its strikes come when they would), a thrown thing (updateEbullets, T.grVeilThrown, on its flight - its flight clock is not slowed). Multiplied on top of any other slowing (RW2), e.g. a body's speed already carrying P.hazSlow. Your shots (`bullets`) and events are never passed here (G4). During a hold nothing moves, so it has nothing to slow (build_GR2_2026-09-30)
+const grVeilK = (o, k) => grand.veil && dist2(o, P) < T.grVeilR * T.grVeilR ? k : 1
+
+// GR2-M3 2026-09-30: the aftershock (PLAN_GR2 W3 as ruling RW3 reads it). Called from hurtEnemy when a burst (grAsBurst = its damage) kills body e. Unless the line already holds T.grAsDepth jumps (grAsLine, RW3's own depth counter - not the Residual guard), lightning jumps from e to the nearest hazard - a body or the compound event - within T.grAsR px, for T.grAsShare of that burst's damage (the burst's damage already carries P.dmgMul, so none is added: G7). At most T.grAsPerSec jumps start in any second of run time; a jump that finds nothing in reach is not counted. If the jump kills a body and the line is still short of T.grAsDepth, one Fragmenting-sized burst (radius SHOT().burstR, the same damage as the burst that set this jump off) goes off where it fell, in the aftershock's colour with Fragmenting's stroke form, whatever the first burst was (RW3); its kills may set off the line's next jump. That kill's own Residual burst is held back (inResidual) so the kill sets off one burst, not two; the last jump's kill is billed with the Residual guard as it stands, so it bursts as any kill does and starts nothing more. A jump starts no Warning chain, Relay or split (G6); it is not counted in beltBlocked (G5). The arc is drawn in the chain lightning's style (fx arc, within T.fxCap) in the aftershock's own colour; the burst's ring is pushed only under T.fxCap (explode, opts.capFx) (build_GR2_2026-09-30)
+function grAftershock(e, dmg) {
+  if (grAsLine >= T.grAsDepth) return
+  let tgt = null, bd = T.grAsR * T.grAsR
+  for (const o of enemies) {
+    if (o.gone || o === e) continue
+    const d = (o.x - e.x) ** 2 + (o.y - e.y) ** 2
+    if (d <= bd) { bd = d; tgt = o }
+  }
+  if (boss && boss.state !== 'arrive' && (boss.x - e.x) ** 2 + (boss.y - e.y) ** 2 <= bd) tgt = boss
+  if (!tgt) return
+  while (grAsTimes.length && grAsTimes[0] <= t - 1) grAsTimes.shift()
+  if (grAsTimes.length >= T.grAsPerSec) return
+  grAsTimes.push(t)
+  const g = GRANDS.find(x => x.id === 'aftershock'), tx = tgt.x, ty = tgt.y, ad = dmg * T.grAsShare
+  if (fx.length <= T.fxCap) fx.push({ arc: true, pts: grArcPts(e.x, e.y, tx, ty), x: tx, y: ty, vx: 0, vy: 0,
+                                      life: T.grAsArcT, max: T.grAsArcT, col: g.col, core: g.arc })
+  AU.play('ember')
+  const burstOuter = grAsBurst, resOuter = inResidual
+  grAsBurst = null; grAsLine++
+  const more = grAsLine < T.grAsDepth
+  if (more) inResidual = true
+  if (tgt === boss) hurtBoss(ad, 0, 0)
+  else hurtEnemy(tgt, ad, 0, 0)
+  inResidual = resOuter
+  if (more && tgt !== boss && tgt.gone && tgt.hp <= 0) {
+    const r = SHOT().burstR
+    if (r) explode(tx, ty, r, dmg, g.col, { ramp: 'gold', style: 'frag', capFx: true })
+  }
+  grAsLine--; grAsBurst = burstOuter
+}
+
+// GR2-M4 2026-09-30: the patrol orbit (PLAN_GR2 W4, rulings RW1, RW4). Called every step, a hold included (the pieces are yours). T.grOrbitN pieces on a circle T.grOrbitR px out from you, one turn every T.grOrbitTurn s, evenly spaced. A piece touching a hazard (centre within T.grOrbitPieceR + its radius) hits it for T.grOrbitDps x T.grOrbitCd x P.dmgMul (no eff(): RW4) at most once every T.grOrbitCd s per hazard (its own clock, `orbT`, on the run clock), so 30 x P.dmgMul a second while it touches; the hit carries a knock of T.grOrbitPush straight out from you (hurtEnemy; the compound event through hurtBoss's own knockback, RW1). A heat zone is skipped: neither hit nor pushed (GR2-FIX 2026-09-30: was "A heat zone is hit like any body and never moves (moveHazard), so it is hurt, not pushed (RW1)." - ADJUDICATION_GR2 F3 re-ruled RW1, as the field aura and Practiced evacuation skip zones; build_GR2_2026-09-30 fix round). A held body keeps the knock without moving (the step's hold branch), G3. Thrown things are not touched (build_GR2_2026-09-30)
+function grOrbit(dt) {
+  if (!grand.orbit) return
+  grOrbAng = (grOrbAng + dt * TAU / T.grOrbitTurn) % TAU
+  const hit = T.grOrbitDps * T.grOrbitCd * P.dmgMul, R = T.grOrbitR, pr = T.grOrbitPieceR
+  const pcs = []
+  for (let k = 0; k < T.grOrbitN; k++) { const a = grOrbAng + k * TAU / T.grOrbitN; pcs.push(P.x + Math.cos(a) * R, P.y + Math.sin(a) * R) }
+  const touch = o => { for (let k = 0; k < pcs.length; k += 2) if ((o.x - pcs[k]) ** 2 + (o.y - pcs[k + 1]) ** 2 < (pr + o.r) ** 2) return true; return false }
+  for (const e of enemies.slice()) {   // a copy: hurtEnemy splices the dead out
+    if (e.behaviour === 'zone') continue   // GR2-FIX 2026-09-30: heat zones skipped entirely - no hit, no knock, no clock (ADJUDICATION_GR2 F3, RW1 re-ruled), the same test the field aura (B1) and Practiced evacuation use (build_GR2_2026-09-30 fix round)
+    if (e.gone || (e.orbT || 0) > t || !touch(e)) continue
+    e.orbT = t + T.grOrbitCd
+    const a = Math.atan2(e.y - P.y, e.x - P.x)
+    hurtEnemy(e, hit, Math.cos(a) * T.grOrbitPush, Math.sin(a) * T.grOrbitPush)
+  }
+  if (boss && boss.state !== 'arrive' && (boss.orbT || 0) <= t && touch(boss)) {
+    boss.orbT = t + T.grOrbitCd
+    const a = Math.atan2(boss.y - P.y, boss.x - P.x)
+    hurtBoss(hit, Math.cos(a) * T.grOrbitPush, Math.sin(a) * T.grOrbitPush)
+  }
 }
 
 // ---------------------------------------------------------------- level up
@@ -6209,11 +6315,12 @@ function offerCards(fromLevelUp) {
   const fuR = tr ? null : FUSIONS.find(f => !fused[f.id] && f.need())
   const syR = tr ? null : availableSynergy()
   // GR-M1 2026-09-29: a ready grand programme joins the special slot under the SY rule above (PLAN_GR X1): the ready candidates in the order grand, compound, synergy; the first takes the slot, unless it had the slot at the last opening and was not taken (specLast), in which case the next one in that order does (round to the first after the last), so no one of the three blocks the others for good. With only a compound programme and a synergy ready this gives what the SY lines it replaces gave (`fu` = the programme unless specLast is that programme and a synergy is ready; `sy` otherwise): the programme, unless it was declined last time. At the cap (T.grandCap) grandReady is false for all, and none is offered. A trade-off (`tr`) still shuts out all three and leaves specLast as it was (build_GR_2026-09-29)
-  const grR = tr ? null : (GRANDS.find(grandReady) || null)
-  const cand = [grR && 'gr:' + grR.id, fuR && 'fu:' + fuR.id, syR && 'sy'].filter(Boolean)
+  // GR2-FIX 2026-09-30: every ready grand programme is a candidate, not only the first (ADJUDICATION_GR2 F1): the candidates are now the ready grand programmes in GRANDS order, then the compound programme, then the synergy, and the rule above is unchanged - the one after the card that had the slot last time and was not taken, round to the first. So a declined grand programme passes the slot to the next ready one at the next opening, and after the last ready one to the compound programme or the synergy; with one grand programme ready or none, the list and the pick are what they were. A taken card is no longer in the list, so the next opening starts from the first, as before. The cap still holds: grandReady is false for all at T.grandCap (build_GR2_2026-09-30 fix round)
+  const grR = tr ? [] : GRANDS.filter(grandReady)
+  const cand = [...grR.map(g => 'gr:' + g.id), fuR && 'fu:' + fuR.id, syR && 'sy'].filter(Boolean)
   const last = cand.indexOf(specLast)
   const pickK = cand.length ? cand[last >= 0 && cand.length > 1 ? (last + 1) % cand.length : 0] : null
-  const gr = pickK && pickK === 'gr:' + (grR && grR.id) ? grR : null
+  const gr = grR.find(g => pickK === 'gr:' + g.id) || null   // GR2-FIX 2026-09-30: the picked one of the ready grand programmes (F1) (build_GR2_2026-09-30 fix round)
   const fu = gr ? null : (pickK === 'fu:' + (fuR && fuR.id) ? fuR : null)
   const sy = (gr || fu) ? null : syR
   if (gr) specLast = 'gr:' + gr.id
@@ -6447,7 +6554,8 @@ const closeCards = () => {
       // SY-FIX 2026-09-29: the ring obeys the effects cap as emit() does - it is pushed only while fx is not past T.fxCap (ADJUDICATION_SY F15); the shake below is not an effect and plays either way (build_SY_2026-09-29 fix round)
       // GR-M6 2026-09-29: the ring about twice the radius (max 240 -> 480; its line width doubles in RING_STYLE.syn) and brighter - it stays at full strength longer (life 0.6 -> 0.9: the ring pass draws at full alpha while life > 0.5) and gets a light core (draw); and one short tint of the screen in the same colour (grTint, T.grTintT s from alpha T.grTintA to 0, once) (PLAN_GR X6) (build_GR_2026-09-29)
       // CB-M4 2026-09-30: the ring's radius scales to the screen, so it stays inside it on a phone (PLAN_CB C4, the GR Builder's carried (c)): at most 480, and at most half the shorter side of the view less 16 px (half the ring's drawn stroke, (12 + 3) / 2, plus the shake of 8 below, rounded up) - on a 375 x 812 phone 171.5, on a 1280 x 720 screen 344 (build_CB_2026-09-30)
-      if (fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, x: P.x, y: P.y, r: 12, max: Math.min(480, Math.min(W, H) / 2 - 16), life: 0.9, col: synBurst, style: 'syn', hit: new Set() })
+      // GR2-M5 2026-09-30: `follow: true` - the ring follows you for its short life (step's ring loop), so moving does not carry it off the screen (ADJUDICATION_CB H2) (build_GR2_2026-09-30)
+      if (fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, follow: true, x: P.x, y: P.y, r: 12, max: Math.min(480, Math.min(W, H) / 2 - 16), life: 0.9, col: synBurst, style: 'syn', hit: new Set() })
       shake = Math.max(shake, 8)
       grTint = T.grTintT; grTintCol = synBurst
     }
@@ -6889,6 +6997,15 @@ function mergeMoment(ids) {
   for (const id of ids) cbFresh[id] = true
   syncHud()
   const box = $('weapons')
+  // GR2-M5 2026-09-30: when the list is cut (on a phone, at 38vh) it is scrolled so the new synergy rows show, with room for their glow (20 px, the list's padding): the last new row's bottom first, then, if the list can still show it, the first new row's top. The list is overflow:hidden, so only this moves it; its scroll stays where it is until the next synergy (ADJUDICATION_CB H3) (build_GR2_2026-09-30)
+  const nRows = ids.map(id => box.querySelector(`[data-sy="${id}"]`)).filter(r => r && typeof r.offsetTop === 'number')
+  if (nRows.length && box.scrollHeight > box.clientHeight) {
+    const lo = nRows[nRows.length - 1], top = Math.min(...nRows.map(r => r.offsetTop)) - 20
+    let st = box.scrollTop
+    if (lo.offsetTop + lo.offsetHeight + 20 > st + box.clientHeight) st = lo.offsetTop + lo.offsetHeight + 20 - box.clientHeight
+    if (top < st && lo.offsetTop + lo.offsetHeight + 20 - top <= box.clientHeight) st = top
+    box.scrollTop = Math.max(0, st)
+  }
   const rect = x => x && typeof x.getBoundingClientRect === 'function' ? x.getBoundingClientRect() : null
   const br = rect(box)
   const shown = r => r && br && r.height > 0 && r.top >= br.top - 1 && r.bottom <= br.bottom + 1
@@ -7110,6 +7227,7 @@ function step(dt) {
   fireWeapons(dt)
   updateRing(dt)
   updateFusions(dt)
+  grOrbit(dt)   // GR2-M4 2026-09-30: the patrol orbit, with your other weapons - it runs during a hold too (build_GR2_2026-09-30)
   enemyFire(dt)
 
   // ---- enemies: home, separate, touch
@@ -7124,7 +7242,10 @@ function step(dt) {
     if (holdOn()) { e.kx *= knDecay; e.ky *= knDecay; continue }
     // B10 2026-09-22: the per-body clock (seconds alive) advances here, where every body steps (build_B_2026-09-22)
     e.age += dt
-    moveHazard(e, dt)
+    // GR2-M2 2026-09-30: inside the veil a body moves at T.grVeilBody of its own speed this step (grVeilK): its speed is scaled for the move and put back as it was, so moveHazard is unchanged and a knock is not slowed; a heat zone does not move and is skipped (build_GR2_2026-09-30)
+    const vk = e.behaviour === 'zone' ? 1 : grVeilK(e, T.grVeilBody)
+    if (vk !== 1) { const s0 = e.spd; e.spd = s0 * vk; moveHazard(e, dt); e.spd = s0 }
+    else moveHazard(e, dt)
     e.kx *= knDecay; e.ky *= knDecay
     // A hazard that came for a lifeline spends itself on it: one impact, and it is over.
     // It is an event reaching a thing, not a siege.
@@ -7354,6 +7475,7 @@ function step(dt) {
   // ---- shockwave rings
   for (const f of fx) {
     if (!f.ring) continue
+    if (f.follow) { f.x = P.x; f.y = P.y }   // GR2-M5 2026-09-30: the take moment's ring (closeCards, `follow`) stays centred on you as you move, so it stays on screen (ADJUDICATION_CB H2) (build_GR2_2026-09-30)
     f.r += (f.max - f.r) * Math.min(1, dt * 9)
     if (f.noHit) continue   // a pulse that pushes rather than strikes draws, but never bills
     // BF3 2026-09-23: skips a body already gone - over a copy, a body a Residual burst (or this ring's own Fragmenting burst) killed earlier in this loop was billed again (a second kill and a second mote) (build_B_2026-09-22)
@@ -8395,6 +8517,20 @@ function draw() {
     ctx.globalAlpha = 1; ctx.setLineDash([])
   }
 
+  // GR2-M2 2026-09-30: the slowing veil (PLAN_GR2 W2) - a soft ring at its edge, T.grVeilR px out: a wide faint band in its colour, then its edge as a rippling line (a gentle wave, 9 crests, drifting) over a dark pass so it reads on every ground; under reduced motion the line is a still circle. Its shape, one wide ring around you, is its non-colour mark. Drawn under everything else yours (build_GR2_2026-09-30)
+  if (grand.veil) {
+    const vc = rgbOf(GRANDS.find(g => g.id === 'veil').col), R = T.grVeilR, n = SMALL ? 48 : 96
+    ctx.strokeStyle = `rgba(${vc},.10)`; ctx.lineWidth = 16
+    ctx.beginPath(); ctx.arc(P.x, P.y, R, 0, TAU); ctx.stroke()
+    ctx.beginPath()
+    for (let i = 0; i <= n; i++) {
+      const a = i / n * TAU, r = R + (reduceMotion ? 0 : 3 * Math.sin(a * 9 + t * 2.4))
+      if (i) ctx.lineTo(P.x + Math.cos(a) * r, P.y + Math.sin(a) * r); else ctx.moveTo(P.x + Math.cos(a) * r, P.y + Math.sin(a) * r)
+    }
+    ctx.strokeStyle = 'rgba(8,10,13,.35)'; ctx.lineWidth = 4; ctx.stroke()
+    ctx.strokeStyle = `rgba(${vc},.7)`; ctx.lineWidth = 2; ctx.stroke()
+  }
+
   // field aura
   if (lv.field > 0) {
     const rad = (85 + lv.field * 18) * (P.synField || 1)
@@ -8618,6 +8754,25 @@ function draw() {
     ctx.fillStyle = '#8ef6c6'
     for (const s of ringPoints()) {
       ctx.beginPath(); ctx.arc(s.x, s.y, fused.buffer ? 8 : 7, 0, TAU); ctx.fill()
+    }
+  }
+
+  // GR2-M4 2026-09-30: the patrol orbit (PLAN_GR2 W4) - each piece a solid hexagon (T.grOrbitPieceR across its corners, turned with the orbit) in the programme's colour with a dark 2 px edge, so it reads on every ground and apart from the round belt shards and the synergy diamonds; behind each a short trail along the circle (a quarter of the gap to the next piece, fading), none under reduced motion (build_GR2_2026-09-30)
+  if (grand.orbit) {
+    const oc = GRANDS.find(g => g.id === 'orbit').col, R = T.grOrbitR, s = T.grOrbitPieceR
+    for (let k = 0; k < T.grOrbitN; k++) {
+      const a = grOrbAng + k * TAU / T.grOrbitN, x = P.x + Math.cos(a) * R, y = P.y + Math.sin(a) * R
+      if (!reduceMotion) {
+        const len = TAU / T.grOrbitN / 4
+        for (let j = 0; j < 3; j++) {
+          ctx.strokeStyle = `rgba(${rgbOf(oc)},${(.34 - j * .1).toFixed(2)})`; ctx.lineWidth = SMALL ? 5 : 6
+          ctx.beginPath(); ctx.arc(P.x, P.y, R, a - len * (j + 1) / 3, a - len * j / 3); ctx.stroke()
+        }
+      }
+      ctx.fillStyle = oc; ctx.strokeStyle = 'rgba(8,10,13,.7)'; ctx.lineWidth = 2
+      ctx.beginPath()
+      for (let j = 0; j < 6; j++) { const b = a + j * TAU / 6; if (j) ctx.lineTo(x + Math.cos(b) * s, y + Math.sin(b) * s); else ctx.moveTo(x + Math.cos(b) * s, y + Math.sin(b) * s) }
+      ctx.closePath(); ctx.fill(); ctx.stroke()
     }
   }
 
