@@ -1144,7 +1144,7 @@ const T = {
   // pace 8) for the reason worth remembering: the ramp is not what ends the median run, so
   // stretching it only stretches a part of the curve the player never reaches. Give the player the
   // capacity to get there and the same knob becomes the dominant one.
-  levelHeal: 0.20,                 // the certain reward: capacity back on every level
+  // BS-M4 2026-09-30: `levelHeal: 0.20` ("the certain reward: capacity back on every level") moved to DIFFS[*].levelHeal, per difficulty and small (PLAN_BS H1; ruling RH6) (build_BS_2026-09-30)
   baseHp: 150,                     // starting capacity - in here so a batch can sweep it
   playerSpeed: 200,
   invuln: 0.42,                    // seconds of grace after a hit
@@ -1205,6 +1205,22 @@ const T = {
   bossHp: 1300, bossHpRamp: 90, bossSpd: 96, bossTouch: 20, bossShot: 9,
   bossShootEvery: 2.2, bossVolley: 7,
   bossChargeEvery: 5.5, bossWind: 0.95, bossChargeTime: 0.75, bossChargeSpd: 620,
+  // BS-M1 2026-09-30: the compound event becomes a mid-boss (PLAN_BS B1, the user's "0.55배율"): its health and every damage it deals - touch, charge, thrown shots, siege strikes (on you and on a lifeline) - are multiplied by bossMidMul; its clock, arrival and teaching text are unchanged, and the ordinary hazards a swarm calls in are the place's own and keep their own damage (build_BS_2026-09-30)
+  bossMidMul: 0.55,
+  // BS-M2 2026-09-30: elite variants of the ordinary stream (PLAN_BS B2; every number a first guess, tunable after the playtest). From eliteFrom s of run clock (t) a spawn() draw is elite with a chance rising in a straight line from eliteShare0 to eliteShare1 at eliteShareAt s, then held there; every body of an elite draw is elite (a quake's trio, a flood's whole front). An elite is eliteSize x the size, eliteHp x the health, eliteDmg x the damage (touch, its thrown shots, a heat zone's heat) and eliteXp x the XP. Traits: a chaser dashes at eliteDashMul x its speed for eliteDashT s every eliteDashEvery s of its own age; an orbiting storm splits into two ordinary ones on death; a front is eliteFrontExtra bodies wider on each side; a heat zone pulses out to elitePulseMul x its radius over elitePulseT s every elitePulseEvery s. No text states any of these numbers (strings_BS.md S-B3: comparatives only) (build_BS_2026-09-30)
+  eliteFrom: 90, eliteShare0: 0.04, eliteShareAt: 240, eliteShare1: 0.10,
+  // UXBS-FIX 2026-09-30: F4 - eliteDmg now also multiplies an elite's damage to a lifeline: its impact (step) and its wear while it sits on one (updateLifelines); the BS-M2 line above lists touch, thrown shots and heat only (build_BS_2026-09-30 fix round)
+  eliteSize: 1.4, eliteHp: 3, eliteDmg: 1.3, eliteXp: 3,
+  eliteDashEvery: 3, eliteDashT: 0.6, eliteDashMul: 2, eliteFrontExtra: 2,
+  elitePulseEvery: 3.5, elitePulseT: 0.8, elitePulseMul: 1.35,
+  // BS-M3 2026-09-30: the true boss (PLAN_BS B3, rulings RB1-RB7). It arrives once per run at DIFF.tbossAt s of run clock, warned tbossLead s before (not scaled by DIFF.warn, C4); built on the compound-event engine with its own numbers: tbossHpMul x the compound event's health before B1, tbossSize x its size, tbossDmg x its damage before B1, tbossLife s on the field before it withdraws (the 90 s of B3). At tbossPhase1 and tbossPhase2 of its health it calls a surge of tbossSurgeN ordinary hazards (hazardSurge) and adds an attack: a ring of tbRingN shots every tbRingEvery s at tbRingSpd px/s (60%), then a lane (25%) - a band tbLaneW px wide and tbLaneLen px long from its centre, shown for tbLaneWarn s where it will start, then swept through tbLaneArc radians in tbLaneSweep s, every tbLaneEvery s, hitting you for tbLaneDmg (with the ramp and DIFF.dmg, as its touch is). Beaten, it pays a full repair, tbossXpN motes of tbossXpV XP and tbossPay recovery budget (times DIFF.pay). The texts state none of these numbers ("a few seconds", "all your capacity", ${bonus} printed from the live value) (build_BS_2026-09-30)
+  tbossLead: 4, tbossHpMul: 2.5, tbossSize: 1.5, tbossDmg: 1, tbossLife: 90,
+  tbossPhase1: 0.60, tbossPhase2: 0.25, tbossSurgeN: 14,
+  tbRingEvery: 2.8, tbRingN: 14, tbRingSpd: 170,
+  tbLaneEvery: 6.5, tbLaneWarn: 1.1, tbLaneSweep: 2.2, tbLaneArc: 1.6, tbLaneLen: 620, tbLaneW: 46, tbLaneDmg: 16,
+  tbossXpN: 36, tbossXpV: 6, tbossPay: 8,
+  // BS-M4 2026-09-30: capacity matters (PLAN_BS H1-H4, the user's words there; rulings RH1-RH6). The level-up repair moved to DIFFS[*].levelHeal (H1); these are the rewards: a real save repairs saveHeal of capacity (H2), a synergy card synHeal (H4, was 0.25), absorbing the mid-boss midBossHeal (H4 as updated, "중간보스는 10%주고"; was 0.25). The 3-save hold, the compound and grand programme cards and the true boss fill capacity to full, whatever P.healMul is (healFull, ruling RH1). The texts state 30%, 50% and "all", so a change here changes that text too (build_BS_2026-09-30)
+  saveHeal: 0.30, synHeal: 0.50, midBossHeal: 0.10,
 
   // A run is divided into seasons. Nothing about the ramp pauses when one is quiet — that
   // is the point of the quiet one.
@@ -3082,6 +3098,7 @@ function applyMastery() {
 // ---------------------------------------------------------------- state
 let P, enemies, bullets, ebullets, motes, fx, nums, keys, t, spawnAcc, kills, paused, over, shake, waveIx
 let hazardTally = {}, quizRight = 0, quizWrong = 0     // this run's debrief tally
+let eliteTally = {}, eliteSeen = false   // BS-M2 2026-09-30: elites killed this run, per kind (the report's "N of them were elite."), and whether the first-elite line has shown this run (build_BS_2026-09-30)
 let beltBlocked = 0, emberFires = 0
 let quizStreak = 0, quizBestStreak = 0                 // quizStreak is CARRIED in from the last debrief and fixed for the run
 const syn = {}       // synergy id -> unlocked
@@ -3133,6 +3150,7 @@ function reset(placeId) {
         dodgeT: 0, dodgeGo: 0, dodgeX: 0, dodgeY: 0 }
   enemies = []; bullets = []; ebullets = []; motes = []; fx = []; nums = []
   hazardTally = {}; quizRight = 0; quizWrong = 0; beltBlocked = 0; emberFires = 0
+  eliteTally = {}; eliteSeen = false   // BS-M2 2026-09-30 (build_BS_2026-09-30)
   quizStreak = learnStore().streak; quizBestStreak = 0   // the streak the last debrief left is the tier you fire with
   keys = {}; t = 0; spawnAcc = 0; kills = 0; paused = false; over = false; shake = 0; waveIx = 0
   wetStack = 1; seasonLog = []; seasonIx = 0; prepAcc = 0; bannerT = 0
@@ -3141,6 +3159,7 @@ function reset(placeId) {
   picked = []; worksDone = []; worksMissed = []
   events = []; eventAcc = 0; eventsSeen = []; eventsHit = 0; warnBought = 0
   boss = null; bossAcc = 0; bossesKilled = 0; bossesSurvived = 0; bossSeen = []
+  tboss = null; tbossState = null; tbossWarned = false; tbossBonus = 0   // BS-M3 2026-09-30: the true boss does not cross into the next run (build_BS_2026-09-30)
   for (const k in UPGRADES) lv[k] = 0
   for (const k in mod) delete mod[k]
   for (const k in syn) delete syn[k]
@@ -3164,6 +3183,7 @@ function reset(placeId) {
   // SY-FIX 2026-09-29: nor do a season kept for a hold's end, the counter row's first save, or the special slot's turn (F2, F11, F7) (build_SY_2026-09-29 fix round)
   seasonPend = null; seasonRest = 0; secSeen = false; specLast = null
   synMerge.length = 0; for (const k in cbFresh) delete cbFresh[k]   // CB-M3 2026-09-30: no merge moment crosses into the next run (build_CB_2026-09-30)
+  uxMergeNew.length = 0; uxMergeQ.length = 0; uxMergeCur = null   // UX-M3 2026-09-30: nor does a moment in the middle of the screen, playing, waiting or not yet started, or the banner line one holds (build_UX_2026-09-30)
   P.fuseHaste = 0
   lv.pulse = 1
   // The dial pays out the same way the place does: what the pressure built (more to
@@ -3310,12 +3330,15 @@ const DIFFS = {
     // takes the same ~1.5x every other mode took: 3:35 before, 5:09 after, still the longest mode.
     ramp: 0.60, dmg: 0.60, spawn: 0.75, warn: 1.9, len: 1.0, hard: 11, pay: 1.0,
     fail: 99, llDmg: 0.5,
+    // BS-M4 2026-09-30: levelHeal - capacity back per level, before any choice (PLAN_BS H1: Learning 8%, Steady 5%, Pressed 3%, Exposed 2%; was T.levelHeal 0.20 on every difficulty). BS-M3: tbossAt - the true boss's arrival on the run clock (PLAN_BS B3, the user's "4분, 3분30초, 3분, 2분30초" read in the order Learning, Steady, Pressed, Exposed) (build_BS_2026-09-30)
+    levelHeal: 0.08, tbossAt: 240,
   },
   steady: {
     name: 'Steady', short: 'Steady', col: '#57c7ff',
     blurb: 'The tuned run, and a longer one.',
     ramp: 1, dmg: 1, spawn: 1, warn: 1, len: 1.25, pay: 1.3,
     fail: 3, llDmg: 1,
+    levelHeal: 0.05, tbossAt: 210,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
   },
   pressed: {
     name: 'Pressed', short: 'Pressed', col: '#ffd166',
@@ -3324,6 +3347,7 @@ const DIFFS = {
     // GP-M2 2026-09-29: ramp 1.35 -> 1.5, dmg 1.20 -> 1.5, spawn 1.15 -> 1.35, warn 0.78 -> 0.7, len 1.55 -> 1.6, llDmg 1.2 -> 1.25 (the user's list, PLAN_GP G3); pay 1.7 and fail 3 kept (build_GP_2026-09-29)
     ramp: 1.5, dmg: 1.5, spawn: 1.35, warn: 0.7, len: 1.6, pay: 1.7,
     fail: 3, llDmg: 1.25,
+    levelHeal: 0.03, tbossAt: 180,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
   },
   exposed: {
     name: 'Exposed', short: 'Exposed', col: '#ff4d5e',
@@ -3332,6 +3356,7 @@ const DIFFS = {
     // GP-M2 2026-09-29: ramp 1.75 -> 2, dmg 1.45 -> 2, spawn 1.30 -> 2, warn 0.58 -> 0.5, len 1.9 -> 2, llDmg 1.4 -> 1.5 (the user's list, PLAN_GP G3); pay 2.2 and fail 2 kept (build_GP_2026-09-29)
     ramp: 2, dmg: 2, spawn: 2, warn: 0.5, len: 2, pay: 2.2,
     fail: 2, llDmg: 1.5,
+    levelHeal: 0.02, tbossAt: 150,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
   },
 }
 const DIFF_IDS = Object.keys(DIFFS)
@@ -3368,7 +3393,8 @@ const ONBOARD_COPY = {
   // P6-B2 2026-09-25: F1 (a) - a right answer's share is now banked when it is shown (bankShare), not by releaseFunds at finish(); the words of S3.4 and S4.6 stay true, and "Only the right answers you already gave keep their share" now also holds for leaving by the end buttons (build_P6_2026-09-25)
   'S4.6': { title: 'Questions before the report', body: 'Right answers keep their budget share and grow your streak. Wrong answers lose both. Keep a streak of two or more to power up your next run. Skip ends all the questions left. Only the right answers you already gave keep their share, and your streak stays.', ok: 'Got it' },
   // SY-M1 2026-09-29: S-Y1 Y1-f verbatim (ruling RS8) - raised at the first save (llSecure); "65%" is T.serviceDipAt and "3" / "3s" are T.holdAt / T.holdT (build_SY_2026-09-29)
-  'S4.7': { title: 'Secure 3 to stop hazards', body: 'You repaired a lifeline to full after it fell to 65% or less. That secures it. Do this 3 times without losing a lifeline, and hazards stop for 3s. Losing one sets the count back to 0.', ok: 'Got it' },
+  // BS-M5 2026-09-30: S4.7's body now names both rewards, strings_BS_hp.md S-H2 (b) Option B verbatim (ruling RH1); it read "... That secures it. Do this 3 times without losing a lifeline, and hazards stop for 3s. Losing one ..." (build_BS_2026-09-30)
+  'S4.7': { title: 'Secure 3 to stop hazards', body: 'You repaired a lifeline to full after it fell to 65% or less. That secures it and gives you capacity back. Do this 3 times without losing a lifeline: hazards stop for 3s, and all your capacity comes back. Losing one sets the count back to 0.', ok: 'Got it' },
 }
 
 // ---- the store: one new key, read and written in the same pattern as learnStore ----------------
@@ -3667,6 +3693,19 @@ const PLAIN = {
   // CORRECTED 2026-09-23: the Missouri development figure removed, as in the English (pre-deploy check F1); the floodplain sentence now given as Mallea's view in two plain sentences, "Mallea writes that ..." and "Mallea also writes that ...", resting on Mallea's "However, this trend quickly reversed." (capture P03 L382), no figure; game half unchanged; tag unchanged but the re-read date (pre-deploy text, predeploy_2026-09-23)
   'TRD.levee.src': 'In this game, hard defences cut every hit by 40%. But a flood sitting on a lifeline wears it down twice as fast. Mallea writes that after the 1993 Midwest floods, some communities were moved off the floodplain. Mallea also writes that this trend quickly reversed. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis. Re-read 2026-09-23.)',
   'BOSS.passes.line': 'It was not absorbed this time. You lasted until it passed.',
+  // BS-M3 2026-09-30: the true boss's Learning lines, strings_BS.md S-B1 (c)-(g) verbatim; its warning and the "still on the field" row have no Learning variant (the same text) (build_BS_2026-09-30)
+  'BOSS.true.arrive': 'Several hazards, arriving together. This is the boss. Beat it, or last until it passes.',
+  'BOSS.true.phase1': 'The boss called them in. Now it also shoots in a ring around itself.',
+  'BOSS.true.phase2': 'The boss called them in. Now it also sweeps a lane across the ground. Stay out of it.',
+  // UXBS-FIX 2026-09-30: F3 - 'BOSS.true.down', 'BOSS.true.rep.down' and (the same claim, swept) 'BOSS.true.rep.passed' say the boss makes the recovery budget bigger - its SIZE, runFunds in die() - not that you got it; right answers release it. Were: "You beat it. You get all your capacity back, a lot of XP and extra recovery budget." / "You beat it. You got all your capacity back, a lot of XP and <b>${bonus}</b> more recovery budget." / "You did not beat it, but you lasted until it passed. Beating it gives all your capacity back, a lot of XP and extra recovery budget." (fix_record_UXBS.md F3) (build_BS_2026-09-30 fix round)
+  'BOSS.true.down': 'You beat it. You get all your capacity back and a lot of XP. Your recovery budget gets bigger.',
+  'BOSS.true.passes': 'You did not beat it, but you lasted until it passed. It will not come back this run.',
+  'BOSS.true.rep.down': bonus => `You beat it. You got all your capacity back and a lot of XP. It added <b>${bonus}</b> to the size of your recovery budget.`,
+  'BOSS.true.rep.passed': 'You did not beat it, but you lasted until it passed. Beating it gives all your capacity back and a lot of XP. Your recovery budget also gets bigger.',
+  // BS-M2 2026-09-30: the first-elite line, strings_BS.md S-B3 (b) verbatim (build_BS_2026-09-30)
+  'ELITE.first': 'Hazards with a crown are bigger and harder to stop. They hit harder. They give more XP.',
+  // BS-M4 2026-09-30: the secured line with a real save's repair, strings_BS_hp.md S-H2 (a) verbatim (ruling RH2) (build_BS_2026-09-30)
+  'LL.secured': 'You get 30% of your capacity back. It leaves the map for 15s and comes back somewhere new. Its bonus stays.',
   // LL-M2 2026-09-25: the rebuild card's cost, S-L2's Learning text verbatim (strings_LL.md); TRD.rebuild.desc is absent on purpose - the desc falls through to the Steady line (build_LL_2026-09-25)
   'TRD.rebuild.cost': 'The most capacity you can have drops by 25%. This lasts until the run ends.',
 }
@@ -3731,17 +3770,21 @@ const glossWithSrc = (key, face, src) => {
 // ---- the Hospital-lost heal lines (S5 row 7.32), every difficulty ---------------------------------
 // CORRECTED 2026-09-23: comment made true - TRD.relief.desc now has a PLAIN entry; the Hospital-lost line still wins because healLine() is applied to what say() returns (section C round 2, section_C_2026-09-22)
 // Once the Hospital is lost every heal() runs at P.healMul 0.3, so a card that says 25% repairs 7.5%.
+// BS-M5 2026-09-30: the example above predates BS - a synergy card now says 50% and repairs 15%; a full repair (healFull) is not a heal() and fills capacity whatever healMul is (ruling RH1), so row 32b prints the card's own line; comment only (build_BS_2026-09-30)
 // These print the real figure while that holds; otherwise the card keeps its current words. 7.32d (the
 // level-up heal) has no text. On Learning the relief pickup and the relief trade-off have no plain
 // Hospital-lost wording in the copy, so they show these same lines. TRD.relief.desc has had a PLAIN entry
 // since section C (2026-09-23), but healLine() is applied to what say() returns, so this line still wins.
 const HOSPITAL_LOST = {
-  'S5.7.32a': 'Repairs 7.5% of capacity',
-  'S5.7.32b': 'Repairs 4.5% of capacity',
+  // BS-M5 2026-09-30: 32a 'Repairs 7.5% of capacity' -> 15% (the synergy card now repairs 50%, x healMul 0.3; strings_BS_hp.md S-H2 (c)); 32b 'Repairs 4.5% of capacity' -> 'Repairs all your capacity' (the programme cards now fill capacity whatever healMul is - ruling RH1, Option B: the row prints the card's own line) (build_BS_2026-09-30)
+  'S5.7.32a': 'Repairs 15% of capacity',
+  'S5.7.32b': 'Repairs all your capacity',
   'S5.7.32c': '5.1% of capacity back.',
   // CORRECTED 2026-09-23: was "Help arrives after each event ... on every level" - the relief heal runs on level-up; 9% = 30% x healMul 0.3 (section C, section_C_2026-09-22)
   'S5.7.32e': 'Help arrives each time you level up: 9% of capacity back.',
   'S5.7.32f': 'Repair 4.5% of capacity, and raise its ceiling by 8.',
+  // BS-M4 2026-09-30: the secured line after a Hospital loss - a real save's 30% x healMul 0.3 = 9% (strings_BS_hp.md S-H2 (a); ruling RH2) (build_BS_2026-09-30)
+  'S5.7.32g': '9% of capacity back. It leaves the map for 15s and comes back somewhere new. Its bonus stays.',
 }
 const healLine = (row, cur) => (P && P.healMul === 0.3) ? HOSPITAL_LOST[row] : cur
 
@@ -4087,7 +4130,8 @@ const LIFELINES = {
   // DX9 2026-09-23: "and the hazards" dropped - no lifeline's old colour was a hazard colour; four were measure or modifier colours, the hospital's #ff8a9b neither (review F13; build_D_2026-09-22/fix/check_x9.js, read from index_before_D.html); comment only (build_D_2026-09-22 fix round)
   hospital: { name: 'Hospital', col: PAL.place.lifeline.hospital, tag: '+regen',
               gain: 'Capacity recovers slowly while it stands.',
-              cost: 'Almost nothing repairs you now.',
+              // BS-M5 2026-09-30: was 'Almost nothing repairs you now.' - false once a full repair fills capacity whatever healMul is (ruling RH1; strings_BS_hp.md S-H1 #5, Option B) (build_BS_2026-09-30)
+              cost: 'Most things that repair you do far less now.',
               on: P => { P.regen = (P.regen || 0) + 0.75 }, off: P => { P.regen -= 0.75 },
               lost: P => { P.healMul = 0.3 },
               note: 'A hospital still working is the difference between an event and a catastrophe. It is also usually the building with the most people in it.',
@@ -4259,6 +4303,17 @@ const BOSSES = {
 }
 
 let boss = null, bossAcc = 0, bossesKilled = 0, bossesSurvived = 0
+// BS-M3 2026-09-30: the true boss (PLAN_BS B3) has its own slot beside the mid-boss's (`boss`), so both can be on the field at once. tbossState is null until it arrives, then 'field', and 'absorbed' or 'passed' when it goes - the run report row's three states (strings_BS.md S-B1 (g)); tbossWarned once its warning has shown (once per run); tbossBonus the recovery budget its defeat added to runFunds, which the report prints. Its tally is its own: it never enters bossSeen, bossesKilled or bossesSurvived (C6) (build_BS_2026-09-30)
+let tboss = null, tbossState = null, tbossWarned = false, tbossBonus = 0
+// BS-M3 2026-09-30: every compound-event body on the field, the mid-boss first; a fresh array whenever one is up, so a caller can hurt (and so remove) one while it walks the list (build_BS_2026-09-30)
+const NO_BOSSES = []
+const bossesUp = () => boss ? (tboss ? [boss, tboss] : [boss]) : tboss ? [tboss] : NO_BOSSES
+// UXBS-FIX 2026-09-30: F1 - a body is live only while it still holds its slot (`boss` or `tboss`). A body that was absorbed or has passed is out of its slot, so a caller still holding it from an earlier bossesUp() list (the shot loop in step, when a chain from the mid-boss has absorbed the true boss) cannot hit it or absorb it a second time: hurtBoss and that loop test this (verify_UXBS F1) (build_BS_2026-09-30 fix round)
+const bossLive = B => !!B && (B === boss || B === tboss)
+// BS-M3 2026-09-30: the true boss's name per place, strings_BS.md S-B1 (a) verbatim (all six places, alpine included - ruling RB4), and its colour, one no compound event uses (B3 "a distinct colour"; a first choice, for the Lead's eye) (build_BS_2026-09-30)
+const TBOSS_NAMES = { delta: 'Storm, Surge and Tide', fault: 'Quake, Fire and Aftershock', wui: 'Firestorm, Embers and Heat',
+                      basin: 'Rain, River and Flash Flood', metro: 'Blackout, Heat and Flood', alpine: 'Rock, Ice and Water' }
+const TBOSS_COL = '#e2409c'
 
 // Which one arrives. Anything not yet seen this run comes first, so a long run meets the
 // place's whole roster before it repeats — the same rule the works sites use.
@@ -4277,7 +4332,7 @@ function spawnBoss(reason) {
   // reward for absorbing one was unreachable. Outlasting is meant to be the baseline, not
   // the only outcome.
   const hpS = (1 + rampTime() / T.bossHpRamp) * DIFF.dmg
-  const hp = T.bossHp * hpS
+  const hp = T.bossHp * hpS * T.bossMidMul   // BS-M1 2026-09-30: x T.bossMidMul (build_BS_2026-09-30)
   boss = {
     kind: PLACE.id, name: K.name, col: K.col, ramp: K.ramp, how: K.how || 'volley', reason,
     x: P.x + Math.cos(a) * d, y: P.y + Math.sin(a) * d,
@@ -4287,16 +4342,21 @@ function spawnBoss(reason) {
     // eight seconds, and at the old 5.5s opener the wind-up-and-dash — the one move that
     // asks the player to do something other than hold a direction — was never seen at all.
     cdShoot: 1.6, cdCharge: 2.6, chargeVx: 0, chargeVy: 0, phase: 0,
-    dmg: T.bossTouch * (1 + rampTime() / T.dmgRamp) * DIFF.dmg,
+    dmg: T.bossTouch * (1 + rampTime() / T.dmgRamp) * DIFF.dmg * T.bossMidMul,   // BS-M1 2026-09-30: x T.bossMidMul (build_BS_2026-09-30)
+    // BS-M1 / BS-M3 2026-09-30: isBoss marks a compound-event body for the code that can strike either one (bossesUp); dmgK multiplies its thrown shots and strikes - T.bossMidMul here, T.tbossDmg on the true boss (build_BS_2026-09-30)
+    isBoss: true, dmgK: T.bossMidMul,
   }
   bossSeen.push(K.name)
   // D12 2026-09-22: shown at once, never queued behind another line - the evacuation pickup's note names this event by these exact words, so the line must be on screen when the event is; the same treatment BF1 gave the "inbound" line (section C round-4 check, F4) (build_D_2026-09-22)
-  flash(K.name, 'Several hazards, arriving together.', K.col, { now: true })
+  flash(K.name, 'Several hazards, arriving together.', K.col, { now: true, evt: true })   // UX-M2 2026-09-30: an event warning - keeps 2.2 s (FLASH_EVT_T) (build_UX_2026-09-30)
   AU.play('bossIn')
   shake = Math.max(shake, 18)
 }
 
 function updateBoss(dt) {
+  tbossClock()   // BS-M3 2026-09-30: the true boss's warning and arrival, on the run clock (build_BS_2026-09-30)
+  // BS-M3 2026-09-30: the mid-boss's clock waits while the true boss is on the field (PLAN_BS B3): it neither counts nor brings one; a mid-boss already on the field stays and runs on (build_BS_2026-09-30)
+  if (!tboss) {
   // the clock
   bossAcc += dt
   // Same shape as the event gate, and it was written wrong here for the same reason: the
@@ -4308,8 +4368,14 @@ function updateBoss(dt) {
     const due = bossSeen.length === 0 ? t >= T.bossFirst : bossAcc >= T.bossEvery
     if (due) { bossAcc = 0; spawnBoss('clock') }
   }
-  if (!boss) return
-  const B = boss
+  }
+  // BS-M3 2026-09-30: each body on the field runs the engine below, the mid-boss first; the true boss's only if the mid-boss's step did not end the run (build_BS_2026-09-30)
+  if (boss) bossTick(boss, dt)
+  if (tboss && !over) bossTick(tboss, dt)
+}
+
+// BS-M3 2026-09-30: the compound-event engine, for one body B (the mid-boss or the true boss); it was the rest of updateBoss, for `boss`. Unchanged but for the marked lines (build_BS_2026-09-30)
+function bossTick(B, dt) {
   B.flash = Math.max(0, B.flash - dt)
   // BF4 2026-09-23: the held beam's per-boss cooldown counts down here, with the boss's other timers and in the enemies' beamCd idiom - fireBeam set it to 0.2 and nothing lowered it, so the beam billed a boss once per boss (build_B_2026-09-22)
   B.beamCd = Math.max(0, (B.beamCd || 0) - dt)
@@ -4331,6 +4397,7 @@ function updateBoss(dt) {
   }
 
   B.life -= dt
+  if (B.life <= 0 && B.tb) return tbossPass(B)   // BS-M3 2026-09-30: the true boss withdraws on its own (build_BS_2026-09-30)
   if (B.life <= 0) {
     // it passes. That is what events do, and not killing it is not a loss.
     // C0 2026-09-23: the sub-line goes through say() under BOSS.passes.line (section C plumbing) (build_B_2026-09-22)
@@ -4376,7 +4443,7 @@ function updateBoss(dt) {
       if (ebullets.length >= T.ebulletCap) return
       ebullets.push({ x: B.x + Math.cos(a) * B.r, y: B.y + Math.sin(a) * B.r,
                       vx: Math.cos(a) * spd, vy: Math.sin(a) * spd, r: r || 7,
-                      dmg: T.bossShot * (1 + rampTime() / T.dmgRamp) * DIFF.dmg,
+                      dmg: T.bossShot * (1 + rampTime() / T.dmgRamp) * DIFF.dmg * B.dmgK,   // BS-M1 2026-09-30: x B.dmgK (build_BS_2026-09-30)
                       life: 3.2, col: B.col, kind: 'boss', ember: 0, ang: 0 })
     }
     const hold = B.how === 'siege' ? 400 : B.how === 'spiral' ? 240 : B.how === 'swarm' ? 60 : 210
@@ -4403,8 +4470,9 @@ function updateBoss(dt) {
         for (let k = 0; k < 4; k++)
           pts.push({ x: P.x + rand(-130, 130), y: P.y + rand(-130, 130), r: 46, off: rand(0, .5) })
         // SY-FIX 2026-09-29: `byBoss` marks a strike as the compound event's, so a hold holds it (updateEvents; ADJUDICATION_SY F3); the place's own scheduled events carry no mark and are not held (build_SY_2026-09-29 fix round)
+        // BS-M1 2026-09-30: dmg x B.dmgK, and llK carries the same factor to the wear its circles put on a lifeline (updateEvents) (build_BS_2026-09-30)
         events.push({ kind: 'rockfall', phase: 'warn', tw: 1.05, warn: 1.05, td: .45,
-                      pts, dmg: T.bossShot * 1.6, byBoss: true })
+                      pts, dmg: T.bossShot * 1.6 * B.dmgK, llK: B.dmgK, byBoss: true })
         AU.play('warn')
       } else if (B.how === 'swarm') {
         // it calls the place's own hazards in around itself, except a flood: that starts at spawn()'s
@@ -4443,6 +4511,7 @@ function updateBoss(dt) {
       if (B.cdCharge <= 0) { B.state = 'wind'; B.tState = T.bossWind; AU.play('warn') }
     }
   }
+  if (B.tb && tbossAttacks(B, dt)) return   // BS-M3 2026-09-30: the true boss's ring and lane, from its phases; true when a hit ended the run (build_BS_2026-09-30)
 
   B.x += B.kx * dt; B.y += B.ky * dt
   B.kx *= knDecay; B.ky *= knDecay
@@ -4456,13 +4525,14 @@ function updateBoss(dt) {
   }
 }
 
-function hurtBoss(dmg, kx, ky) {
-  const B = boss
-  if (!B || B.state === 'arrive') return
+// BS-M3 2026-09-30: B, the body struck - the mid-boss (`boss`, the default, as every caller before BS meant) or the true boss; the true boss's phases and defeat are its own (tbossPhases, tbossDown) (build_BS_2026-09-30)
+function hurtBoss(dmg, kx, ky, B = boss) {
+  if (!bossLive(B) || B.state === 'arrive') return   // UXBS-FIX 2026-09-30: F1 - was `!B`; a body out of its slot (absorbed or passed) takes no hit, so its defeat pays once (build_BS_2026-09-30 fix round)
   B.hp -= dmg
   B.flash = 0.08
   B.kx += kx * 0.25; B.ky += ky * 0.25
   addNum(B.x, B.y - B.r, Math.round(dmg), dmg > 20)
+  if (B.tb) return B.hp > 0 ? tbossPhases(B) : tbossDown(B)
   if (B.hp > 0) return
   // down. A compound event that gets absorbed is the best outcome the subject has.
   emit('debris', B.x, B.y, 30, B.ramp, { boost: 1.4 })
@@ -4470,12 +4540,130 @@ function hurtBoss(dmg, kx, ky) {
   emit('smoke', B.x, B.y, 18, 'ash', { scale: 1.6 })
   emit('spark', B.x, B.y, 40, 'gold', { boost: 1.6 })
   for (let i = 0; i < 14; i++) motes.push({ x: B.x + rand(-60, 60), y: B.y + rand(-60, 60), v: 5, r: 6 })
-  heal(P.max * 0.25)
+  heal(P.max * T.midBossHeal)   // BS-M4 2026-09-30: was heal(P.max * 0.25) - PLAN_BS H4 as updated, 10% (build_BS_2026-09-30)
   bossesKilled++
   flash('Absorbed', 'The event arrived and the place is still here. That is the whole job.', '#7ee787')
   AU.play('bossDown')
   shake = Math.max(shake, 22)
   boss = null
+  syncHud()
+}
+
+// BS-M4 2026-09-30: a full repair - capacity to its maximum whatever P.healMul is, so it still fills after the Hospital is lost (ruling RH1; not a heal(), which the Hospital's loss cuts to 0.3). The 3-save hold, the compound and grand programme cards and the true boss's defeat (build_BS_2026-09-30)
+const healFull = () => { P.hp = P.max }
+
+// ---------------------------------------------------------------- BS-M3 2026-09-30: the true boss (PLAN_BS B3; rulings RB1-RB7; strings_BS.md S-B1) (build_BS_2026-09-30)
+// Once per run, at DIFF.tbossAt s of run clock, warned T.tbossLead s before; the warning and the arrival flash show at once ({ now: true }) and keep the event warnings' 2.2 s ({ evt: true }), as the mid-boss's arrival line does. Neither time is scaled by DIFF.warn (C4).
+function tbossClock() {
+  if (tbossState !== null || !DIFF.tbossAt) return
+  if (!tbossWarned && t >= DIFF.tbossAt - T.tbossLead) {
+    tbossWarned = true
+    flash('The boss is coming', 'It arrives in a few seconds. Get ready.', TBOSS_COL, { now: true, evt: true, tbw: true, keep: true })   // UXBS-FIX 2026-09-30: F2 - keep: true (build_BS_2026-09-30 fix round)
+    AU.play('warn')
+  }
+  if (t >= DIFF.tbossAt) spawnTrueBoss()
+}
+
+// Built on the compound-event engine (bossTick) with its own numbers: the place's own boss kind - the first of its compound events, or the delta's where it has none (alpine, ruling RB4) - for its behaviour and particles; its own name, colour and size; T.tbossHpMul x the compound event's health before B1, and its damage before B1 x T.tbossDmg. Its arrival sub-line keeps "Several hazards, arriving together." verbatim (C1).
+function spawnTrueBoss() {
+  const K = (BOSSES[PLACE.id] || BOSSES.delta)[0]
+  const a = Math.random() * TAU, d = Math.max(520, Math.max(W, H) * 0.7)
+  const hp = T.bossHp * (1 + rampTime() / T.bossHpRamp) * DIFF.dmg * T.tbossHpMul
+  tboss = {
+    kind: PLACE.id, name: TBOSS_NAMES[PLACE.id] || TBOSS_NAMES.delta, col: TBOSS_COL, ramp: K.ramp, how: K.how || 'volley', reason: 'clock',
+    x: P.x + Math.cos(a) * d, y: P.y + Math.sin(a) * d,
+    r: 34 * T.tbossSize, hp, max: hp, flash: 0, kx: 0, ky: 0,
+    state: 'arrive', tState: T.bossWarn, life: T.tbossLife,
+    cdShoot: 1.6, cdCharge: 2.6, chargeVx: 0, chargeVy: 0, phase: 0,
+    dmg: T.bossTouch * (1 + rampTime() / T.dmgRamp) * DIFF.dmg * T.tbossDmg,
+    isBoss: true, dmgK: T.tbossDmg, tb: true,
+    // tphase: 0, then 1 below T.tbossPhase1 of its health (the ring of shots), 2 below T.tbossPhase2 (the lane, too) - ruling RB3's order
+    tphase: 0, ringCd: 0, laneCd: 0, lane: null, laneDir: 1,
+  }
+  tbossState = 'field'; tbossWarned = true
+  // its warning, if still on screen or waiting, ends here and is never shown after the arrival (it says the boss is still to come); it is found by its { tbw: true } flag, as a "ruled out" line is by { ban: true }
+  for (let i = flashQ.length - 1; i >= 0; i--) if (flashQ[i][3] && flashQ[i][3].tbw) flashQ.splice(i, 1)
+  if (flashT > 0 && flashCur && flashCur[3] && flashCur[3].tbw) flashT = 0
+  flash(tboss.name, say('BOSS.true.arrive', 'Several hazards, arriving together. This is the boss.'), TBOSS_COL, { now: true, evt: true, keep: true })   // UXBS-FIX 2026-09-30: F2 - keep: true (build_BS_2026-09-30 fix round)
+  AU.play('bossIn')
+  shake = Math.max(shake, 22)
+}
+
+// Its phases, from hurtBoss while it stands: each threshold crossed calls a surge of ordinary hazards (hazardSurge - bodies in `enemies`, so the Evacuation order pushes them, C3) and adds its attack; a hit that crosses both runs both, in order. The flash lines queue as ordinary lines.
+// UXBS-FIX 2026-09-30: F2 - the last sentence above no longer holds: the phase lines pass { now: true, keep: true } (flash), so neither is dropped; a hit that crosses both shows phase 2 at once and phase 1 waits and follows it. F8 - the title "More hazards arrive" -> "More hazards may arrive": hazardSurge adds nobody once enemies.length reaches T.enemyCap (verify_UXBS F8; the Fixer's Drafter pen, fix_record_UXBS.md F8) (build_BS_2026-09-30 fix round)
+function tbossPhases(B) {
+  while (B.tphase < 2 && B.hp / B.max <= (B.tphase === 0 ? T.tbossPhase1 : T.tbossPhase2)) {
+    B.tphase++
+    hazardSurge(T.tbossSurgeN)
+    AU.play('surge')
+    if (B.tphase === 1) { B.ringCd = 0.6; flash('More hazards may arrive', say('BOSS.true.phase1', 'The boss now fires a ring of shots too.'), B.col, { now: true, keep: true }) }   // UXBS-FIX 2026-09-30: F2, F8 (build_BS_2026-09-30 fix round)
+    else { B.laneCd = 0.8; flash('More hazards may arrive', say('BOSS.true.phase2', 'The boss now sweeps a lane across the ground too.'), B.col, { now: true, keep: true }) }   // UXBS-FIX 2026-09-30: F2, F8 (build_BS_2026-09-30 fix round)
+  }
+}
+
+// Its two added attacks, from bossTick - so only once it has arrived, and never while a hold runs (bossTick returns before this when held: their clocks wait, nothing fires or sweeps, C5). The ring's shots are thrown things (ebullets): the green belt, the veil, a hold and your grace (P.inv) meet them as they meet every thrown thing (C8). The lane is a band from its centre, tbLaneW wide and tbLaneLen long: first shown where it will start for tbLaneWarn s, then swept through tbLaneArc radians in tbLaneSweep s - a band that moves across the ground (ruling RB3); it hits you only outside your grace, and gives you grace as a hit does (C8), through P.exposure (C9). Returns true when a hit ended the run.
+function tbossAttacks(B, dt) {
+  const mul = (1 + rampTime() / T.dmgRamp) * DIFF.dmg * B.dmgK
+  if (B.tphase >= 1 && (B.ringCd -= dt) <= 0) {
+    B.ringCd = T.tbRingEvery
+    const a0 = Math.random() * TAU
+    for (let i = 0; i < T.tbRingN && ebullets.length < T.ebulletCap; i++) {
+      const a = a0 + i / T.tbRingN * TAU
+      ebullets.push({ x: B.x + Math.cos(a) * B.r, y: B.y + Math.sin(a) * B.r,
+                      vx: Math.cos(a) * T.tbRingSpd, vy: Math.sin(a) * T.tbRingSpd, r: 7,
+                      dmg: T.bossShot * mul, life: 3.2, col: B.col, kind: 'boss', ember: 0, ang: 0 })
+    }
+    AU.play('eshot')
+  }
+  if (B.tphase < 2) return false
+  if (!B.lane) {
+    if ((B.laneCd -= dt) > 0) return false
+    B.laneDir = -B.laneDir
+    B.lane = { a: Math.atan2(P.y - B.y, P.x - B.x) - B.laneDir * T.tbLaneArc / 2, t: 0, live: false }
+    AU.play('warn')
+    return false
+  }
+  const L = B.lane
+  L.t += dt
+  if (!L.live) { if (L.t >= T.tbLaneWarn) { L.live = true; L.t = 0 } return false }
+  L.a += B.laneDir * T.tbLaneArc / T.tbLaneSweep * dt
+  if (L.t >= T.tbLaneSweep) { B.lane = null; B.laneCd = T.tbLaneEvery; return false }
+  if (P.inv > 0) return false
+  const ux = Math.cos(L.a), uy = Math.sin(L.a)
+  const along = clamp((P.x - B.x) * ux + (P.y - B.y) * uy, 0, T.tbLaneLen)
+  if (Math.hypot(P.x - (B.x + ux * along), P.y - (B.y + uy * along)) < T.tbLaneW / 2 + P.r) {
+    P.hp -= T.tbLaneDmg * mul * (1 - P.armour) * P.exposure
+    P.inv = T.invuln; shake = Math.max(shake, 12); AU.play('hurt')
+    emit('shard', P.x, P.y, 8, 'cold')
+    if (P.hp <= 0) { die(); return true }
+  }
+  return false
+}
+
+// Beaten: a full repair (capacity only - ruling RB2), an XP burst paid in motes (so the XP multiplier applies as it does to every mote, C9), and its recovery-budget bonus - T.tbossPay x DIFF.pay, rounded, added to runFunds in die() and printed from tbossBonus by the report.
+function tbossDown(B) {
+  emit('debris', B.x, B.y, 30, B.ramp, { boost: 1.4 })
+  emit('ember', B.x, B.y, 26, B.ramp)
+  emit('smoke', B.x, B.y, 18, 'ash', { scale: 1.6 })
+  emit('spark', B.x, B.y, 40, 'gold', { boost: 1.6 })
+  for (let i = 0; i < T.tbossXpN; i++) motes.push({ x: B.x + rand(-80, 80), y: B.y + rand(-80, 80), v: T.tbossXpV, r: 6 })
+  healFull()
+  tbossBonus = Math.round(T.tbossPay * (DIFF.pay || 1))
+  tbossState = 'absorbed'
+  // UXBS-FIX 2026-09-30: F2 - { now: true, keep: true } (flash). F3 - the line says the bonus makes the budget bigger (its SIZE, runFunds in die()), not that you got it; was "All your capacity back, a burst of XP and more budget." (fix_record_UXBS.md F3) (build_BS_2026-09-30 fix round)
+  flash('Boss absorbed', say('BOSS.true.down', 'All your capacity back and a burst of XP. Your budget gets bigger.'), '#7ee787', { now: true, keep: true })
+  AU.play('bossDown')
+  shake = Math.max(shake, 26)
+  tboss = null
+  syncHud()
+}
+
+// Not beaten in T.tbossLife s: it withdraws (the game's rule that events pass) and does not return this run.
+function tbossPass(B) {
+  flash('The boss passes', say('BOSS.true.passes', 'Not absorbed, but outlasted. It will not return this run.'), B.col, { now: true, keep: true })   // UXBS-FIX 2026-09-30: F2 - { now: true, keep: true } (flash) (build_BS_2026-09-30 fix round)
+  emit('smoke', B.x, B.y, 24, B.ramp, { scale: 1.5 })
+  tbossState = 'passed'
+  tboss = null
   syncHud()
 }
 
@@ -4595,7 +4783,7 @@ function fireEvent() {
   // BF1 2026-09-23: shown at once, never queued behind another line - it states how many seconds the warning buys, and a wait of up to 2.2 s or a drop would make that false; the line it displaces waits once or is dropped (flash) (build_B_2026-09-22)
   flash(K.name + ' inbound', lv.pulse > 1
     ? say('EVT.inbound.warned', `Your warning system is buying you ${(warn).toFixed(1)}s.`, warn)
-    : 'Get out of the way of it.', K.col, { now: true })
+    : 'Get out of the way of it.', K.col, { now: true, evt: true })   // UX-M2 2026-09-30: an event warning - keeps 2.2 s (FLASH_EVT_T) (build_UX_2026-09-30)
   AU.play('warn')
   shake = Math.max(shake, 6)
   // First telegraph (S4.4). Siege rockfalls skip fireEvent and never raise this (8.6); the pause freezes
@@ -4730,7 +4918,7 @@ function updateEvents(dt) {
           if (secs <= 0) continue
           ev.llBilled.set(L, billed + secs)
         }
-        hitLifeline(L, (ev.lines ? 26 : 42) * secs * 2)
+        hitLifeline(L, (ev.lines ? 26 : 42) * secs * 2 * (ev.llK || 1))   // BS-M1 2026-09-30: x ev.llK - a mid-boss strike's wear x T.bossMidMul; every other event carries none (build_BS_2026-09-30)
       }
     }
 
@@ -4980,6 +5168,8 @@ function surgeTypes() {
 // One line, centre-low, for the things that happen out on the map. The season banner sits
 // higher and says something slower; sharing one element made them overwrite each other.
 let flashT = 0
+// UX-M2 2026-09-30: on-field text stays 1.5x as long (PLAN_UX U2, the user's "1.5배"): a flash line - the synergy / programme banner (pendingGist) is one - 2.2 -> 3.3 s (FLASH_T); the season banner 2.8 -> 4.2 s (SEASON_BANNER_T). Unchanged: the event warnings, whose timing is gameplay - fireEvent's "inbound" line and spawnBoss's arrival line pass { evt: true } and keep 2.2 s (FLASH_EVT_T); the 3 s hold banner (T.holdT); hint cards. The queue rules below are unchanged; where they say 2.2 s, read FLASH_T for an ordinary line (build_UX_2026-09-30)
+const FLASH_T = 3.3, FLASH_EVT_T = 2.2, SEASON_BANNER_T = 4.2
 // B11 2026-09-22: overlapping calls queue instead of overwriting - each line shown for its full 2.2 s, in call order, with two exceptions: an "inbound" line and the compound event's arrival line show at once and can displace or drop another (BF1, D12), and a "ruled out" line ends when the card screen closes (BF9); at most FLASH_WAIT_MAX (1) waits behind the one on screen and a call that finds that slot taken is dropped, so a burst cannot build a backlog; flashNext shows the next when a line runs out; flashClear (from reset) keeps a line, shown or waiting, from crossing into the next run (build_B_2026-09-22)
 // BF10 2026-09-23: the B11 line above now names its exceptions - "each line shown for its full 2.2 s, in call order" has been untrue since BF1 (review_B F11), and BF9 adds the second; comment only (build_B_2026-09-22)
 const flashQ = [], FLASH_WAIT_MAX = 1
@@ -4989,9 +5179,15 @@ let flashCur = null
 // LL-FIX1 2026-09-25: a third `{ now: true }` caller, llSecure's "secured" line (verify_LL F1); the B11 and BF1 lines above name the first two; comment only (build_LL_2026-09-25)
 // BF8 2026-09-23: flash() returns what became of the call - 'shown', 'queued' or 'dropped' - so the lifeline alarm can spend its 9 s throttle only on a line that will be seen; every other caller ignores the value (review_B F5) (build_B_2026-09-22)
 // BF9 2026-09-23: a line keeps its options as a fourth entry, in the waiting slot and in flashCur (flashNext passes them back), so a "ruled out" confirmation can be found by the { ban: true } flag its one caller passes (review_B F6) (build_B_2026-09-22)
+// UXBS-FIX 2026-09-30: F2 - the true boss's lines (warning, arrival, phases, defeat, withdrawal) and the first-elite line are never dropped (ADJUDICATION_UXBS F2): they pass { now: true } as the "secured" line does, so each shows at once, and { keep: true }, so when a later { now: true } line displaces one of them it waits even if the waiting slot is taken - an ordinary waiting line gives up the slot to it (that ordinary line is dropped), and a kept line already waiting stays (then two wait, kept lines only: at most six a run). Kept lines leave the queue only by being shown, by the warning's removal at the arrival (tbw, spawnTrueBoss) or by flashClear at reset. Every other line is handled as before (build_BS_2026-09-30 fix round)
 function flash(title, sub, col, opt) {
   if (flashT > 0) {
-    if (opt && opt.now) { if (flashQ.length < FLASH_WAIT_MAX) flashQ.push(flashCur) }
+    if (opt && opt.now) {
+      if (flashCur && flashCur[3] && flashCur[3].keep) {   // UXBS-FIX 2026-09-30: F2 - a kept line displaced is never dropped (build_BS_2026-09-30 fix round)
+        for (let i = flashQ.length - 1; i >= 0; i--) if (!(flashQ[i][3] && flashQ[i][3].keep)) flashQ.splice(i, 1)
+        flashQ.push(flashCur)
+      } else if (flashQ.length < FLASH_WAIT_MAX) flashQ.push(flashCur)
+    }
     else { if (flashQ.length < FLASH_WAIT_MAX) { flashQ.push([title, sub, col, opt]); return 'queued' } return 'dropped' }
   }
   const el = $('flash')
@@ -5000,7 +5196,7 @@ function flash(title, sub, col, opt) {
   el.lastElementChild.textContent = sub || ''
   el.classList.toggle('big', !!(opt && opt.big))   // GR-M6 2026-09-29: a take moment's line (closeCards) shows its title larger; every other line as before (build_GR_2026-09-29)
   el.classList.add('show')
-  flashT = 2.2
+  flashT = opt && opt.evt ? FLASH_EVT_T : FLASH_T   // UX-M2 2026-09-30: was 2.2 for every line (build_UX_2026-09-30)
   flashCur = [title, sub, col, opt]
   return 'shown'
 }
@@ -5024,7 +5220,7 @@ function startSeason(id, silent) {
   // SY-M1 2026-09-29: while a hold runs, the banner is the hold's (ruling RS2): a new season still begins, but its banner is not shown (build_SY_2026-09-29)
   // SY-FIX 2026-09-29: the SY-M1 line above is superseded (ADJUDICATION_SY F2, RS2 re-ruled): the banner is not shown DURING the hold, but it is kept (seasonPend) and shown, with its sound, when the hold ends (endHold) (build_SY_2026-09-29 fix round)
   if (holdOn()) { seasonPend = id; return }
-  seasonBanner(id, 2.8, true)
+  seasonBanner(id, SEASON_BANNER_T, true)   // UX-M2 2026-09-30: was 2.8 (build_UX_2026-09-30)
 }
 // SY-FIX 2026-09-29: the season banner, written as startSeason wrote it (unchanged text, colour and 2.8 s), made callable so endHold can show it too; `sound` false only for a banner shown again after a hold, whose sound was already played (build_SY_2026-09-29 fix round)
 function seasonBanner(id, dur, sound) {
@@ -5045,14 +5241,14 @@ function startHold() {
   const el = $('season')
   el.firstElementChild.textContent = 'Hazards stop'
   el.firstElementChild.style.color = HOLD_COL
-  el.lastElementChild.textContent = 'For 3s, they cannot move or attack. Marked events still come.'
+  el.lastElementChild.textContent = 'For 3s, they cannot move or attack. Marked events still come. All your capacity back.'   // BS-M4 2026-09-30: the last sentence added, strings_BS_hp.md S-H2 (b) verbatim (llSecure fills capacity as the hold starts; ruling RH3) (build_BS_2026-09-30)
   el.classList.add('show')
   AU.play('evolve')
   bannerT = T.holdT
 }
 // SY-FIX 2026-09-29: the hold ends (called by step when holdLeft reaches 0; ADJUDICATION_SY F2). A season that began during the hold is announced now, banner and sound, for its full 2.8 s; if none began, a season banner the hold cut short is shown again, without its sound, for the seconds it had left. The newer season wins when both apply. Otherwise the hold's banner simply ends, in the same step, as before (build_SY_2026-09-29 fix round)
 function endHold() {
-  if (seasonPend) seasonBanner(seasonPend, 2.8, true)
+  if (seasonPend) seasonBanner(seasonPend, SEASON_BANNER_T, true)   // UX-M2 2026-09-30: was 2.8 (build_UX_2026-09-30)
   else if (seasonRest > 0) seasonBanner(Object.keys(SEASONS).find(k => SEASONS[k] === SEASON), seasonRest, false)
   seasonPend = null; seasonRest = 0
 }
@@ -5168,13 +5364,15 @@ function llSecure(L) {
   if (onSite === L) onSite = null
   for (const e of enemies) if (e.tgt === L) e.tgt = pickTarget()
   const K = LIFELINES[L.kind]
+  // BS-M4 2026-09-30: a real save repairs T.saveHeal of capacity (PLAN_BS H2) - through heal(), so 9% after a Hospital loss; before the line below states it, and before startHold() (ruling RH5). Its line: strings_BS_hp.md S-H2 (a) verbatim - the new sentence first, the Learning line under PLAIN 'LL.secured', the Hospital-lost line HOSPITAL_LOST 'S5.7.32g', wrapped as the relief pickup's is (healLine over say(), ruling RH2) (build_BS_2026-09-30)
+  heal(P.max * T.saveHeal)
   // LL-FIX1 2026-09-25: shown at once, with the priority the flash queue gives event warnings ({ now: true }, BF1 and D12 above flash()), so the queue can no longer drop it: it is the only on-screen explanation of a lifeline leaving the map; the line it displaces waits once or is dropped, as for those two, and the service line raised just before it waits (verify_LL F1) (build_LL_2026-09-25)
-  flash(`${K.name} secured`, 'It leaves the map for 15s and comes back somewhere new. Its bonus stays.', K.col, { now: true })
+  flash(`${K.name} secured`, healLine('S5.7.32g', say('LL.secured', '30% of capacity back. It leaves the map for 15s and comes back somewhere new. Its bonus stays.')), K.col, { now: true })
   // SY-M1 2026-09-29: a save counts here, where a lifeline is secured after a real save, whether or not its service fired (ruling RS1) - never at a top-up, a Power service top-up (it never calls this) or a rebuild. The first one raises hint S4.7 (ruling RS8; once per browser, as every hint). The T.holdAt-th starts the hold and the count begins again at 0 (build_SY_2026-09-29)
   secCount++
   secSeen = true   // SY-FIX 2026-09-29: the counter row shows from here, the run's first save (F11) (build_SY_2026-09-29 fix round)
   hint('secure')
-  if (secCount >= T.holdAt) { secCount = 0; startHold() }
+  if (secCount >= T.holdAt) { secCount = 0; healFull(); startHold() }   // BS-M4 2026-09-30: the 3-save hold fills capacity (PLAN_BS H3; healFull, ruling RH1), after the save's own repair above (build_BS_2026-09-30)
 }
 
 // LL-M3 2026-09-25: its own countdown over, a secured lifeline comes back (PLAN_LL D3): at a new site in the placement band, at least T.lifelineMoveMin from where it stood (llNewSite), at 100 and not dipped, open to hazards again. Each lifeline runs its own countdown (L.away). The flash is S-L3 (b) (build_LL_2026-09-25)
@@ -5201,13 +5399,14 @@ function updateLifelines(dt) {
     if (!L.alive) continue
     // LL-M3 2026-09-25: a secured lifeline is off the map on its own countdown - nothing sits on it, nothing is inbound, it is not repaired or defended; when the countdown ends it comes back at a new site (llReturn) (build_LL_2026-09-25)
     if (L.away > 0) { if ((L.away -= dt) <= 0) llReturn(L); continue }
-    let under = 0, inbound = 0, underF = 0
+    // UXBS-FIX 2026-09-30: F4 - underK sums each occupier's damage factor (T.eliteDmg for an elite zone or front, else 1); the wear below is multiplied by underK / under, the mean factor, so an elite sitting on a lifeline wears it T.eliteDmg x as fast and a lifeline with no elite on it wears exactly as before; `under` stays a count (the 4-occupier cap, the repair gate, L.under) (build_BS_2026-09-30 fix round)
+    let under = 0, inbound = 0, underF = 0, underK = 0
     for (const e of enemies) {
       if (e.tgt === L) inbound++
       if (e.behaviour !== 'zone' && e.behaviour !== 'front') continue
       const rr = T.lifelineR + e.r
       const dx = e.x - L.x, dy = e.y - L.y
-      if (dx * dx + dy * dy < rr * rr) { under++; if (e.kind === 'flood') underF++ }
+      if (dx * dx + dy * dy < rr * rr) { under++; underK += e.elite ? T.eliteDmg : 1; if (e.kind === 'flood') underF++ }   // UXBS-FIX 2026-09-30: F4 - underK (build_BS_2026-09-30 fix round)
     }
     L.under = under; L.inbound = inbound
     // LL-M1 2026-09-25: "standing there" reads the repair reach (T.lifelineR at Maintenance 0, wider per level) in place of T.lifelineR; it gates the pulse and the repair below; `under` above and the pulse's own hit test keep T.lifelineR (build_LL_2026-09-25)
@@ -5246,7 +5445,7 @@ function updateLifelines(dt) {
     const casc = P.cascade && L.kind !== 'power' ? T.cascadeMul : 1
     // Hard defences (2026-09-15): with the card, each flood front here counts leveeFloodWear times (exact up to the 4-occupier cap).
     // SY-M1 2026-09-29: held zones and fronts wear nothing while a hold runs, but they still count as sitting on it (`under`), so it is not repaired under them: the repair rule is unchanged (ruling RS5) (build_SY_2026-09-29)
-    if (under) { if (!holdOn()) hitLifeline(L, T.lifelineDps * (DIFF.llDmg || 1) * Math.min(under, 4) * casc * dt * (trade.levee ? 1 + (T.leveeFloodWear - 1) * underF / under : 1)) }
+    if (under) { if (!holdOn()) hitLifeline(L, T.lifelineDps * (DIFF.llDmg || 1) * Math.min(under, 4) * casc * dt * (trade.levee ? 1 + (T.leveeFloodWear - 1) * underF / under : 1) * (underK / under)) }   // UXBS-FIX 2026-09-30: F4 - x underK / under (1 with no elite on it) (build_BS_2026-09-30 fix round)
     else if (L.hp < 100 && here) {
       // Maintenance is the only way one comes back, and the only place in the game where
       // that measure does something you can watch happening.
@@ -5309,11 +5508,30 @@ function makeHazard(id, x, y, extra) {
   }, extra || {})
 }
 
+// BS-M2 2026-09-30: elite variants (PLAN_BS B2). The chance that a spawn() draw is elite at run clock t: 0 before T.eliteFrom, then T.eliteShare0 rising in a straight line to T.eliteShare1 at T.eliteShareAt, and held there (build_BS_2026-09-30)
+const eliteShare = () => t < T.eliteFrom ? 0 : T.eliteShare0 + (T.eliteShare1 - T.eliteShare0) * clamp((t - T.eliteFrom) / (T.eliteShareAt - T.eliteFrom), 0, 1)
+// BS-M2 2026-09-30: the crown's and the outline's colour - with the crown's shape, not colour alone, as the marker (B2) (build_BS_2026-09-30)
+const ELITE_COL = '#ffd96a'
+// BS-M2 2026-09-30: a body made by makeHazard becomes elite: T.eliteSize x its size (r0 keeps it, for a heat zone's pulse), T.eliteHp x its health, T.eliteDmg x its damage (touch, and a zone's heat), T.eliteXp x its XP (the mote it drops). The first elite of a run raises the first-elite line (strings_BS.md S-B3 (b) verbatim), queued like a hazard's arrival line (build_BS_2026-09-30)
+function makeElite(e) {
+  e.elite = true
+  e.r *= T.eliteSize; e.r0 = e.r
+  e.hp *= T.eliteHp; e.max = e.hp
+  e.dmg *= T.eliteDmg
+  e.xp *= T.eliteXp
+  // UXBS-FIX 2026-09-30: F2 - the line passes { now: true, keep: true } (flash), so it is never dropped; the flag is set from what flash() returns, only when the line is shown (it was set before the call, whatever became of it). The BS-M2 comment above said "queued like a hazard's arrival line"; it is not queued now (build_BS_2026-09-30 fix round)
+  if (!eliteSeen) eliteSeen = flash('Elite hazards', say('ELITE.first', 'A crown marks them. They are bigger and tougher, hit harder and are worth more XP.'), ELITE_COL, { now: true, keep: true }) === 'shown'
+  return e
+}
+
 // Ordinary trickle. Two thirds land in a cone ahead of travel — without that a player who
 // simply runs in one direction trails the whole swarm behind them and the screen empties.
 function spawn() {
   const id = drawHazard()
   const k = HAZARDS[id]
+  // BS-M2 2026-09-30: one roll per draw, from T.eliteFrom on (before it no random number is drawn, so an early run is as it was); every body of an elite draw is made elite (mk), and an elite front is T.eliteFrontExtra bodies wider on each side (build_BS_2026-09-30)
+  const el = t >= T.eliteFrom && Math.random() < eliteShare()
+  const mk = (...a) => el ? makeElite(makeHazard(...a)) : makeHazard(...a)
   const d = Math.max(420, Math.max(W, H) * 0.62 + 40)
   const L = pickTarget()
   const cx = L ? L.x : P.x, cy = L ? L.y : P.y
@@ -5322,7 +5540,7 @@ function spawn() {
     // Heat settles somewhere near you rather than walking in — or straight on top of a
     // lifeline, which is the version of a heatwave that actually empties a hospital.
     const a = Math.random() * TAU, dd = L ? rand(0, 34) : rand(90, 300)
-    enemies.push(makeHazard(id, cx + Math.cos(a) * dd, cy + Math.sin(a) * dd))
+    enemies.push(mk(id, cx + Math.cos(a) * dd, cy + Math.sin(a) * dd))   // BS-M2 2026-09-30: mk (build_BS_2026-09-30)
     return
   }
   if (k.behaviour === 'front') {
@@ -5331,12 +5549,12 @@ function spawn() {
     const a = Math.random() * TAU
     const nx = Math.cos(a), ny = Math.sin(a)
     const px = -ny, py = nx
-    const half = PLACE.bite.frontHalf || 3
+    const half = (PLACE.bite.frontHalf || 3) + (el ? T.eliteFrontExtra : 0)   // BS-M2 2026-09-30: an elite front is wider (build_BS_2026-09-30)
     let made = 0
     for (let i = -half; i <= half; i++) {
       if (enemies.length >= T.enemyCap) break
-      enemies.push(makeHazard(id, cx + nx * d + px * i * 46, cy + ny * d + py * i * 46,
-                              { fx: -nx, fy: -ny, range: d * 2 + 400 }))
+      enemies.push(mk(id, cx + nx * d + px * i * 46, cy + ny * d + py * i * 46,
+                              { fx: -nx, fy: -ny, range: d * 2 + 400 }))   // BS-M2 2026-09-30: mk (build_BS_2026-09-30)
       made++
     }
     // A front is one draw but seven to eleven arrivals. Charging it as one spawn is what
@@ -5355,7 +5573,7 @@ function spawn() {
   let made = 0
   for (let i = 0; i < n && enemies.length < T.enemyCap; i++) {
     const j = rand(-38, 38), j2 = rand(-38, 38)
-    enemies.push(makeHazard(id, cx + Math.cos(a) * d + j, cy + Math.sin(a) * d + j2, { tgt: L }))
+    enemies.push(mk(id, cx + Math.cos(a) * d + j, cy + Math.sin(a) * d + j2, { tgt: L }))   // BS-M2 2026-09-30: mk (build_BS_2026-09-30)
     made++
   }
   if (made > 1) spawnAcc -= (made - 1)
@@ -5403,8 +5621,10 @@ function moveHazard(e, dt) {
     return
   }
   const a = Math.atan2(G.y - e.y, G.x - e.x)
-  e.x += Math.cos(a) * e.spd * dt + e.kx * dt
-  e.y += Math.sin(a) * e.spd * dt + e.ky * dt
+  // BS-M2 2026-09-30: an elite chaser dashes - T.eliteDashMul x its speed for the first T.eliteDashT s of every T.eliteDashEvery s of its age (which waits during a hold); e.spd is already the veil's slowed speed when the veil holds it (step), so the veil slows the dash too (C7) (build_BS_2026-09-30)
+  const dk = e.elite && e.behaviour === 'chase' && e.age % T.eliteDashEvery < T.eliteDashT ? T.eliteDashMul : 1
+  e.x += Math.cos(a) * e.spd * dk * dt + e.kx * dt
+  e.y += Math.sin(a) * e.spd * dk * dt + e.ky * dt
 }
 
 // A ring of hazards from every side at once. The ordinary trickle biases toward where the
@@ -5548,9 +5768,10 @@ function explode (x, y, radius, dmg, col, opts = {}) {
   // DX2 2026-09-23: `opts.n` - a burst from a shot standing for n shots (mergeN) knocks or pulls as n bursts do; its damage already arrives combined (build_D_2026-09-22 fix round)
   const kN = opts.n || 1
   // F3a 2026-09-23: `opts.skip` spares the boss too - a shot whose last pierce is spent on the boss bursts there, and the boss was billed for the direct hit (S10) (build_F_2026-09-23)
-  if (boss && opts.skip !== boss && boss.state !== 'arrive' && dist2(boss, at) < (boss.r + radius) ** 2) {
-    const a = Math.atan2(boss.y - y, boss.x - x)
-    hurtBoss(dmg, Math.cos(a) * 30 * kN, Math.sin(a) * 30 * kN)
+  // BS-M3 2026-09-30: each compound-event body on the field, the true boss too (bossesUp; B passed to hurtBoss) (build_BS_2026-09-30)
+  for (const B of bossesUp()) if (opts.skip !== B && B.state !== 'arrive' && dist2(B, at) < (B.r + radius) ** 2) {
+    const a = Math.atan2(B.y - y, B.x - x)
+    hurtBoss(dmg, Math.cos(a) * 30 * kN, Math.sin(a) * 30 * kN, B)
   }
   // BF3 2026-09-23: skips a body already gone - over a copy, a body a Residual burst killed earlier in this loop was billed again (measured: 5 kills from 3 bodies) (build_B_2026-09-22)
   // GR2-M3 2026-09-30: while this burst bills the bodies, grAsBurst holds its damage, so a death it causes can set off the aftershock (hurtEnemy); restored after, so a burst inside a burst hands back the outer one's (build_GR2_2026-09-30)
@@ -5593,6 +5814,7 @@ function hurtEnemy(e, dmg, kx, ky, pull) {
     AU.play('kill')
     kills++
     hazardTally[e.kind] = (hazardTally[e.kind] || 0) + 1
+    if (e.elite) eliteTally[e.kind] = (eliteTally[e.kind] || 0) + 1   // BS-M2 2026-09-30: for the report's "N of them were elite." (build_BS_2026-09-30)
     ;(DEATH_FX[e.kind] || DEATH_FX.quake)(e.x, e.y)
     motes.push({ x: e.x, y: e.y, v: e.xp, r: 4 + Math.min(3, e.xp) })
     e.gone = true; const i = enemies.indexOf(e); if (i > -1) enemies.splice(i, 1)
@@ -5616,6 +5838,9 @@ function hurtEnemy(e, dmg, kx, ky, pull) {
     }
     // GR2-M3 2026-09-30: a body a burst killed (grAsBurst set by explode) can set off the aftershock - after everything above, which is as it was (build_GR2_2026-09-30)
     if (grand.aftershock && grAsBurst !== null) grAftershock(e, grAsBurst)
+    // BS-M2 2026-09-30: an elite orbiting storm splits into two ordinary storms where it fell, after everything above (so an aftershock picks its target as before), within T.enemyCap (build_BS_2026-09-30)
+    if (e.elite && e.behaviour === 'orbit')
+      for (let k = 0; k < 2 && enemies.length < T.enemyCap; k++) { const a = Math.random() * TAU; enemies.push(makeHazard(e.kind, e.x + Math.cos(a) * 18, e.y + Math.sin(a) * 18)) }
   }
 }
 
@@ -5663,8 +5888,8 @@ function fireWeapons(dt) {
   // field — continuous damage close in
   if (lv.field > 0 && step('field', 0.30)) {
     const rad = (85 + lv.field * 18) * (P.synField || 1)
-    if (boss && boss.state !== 'arrive' && dist2(boss, P) < (rad + boss.r) ** 2)
-      hurtBoss((5 + lv.field * 3) * P.dmgMul * eff(), 0, 0)
+    for (const B of bossesUp()) if (B.state !== 'arrive' && dist2(B, P) < (rad + B.r) ** 2)   // BS-M3 2026-09-30: each body on the field (build_BS_2026-09-30)
+      hurtBoss((5 + lv.field * 3) * P.dmgMul * eff(), 0, 0, B)
     // B2 2026-09-22: over a copy, as the beam and the blast helper already iterate - hurtEnemy splices the dead out, which skipped the body after each kill; `gone` stops a body killed mid-loop (a Residual burst) being billed again (build_B_2026-09-22)
     for (const e of enemies.slice()) {
       if (e.gone) continue
@@ -5688,7 +5913,7 @@ function firePulse (sh) {
   const ST = streakTier()
   let near = null, bd = 1e9
   for (const e of enemies) { const d = dist2(e, P); if (d < bd) { bd = d; near = e } }
-  if (boss && boss.state === 'active') { const d = dist2(boss, P); if (d < bd) { bd = d; near = boss } }
+  for (const B of bossesUp()) if (B.state === 'active') { const d = dist2(B, P); if (d < bd) { bd = d; near = B } }   // BS-M3 2026-09-30: each body on the field (build_BS_2026-09-30)
   if (!near) return
   const base = Math.atan2(near.y - P.y, near.x - P.x)
   fireVolley(sh, ST, base, false)      // the aimed shots: always, whatever the build holds
@@ -5768,7 +5993,7 @@ function fireBeam (dt, sh) {
   const near = enemies.filter(e => dist2(e, P) < reach * reach)
   near.sort((p, q) => dist2(p, P) - dist2(q, P))
   const tgts = near.slice(0, sh.beamTgts)
-  if (boss && boss.state === 'active' && tgts.length < sh.beamTgts && dist2(boss, P) < reach * reach) tgts.push(boss)
+  for (const B of bossesUp()) if (B.state === 'active' && tgts.length < sh.beamTgts && dist2(B, P) < reach * reach) tgts.push(B)   // BS-M3 2026-09-30: each body on the field (build_BS_2026-09-30)
   if (!tgts.length) return
   // GR-M3 2026-09-29: the laser multiplies the beam's damage by T.grLaserDmg (PLAN_GR X3); the hit test below (reach, beamHalf) is unchanged - the laser is only drawn wider (build_GR_2026-09-29)
   const dps = (26 + lv.pulse * 9) * P.dmgMul * eff() * sh.heft * (grand.laser ? T.grLaserDmg : 1)
@@ -5776,11 +6001,11 @@ function fireBeam (dt, sh) {
   for (const T0 of tgts) {
     const a = Math.atan2(T0.y - P.y, T0.x - P.x)
     lines.push(a)
-    if (boss && boss.state !== 'arrive' && (boss.beamCd || 0) <= 0) {
-      const d = Math.hypot(boss.x - P.x, boss.y - P.y)
-      let da = Math.atan2(boss.y - P.y, boss.x - P.x) - a
+    for (const B of bossesUp()) if (B.state !== 'arrive' && (B.beamCd || 0) <= 0) {   // BS-M3 2026-09-30: each body on the field (build_BS_2026-09-30)
+      const d = Math.hypot(B.x - P.x, B.y - P.y)
+      let da = Math.atan2(B.y - P.y, B.x - P.x) - a
       da = Math.atan2(Math.sin(da), Math.cos(da))
-      if (d < reach && Math.abs(da) < sh.beamHalf) { boss.beamCd = 0.2; hurtBoss(dps * 0.2, 0, 0) }
+      if (d < reach && Math.abs(da) < sh.beamHalf) { B.beamCd = 0.2; hurtBoss(dps * 0.2, 0, 0, B) }
     }
     // BF3 2026-09-23: skips a body already gone - over a copy, a body a Residual burst killed earlier in this loop was billed again (measured: 5 kills from 3 bodies) (build_B_2026-09-22)
     for (const e of enemies.slice()) {
@@ -5956,7 +6181,7 @@ function enemyFire(dt) {
       AU.play('eshot')
       ebullets.push({ x: e.x + Math.cos(base) * e.r, y: e.y + Math.sin(base) * e.r,
                       vx: Math.cos(a) * sh.spd, vy: Math.sin(a) * sh.spd,
-                      r: sh.r, dmg: sh.dmg * (1 + rampTime() / T.dmgRamp) * (PLACE.bite.dmgMul || 1) * DIFF.dmg * (P.hazSlow || 1),
+                      r: sh.r, dmg: sh.dmg * (1 + rampTime() / T.dmgRamp) * (PLACE.bite.dmgMul || 1) * DIFF.dmg * (P.hazSlow || 1) * (e.elite ? T.eliteDmg : 1),   // BS-M2 2026-09-30: an elite's shots x T.eliteDmg (build_BS_2026-09-30)
                       life: sh.life, col: e.col, kind: e.kind, ember: sh.ember || 0, ang: 0 })
     }
   }
@@ -6040,7 +6265,7 @@ function grChain(b, from) {
       const d = (o.x - x) ** 2 + (o.y - y) ** 2
       if (d <= bd) { bd = d; tgt = o }
     }
-    if (boss && boss.state !== 'arrive' && !struck.has(boss) && (boss.x - x) ** 2 + (boss.y - y) ** 2 <= bd) tgt = boss
+    for (const B of bossesUp()) if (B.state !== 'arrive' && !struck.has(B) && (B.x - x) ** 2 + (B.y - y) ** 2 <= bd) { bd = (B.x - x) ** 2 + (B.y - y) ** 2; tgt = B }   // BS-M3 2026-09-30: each body on the field, the nearer one when both are in reach (build_BS_2026-09-30)
     return tgt
   }
   const struck = new Set([from])
@@ -6056,7 +6281,7 @@ function grChain(b, from) {
     const tx = tgt.x, ty = tgt.y
     if (fx.length <= T.fxCap) fx.push({ arc: true, pts: grArcPts(x, y, tx, ty), x: tx, y: ty, vx: 0, vy: 0,
                                         life: T.grChainArcT, max: T.grChainArcT, col: G0.col, core: G0.arc })
-    if (tgt === boss) hurtBoss(dmg, 0, 0)
+    if (tgt.isBoss) hurtBoss(dmg, 0, 0, tgt)   // BS-M3 2026-09-30: was `tgt === boss` (build_BS_2026-09-30)
     else hurtEnemy(tgt, dmg, 0, 0)
     x = tx; y = ty
     dmg *= T.grChainFall
@@ -6085,7 +6310,7 @@ function grAftershock(e, dmg) {
     const d = (o.x - e.x) ** 2 + (o.y - e.y) ** 2
     if (d <= bd) { bd = d; tgt = o }
   }
-  if (boss && boss.state !== 'arrive' && (boss.x - e.x) ** 2 + (boss.y - e.y) ** 2 <= bd) tgt = boss
+  for (const B of bossesUp()) if (B.state !== 'arrive' && (B.x - e.x) ** 2 + (B.y - e.y) ** 2 <= bd) { bd = (B.x - e.x) ** 2 + (B.y - e.y) ** 2; tgt = B }   // BS-M3 2026-09-30: each body on the field, the nearer one when both are in reach (build_BS_2026-09-30)
   if (!tgt) return
   while (grAsTimes.length && grAsTimes[0] <= t - 1) grAsTimes.shift()
   if (grAsTimes.length >= T.grAsPerSec) return
@@ -6098,10 +6323,10 @@ function grAftershock(e, dmg) {
   grAsBurst = null; grAsLine++
   const more = grAsLine < T.grAsDepth
   if (more) inResidual = true
-  if (tgt === boss) hurtBoss(ad, 0, 0)
+  if (tgt.isBoss) hurtBoss(ad, 0, 0, tgt)   // BS-M3 2026-09-30: was `tgt === boss`, and `tgt !== boss` below (build_BS_2026-09-30)
   else hurtEnemy(tgt, ad, 0, 0)
   inResidual = resOuter
-  if (more && tgt !== boss && tgt.gone && tgt.hp <= 0) {
+  if (more && !tgt.isBoss && tgt.gone && tgt.hp <= 0) {
     const r = SHOT().burstR
     if (r) explode(tx, ty, r, dmg, g.col, { ramp: 'gold', style: 'frag', capFx: true })
   }
@@ -6123,10 +6348,10 @@ function grOrbit(dt) {
     const a = Math.atan2(e.y - P.y, e.x - P.x)
     hurtEnemy(e, hit, Math.cos(a) * T.grOrbitPush, Math.sin(a) * T.grOrbitPush)
   }
-  if (boss && boss.state !== 'arrive' && (boss.orbT || 0) <= t && touch(boss)) {
-    boss.orbT = t + T.grOrbitCd
-    const a = Math.atan2(boss.y - P.y, boss.x - P.x)
-    hurtBoss(hit, Math.cos(a) * T.grOrbitPush, Math.sin(a) * T.grOrbitPush)
+  for (const B of bossesUp()) if (B.state !== 'arrive' && (B.orbT || 0) <= t && touch(B)) {   // BS-M3 2026-09-30: each body on the field (build_BS_2026-09-30)
+    B.orbT = t + T.grOrbitCd
+    const a = Math.atan2(B.y - P.y, B.x - P.x)
+    hurtBoss(hit, Math.cos(a) * T.grOrbitPush, Math.sin(a) * T.grOrbitPush, B)
   }
 }
 
@@ -6206,13 +6431,15 @@ function combosClose() {
 
 function takeSynergy(sy) {
   syn[sy.id] = true; sy.apply(P)
-  heal(P.max * 0.25)                            // the measure pays immediately
+  heal(P.max * T.synHeal)                       // the measure pays immediately - BS-M4 2026-09-30: was 0.25, now 50% (PLAN_BS H4) (build_BS_2026-09-30)
   syncHud()
   AU.play('right')
   // SY-M3 2026-09-29: the banner line also names the modifier the pair opens (pairOpens, on Steady and Learning alike); this synergy is now the latest (the trail's colour) and its burst waits for the cards to close (build_SY_2026-09-29)
   pendingGist = { name: sy.name, col: sy.col, text: say('GIST.' + sy.id, SYN_GIST[sy.id]) + pairOpens(sy.id) }
   synLast = sy.id; synBurst = sy.col
   synMerge.push(sy.id)   // CB-M3 2026-09-30: its merge moment waits for the cards to close (build_CB_2026-09-30)
+  const [uxA, uxB] = pairChips(sy)
+  uxMergeNew.push({ a: uxA, b: uxB, c: { txt: sy.name, col: sy.col }, t: 0, gist: null })   // UX-M3 2026-09-30: and so does its moment in the middle of the screen: its two measures' short names and colours, then its own (build_UX_2026-09-30)
 }
 
 // CB-M2 2026-09-30: the combination row at the top of a synergy, compound programme or grand programme card, under its tier line and over its name (PLAN_CB C2; strings_CB.md S-C2): [chip A] + [chip B] →, then the h3 name reads as the result. Each chip is its ingredient's colour with its name on it in dark ink, so colour is never the only signal; chip B and the arrow are kept together, so on a narrow card the row wraps as whole chips with "+" between them and "→" at the end. The row is one image to a screen reader (role img), named by the sentence "{A} plus {B} makes {name}" (S-C2 C2-a/b/c); the chips and glyphs inside are presentational. No new visible word (build_CB_2026-09-30)
@@ -6225,12 +6452,13 @@ const pairChips = sy => [{ txt: UPGRADES[sy.a].short, col: UPGRADES[sy.a].col },
 function renderSynCard(wrap, sy) {
   const el = document.createElement('div')
   el.className = 'card syn'
+  // BS-M5 2026-09-30: the gate line below, 'Repairs 25% of capacity' -> 'Repairs 50% of capacity' (strings_BS_hp.md S-H2 (c); the card now repairs T.synHeal) (build_BS_2026-09-30)
   // CB-M2 2026-09-30: the tier line is "Synergy" (S-C2 C2-a; the pair moved into the combination row) (build_CB_2026-09-30)
   el.innerHTML = `<div class="ic" style="background:${sy.col}"></div>
     <div class="tier">Synergy</div>${comboHtml(...pairChips(sy), sy.name)}
     <h3>${sy.name}</h3><p>${say('SYN.' + sy.id + '.gain', sy.gain)}</p>
     ${shotChanges({ syn: Object.assign({}, syn, { [sy.id]: true }) })}
-    <div class="gate">${healLine('S5.7.32a', 'Repairs 25% of capacity')}</div>`
+    <div class="gate">${healLine('S5.7.32a', 'Repairs 50% of capacity')}</div>`
   el.onclick = () => {
     takeSynergy(sy)
     picksLeft = Math.max(0, picksLeft - 1)
@@ -6244,14 +6472,15 @@ function renderFuseCard(wrap, fu) {
   const sy = SYNERGIES.find(s => s.id === fu.id)
   const el = document.createElement('div')
   el.className = 'card fuse'
+  // BS-M5 2026-09-30: the gate line below, 'Repairs 15% of capacity' -> 'Repairs all your capacity' (strings_BS_hp.md S-H2 (c)); BS-M4: the card fills capacity (healFull, PLAN_BS H4, ruling RH1; was heal(P.max * 0.15)) (build_BS_2026-09-30)
   // CB-M2 2026-09-30: the tier line is "Compound programme" (S-C2 C2-b); the combination row shows its pair, the measures of the synergy of the same id; its level needs stay in the Combos panel (build_CB_2026-09-30)
   el.innerHTML = `<div class="ic" style="background:${fu.col}"></div>
     <div class="tier">Compound programme</div>${comboHtml(...pairChips(sy), fu.name)}
     <h3>${fu.name}</h3><p>${say('FUS.' + fu.id + '.desc', fu.desc)}</p>${glossHtml(glossTerms(fu.id, fu.name + ' ' + fu.desc))}
-    <div class="gate">${healLine('S5.7.32b', 'Repairs 15% of capacity')}</div>`
+    <div class="gate">${healLine('S5.7.32b', 'Repairs all your capacity')}</div>`
   el.onclick = () => {
     fused[fu.id] = true
-    heal(P.max * 0.15)
+    healFull()
     syncHud()
     AU.play('mastery')
     shake = Math.max(shake, 10)
@@ -6263,25 +6492,28 @@ function renderFuseCard(wrap, fu) {
   wrap.appendChild(el)
 }
 
-// GR-M1 2026-09-29: a grand programme's card (PLAN_GR X1; strings_GR.md S-G1, S-G2 "as placed"; rulings RG1, RG2). Built as the compound programme's card is: the tier line names the kind and its place in the cap (k = taken + 1, of T.grandCap), the desc goes through say(), and the gate is the compound card's own heal line and 15% heal (RG1). Taking it: the laser grants Continuous by setting mod.beam (B1; already held, nothing changes); the banner is the name and `take`, through pendingGist (RG2, B4); and the take moment's ring and tint play when the cards close, as a synergy's do (synBurst; PLAN_GR X6 "drawn to this standard") (build_GR_2026-09-29)
+// UXBS-FIX 2026-09-30: F9 - the GR-M1 line below said "the gate is the compound card's own heal line and 15% heal (RG1)"; since BS-M4 both cards fill capacity (healFull), so it now says so; comment only (build_BS_2026-09-30 fix round)
+// GR-M1 2026-09-29: a grand programme's card (PLAN_GR X1; strings_GR.md S-G1, S-G2 "as placed"; rulings RG1, RG2). Built as the compound programme's card is: the tier line names the kind and its place in the cap (k = taken + 1, of T.grandCap), the desc goes through say(), and the gate is the compound card's own heal line and heal (RG1) - since BS-M4 a full repair (healFull). Taking it: the laser grants Continuous by setting mod.beam (B1; already held, nothing changes); the banner is the name and `take`, through pendingGist (RG2, B4); and the take moment's ring and tint play when the cards close, as a synergy's do (synBurst; PLAN_GR X6 "drawn to this standard") (build_GR_2026-09-29)
 function renderGrandCard(wrap, g) {
   const el = document.createElement('div')
   el.className = 'card fuse grand'
+  // BS-M5 2026-09-30: the gate line below, 'Repairs 15% of capacity' -> 'Repairs all your capacity' (strings_BS_hp.md S-H2 (c)); BS-M4: the card fills capacity (healFull, PLAN_BS H4, ruling RH1; was heal(P.max * 0.15)) (build_BS_2026-09-30)
   // CB-M2 2026-09-30: the tier line unchanged (S-C2 C2-c); the combination row shows the two synergies it needs (g.needs), each chip its synergy's name on its colour (build_CB_2026-09-30)
   const [gA, gB] = g.needs.map(id => SYNERGIES.find(s => s.id === id))
   el.innerHTML = `<div class="ic" style="background:${g.col}"></div>
     <div class="tier">Grand programme · ${grandTaken() + 1} of ${T.grandCap} this run</div>${comboHtml({ txt: gA.name, col: gA.col }, { txt: gB.name, col: gB.col }, g.name)}
     <h3>${g.name}</h3><p>${say('GRD.' + g.id + '.desc', g.desc)}</p>
-    <div class="gate">${healLine('S5.7.32b', 'Repairs 15% of capacity')}</div>`
+    <div class="gate">${healLine('S5.7.32b', 'Repairs all your capacity')}</div>`
   el.onclick = () => {
     grand[g.id] = true
     if (g.id === 'laser' && !mod.beam) mod.beam = 1
-    heal(P.max * 0.15)
+    healFull()
     syncHud()
     AU.play('mastery')
     shake = Math.max(shake, 10)
     pendingGist = { name: g.name, col: g.col, text: g.take }
     synBurst = g.col
+    uxMergeNew.push({ a: { txt: gA.name, col: gA.col }, b: { txt: gB.name, col: gB.col }, c: { txt: g.name, col: g.col }, t: 0, gist: null })   // UX-M3 2026-09-30: a grand programme's moment - its two synergies' names and colours, then its own (build_UX_2026-09-30)
     picksLeft = Math.max(0, picksLeft - 1)
     if (picksLeft > 0) offerCards()
     else closeCards()
@@ -6547,22 +6779,34 @@ const closeCards = () => {
   flashEndBan()
   // The mechanism, said where the player is looking — the field the effect now works on.
   // GR-M6 2026-09-29: the line goes up with { big: true } - its title drawn larger (#flash.big, CSS), for a synergy's and a programme's take moment alike (PLAN_GR X6); every other flash line is unchanged (build_GR_2026-09-29)
+  // UX-M3 2026-09-30: the moments of the synergies and grand programmes taken on this screen join the queue, in the order taken, and play one after another in the middle of the screen (uxMergeDraw); the banner line waits for the last of them and goes up, as before, when it ends (step). A screen with no such take (a measure, a compound programme) raises its line at once, as before (build_UX_2026-09-30)
+  if (uxMergeNew.length) {
+    const ms = uxMergeNew.splice(0)
+    if (pendingGist) { ms[ms.length - 1].gist = pendingGist; pendingGist = null }
+    uxMergeQ.push(...ms)
+    if (!uxMergeCur) uxMergeCur = uxMergeQ.shift()
+  }
   if (pendingGist) { flash(pendingGist.name, pendingGist.text, pendingGist.col, { big: true }); pendingGist = null }
-  // SY-M3 2026-09-29: the synergy moment, on the field once the cards close (PLAN_SY Y3): a ring bursting out from you in the synergy's colour (its own form, `syn` in RING_STYLE: the widest solid ring in the game) and a short shake. Under reduced motion (P6-B1) neither is played; the banner line above still is. Played even when a later pick on the same screen replaced the banner line (build_SY_2026-09-29)
-  if (synBurst) {
+  // UX-M3 2026-09-30: the SY-M3 / GR-M6 ring, shake and tint below no longer play here: they play, unchanged, when each moment's two chips meet over you and become its name (uxTakeRing, from step), so the ring comes with the name; synBurst is only cleared here now (build_UX_2026-09-30)
+  synBurst = null
+  // CB-M3 2026-09-30: the merge moment in the build list, for each synergy taken on this screen (under reduced motion too: there it is a highlight only) (build_CB_2026-09-30)
+  if (synMerge.length) { const ids = synMerge.splice(0); mergeMoment(ids) }   // UX-M3 2026-09-30: moved up, unchanged, so the ring block below can become uxTakeRing (build_UX_2026-09-30)
+}
+// UX-M3 2026-09-30: the take ring, shake and tint, as closeCards played them (the SY-M3 / SY-FIX / GR-M6 / CB-M4 / GR2-M5 lines below still describe them), now played by step when a moment's chips meet (uxMergeStep), in `col`, the colour of the synergy or grand programme the moment names (closeCards used synBurst, the same colour for one take) (build_UX_2026-09-30)
+function uxTakeRing(col) {
+  // UXBS-FIX 2026-09-30: F9 - the SY-M3 line below said "the banner line above still is"; since UX-M3 moved it into uxTakeRing there is no banner line above it - the line goes up from closeCards, or from uxMergeStep when the moment ends; comment only (build_BS_2026-09-30 fix round)
+  // SY-M3 2026-09-29: the synergy moment, on the field once the cards close (PLAN_SY Y3): a ring bursting out from you in the synergy's colour (its own form, `syn` in RING_STYLE: the widest solid ring in the game) and a short shake. Under reduced motion (P6-B1) neither is played; the banner line still is (raised by closeCards, or by uxMergeStep at the moment's end). Played even when a later pick on the same screen replaced the banner line (build_SY_2026-09-29)
+  if (col) {
     if (!reduceMotion) {
       // SY-FIX 2026-09-29: the ring obeys the effects cap as emit() does - it is pushed only while fx is not past T.fxCap (ADJUDICATION_SY F15); the shake below is not an effect and plays either way (build_SY_2026-09-29 fix round)
       // GR-M6 2026-09-29: the ring about twice the radius (max 240 -> 480; its line width doubles in RING_STYLE.syn) and brighter - it stays at full strength longer (life 0.6 -> 0.9: the ring pass draws at full alpha while life > 0.5) and gets a light core (draw); and one short tint of the screen in the same colour (grTint, T.grTintT s from alpha T.grTintA to 0, once) (PLAN_GR X6) (build_GR_2026-09-29)
       // CB-M4 2026-09-30: the ring's radius scales to the screen, so it stays inside it on a phone (PLAN_CB C4, the GR Builder's carried (c)): at most 480, and at most half the shorter side of the view less 16 px (half the ring's drawn stroke, (12 + 3) / 2, plus the shake of 8 below, rounded up) - on a 375 x 812 phone 171.5, on a 1280 x 720 screen 344 (build_CB_2026-09-30)
       // GR2-M5 2026-09-30: `follow: true` - the ring follows you for its short life (step's ring loop), so moving does not carry it off the screen (ADJUDICATION_CB H2) (build_GR2_2026-09-30)
-      if (fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, follow: true, x: P.x, y: P.y, r: 12, max: Math.min(480, Math.min(W, H) / 2 - 16), life: 0.9, col: synBurst, style: 'syn', hit: new Set() })
+      if (fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, follow: true, x: P.x, y: P.y, r: 12, max: Math.min(480, Math.min(W, H) / 2 - 16), life: 0.9, col: col, style: 'syn', hit: new Set() })
       shake = Math.max(shake, 8)
-      grTint = T.grTintT; grTintCol = synBurst
+      grTint = T.grTintT; grTintCol = col
     }
-    synBurst = null
   }
-  // CB-M3 2026-09-30: the merge moment in the build list, for each synergy taken on this screen (under reduced motion too: there it is a highlight only) (build_CB_2026-09-30)
-  if (synMerge.length) { const ids = synMerge.splice(0); mergeMoment(ids) }
 }
 
 // Which measures this one compounds with. Shown on the card so a pair is something the
@@ -6592,6 +6836,65 @@ let pendingGist = null
 let synLast = null, synBurst = null
 // CB-M3 2026-09-30: the synergies taken on the card screen now open, in the order taken, whose merge moment closeCards plays (mergeMoment); emptied there and in reset() (build_CB_2026-09-30)
 const synMerge = []
+// UX-M3 2026-09-30: the merge moment in the middle of the screen (PLAN_UX U3). One per synergy or grand programme taken: { a, b, c } are chips ({ txt, col }: the two measures' short names or the two synergies' names, then the result's name), t its seconds so far, gist the banner line held for its end. uxMergeNew - taken on the card screen now open (closeCards moves them to the queue); uxMergeQ - waiting; uxMergeCur - playing. Emptied in reset(). No new words: the chips carry existing names; the still version adds only the "+" and "->" glyphs the cards' combination row already uses (build_UX_2026-09-30)
+const uxMergeNew = [], uxMergeQ = []
+let uxMergeCur = null
+// UX-M3 2026-09-30: its times, in seconds: the whole moment (about 1 s, U3); the two chips fade in at your left and right; they meet over you (then the take ring plays and the name chip appears, a little larger, settling); the name chip fades out at the end. Under reduced motion the still chip "A + B -> C" shows for the whole UX_MERGE_T (build_UX_2026-09-30)
+const UX_MERGE_T = 1.0, UX_MERGE_IN = 0.15, UX_MERGE_JOIN = 0.55, UX_MERGE_POP = 0.15, UX_MERGE_OUT = 0.2
+// UX-M3 2026-09-30: advanced by step (run time, so a pause holds it): at the meeting point the take ring (uxTakeRing; never under reduced motion, as before); at the end the held banner line goes up and the next moment starts (build_UX_2026-09-30)
+function uxMergeStep(dt) {
+  const m = uxMergeCur
+  if (!m) return
+  const t0 = m.t
+  m.t += dt
+  if (t0 < UX_MERGE_JOIN && m.t >= UX_MERGE_JOIN) uxTakeRing(m.c.col)
+  if (m.t >= UX_MERGE_T) {
+    if (m.gist) flash(m.gist.name, m.gist.text, m.gist.col, { big: true })
+    uxMergeCur = uxMergeQ.shift() || null
+  }
+}
+// UX-M3 2026-09-30: drawn in screen space over you (the view is centred on you; the shake does not move it). A chip is its colour with its name in dark ink (#0b0d10, as the cards' chips), on a dark edge so it reads on every ground; SMALL screens use a smaller font, and anything wider than the view less 16 px each side is scaled down to fit (build_UX_2026-09-30)
+function uxMergeDraw() {
+  const m = uxMergeCur
+  if (!m) return
+  const fs = SMALL ? 13 : 16, px = SMALL ? 8 : 11, h = fs + (SMALL ? 9 : 11), cx = W / 2, cy = H / 2, room = W - 32
+  ctx.save()
+  ctx.font = `800 ${fs}px system-ui,sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+  const wOf = x => ctx.measureText(x.txt).width + px * 2
+  const chip = (x, x0, y0, w) => {
+    ctx.fillStyle = 'rgba(8,10,13,.75)'; ctx.beginPath(); ctx.roundRect(x0 - w / 2 - 2, y0 - h / 2 - 2, w + 4, h + 4, h / 2 + 2); ctx.fill()
+    ctx.fillStyle = x.col; ctx.beginPath(); ctx.roundRect(x0 - w / 2, y0 - h / 2, w, h, h / 2); ctx.fill()
+    ctx.fillStyle = '#0b0d10'; ctx.fillText(x.txt, x0, y0 + 1)
+  }
+  const fade = clamp((UX_MERGE_T - m.t) / UX_MERGE_OUT, 0, 1)
+  if (reduceMotion) {
+    // the still version: one row, "A + B -> C", on one dark pill
+    const ops = ['+', '→'], wa = wOf(m.a), wb = wOf(m.b), wc = wOf(m.c), wo = ops.map(o => ctx.measureText(o).width + 12)
+    const tot = wa + wb + wc + wo[0] + wo[1], s = Math.min(1, room / (tot + 16))
+    ctx.globalAlpha = fade
+    ctx.translate(cx, cy); ctx.scale(s, s)
+    ctx.fillStyle = 'rgba(8,10,13,.75)'; ctx.beginPath(); ctx.roundRect(-tot / 2 - 8, -h / 2 - 6, tot + 16, h + 12, h / 2 + 6); ctx.fill()
+    let x = -tot / 2
+    const put = (c, w) => { chip(c, x + w / 2, 0, w); x += w }
+    const op = (o, w) => { ctx.fillStyle = '#f7f4ee'; ctx.fillText(o, x + w / 2, 1); x += w }
+    put(m.a, wa); op(ops[0], wo[0]); put(m.b, wb); op(ops[1], wo[1]); put(m.c, wc)
+  } else if (m.t < UX_MERGE_JOIN) {
+    // the two chips: in at your left and right, then together over you
+    const kIn = clamp(m.t / UX_MERGE_IN, 0, 1), k = clamp((m.t - UX_MERGE_IN) / (UX_MERGE_JOIN - UX_MERGE_IN), 0, 1), e = k * k * (3 - 2 * k)
+    const wa = Math.min(wOf(m.a), room / 2), wb = Math.min(wOf(m.b), room / 2)
+    const da = Math.max(0, Math.min(SMALL ? 100 : 150, cx - 16 - wa / 2)), db = Math.max(0, Math.min(SMALL ? 100 : 150, cx - 16 - wb / 2))
+    ctx.globalAlpha = kIn
+    const one = (c, w, x0) => { const s = w / wOf(c); ctx.save(); ctx.translate(x0, cy); ctx.scale(s * (1 - 0.15 * e), s * (1 - 0.15 * e)); chip(c, 0, 0, wOf(c)); ctx.restore() }
+    one(m.a, wa, cx - da * (1 - e)); one(m.b, wb, cx + db * (1 - e))
+  } else {
+    // the name chip, with the take ring: a little larger as it appears, settling to its size, then fading out
+    const kp = clamp((m.t - UX_MERGE_JOIN) / UX_MERGE_POP, 0, 1), wc = wOf(m.c), s = Math.min(1.3 - 0.3 * kp, room / wc)
+    ctx.globalAlpha = fade
+    ctx.translate(cx, cy); ctx.scale(s, s)
+    chip(m.c, 0, 0, wc)
+  }
+  ctx.restore()
+}
 // SY-M4 2026-09-29: whether the Combos panel is open on the card screen (the player's last choice, this page load; closed at first), and the switch and panel of the screen now open, for Escape (build_SY_2026-09-29)
 let combosShown = false, combosUi = null
 
@@ -7165,6 +7468,7 @@ function step(dt) {
   // SY-FIX 2026-09-29: and the step in which it runs out ends it (endHold: a season kept for the end, ADJUDICATION_SY F2) (build_SY_2026-09-29 fix round)
   if (holdLeft > 0) { holdLeft = Math.max(0, holdLeft - dt); if (holdLeft === 0) endHold() }
   if (grTint > 0) grTint = Math.max(0, grTint - dt)   // GR-M6 2026-09-29: the take moment's tint runs out (build_GR_2026-09-29)
+  uxMergeStep(dt)   // UX-M3 2026-09-30: the merge moment in the middle of the screen runs on (build_UX_2026-09-30)
 
   // ---- player
   let ix = (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0)
@@ -7254,13 +7558,15 @@ function step(dt) {
       const rr = T.lifelineR + e.r
       const dx = e.x - e.tgt.x, dy = e.y - e.tgt.y
       if (dx * dx + dy * dy < rr * rr) {
-        hitLifeline(e.tgt, T.lifelineHit); AU.play('llhit')
+        hitLifeline(e.tgt, T.lifelineHit * (e.elite ? T.eliteDmg : 1)); AU.play('llhit')   // UXBS-FIX 2026-09-30: F4 - an elite's impact x T.eliteDmg, so "They hit harder" holds of every hit (ADJUDICATION_UXBS F4: the code follows the text) (build_BS_2026-09-30 fix round)
         burst(e.x, e.y, e.col, 9, 190)
         e.gone = true; enemies.splice(i, 1)
         continue
       }
     }
     if (e.behaviour === 'zone') {
+      // BS-M2 2026-09-30: an elite heat zone pulses outward - its radius swells to T.elitePulseMul x and back over T.elitePulseT s, once every T.elitePulseEvery s of its age (which waits during a hold); it does not move. The pulse is heat: the test below, which ignores your grace (C8) (build_BS_2026-09-30)
+      if (e.elite) { const ph = e.age % T.elitePulseEvery; e.r = e.r0 * (ph < T.elitePulseT ? 1 + (T.elitePulseMul - 1) * Math.sin(Math.PI * ph / T.elitePulseT) : 1) }
       // Heat does not need to touch you, only to be where you are. It ignores i-frames,
       // which is what makes standing in it a different mistake from being hit.
       if (dist2(e, P) < (e.r + P.r) ** 2) {
@@ -7364,15 +7670,17 @@ function step(dt) {
     // F3a 2026-09-23: Fragmenting bursts once, where the shot ends (S10) - here, its life ran out, at its last position; the other two ends are its last pierce spent on the boss and on a body, below (build_F_2026-09-23)
     // FX1 2026-09-23: supersedes the F3a line above on where (review F-01, the user's ruling) - the one burst still goes off when the shot stops, but on the LAST body it struck (b.lastHit, set at each strike below: a body or the boss), and a shot that struck nothing does not burst. Here its life ran out: the burst goes off where that body is now, or at its last position if it has died or left the field (a body spliced out keeps its x, y; the boss object keeps its own after `boss` is nulled), and `skip` spares it - it was billed for the direct hit, as on the other two ends (build_F_2026-09-23 fix round)
     if (gone && b.burst && b.lastHit) explode(b.lastHit.x, b.lastHit.y, b.burst, b.dmg * b.burstMul, PAL.yours.ring.frag, { skip: b.lastHit, ramp: 'gold', pull: b.pull, style: 'frag', n: b.mergeN || 1 })
-    if (!gone && boss && boss.state !== 'arrive' && !b.hits.has(boss)
-        && dist2(boss, b) < (boss.r + b.r) ** 2) {
+    // BS-M3 2026-09-30: each compound-event body on the field, the mid-boss first (bossesUp), as the one `boss` was: BB below is the body struck (build_BS_2026-09-30)
+    // UXBS-FIX 2026-09-30: F1 - `bossLive(BB)` added: the list is taken once, before the hits, so a body a chain from the mid-boss absorbed (tbossDown nulls `tboss`) is skipped - no hit, no pierce spent on it, no chain from it (build_BS_2026-09-30 fix round)
+    for (const BB of bossesUp()) if (!gone && bossLive(BB) && BB.state !== 'arrive' && !b.hits.has(BB)
+        && dist2(BB, b) < (BB.r + b.r) ** 2) {
       const a = Math.atan2(b.vy, b.vx)
-      b.hits.add(boss)
+      b.hits.add(BB)
       // FX1 2026-09-23: the boss is now the last body this shot struck - kept on the shot, because hurtBoss sets `boss` to null when this hit kills it (build_F_2026-09-23 fix round)
-      b.lastHit = boss
+      b.lastHit = BB
       // DX2 2026-09-23: a shot standing for n shots (mergeN) knocks as n shots do (build_D_2026-09-22 fix round)
       const n = b.mergeN || 1
-      hurtBoss(b.dmg, Math.cos(a) * 40 * n, Math.sin(a) * 40 * n)
+      hurtBoss(b.dmg, Math.cos(a) * 40 * n, Math.sin(a) * 40 * n, BB)
       if (--b.pierce < 0) {
         gone = true
         // F3a 2026-09-23: its last pierce spent on the boss - the one burst goes off here; `skip: boss`, billed for the direct hit, as `skip: e` spares a body (S10) (build_F_2026-09-23)
@@ -7516,7 +7824,7 @@ function step(dt) {
         P.xp -= P.need; P.level++
         P.need = Math.round(P.need * T.xpCurve + T.xpAdd)
         if (P.relief) heal(P.max * P.relief)
-        heal(P.max * T.levelHeal)             // the certain reward, before any choice
+        heal(P.max * DIFF.levelHeal)          // BS-M4 2026-09-30: a small repair per level, before any choice, by difficulty (PLAN_BS H1; was T.levelHeal 0.20, "the certain reward" - ruling RH6) (build_BS_2026-09-30)
         picksLeft += T.picksPerLevel          // crossing several levels at once banks them all
         leveled = true
       }
@@ -7574,6 +7882,7 @@ function die() {
   // Playtest god mode: every damage path ends here, so one guard covers all of them.
   if (dev.on && dev.god) { P.hp = P.max; return }
   over = true
+  uxMergeNew.length = 0; uxMergeQ.length = 0; uxMergeCur = null   // UXBS-FIX 2026-09-30: F6 - a merge moment playing, waiting or not yet started when the run ends is cleared, as reset() clears it; step no longer runs, so it would stay drawn, frozen, under the report (verify_UXBS F6) (build_BS_2026-09-30 fix round)
   AU.play('die')
   burst(P.x, P.y, '#ff4d5e', 40, 380)
   // What still stood becomes the recovery budget: time held, lifelines standing, works
@@ -7587,6 +7896,7 @@ function die() {
   // GP 2026-09-29: the medians above (81 against Exposed's 32) were measured on 2026-09-01 and predate GP-M2's Exposed values; they were not re-measured, and pay was kept at 2.2 (PLAN_GP G3); comment only (build_GP_2026-09-29)
   runFunds = Math.round((Math.round(t / 15) + lifelines.filter(L => L.alive).length * 3 +
                          worksDone.length * 2 + bossesKilled * 2) * (DIFF.pay || 1))
+    + (tbossState === 'absorbed' ? tbossBonus : 0)   // BS-M3 2026-09-30: the true boss's bonus, already x DIFF.pay and rounded (tbossDown), added whole so the report prints exactly what was added (build_BS_2026-09-30)
   // CORRECTED 2026-09-23: comment made true - a skip after right answers keeps their share (finish() calls releaseFunds(debrief.right, list.length), which pays Math.round(runFunds * right / asked)); a skip pays nothing only if it comes before any right answer (section C round 3, section_C_2026-09-22)
   // NOT banked here (2026-09-02, user direction). What the run protected sets the SIZE of
   // the recovery budget; the debrief decides how much of it you actually get - right/asked of
@@ -7669,6 +7979,8 @@ function renderReport() {
       // CORRECTED 2026-09-22: was "+15% to everything"; svc() feeds eff(), which multiplies damage and fire rate only (sweep 3, sweep3_2026-09-22/source_verification.md n/a, code; Lead F7)
       // LL-M2 2026-09-25: S-L4 R-1 (ruling RL2) - after a rebuild the bonus stopped while a lifeline was down, so "held all run" reads "held since your last rebuild" in a run with one; a run with none prints exactly as before (build_LL_2026-09-25)
       `+${Math.round((T.svcBonus - 1) * 100)}% damage and fire rate, ${llRebuilds ? 'held since your last rebuild' : 'held all run'}. Paid only while every service is up, not most of them — the disruption of basic services is what Target D sets out to reduce.`))
+  // UXBS-FIX 2026-09-30: F5 - the true boss's row still shows here, right after the lifeline row, but it is added below the first / best run rows (hls.splice at hlBoss), and only when the rows that come unconditionally leave a slot (hls.length < 3), so the block is never more than three rows (verify_UXBS F5); where it shows, the order on screen is as before (build_BS_2026-09-30 fix round)
+  const hlBoss = hls.length
   // FX2 2026-09-23: shown only when every question asked was answered right - "asked" is the debrief's list, the count releaseFunds banks against (a skipped question counts as asked and not right, as the comment under debriefN in T says); it was `quizRight + quizWrong > 0 && !quizWrong`, true after one right answer and a skip (review_F.md, pre-existing). No questions: not shown, as before (build_F_2026-09-23 fix round)
   // P6-B2 2026-09-25: F1 (a) - "the count releaseFunds banks against" is now the count each share is banked against (bankShare's step divides by list.length); the condition is unchanged (build_P6_2026-09-25)
   if (debrief && debrief.list.length && quizRight === debrief.list.length)
@@ -7695,6 +8007,13 @@ function renderReport() {
       (runLog.beatLv ? `, and level ${P.level} against ${runLog.was.lv}.`
                      : `, on level ${P.level} — your best here reached ${runLog.was.lv}.`) +
       ` The clock separates runs here far less than what they hold does, and what you carry in lands there.`))
+  // UXBS-FIX 2026-09-30: F5 - the true boss's row (BS-M3: strings_BS.md S-B1 (g), shown only when it arrived this run, in one of its three states; its title names it; ${bonus} is tbossBonus, the value die() added to runFunds; not in the "Compound events" fold, C6). Moved here from right after the lifeline row and gated on a free slot: it goes in after the rows above (the unconditional ones) have taken theirs, and before the budget row and the other slot-gated rows below; it is put back in its old place on screen, after the lifeline row (hlBoss). The F3d line below ("It sits below the unconditional rows and above every slot-gated one") now has this row above it (build_BS_2026-09-30 fix round)
+  if (hls.length < 3 && tbossState)
+    hls.splice(hlBoss, 0, row(TBOSS_COL, `Boss — ${TBOSS_NAMES[PLACE.id] || TBOSS_NAMES.delta}`,
+      // UXBS-FIX 2026-09-30: F3 - the two lines below say the boss adds to the SIZE of the recovery budget (as the budget row in the folds says: "... set the SIZE of it"), not that you got it; were "Absorbed. It paid all capacity back, a burst of XP and <b>${tbossBonus}</b> more recovery budget." / "Not absorbed, but outlasted. Absorbing it pays all capacity back, a burst of XP and more recovery budget." (fix_record_UXBS.md F3) (build_BS_2026-09-30 fix round)
+      tbossState === 'absorbed' ? say('BOSS.true.rep.down', `Absorbed. It paid all capacity back and a burst of XP. It also added <b>${tbossBonus}</b> to the size of your recovery budget.`, tbossBonus)
+      : tbossState === 'passed' ? say('BOSS.true.rep.passed', 'Not absorbed, but outlasted. Absorbing it pays all capacity back and a burst of XP. It also makes your recovery budget bigger.')
+      : 'It was still on the field when the run ended.'))
   // FX3 2026-09-23: the F3d line below made true (review F-07) - it said the highlight is "the fold row's title"; the fold row's title adds a difficulty suffix whenever DIFF.pay is set and not 1, and the highlight's title has none (build_F_2026-09-23 fix round)
   // F3d 2026-09-23: the recovery budget said out loud (part 4 N4) - one highlight: the fold row's title without its difficulty suffix (DIFF.name and DIFF.pay, added when DIFF.pay is set and not 1) and one sentence, the C8 strings verbatim (section_C_2026-09-22/drafter_record.md section 7, restated in drafter_record_r2.md section 6), gated on runFunds > 0 as the stat tile and the fold row are, and on the three-highlight gate like every row here. It sits below the unconditional rows and above every slot-gated one, so the "Run N" row after it no longer hangs off the else chain: its condition is written out (not first, not best), which is exactly what the else chain gave it. The fold row further down is untouched (build_F_2026-09-23)
   if (hls.length < 3 && runFunds > 0) {
@@ -7767,7 +8086,8 @@ function renderReport() {
     const list = BOSSES[PLACE.id] || BOSSES.delta
     html += sec(`Compound events — ${bossesKilled} absorbed, ${bossesSurvived} outlasted`,
       bossSeen.map(n => { const K = list.find(b => b.name === n); return K ? row(K.col, K.name, K.note) : '' }).join('') +
-      row('#8fe3ff', 'Why it is the boss',
+      // BS-M5 2026-09-30: the title was 'Why it is the boss' - false once the true boss carries "BOSS" on its bar (strings_BS.md S-B2) (build_BS_2026-09-30)
+      row('#8fe3ff', 'Why it is a boss',
           'Hazards do not queue. The word for several of them arriving together is a compound event, and it is the case that ordinary planning misses — each part is survivable on its own, and the plan was written for the parts.'))
   }
 
@@ -7845,6 +8165,7 @@ function renderReport() {
       let note = say('HAZ.' + k + '.src', HAZARDS[k].src)
       if (k === 'fire' && emberFires)
         note += ` <b>${emberFires} of them started where an ember landed, not where a fire walked in.</b>`
+      if (eliteTally[k]) note += ` <b>${eliteTally[k]} of them were elite.</b>`   // BS-M2 2026-09-30: strings_BS.md S-B3 (c) verbatim, shown when n > 0 (build_BS_2026-09-30)
       return row(HAZARDS[k].col, `${HAZARDS[k].name} ${n}`, note)
     }).join('') +
     (runFunds > 0
@@ -7853,7 +8174,8 @@ function renderReport() {
           return row('#ffd166', `Recovery budget — ${learnFunds} of ${runFunds} released` +
             (DIFF.pay && DIFF.pay !== 1 ? ` · ${DIFF.name} ×${DIFF.pay}` : ''),
             // P6-B8 2026-09-25: F4 - S-B2 verbatim (ruling R-S2): the sentence names all four terms runFunds adds in die() (time, lifelines standing, works built, compound events absorbed); a second sentence names the DIFFICULTY setting's multiplier, shown only when DIFF.pay is set and not 1, the title's own condition above. It read "Time held, lifelines standing and works built set the SIZE of it: <b>${runFunds}</b>. " (build_P6_2026-09-25)
-            `Time held, lifelines still standing, works built and compound events absorbed set the SIZE of it` +
+            // BS-M5 2026-09-30: a fifth term, the true boss's bonus (strings_BS.md S-B4 rewrite #1 verbatim); it read "Time held, lifelines still standing, works built and compound events absorbed set the SIZE of it" (build_BS_2026-09-30)
+            `Time held, lifelines still standing, works built, compound events absorbed and the boss absorbed set the SIZE of it` +
             (DIFF.pay && DIFF.pay !== 1 ? `. ${DIFF.name} pays ${DIFF.pay} times that: <b>${runFunds}</b>. ` : `: <b>${runFunds}</b>. `) +
             (dN && quizRight
               ? `What you keep is what you could explain — <b>${quizRight} of ${dN}</b> right released <b>${learnFunds}</b>. `
@@ -8077,6 +8399,21 @@ function buildVignette() {
 // quake is angular and arrives in threes, a storm is a swirl that never closes, a flood is
 // a squared mass with a crest on the edge that is moving, a fire leans and flickers.
 // SY-M1 2026-09-29: the sprites' own motion reads hazClock() (`tk`), not `t`: it is `t`, except while a hold runs, when it stays at the moment the hold began - so a held body stops turning, bobbing and flickering on screen as well (build_SY_2026-09-29)
+// BS-M2 2026-09-30: an elite's marker (B2: "a distinct outline and a small crown mark (not colour alone)"): a steady solid ring, dark under ELITE_COL, 3 px out from a body (on a zone's edge), and a three-pointed crown above a body, clear of its health bar (at a zone's centre). Drawing only; no particle, so nothing here counts toward T.fxCap (build_BS_2026-09-30)
+function eliteMark(e, zone) {
+  const rr = zone ? e.r : e.r + 3
+  ctx.setLineDash([])
+  ctx.beginPath(); ctx.arc(e.x, e.y, rr, 0, TAU)
+  ctx.strokeStyle = 'rgba(8,10,13,.6)'; ctx.lineWidth = 4; ctx.stroke()
+  ctx.strokeStyle = ELITE_COL; ctx.lineWidth = 2; ctx.stroke()
+  const cx = e.x, cy = zone ? e.y : e.y - e.r - 14, s = 7
+  ctx.beginPath()
+  ctx.moveTo(cx - s, cy + s * .6); ctx.lineTo(cx - s, cy - s * .5); ctx.lineTo(cx - s * .5, cy); ctx.lineTo(cx, cy - s * .8)
+  ctx.lineTo(cx + s * .5, cy); ctx.lineTo(cx + s, cy - s * .5); ctx.lineTo(cx + s, cy + s * .6); ctx.closePath()
+  ctx.fillStyle = ELITE_COL; ctx.fill()
+  ctx.strokeStyle = 'rgba(8,10,13,.75)'; ctx.lineWidth = 1.2; ctx.stroke()
+}
+
 function hazardSprite(e, col) {
   ctx.fillStyle = col
   const r = e.r, lit = e.flash > 0, tk = hazClock()
@@ -8303,8 +8640,9 @@ function drawEvents(layer) {
   }
   // DX5 2026-09-23: the compound event's two warnings - its arrival ring and its charge lane - are drawn in this layer with every other warning, after all of your paint; they were drawn in the hazards pass, under your rings, shots and particles (review F6; S01: player paint must never draw over a live telegraph). Moved from the compound event's block in draw(), drawn as they were (build_D_2026-09-22 fix round)
   // SY-FIX 2026-09-29: held with the compound event (ADJUDICATION_SY F4): during a hold the arrival ring stops pulsing and crawling - it is drawn by the hazards' clock (hazClock, frozen at the hold's start, as the held bodies are), and its size already waits with B.tState - and the charge lane stops turning after you: it keeps the heading it had when the hold began (B.laneA, written here only while no hold runs) and follows you again after it (build_SY_2026-09-29 fix round)
-  if (tele && boss) {
-    const B = boss, hk = hazClock()
+  // BS-M3 2026-09-30: for each body on the field (bossesUp), the true boss's lane after its own warnings (build_BS_2026-09-30)
+  if (tele) for (const B of bossesUp()) {
+    const hk = hazClock()
     if (B.state === 'arrive') {
       const k = 1 - B.tState / T.bossWarn
       ctx.strokeStyle = `rgba(255,77,94,${.3 + .4 * Math.sin(hk * 14)})`
@@ -8322,7 +8660,28 @@ function drawEvents(layer) {
       ctx.fillRect(0, -B.r * .8, 640, B.r * 1.6)
       ctx.restore()
     }
+    if (B.lane) tbossLaneDraw(B, hk)
   }
+}
+
+// BS-M3 2026-09-30: the true boss's lane (tbossAttacks). While it waits: a faint band where it will start, the arc it will sweep drawn as a dashed edge, a dashed outline that crawls on the hazards' clock (the warnings' signature, D6) - so you see where the band comes from and which way it turns. Live: the band itself, solid, in the alarm red, turning across the ground. Drawn in the telegraph layer with the charge lane, after your own paint (build_BS_2026-09-30)
+function tbossLaneDraw(B, hk) {
+  const L = B.lane, hw = T.tbLaneW / 2, len = T.tbLaneLen
+  ctx.save(); ctx.translate(B.x, B.y)
+  if (!L.live) {
+    const k = clamp(L.t / T.tbLaneWarn, 0, 1)
+    ctx.strokeStyle = `rgba(255,77,94,${.25 + .2 * k})`; ctx.lineWidth = 2; ctx.setLineDash([10, 10]); ctx.lineDashOffset = -hk * 40
+    ctx.beginPath(); ctx.arc(0, 0, len, L.a, L.a + B.laneDir * T.tbLaneArc, B.laneDir < 0); ctx.stroke()
+    ctx.rotate(L.a)
+    ctx.fillStyle = `rgba(255,77,94,${.08 + .14 * k})`; ctx.fillRect(0, -hw, len, hw * 2)
+    ctx.strokeRect(0, -hw, len, hw * 2)
+    ctx.setLineDash([])
+  } else {
+    ctx.rotate(L.a)
+    ctx.fillStyle = 'rgba(255,77,94,.42)'; ctx.fillRect(0, -hw, len, hw * 2)
+    ctx.strokeStyle = 'rgba(255,200,205,.8)'; ctx.lineWidth = 2; ctx.strokeRect(0, -hw, len, hw * 2)
+  }
+  ctx.restore()
 }
 
 // D11 2026-09-22: the nearest part of an event's warning to the player, with that warning's colour, for its edge pointer - or null when the event shows no warning now. Rockfall: the nearest circle still in its telegraph look; ground failure: the nearest point of its lines; a wall: the nearest point of its warning line, drawn 640 px out along its normal from where it was fired (drawEvents) (build_D_2026-09-22)
@@ -8677,9 +9036,11 @@ function draw() {
         ctx.lineWidth = 1.5
         ctx.beginPath(); ctx.arc(e.x, e.y, e.r * (0.35 + ph * 0.62), 0, TAU); ctx.stroke()
       }
+      if (e.elite) eliteMark(e, true)   // BS-M2 2026-09-30 (build_BS_2026-09-30)
       continue
     }
     hazardSprite(e, e.flash > 0 ? '#fff' : hld ? heldCol(e.col) : e.col)   // SY-M1 2026-09-29: greyed while held (build_SY_2026-09-29)
+    if (e.elite) eliteMark(e, false)   // BS-M2 2026-09-30 (build_BS_2026-09-30)
     if (e.hard) {
       // bought by a wrong answer: outlined so it is legible as a consequence and not as
       // bad luck
@@ -8696,8 +9057,7 @@ function draw() {
 
   // the compound event. Several hazards at once, so it is drawn as several rings that do
   // not quite agree with each other rather than as one body.
-  if (boss) {
-    const B = boss
+  for (const B of bossesUp()) {   // BS-M3 2026-09-30: each body on the field, the true boss in its own colour and size (build_BS_2026-09-30)
     // DX5 2026-09-23: its arrival ring and charge lane are warnings, so they are drawn in the telegraph layer (drawEvents), no longer here under your paint (build_D_2026-09-22 fix round)
     const glow = ctx.createRadialGradient(B.x, B.y, B.r * .4, B.x, B.y, B.r * 2.2)
     glow.addColorStop(0, B.col + '55'); glow.addColorStop(1, B.col + '00')
@@ -8718,7 +9078,7 @@ function draw() {
   if (hld) {
     ctx.beginPath()
     for (const e of enemies) { const rr = e.behaviour === 'zone' ? e.r : e.r + 3; ctx.moveTo(e.x + rr, e.y); ctx.arc(e.x, e.y, rr, 0, TAU) }
-    if (boss) { ctx.moveTo(boss.x + boss.r + 5, boss.y); ctx.arc(boss.x, boss.y, boss.r + 5, 0, TAU) }
+    for (const B of bossesUp()) { ctx.moveTo(B.x + B.r + 5, B.y); ctx.arc(B.x, B.y, B.r + 5, 0, TAU) }   // BS-M3 2026-09-30: each body on the field (build_BS_2026-09-30)
     ctx.setLineDash([])
     ctx.strokeStyle = 'rgba(8,10,13,.55)'; ctx.lineWidth = 3.5; ctx.stroke()
     ctx.strokeStyle = HOLD_COL; ctx.lineWidth = 1.5; ctx.stroke()
@@ -8978,26 +9338,13 @@ function draw() {
   ctx.beginPath(); ctx.arc(P.x, P.y, P.r, 0, TAU); ctx.fill()
   ctx.fillStyle = 'rgba(11,13,16,.5)'
   ctx.beginPath(); ctx.arc(P.x, P.y, P.r * .42, 0, TAU); ctx.fill()
-  // SY-M3 2026-09-29: one mark per synergy held, circling you in that synergy's colour (PLAN_SY Y3 "What stays"), so a build that has compounded looks different at a glance: separate diamonds, so the count reads without colour, each with a dark edge so it stands out on every ground. Evenly spaced on a circle 22 px out from your disc, turning slowly; under reduced motion (P6-B1) they stand still (build_SY_2026-09-29)
-  const synHeld = SYNERGIES.filter(sy => syn[sy.id])
-  if (synHeld.length) {
-    // GR-M6 2026-09-29: supersedes the SY-M3 line above on size and radius - the marks are 2.5x larger (half-size 4.5 -> 11.25), on a circle 34 px out (was 22) so nine still stand apart (about 30 px centre to centre) and clear your disc, each on a soft halo drawn as two translucent discs of its colour (no shadowBlur, for phones); the dark edge 2 px. Count and spacing unchanged, so the count still reads without colour (PLAN_GR X6) (build_GR_2026-09-29)
-    const R = P.r + 34, a0 = reduceMotion ? -Math.PI / 2 : t * 0.8, s = 11.25
-    ctx.strokeStyle = 'rgba(8,10,13,.7)'; ctx.lineWidth = 2
-    synHeld.forEach((sy, i) => {
-      const a = a0 + i * TAU / synHeld.length, x = P.x + Math.cos(a) * R, y = P.y + Math.sin(a) * R
-      ctx.fillStyle = `rgba(${rgbOf(sy.col)},.14)`; ctx.beginPath(); ctx.arc(x, y, s * 1.55, 0, TAU); ctx.fill()
-      ctx.fillStyle = `rgba(${rgbOf(sy.col)},.22)`; ctx.beginPath(); ctx.arc(x, y, s * 1.15, 0, TAU); ctx.fill()
-      ctx.fillStyle = sy.col; ctx.beginPath()
-      ctx.moveTo(x, y - s); ctx.lineTo(x + s, y); ctx.lineTo(x, y + s); ctx.lineTo(x - s, y); ctx.closePath()
-      ctx.fill(); ctx.stroke()
-    })
-  }
+  // UX-M1 2026-09-30: the SY-M3 / GR-M6 marks circling you (one diamond per synergy held) are removed (PLAN_UX U1, the user's choice): nothing unexplained orbits you now. The aimed shots' trail, the take ring and the banner are unchanged (build_UX_2026-09-30)
   ctx.restore()
 
   if (vignette) { ctx.fillStyle = vignette; ctx.fillRect(0, 0, W, H) }
   // GR-M6 2026-09-29: the take moment's tint - the whole screen in the synergy's (or grand programme's) colour, once, fading from T.grTintA to 0 over T.grTintT s (set in closeCards, never under reduced motion; counted down in step) (PLAN_GR X6) (build_GR_2026-09-29)
   if (grTint > 0 && grTintCol) { ctx.fillStyle = `rgba(${rgbOf(grTintCol)},${(T.grTintA * clamp(grTint / T.grTintT, 0, 1)).toFixed(3)})`; ctx.fillRect(0, 0, W, H) }
+  uxMergeDraw()   // UX-M3 2026-09-30: the merge moment, over you and over the tint (build_UX_2026-09-30)
 
   // Everything off-screen that you might want to go to, marked at the edge in screen space.
   // Going or not going is the decision all of this exists for, and you cannot decide about
@@ -9053,7 +9400,7 @@ function draw() {
   for (const w of works) mark(w.x, w.y, WORKS[w.kind].col, 9, .3 + .3 * Math.sin(t * 4), false, () => worksGlyph(w.kind, 0, 0, WORKS[w.kind].col))
   for (const q of pickups) mark(q.x, q.y, PICKUPS[q.kind].col, 7, .34, false, () => pickupStar(q.kind))
   // D11 2026-09-22: the compound event is theirs - its pointer takes the theirs arrowhead (build_D_2026-09-22)
-  if (boss) mark(boss.x, boss.y, boss.col, 13, .5 + .4 * Math.sin(t * 7), true)
+  for (const B of bossesUp()) mark(B.x, B.y, B.col, 13, .5 + .4 * Math.sin(t * 7), true)   // BS-M3 2026-09-30: each body on the field (build_BS_2026-09-30)
   // D11 2026-09-22: an event warning whose nearest part is off screen gets a pointer at the edge, from its first frame - a wall's warning line sits 640 px out, off a phone screen in every direction. Points at the warning's nearest part, in that warning's own colour, with the theirs arrowhead; nothing is drawn while that nearest part is on screen (eventMarkNear) (build_D_2026-09-22)
   for (const ev of events) {
     const near = eventMarkNear(ev)
@@ -9073,8 +9420,12 @@ function draw() {
 
   // the boss bar. Top of the screen, named, with the withdrawal timer under it — because
   // "it leaves on its own" is only fair if you can see how long that is.
-  if (boss && boss.state !== 'arrive') {
-    const B = boss, w = Math.min(W - 60, 520), x0 = (W - w) / 2, y0 = 46
+  // BS-M3 2026-09-30: one bar per body on the field, stacked 48 px apart - the mid-boss's first, where it always was; the true boss's label is `BOSS · <NAME>` (strings_BS.md S-B1 (a)), its withdrawal line runs over T.tbossLife, and a label wider than the bar is drawn smaller to fit, never cut (ruling RB7) (build_BS_2026-09-30)
+  // UXBS-FIX 2026-09-30: F7 - a bar keeps the place it first took (B.barY): the top one (46) unless the other body's bar holds it, else the one below (94). It was stacked afresh each frame over the bodies past their arrival, so the true boss's bar, drawn on top while the mid-boss walked in, jumped 48 px down when the mid-boss arrived (verify_UXBS F7) (build_BS_2026-09-30 fix round)
+  for (const B of bossesUp()) {
+    if (B.state === 'arrive') continue
+    if (!B.barY) B.barY = bossesUp().some(o => o !== B && o.barY === 46) ? 94 : 46   // UXBS-FIX 2026-09-30: F7 (build_BS_2026-09-30 fix round)
+    const w = Math.min(W - 60, 520), x0 = (W - w) / 2, y0 = B.barY   // UXBS-FIX 2026-09-30: F7 - was `y0 = barY`, then `barY += 48` (build_BS_2026-09-30 fix round)
     ctx.fillStyle = 'rgba(6,8,11,.62)'
     ctx.beginPath(); ctx.roundRect(x0 - 10, y0 - 22, w + 20, 42, 10); ctx.fill()
     ctx.fillStyle = 'rgba(255,255,255,.12)'
@@ -9083,11 +9434,14 @@ function draw() {
     ctx.fillStyle = B.col
     ctx.beginPath(); ctx.roundRect(x0, y0, Math.max(3, w * frac), 11, 6); ctx.fill()
     ctx.fillStyle = 'rgba(255,255,255,.22)'
-    ctx.fillRect(x0, y0 + 14, w * clamp(B.life / T.bossLife, 0, 1), 2)
+    ctx.fillRect(x0, y0 + 14, w * clamp(B.life / (B.tb ? T.tbossLife : T.bossLife), 0, 1), 2)   // BS-M3 2026-09-30: over its own time on the field (build_BS_2026-09-30)
     ctx.textAlign = 'center'
     ctx.font = '800 12px system-ui,sans-serif'
     ctx.fillStyle = B.col
-    ctx.fillText(B.name.toUpperCase(), W / 2, y0 - 7)
+    const lbl = (B.tb ? 'BOSS · ' : '') + B.name.toUpperCase()   // BS-M3 2026-09-30 (build_BS_2026-09-30)
+    const lw = B.tb ? ctx.measureText(lbl).width : 0
+    if (lw > w) ctx.font = `800 ${(12 * w / lw).toFixed(2)}px system-ui,sans-serif`   // BS-M3 2026-09-30: shrink to fit, RB7 (build_BS_2026-09-30)
+    ctx.fillText(lbl, W / 2, y0 - 7)
     ctx.textAlign = 'left'
   }
 }
@@ -9209,7 +9563,7 @@ function initDev() {
     if (over) return
     P.xp = 0; P.level++
     P.need = Math.round(P.need * T.xpCurve + T.xpAdd)
-    heal(P.max * T.levelHeal)
+    heal(P.max * DIFF.levelHeal)   // BS-M4 2026-09-30: the per-difficulty key, as the level-up loop (ruling RH6) (build_BS_2026-09-30)
     picksLeft += T.picksPerLevel
     AU.play('level'); offerCards(true); syncHud()
   }
