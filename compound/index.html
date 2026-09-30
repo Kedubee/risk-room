@@ -285,6 +285,12 @@
   .wpn i{width:9px;height:9px;border-radius:2px;font-style:normal}
   .wpn b{font-weight:700}
   .wpn span{opacity:.55}
+  /* CB-M3 2026-09-30: the merge moment in the build list (PLAN_CB C3; RC4). .ghost - a copy of a measure row laid over it and moved by script (mergeMoment). .fresh - the new synergy row: a faint panel with a 1 px edge in its colour (--mc); it comes in as the copies arrive (0-35% hidden), glows once in its colour and settles. Under reduced motion there is no animation: the row is simply shown highlighted. The negative margin keeps the list from moving when the panel's padding is added (build_CB_2026-09-30) */
+  .wpn.ghost{position:fixed;z-index:7;margin:0;pointer-events:none}
+  .wpn.fresh{margin:-2px -6px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);
+    box-shadow:0 0 0 1px var(--mc);animation:cb-merge 1.6s ease-out both}
+  @keyframes cb-merge{0%,35%{opacity:0;box-shadow:0 0 0 0 transparent}55%{opacity:1;box-shadow:0 0 14px 4px var(--mc)}100%{opacity:1;box-shadow:0 0 0 1px var(--mc)}}
+  @media (prefers-reduced-motion: reduce){ .wpn.fresh{animation:none} }
 
   #cards{position:fixed;inset:0;z-index:20;display:none;align-items:flex-start;
     justify-content:center;overflow-y:auto;overscroll-behavior:contain;
@@ -313,6 +319,18 @@
     border-radius:50%;box-sizing:border-box;vertical-align:middle}
   .card .pairs .ph .pm{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
   .card .pairs .pd .pm{background:currentColor}
+  /* CB-M1 2026-09-30: the preview line on a measure card that completes a pair - bold, in the synergy's colour (set on the line) with its swatch, a bar of that colour down its left edge on a faint panel, so it stands out from the grey "Compounds with" line under it; "and 1 more pair" in the card's own ink (PLAN_CB C1) (build_CB_2026-09-30) */
+  .card .cmp{margin-top:10px;display:flex;align-items:baseline;gap:7px;padding:5px 9px;border-radius:7px;
+    border-left:3px solid currentColor;background:rgba(255,255,255,.06);font-size:11.5px;font-weight:800;line-height:1.4}
+  .card .cmp i{flex:none;width:9px;height:9px;border-radius:2px;font-style:normal;align-self:center}
+  .card .cmp + .cmp{margin-top:5px}
+  .card .cmp.more{border-left-color:rgba(255,255,255,.28);color:rgba(232,238,247,.75);font-weight:700}
+  /* CB-M2 2026-09-30: the combination row on a synergy / programme card - chips filled with each ingredient's colour, dark ink on them, joined by a large "+" and "→"; chip B and the arrow wrap together (.end), a chip longer than the card wraps inside itself (PLAN_CB C2) (build_CB_2026-09-30) */
+  .card .combo{display:flex;flex-wrap:wrap;align-items:center;gap:5px 6px;margin:-3px 0 9px}
+  .card .combo .chip{display:inline-block;max-width:100%;padding:2px 9px;border-radius:9px;color:#0b0d10;
+    font-size:11px;font-weight:800;line-height:1.4}
+  .card .combo .op{font-size:15px;font-weight:800;line-height:1;opacity:.9}
+  .card .combo .end{display:inline-flex;align-items:center;gap:6px;min-width:0;max-width:100%}
   /* What taking this card actually changes, in numbers. Only the rows that move are printed. */
   .card .res{margin-top:10px;display:flex;flex-direction:column;gap:3px}
   .card .res span{font-size:10.5px;letter-spacing:.03em;opacity:.62}
@@ -353,6 +371,8 @@
   #cards.show ~ #lvlup{display:block}
   /* SY-FIX 2026-09-29: on a phone the card screen scrolls (the Combos panel made it long), and the label, fixed at 26% from the top, sat over the cards as they scrolled past (ADJUDICATION_SY L1). At 480 px and below the card screen keeps a 32 px band at its top as a transparent top border - outside its scroll area, so no card ever passes under it, and still dimmed and blurred by the screen's own background - and the label sits in that band. Same element, same text and look; layout only (build_SY_2026-09-29 fix round) */
   @media (max-width:480px){#cards{border-top:32px solid transparent}#lvlup{top:8px}}
+  /* CB-M5 2026-09-30: the same band and place for the label on a phone held sideways - 900 px wide or less and 500 px tall or less - where the label, at 26% from the top, covered the scrolled cards (PLAN_CB C5; ADJUDICATION_SY G5). Layout only (build_CB_2026-09-30) */
+  @media (max-width:900px) and (max-height:500px){#cards{border-top:32px solid transparent}#lvlup{top:8px}}
 
   #over{position:fixed;inset:0;z-index:22;display:none;align-items:flex-start;
     justify-content:center;overflow-y:auto;overscroll-behavior:contain;padding:20px;
@@ -1250,7 +1270,7 @@ const T = {
   holdT: 3,
   // GR-M1 2026-09-29: grand programmes taken per run, at most (PLAN_GR X1, the user's cap of 2); the card's tier line and the Combos heading and cap reason print it from here, so 1 or 3 is this one line (build_GR_2026-09-29)
   grandCap: 2,
-  // GR-M2 2026-09-29: chain lightning (PLAN_GR X2, ruling RG4): a jump reaches the nearest hazard not yet struck within grChainR px (centre to centre), up to grChainJumps jumps; the first deals grChainFirst of the shot's damage and each later one grChainFall of the one before; at most grChainPerSec chains start in any second of run time (a chain counts when it makes its first jump); each jump's arc is drawn for grChainArcT s. The card and the Combos row state 4, 60% and 20% (= 1 - 0.8), so a change here changes that text too (build_GR_2026-09-29)
+  // GR-M2 2026-09-29: chain lightning (PLAN_GR X2, ruling RG4): a jump reaches the nearest hazard not yet struck within grChainR px (centre to centre), up to grChainJumps jumps; the first deals grChainFirst of the shot's damage and each later one grChainFall of the one before; at most grChainPerSec chains start in any second of run time (a chain counts when it makes its first jump); each jump's arc is drawn for grChainArcT s. The card and the Combos row state 4, 60% and 20% (= 1 - 0.8), so a change here changes that text too (build_GR_2026-09-29). CB-M4 2026-09-30 (ruling RC7): the Combos row (gain, Steady and Learning) also states the cap, 12 a second (grChainPerSec), so a change to it changes that text too (build_CB_2026-09-30)
   grChainR: 150, grChainJumps: 4, grChainFirst: 0.60, grChainFall: 0.8, grChainPerSec: 12, grChainArcT: 0.12,
   // GR-M3 2026-09-29: the laser (PLAN_GR X3): the held beam's damage multiplier and the targets it adds (SHOT().beamTgts). The card states "50% harder" and "one more target", so a change here changes that text too (build_GR_2026-09-29)
   grLaserDmg: 1.5, grLaserTgts: 1,
@@ -2297,10 +2317,11 @@ const FUSIONS = [
 ]
 const fused = {}      // fusion id -> taken
 // GR-M1 2026-09-29: the grand programmes (PLAN_GR X1-X4; strings_GR.md S-G1 verbatim as ruled, RG3 names; B5: a list of its own, never appended to FUSIONS). Each needs two synergies held (`needs`, synergy ids) and no levels; taken from the special card slot, at most T.grandCap a run (grandReady). `take` is the banner line on taking (RG2), which goes through pendingGist; `desc` and `gain` have Learning entries (PLAIN 'GRD.<id>.desc' / '.gain'). Colours are in the YOURS band (PAL, above: cool, chroma >= 0.025); `arc` is the lightning's own paint (build_GR_2026-09-29)
+// CB-M4 2026-09-30: two rewordings, strings_CB.md S-C4 verbatim as ruled (PLAN_CB C4; ADJUDICATION_GR F1, F2): the chain's desc and gain say the shots "can" set off lightning, and the gain gives the cap (T.grChainPerSec, 12 a second); the shield's gain says the return does "at least double its damage, more with Resilient investment" (grReflect multiplies by P.dmgMul, which is never below 1). The Learning rows GRD.chain.desc / .gain and GRD.shield.gain changed with them (build_CB_2026-09-30)
 const GRANDS = [
   { id: 'chain', name: 'Warning chain', col: '#c4b5ff', arc: '#e4deff', needs: ['who', 'see'],
-    desc: 'Your aimed shots and the wide sweep set off chain lightning. It jumps from the hazard they hit to others close by, up to 4 times.',
-    gain: 'Your aimed shots and the wide sweep set off lightning. It jumps to the nearest hazard close by that it has not struck, up to 4 times. The first jump deals 60% of the shot\'s damage; each later jump deals 20% less than the one before.',
+    desc: 'Your aimed shots and the wide sweep can set off chain lightning. It jumps from the hazard they hit to others close by, up to 4 times.',
+    gain: 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not struck, up to 4 times. The first jump deals 60% of the shot\'s damage; each later jump deals 20% less than the one before.',
     take: 'Lightning now jumps from hazard to hazard.' },
   { id: 'laser', name: 'Line of sight', col: '#7fe0ff', needs: ['see', 'act'],
     desc: 'A laser fires alongside your aimed shots, which keep firing. You get the Continuous beam if you lack it. It hits 50% harder and aims at one more target.',
@@ -2308,7 +2329,7 @@ const GRANDS = [
     take: 'Your beam is now a laser. Your shots still fire.' },
   { id: 'shield', name: 'Layered defence', col: '#a8f5d8', needs: ['buffer', 'stock'],
     desc: 'Some thrown things that would hit you are blocked and sent back as your own shots. The chance grows with each Green defences level. Only thrown things are blocked.',
-    gain: 'Blocks a thrown thing that would hit you: a 20% chance, plus 8% per Green defences level (60% at Lv 5). A blocked one flies back toward where it came from as your shot, with double its damage.',
+    gain: 'Blocks a thrown thing that would hit you: a 20% chance, plus 8% per Green defences level (60% at Lv 5). A blocked one flies back toward where it came from as your shot. It does at least double its damage, more with Resilient investment.',   // CB-M4 2026-09-30: S-C4 C4-5 (build_CB_2026-09-30)
     take: 'Thrown things can now be blocked and sent back.' },
 ]
 const grand = {}      // GR-M1 2026-09-29: grand programme id -> taken, this run only (reset) (build_GR_2026-09-29)
@@ -3112,6 +3133,7 @@ function reset(placeId) {
   secCount = 0; holdLeft = 0; holdFrom = 0; synLast = null; synBurst = null
   // SY-FIX 2026-09-29: nor do a season kept for a hold's end, the counter row's first save, or the special slot's turn (F2, F11, F7) (build_SY_2026-09-29 fix round)
   seasonPend = null; seasonRest = 0; secSeen = false; specLast = null
+  synMerge.length = 0; for (const k in cbFresh) delete cbFresh[k]   // CB-M3 2026-09-30: no merge moment crosses into the next run (build_CB_2026-09-30)
   P.fuseHaste = 0
   lv.pulse = 1
   // The dial pays out the same way the place does: what the pressure built (more to
@@ -3539,12 +3561,13 @@ const PLAIN = {
   'FUS.buffer.desc': 'A buffer that is planned, planted and defended. It is wider and thicker, and it pushes back what touches it.',
   'FUS.buffer.gain': 'The green belt gets two more shards and reaches 25% further. It throws back what it hits.',
   // GR-M1 2026-09-29: the grand programmes' Learning desc and gain, strings_GR.md S-G1 verbatim (keys GRD.<id>.desc / .gain, the FUS pattern); names and the banner's `take` have none, so they fall through to the Steady text (build_GR_2026-09-29)
-  'GRD.chain.desc': 'Your aimed shots and the wide sweep set off lightning. It jumps from the hazard they hit to others close by. It can jump up to 4 times.',
-  'GRD.chain.gain': 'Your aimed shots and the wide sweep set off lightning. It jumps to the nearest hazard close by that it has not hit yet. It can jump up to 4 times. The first jump does 60% of the shot\'s damage. Each jump after that does 20% less than the one before.',
+  // CB-M4 2026-09-30: GRD.chain.desc / .gain and GRD.shield.gain reworded, strings_CB.md S-C4 C4-3, C4-4, C4-6 verbatim (ADJUDICATION_GR F1, F2) (build_CB_2026-09-30)
+  'GRD.chain.desc': 'Your aimed shots and the wide sweep can set off lightning. It jumps from the hazard they hit to others close by. It can jump up to 4 times.',
+  'GRD.chain.gain': 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not hit yet. It can jump up to 4 times. The first jump does 60% of the shot\'s damage. Each jump after that does 20% less than the one before.',
   'GRD.laser.desc': 'Your aimed shots keep firing. A laser fires too. If you do not have Continuous, you get its beam. The beam hits 50% harder and aims at one more target.',
   'GRD.laser.gain': 'Your beam becomes a laser. It hits 50% harder and aims at one more target. If you have no beam, you get one. Your aimed shots stay the same.',
   'GRD.shield.desc': 'Some thrown things that would hit you are stopped. They fly back as your own shots. The chance grows with each Green defences level. Only thrown things are stopped.',
-  'GRD.shield.gain': 'It can block a thrown thing that would hit you. The chance is 20%, plus 8% for each Green defences level. At Lv 5 it is 60%. A blocked one flies back toward where it came from, as your shot. It does double its damage.',
+  'GRD.shield.gain': 'It can block a thrown thing that would hit you. The chance is 20%, plus 8% for each Green defences level. At Lv 5 it is 60%. A blocked one flies back toward where it came from, as your shot. It does at least double its damage. Resilient investment makes it do more.',
   'MOD.track.descN': l => `It turns more sharply, and gives up later (Lv ${l + 1}).`,
   'MOD.volley.desc0': 'One more shot goes out every time it fires.',
   // CORRECTED 2026-09-23: was "What you fire bursts where it lands. The burst reaches what stood next to it." - since F3a a shot bursts once, where it stops - on the hit that spends its last pierce (a body or the boss), or in mid-air when its life runs out - so "lands" was untrue of a shot that missed (section F text, build_F_2026-09-23); CORRECTED again 2026-09-23: was "What you fire bursts where it stops. The burst reaches what stood next to it." - since FX1 a shot bursts once, when it stops, on the last body it struck (a body or the boss), at that body's position at that moment (its last position if it has gone), and not at all if it struck nothing - so "where it stops" was untrue of a shot that struck a body and flew on, and "What you fire bursts" was untrue of a shot that struck nothing (section F text 2, build_F_2026-09-23)
@@ -5628,8 +5651,9 @@ function firePulse (sh) {
 // D1 2026-09-22: the projectile merge (X03(b)) - every player shot is added here. Past T.bulletMerge live shots a new one is neither dropped nor capped: it joins the nearest flying shot of the same source (`src`) and the same build that has not struck anything yet (pierce unspent, not relayed, not turned), and that shot carries the combined damage from then on - so each hit, burst, relay and split it makes carries both shots' damage. What is lost is the second shot's own path (DX2 below: never its own volley, only its own lane, and every hit event kept) (build_D_2026-09-22)
 // DX2 2026-09-23: X03(b) as written - "carrying combined damage and preserving hit events" - for review F2. (1) A merge never joins two shots of one volley (`vol`: one id per fireVolley call, per relay send, per split). Every shot of a volley is born at one point, so the nearest shot was a sibling at distance 0 and the fan folded into one shot (1,325 of 2,679 merges). (2) A shot that has a lane (`lane`, its volley's angular step: the aimed volley, Broadside, a split's shards) joins only a shot flying within half a step of its own heading, nearest first: with siblings excluded but no lane, a new volley still folded into the one older shot nearest the player (measured: build_D_2026-09-22/fix/test_x2_spread.js). With none in its lane it flies, so the count can pass T.bulletMerge by at most what one firing adds. (3) `mergeN` is how many shots a shot stands for, and the landing code reads it: a hit event is one shot landing on one body, and at each landing a shot standing for n does what n shots landing there would do - the same combined damage, n times the knock or Gathering's pull, a burst with n times its knock or pull, relay shots and split shards that each stand for n (build_D_2026-09-22 fix round)
 let volN = 0
+// CB-M4 2026-09-30: a returned shot (src 'reflect', the shield's grReflect) is never merged: it always flies on its own path, back toward where the thrown thing came from, so past T.bulletMerge the count can pass the cap by the returned shots alive (each lives T.grShieldLife s and ends on its first hit). No other shot merges into one either: the merge requires the same src (PLAN_CB C4; ADJUDICATION_GR F3) (build_CB_2026-09-30)
 function addBullet(b) {
-  if (bullets.length >= T.bulletMerge) {
+  if (bullets.length >= T.bulletMerge && b.src !== 'reflect') {
     let best = null, bd = Infinity
     const cl = b.lane ? Math.cos(b.lane / 2) * Math.hypot(b.vx, b.vy) : 0
     for (const o of bullets) {
@@ -5957,7 +5981,7 @@ function grReflect(b) {
               hits: new Set() })
 }
 
-// GR-M2 2026-09-29: chain lightning (PLAN_GR X2 as ruling RG4 reads it). Called at each hit of a shot on a body or the compound event, after the shot's own mechanics. Only the aimed shots and the wide sweep (src 'aim', 'fan') start a chain: Relay's shots, split shards and shield returns do not, and a jump starts nothing - it bills through hurtEnemy / hurtBoss only, so no relay, no Fragmenting burst and no new chain comes of it (a body it kills still bursts if Residual is held: that burst sits on the death, whatever stopped it, MODS.resid). From the struck body the lightning jumps to the nearest hazard - a body or the compound event - it has not yet struck, within T.grChainR px, up to T.grChainJumps jumps; jump k deals b.dmg x T.grChainFirst x T.grChainFall^(k-1) (b.dmg carries P.dmgMul, ruling RG6 B7). At most T.grChainPerSec chains start in any second of run time; a chain that finds no hazard in reach is not counted. The shot's own state is not touched: not lastHit (B6), not its hit set, not its pierce. Each jump is drawn as a jagged arc (fx, within T.fxCap) and a chain that jumps plays the `ember` crackle once (build_GR_2026-09-29)
+// GR-M2 2026-09-29: chain lightning (PLAN_GR X2 as ruling RG4 reads it). Called at each hit of a shot on a body or the compound event, after the shot's own mechanics. Only the aimed shots and the wide sweep (src 'aim', 'fan') start a chain: Relay's shots, split shards and shield returns do not, and a jump starts nothing - it bills through hurtEnemy / hurtBoss only, so no relay, no Fragmenting burst and no new chain comes of it (a body it kills still bursts if Residual is held: that burst sits on the death, whatever stopped it, MODS.resid). CB-M4 2026-09-30: as ruled (PLAN_CB C4, ADJUDICATION_GR F7): RG4's "no burst" means no Fragmenting burst from an arc; a body a jump kills may still set off Residual's death burst and fire's spread on death (hurtEnemy), since both sit on the death whatever caused it - Residual's card already says "whatever stopped it". No code change (build_CB_2026-09-30). From the struck body the lightning jumps to the nearest hazard - a body or the compound event - it has not yet struck, within T.grChainR px, up to T.grChainJumps jumps; jump k deals b.dmg x T.grChainFirst x T.grChainFall^(k-1) (b.dmg carries P.dmgMul, ruling RG6 B7). At most T.grChainPerSec chains start in any second of run time; a chain that finds no hazard in reach is not counted. The shot's own state is not touched: not lastHit (B6), not its hit set, not its pierce. Each jump is drawn as a jagged arc (fx, within T.fxCap) and a chain that jumps plays the `ember` crackle once (build_GR_2026-09-29)
 function grChain(b, from) {
   if (!grand.chain || !from || (b.src !== 'aim' && b.src !== 'fan')) return
   const near = (x, y, struck) => {
@@ -6082,13 +6106,22 @@ function takeSynergy(sy) {
   // SY-M3 2026-09-29: the banner line also names the modifier the pair opens (pairOpens, on Steady and Learning alike); this synergy is now the latest (the trail's colour) and its burst waits for the cards to close (build_SY_2026-09-29)
   pendingGist = { name: sy.name, col: sy.col, text: say('GIST.' + sy.id, SYN_GIST[sy.id]) + pairOpens(sy.id) }
   synLast = sy.id; synBurst = sy.col
+  synMerge.push(sy.id)   // CB-M3 2026-09-30: its merge moment waits for the cards to close (build_CB_2026-09-30)
 }
+
+// CB-M2 2026-09-30: the combination row at the top of a synergy, compound programme or grand programme card, under its tier line and over its name (PLAN_CB C2; strings_CB.md S-C2): [chip A] + [chip B] →, then the h3 name reads as the result. Each chip is its ingredient's colour with its name on it in dark ink, so colour is never the only signal; chip B and the arrow are kept together, so on a narrow card the row wraps as whole chips with "+" between them and "→" at the end. The row is one image to a screen reader (role img), named by the sentence "{A} plus {B} makes {name}" (S-C2 C2-a/b/c); the chips and glyphs inside are presentational. No new visible word (build_CB_2026-09-30)
+function comboHtml(A, B, name) {
+  const chip = x => `<span class="chip" style="background:${x.col}">${x.txt}</span>`
+  return `<div class="combo" role="img" aria-label="${A.txt} plus ${B.txt} makes ${name}">${chip(A)}<span class="op">+</span><span class="end">${chip(B)}<span class="op">→</span></span></div>`
+}
+const pairChips = sy => [{ txt: UPGRADES[sy.a].short, col: UPGRADES[sy.a].col }, { txt: UPGRADES[sy.b].short, col: UPGRADES[sy.b].col }]
 
 function renderSynCard(wrap, sy) {
   const el = document.createElement('div')
   el.className = 'card syn'
+  // CB-M2 2026-09-30: the tier line is "Synergy" (S-C2 C2-a; the pair moved into the combination row) (build_CB_2026-09-30)
   el.innerHTML = `<div class="ic" style="background:${sy.col}"></div>
-    <div class="tier">Synergy · ${UPGRADES[sy.a].short} + ${UPGRADES[sy.b].short}</div>
+    <div class="tier">Synergy</div>${comboHtml(...pairChips(sy), sy.name)}
     <h3>${sy.name}</h3><p>${say('SYN.' + sy.id + '.gain', sy.gain)}</p>
     ${shotChanges({ syn: Object.assign({}, syn, { [sy.id]: true }) })}
     <div class="gate">${healLine('S5.7.32a', 'Repairs 25% of capacity')}</div>`
@@ -6105,8 +6138,9 @@ function renderFuseCard(wrap, fu) {
   const sy = SYNERGIES.find(s => s.id === fu.id)
   const el = document.createElement('div')
   el.className = 'card fuse'
+  // CB-M2 2026-09-30: the tier line is "Compound programme" (S-C2 C2-b); the combination row shows its pair, the measures of the synergy of the same id; its level needs stay in the Combos panel (build_CB_2026-09-30)
   el.innerHTML = `<div class="ic" style="background:${fu.col}"></div>
-    <div class="tier">Compound programme · ${UPGRADES[sy.a].short} + ${UPGRADES[sy.b].short}</div>
+    <div class="tier">Compound programme</div>${comboHtml(...pairChips(sy), fu.name)}
     <h3>${fu.name}</h3><p>${say('FUS.' + fu.id + '.desc', fu.desc)}</p>${glossHtml(glossTerms(fu.id, fu.name + ' ' + fu.desc))}
     <div class="gate">${healLine('S5.7.32b', 'Repairs 15% of capacity')}</div>`
   el.onclick = () => {
@@ -6127,8 +6161,10 @@ function renderFuseCard(wrap, fu) {
 function renderGrandCard(wrap, g) {
   const el = document.createElement('div')
   el.className = 'card fuse grand'
+  // CB-M2 2026-09-30: the tier line unchanged (S-C2 C2-c); the combination row shows the two synergies it needs (g.needs), each chip its synergy's name on its colour (build_CB_2026-09-30)
+  const [gA, gB] = g.needs.map(id => SYNERGIES.find(s => s.id === id))
   el.innerHTML = `<div class="ic" style="background:${g.col}"></div>
-    <div class="tier">Grand programme · ${grandTaken() + 1} of ${T.grandCap} this run</div>
+    <div class="tier">Grand programme · ${grandTaken() + 1} of ${T.grandCap} this run</div>${comboHtml({ txt: gA.name, col: gA.col }, { txt: gB.name, col: gB.col }, g.name)}
     <h3>${g.name}</h3><p>${say('GRD.' + g.id + '.desc', g.desc)}</p>
     <div class="gate">${healLine('S5.7.32b', 'Repairs 15% of capacity')}</div>`
   el.onclick = () => {
@@ -6195,6 +6231,8 @@ function offerCards(fromLevelUp) {
   // A trade-off takes one of the three slots. It is the only card that charges for what it
   // gives, and the charge is written on it before it is taken. It never shares a level-up
   // with a synergy — one hard decision at a time.
+  // CB-M6 2026-09-30: the trade-off card is built here but put on screen last, after the measure cards and any reinforcement card (trEl, appended below the `!chosen.length` block), so it is never the first card a quick tap lands on (PLAN_CB C6, the user's choice: the last slot; ruling RC2: every other card keeps its order, the rebuild card included, which never shares a screen with a trade-off). Nothing drawn at random moves: the roll above and the draws below run in the same order (build_CB_2026-09-30)
+  let trEl = null
   if (tr) {
     const el = document.createElement('div')
     el.className = 'card trade'
@@ -6212,7 +6250,7 @@ function offerCards(fromLevelUp) {
       if (picksLeft > 0) offerCards()
       else closeCards()
     }
-    wrap.appendChild(el)
+    trEl = el   // CB-M6 2026-09-30: appended last, below (build_CB_2026-09-30)
   }
 
   // LL-M2 2026-09-25: the rebuild card (PLAN_LL D2; S-L2 verbatim). Since this build the trade-off above is not the only card that charges for what it gives: this one does too. It takes one of the MEASURE slots, never the special one - it stays on offer for as long as a lifeline is lost, and in the special slot it would shut out every pair, programme and response while the player declines it, a second price the card does not state. Three cards stay on screen: rebuild + special + one measure, or rebuild + two measures (`want` below). No source line: the card is game-only, so it prints no div.src (say() of a missing row returns undefined), and the Sources switch has nothing on it to hide (build_LL_2026-09-25)
@@ -6284,9 +6322,10 @@ function offerCards(fromLevelUp) {
     const uSrc = say('UPG.' + id + '.src', u.src)
     // P6-A2 2026-09-25: the source line below is hidden while the Sources switch is off (CSS), and a term gloss that only it calls for goes with it; one the description calls for stays (build_P6_2026-09-25)
     // P6-A3 2026-09-25: B-02 counted per run (the Lead, BUILD_PLAN_P6) - on Learning the measure's own definition box shows on its "New measure" card (l === 0; lv is zeroed at every reset()) and on a "Level N" card goes with the source line, behind the Sources switch (build_P6_2026-09-25)
+    // CB-M1 2026-09-30: the preview line(s) (completesHtml) go between the description and the "Compounds with" pills, which stay as they were (PLAN_CB C1) (build_CB_2026-09-30)
     el.innerHTML = `<div class="ic" style="background:${u.col}"></div>
       <div class="tier">${l === 0 ? 'New measure' : 'Level ' + (l + 1)}</div>
-      <h3>${u.name}</h3><p>${d}</p>
+      <h3>${u.name}</h3><p>${d}</p>${completesHtml(id)}
       ${pw ? `<div class="pairs">Compounds with ${pw}</div>` : ''}
       ${shotChanges({ lv: Object.assign({}, lv, { [id]: l + 1 }) })}
       <div class="src">${uSrc}</div>${glossHtml((GLOSS_MEASURE[id] ? [[u.name, GLOSS_MEASURE[id], l > 0]] : []).concat(glossWithSrc(id, d, uSrc)))}
@@ -6335,6 +6374,8 @@ function offerCards(fromLevelUp) {
     fb('Run another drill', 'Evacuate comes back 5% sooner, for the rest of the run.', '#9db4ff',
        () => { P.dodgeMeta = (P.dodgeMeta || 1) * 0.95 })
   }
+  // CB-M6 2026-09-30: the trade-off card, if one was rolled, takes the last slot (built above) (build_CB_2026-09-30)
+  if (trEl) wrap.appendChild(trEl)
 
   // Draft economy. Rerolls are bought by Risk data — commissioning a study is paying to
   // change your option menu; the banish is saying out loud what will NOT be funded here.
@@ -6405,12 +6446,15 @@ const closeCards = () => {
     if (!reduceMotion) {
       // SY-FIX 2026-09-29: the ring obeys the effects cap as emit() does - it is pushed only while fx is not past T.fxCap (ADJUDICATION_SY F15); the shake below is not an effect and plays either way (build_SY_2026-09-29 fix round)
       // GR-M6 2026-09-29: the ring about twice the radius (max 240 -> 480; its line width doubles in RING_STYLE.syn) and brighter - it stays at full strength longer (life 0.6 -> 0.9: the ring pass draws at full alpha while life > 0.5) and gets a light core (draw); and one short tint of the screen in the same colour (grTint, T.grTintT s from alpha T.grTintA to 0, once) (PLAN_GR X6) (build_GR_2026-09-29)
-      if (fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, x: P.x, y: P.y, r: 12, max: 480, life: 0.9, col: synBurst, style: 'syn', hit: new Set() })
+      // CB-M4 2026-09-30: the ring's radius scales to the screen, so it stays inside it on a phone (PLAN_CB C4, the GR Builder's carried (c)): at most 480, and at most half the shorter side of the view less 16 px (half the ring's drawn stroke, (12 + 3) / 2, plus the shake of 8 below, rounded up) - on a 375 x 812 phone 171.5, on a 1280 x 720 screen 344 (build_CB_2026-09-30)
+      if (fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, x: P.x, y: P.y, r: 12, max: Math.min(480, Math.min(W, H) / 2 - 16), life: 0.9, col: synBurst, style: 'syn', hit: new Set() })
       shake = Math.max(shake, 8)
       grTint = T.grTintT; grTintCol = synBurst
     }
     synBurst = null
   }
+  // CB-M3 2026-09-30: the merge moment in the build list, for each synergy taken on this screen (under reduced motion too: there it is a highlight only) (build_CB_2026-09-30)
+  if (synMerge.length) { const ids = synMerge.splice(0); mergeMoment(ids) }
 }
 
 // Which measures this one compounds with. Shown on the card so a pair is something the
@@ -6419,11 +6463,27 @@ function pairsWith(id) {
   return SYNERGIES.filter(sy => sy.a === id || sy.b === id)
     .map(sy => ({ other: sy.a === id ? sy.b : sy.a, sy }))
 }
+// CB-M1 2026-09-30: the preview line(s) on a measure card that completes a pair (PLAN_CB C1; strings_CB.md S-C1 C1-a, C1-b, C1-c verbatim; ruling RC1). Shown only on a "New measure" card (lv[id] === 0) and only for a pair whose other measure is held (lv > 0) and not banished and whose synergy is not yet taken - then taking this card gives the player both measures, which is what availableSynergy tests. One line per such pair, in SYNERGIES order (pairsWith), at most two; a third or more is counted in one line, "and 1 more pair". Each line is drawn in the synergy's colour with its swatch (the square the build list uses for it) and carries the sentence C1-c as its accessible name (role img) and hover title; the "can then appear" hedge lives there (RC3). '' when nothing is completed (build_CB_2026-09-30)
+function completesHtml(id) {
+  if (lv[id] !== 0) return ''
+  const done = pairsWith(id).filter(({ other, sy }) => lv[other] > 0 && !banished[other] && !syn[sy.id])
+  if (!done.length) return ''
+  const line = ({ sy }) => {
+    const A = UPGRADES[sy.a].short, B = UPGRADES[sy.b].short
+    const say1 = `Taking this completes ${A} plus ${B}. Its synergy card, ${sy.name}, can then appear.`
+    return `<div class="cmp" role="img" aria-label="${say1}" title="${say1}" style="color:${sy.col}"><i style="background:${sy.col}"></i><span>Completes ${A} + ${B} → ${sy.name}</span></div>`
+  }
+  const more = done.length - 2
+  return done.slice(0, 2).map(line).join('')
+    + (more > 0 ? `<div class="cmp more">and ${more} more pair${more > 1 ? 's' : ''}</div>` : '')
+}
 
 // The mechanism line waiting to be said out loud on the field, once the card screen closes.
 let pendingGist = null
 // SY-M3 2026-09-29: synLast - the id of the synergy taken most recently this run (its colour is the aimed shots' trail, synTrailCol); synBurst - the colour of a synergy taken on the card screen now open, whose ring burst closeCards plays. Both zeroed in reset() (build_SY_2026-09-29)
 let synLast = null, synBurst = null
+// CB-M3 2026-09-30: the synergies taken on the card screen now open, in the order taken, whose merge moment closeCards plays (mergeMoment); emptied there and in reset() (build_CB_2026-09-30)
+const synMerge = []
 // SY-M4 2026-09-29: whether the Combos panel is open on the card screen (the player's last choice, this page load; closed at first), and the switch and panel of the screen now open, for Escape (build_SY_2026-09-29)
 let combosShown = false, combosUi = null
 
@@ -6790,13 +6850,16 @@ function apply(id) {
   syncHud()
 }
 
+// CB-M3 2026-09-30: the build list's rows are named for the merge moment - a measure row by data-k (its UPGRADES id), a synergy row by data-sy - and a synergy in its merge moment (cbFresh) carries the class `fresh` and its colour as --mc (CSS: it appears as the copies arrive, with a short glow; under reduced motion it is simply highlighted). The list is rewritten only when its rows change (hudRows), so the frequent calls between (each mote picked up) do not restart that animation; the text of every row is as before (build_CB_2026-09-30)
+let hudRows = null
+const cbFresh = {}
 function syncHud() {
   $('lvl').textContent = 'Lv ' + P.level
   const owned = Object.keys(UPGRADES).filter(k => lv[k] > 0)
   const rows = owned.map(k =>
-    `<div class="wpn"><i style="background:${UPGRADES[k].col}"></i><b>${UPGRADES[k].short}</b><span>${lv[k]}</span></div>`)
+    `<div class="wpn" data-k="${k}"><i style="background:${UPGRADES[k].col}"></i><b>${UPGRADES[k].short}</b><span>${lv[k]}</span></div>`)
   for (const sy of SYNERGIES) if (syn[sy.id]) {
-    rows.push(`<div class="wpn sy"><i style="background:${sy.col}"></i><b>${sy.name}</b></div>`)
+    rows.push(`<div class="wpn sy${cbFresh[sy.id] ? ' fresh' : ''}" data-sy="${sy.id}"${cbFresh[sy.id] ? ` style="--mc:${sy.col}"` : ''}><i style="background:${sy.col}"></i><b>${sy.name}</b></div>`)
   }
   for (const k of MOD_IDS) if (mod[k]) {
     rows.push(`<div class="wpn md"><i style="background:${MODS[k].col}"></i><b>${MODS[k].name}</b><span>${mod[k]}</span></div>`)
@@ -6817,7 +6880,37 @@ function syncHud() {
   for (const x of TRADEOFFS) if (trade[x.id]) {
     rows.push(`<div class="wpn"><i style="background:${x.col}"></i><b>${x.short}</b><span>trade-off</span></div>`)
   }
-  $('weapons').innerHTML = rows.join('')
+  const html = rows.join('')
+  if (html !== hudRows) { hudRows = html; $('weapons').innerHTML = html }   // CB-M3 2026-09-30: only when the rows change (build_CB_2026-09-30)
+}
+
+// CB-M3 2026-09-30: the merge moment (PLAN_CB C3; ruling RC4), played by closeCards for each synergy taken on the card screen just closed (synMerge). The synergy's row is marked fresh (syncHud, CSS .wpn.fresh): it appears as the copies arrive and glows briefly. Unless reduced motion is set, a copy of each of its two measure rows is laid over that row and travels to the synergy's row, shrinking and fading as it goes (0.65 s), then is removed; the measure rows and their levels stay in the list - nothing is taken out of it. A copy is made only where both rows are laid out and inside the list's visible box (on a phone the list is cut at 38vh). Under reduced motion nothing travels and the row is simply highlighted. After 2.4 s the mark is cleared. The banner (flash) is not touched. No text: the copies are aria-hidden (build_CB_2026-09-30)
+function mergeMoment(ids) {
+  for (const id of ids) cbFresh[id] = true
+  syncHud()
+  const box = $('weapons')
+  const rect = x => x && typeof x.getBoundingClientRect === 'function' ? x.getBoundingClientRect() : null
+  const br = rect(box)
+  const shown = r => r && br && r.height > 0 && r.top >= br.top - 1 && r.bottom <= br.bottom + 1
+  if (!reduceMotion && br) for (const id of ids) {
+    const sy = SYNERGIES.find(s => s.id === id)
+    const tr = rect(box.querySelector(`[data-sy="${id}"]`))
+    if (!shown(tr)) continue
+    for (const k of [sy.a, sy.b]) {
+      const src = box.querySelector(`[data-k="${k}"]`), r = rect(src)
+      if (!shown(r) || typeof src.cloneNode !== 'function') continue
+      const c = src.cloneNode(true)
+      if (typeof c.animate !== 'function') continue
+      c.removeAttribute('data-k'); c.setAttribute('aria-hidden', 'true'); c.classList.add('ghost')
+      c.style.left = r.left + 'px'; c.style.top = r.top + 'px'; c.style.width = r.width + 'px'
+      document.body.appendChild(c)
+      const a = c.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 },
+                           { transform: `translate(${tr.left - r.left}px,${tr.top - r.top}px) scale(.85)`, opacity: 0 }],
+                          { duration: 650, easing: 'ease-in', fill: 'forwards' })
+      a.onfinish = () => c.remove()
+    }
+  }
+  setTimeout(() => { for (const id of ids) delete cbFresh[id]; syncHud() }, 2400)
 }
 
 // The lifeline panel is rebuilt only when the set changes; the bars are repainted every
@@ -6942,6 +7035,8 @@ function frame(ts) {
   let dt = (ts - last) / 1000; last = ts
   dt = Math.min(dt, 0.05)
   if (!paused && !over) step(dt)
+  // CB-M4 2026-09-30: the take moment's tint also runs out while the game is paused - under a hint card that opens as the cards close, or soon after, it fades on the frame clock instead of holding steady until the card is dismissed (PLAN_CB C4; ADJUDICATION_GR F6). Unpaused, step counts it down as before (build_CB_2026-09-30)
+  else if (grTint > 0) grTint = Math.max(0, grTint - dt)
   draw()
 }
 
@@ -7533,7 +7628,8 @@ function renderReport() {
     (gotSyn.length
       ? gotSyn.map(sy => row(sy.col, sy.name, sy.why)).join('')
         // GR-M1 2026-09-29: the grand programmes taken, listed as the compound programmes' rows are - name, then desc + ' ' + gain (ruling RG7, no new string) - in this section, straight after the synergies they are made of and before any sub-heading, so none sits under "Compound programmes — two measures run as one", which is not true of them (B5) (build_GR_2026-09-29)
-        + GRANDS.filter(g => grand[g.id]).map(g => row(g.col, g.name, g.desc + ' ' + g.gain)).join('')
+        // CB-M4 2026-09-30: a grand programme's row shows its desc only (PLAN_CB C4; ADJUDICATION_GR F4: desc + gain repeated the same sentences); the gain stays in the Combos panel (build_CB_2026-09-30)
+        + GRANDS.filter(g => grand[g.id]).map(g => row(g.col, g.name, g.desc)).join('')
       // CORRECTED 2026-09-15: unverified UNDRR attribution and four-to-one link removed; game behaviour stated (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
       : `<div class="rrow"><i style="background:#3a3f47"></i><b>None</b><p>Single measures were never combined. In this game, two measures that go together can unlock a bonus neither gives alone.</p></div>`) +
     (gotMast.length
@@ -7981,7 +8077,8 @@ function drawEvents(layer) {
         if (warning || !q.burst) {
           if (!tele) continue
           const k = warning ? 1 - ev.tw / ev.warn : 1
-          ctx.setLineDash([7, 5]); ctx.lineDashOffset = -t * 24
+          // CB-M5 2026-09-30: a strike the compound event marked (byBoss) crawls on the hazards' clock (hazClock: frozen at a hold's start), so during a hold, while its warning waits (updateEvents), its circles stop crawling too; the place's own scheduled strikes are not held and keep the run clock (PLAN_CB C5; ADJUDICATION_SY G2) (build_CB_2026-09-30)
+          ctx.setLineDash([7, 5]); ctx.lineDashOffset = -(ev.byBoss ? hazClock() : t) * 24
           ctx.beginPath(); ctx.arc(q.x, q.y, q.r, 0, TAU)
           ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 5; ctx.stroke()
           ctx.strokeStyle = `rgba(255,180,120,${.35 + .35 * k})`; ctx.lineWidth = 2; ctx.stroke()
