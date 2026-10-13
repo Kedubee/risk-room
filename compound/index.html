@@ -291,6 +291,13 @@
     box-shadow:0 0 0 1px var(--mc);animation:cb-merge 1.6s ease-out both}
   @keyframes cb-merge{0%,35%{opacity:0;box-shadow:0 0 0 0 transparent}55%{opacity:1;box-shadow:0 0 14px 4px var(--mc)}100%{opacity:1;box-shadow:0 0 0 1px var(--mc)}}
   @media (prefers-reduced-motion: reduce){ .wpn.fresh{animation:none} }
+  /* G-M2 2026-10-13: a held synergy's row, outside its merge mark: the same 1 px edge as .fresh, in its colour at an alpha that follows its ripening f (--rp, set by syncHud) (build_G_2026-10-01) */
+  .wpn.sy.rp{margin:-2px -6px;padding:2px 6px;border-radius:6px;box-shadow:0 0 0 1px var(--rp)}
+  /* G-M5 2026-10-13: (c) the pair-ready dot after a measure row - a filled round dot (shape, not colour alone; named by role img); (d) the one pulse of a ready pair's two rows, 1.0 s, a still highlight under reduced motion. The negative margin keeps the list from moving, as .fresh does (build_G_2026-10-01) */
+  .wpn i.pr{width:7px;height:7px;border-radius:50%;background:#ffe08a;flex:none}
+  .wpn.pp{margin:-2px -6px;padding:2px 6px;border-radius:6px;background:rgba(255,224,138,.16);animation:g-pp 1s ease-out both}
+  @keyframes g-pp{0%{box-shadow:0 0 0 0 rgba(255,224,138,0)}40%{box-shadow:0 0 12px 3px rgba(255,224,138,.7)}100%{box-shadow:0 0 0 1px rgba(255,224,138,.5)}}
+  @media (prefers-reduced-motion: reduce){ .wpn.pp{animation:none;box-shadow:0 0 0 1px rgba(255,224,138,.6)} }
 
   #cards{position:fixed;inset:0;z-index:20;display:none;align-items:flex-start;
     justify-content:center;overflow-y:auto;overscroll-behavior:contain;
@@ -525,6 +532,8 @@
   #combos .cb-st.ph{background:rgba(255,209,102,.22);color:#ffd166}
   #combos .cb-st.pd{background:rgba(126,231,135,.18);color:#7ee787}
   #combos .cb-st.rx{background:rgba(255,77,94,.16);color:#ff9d9d}
+  /* G-M2 / G-M3 2026-10-13: the ripening word after an owned row's pill ("growing" / "full strength"), in the pill's small register, unboxed (build_G_2026-10-01) */
+  #combos .cb-rp{flex:none;font-size:10.5px;letter-spacing:.04em;opacity:.8}
   #combos .pm{display:inline-block;width:8px;height:8px;margin-left:5px;border:1px solid currentColor;border-radius:50%;box-sizing:border-box;vertical-align:middle}
   #combos .ph .pm{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
   #combos .pd .pm{background:currentColor}
@@ -1208,9 +1217,10 @@ const T = {
   // BS-M1 2026-09-30: the compound event becomes a mid-boss (PLAN_BS B1, the user's "0.55배율"): its health and every damage it deals - touch, charge, thrown shots, siege strikes (on you and on a lifeline) - are multiplied by bossMidMul; its clock, arrival and teaching text are unchanged, and the ordinary hazards a swarm calls in are the place's own and keep their own damage (build_BS_2026-09-30)
   bossMidMul: 0.55,
   // BS-M2 2026-09-30: elite variants of the ordinary stream (PLAN_BS B2; every number a first guess, tunable after the playtest). From eliteFrom s of run clock (t) a spawn() draw is elite with a chance rising in a straight line from eliteShare0 to eliteShare1 at eliteShareAt s, then held there; every body of an elite draw is elite (a quake's trio, a flood's whole front). An elite is eliteSize x the size, eliteHp x the health, eliteDmg x the damage (touch, its thrown shots, a heat zone's heat) and eliteXp x the XP. Traits: a chaser dashes at eliteDashMul x its speed for eliteDashT s every eliteDashEvery s of its own age; an orbiting storm splits into two ordinary ones on death; a front is eliteFrontExtra bodies wider on each side; a heat zone pulses out to elitePulseMul x its radius over elitePulseT s every elitePulseEvery s. No text states any of these numbers (strings_BS.md S-B3: comparatives only) (build_BS_2026-09-30)
-  eliteFrom: 90, eliteShare0: 0.04, eliteShareAt: 240, eliteShare1: 0.10,
+  // G-M6 2026-10-13: elites stronger on the user's "정예적은 정예치고 너무 약함" (PLAN_G G6, the Lead's defaults): eliteShare1 0.10 -> 0.14, eliteHp 3 -> 4.5, eliteDmg 1.3 -> 1.6; still no text states any of them (strings_G.md S-G6b) (build_G_2026-10-01)
+  eliteFrom: 90, eliteShare0: 0.04, eliteShareAt: 240, eliteShare1: 0.14,
   // UXBS-FIX 2026-09-30: F4 - eliteDmg now also multiplies an elite's damage to a lifeline: its impact (step) and its wear while it sits on one (updateLifelines); the BS-M2 line above lists touch, thrown shots and heat only (build_BS_2026-09-30 fix round)
-  eliteSize: 1.4, eliteHp: 3, eliteDmg: 1.3, eliteXp: 3,
+  eliteSize: 1.4, eliteHp: 4.5, eliteDmg: 1.6, eliteXp: 3,
   eliteDashEvery: 3, eliteDashT: 0.6, eliteDashMul: 2, eliteFrontExtra: 2,
   elitePulseEvery: 3.5, elitePulseT: 0.8, elitePulseMul: 1.35,
   // BS-M3 2026-09-30: the true boss (PLAN_BS B3, rulings RB1-RB7). It arrives once per run at DIFF.tbossAt s of run clock, warned tbossLead s before (not scaled by DIFF.warn, C4); built on the compound-event engine with its own numbers: tbossHpMul x the compound event's health before B1, tbossSize x its size, tbossDmg x its damage before B1, tbossLife s on the field before it withdraws (the 90 s of B3). At tbossPhase1 and tbossPhase2 of its health it calls a surge of tbossSurgeN ordinary hazards (hazardSurge) and adds an attack: a ring of tbRingN shots every tbRingEvery s at tbRingSpd px/s (60%), then a lane (25%) - a band tbLaneW px wide and tbLaneLen px long from its centre, shown for tbLaneWarn s where it will start, then swept through tbLaneArc radians in tbLaneSweep s, every tbLaneEvery s, hitting you for tbLaneDmg (with the ramp and DIFF.dmg, as its touch is). Beaten, it pays a full repair, tbossXpN motes of tbossXpV XP and tbossPay recovery budget (times DIFF.pay). The texts state none of these numbers ("a few seconds", "all your capacity", ${bonus} printed from the live value) (build_BS_2026-09-30)
@@ -1305,6 +1315,18 @@ const T = {
   // GR2-M4 2026-09-30: the patrol orbit (PLAN_GR2 W4, rulings RW1, RW4): grOrbitN pieces on a circle grOrbitR px out, one turn every grOrbitTurn s; a piece touching a hazard deals grOrbitDps x P.dmgMul a second (no eff(), RW4) as one hit of grOrbitDps x grOrbitCd x P.dmgMul (9 at P.dmgMul 1) per body every grOrbitCd s, with a knock of grOrbitPush outward (heat zones: the GR2-FIX line below). A piece's touch radius is grOrbitPieceR px. The numbers the texts state: the GR2-FIX line below (build_GR2_2026-09-30)
   // GR2-FIX 2026-09-30: this note corrected (ADJUDICATION_GR2 F3, F5). It said "(a heat zone takes the hit and never moves, RW1)" and "The texts state three pieces, 2.4s and 30 damage a second, so a change here changes that text too; grOrbitR, grOrbitCd, grOrbitPush are not stated". Now heat zones are skipped entirely, neither hit nor pushed (F3, RW1 re-ruled), and the texts state the damage per hit, not per second (F5): three pieces (grOrbitN), 2.4s (grOrbitTurn), 9 damage a hit (grOrbitDps x grOrbitCd) and at most one hit on the same hazard every 0.3s (grOrbitCd), so a change to any of these changes that text too; grOrbitR and grOrbitPush are not stated (build_GR2_2026-09-30 fix round)
   grOrbitN: 3, grOrbitR: 90, grOrbitTurn: 2.4, grOrbitDps: 30, grOrbitCd: 0.3, grOrbitPush: 300, grOrbitPieceR: 11,
+  // G-M1 2026-10-13: a new aimed shot arrives small (PLAN_G G1, the user's "작은발"): a small shot has pelletK x the radius and pelletK x the damage of a full one, the same speed, pierce and everything else (RG7). Early warning Lv 2 / 4 add a small shot that Lv 3 / 5 make full (pulseSmall); each Volley level adds a small shot made full at the next P.level++ after the screen it was taken on (volleySmall, RG5). No text states pelletK ("small") (build_G_2026-10-01)
+  pelletK: 0.5,
+  // G-M2 2026-10-13: a synergy ripens (PLAN_G G2): its multipliers - and `concrete`'s +60s - act at f = clamp((lv.A + lv.B - 2) / min(synRipenK, max.A + max.B - 2), synRipen0, 1) of their full size (a multiplier m acts as 1 + (m - 1) x f; RG1: only these parts ripen), re-read when either measure levels (synRipen); at f = 1 every number is today's. The synergy's trail is 8 r + synTrailF x f r long (was 8 r). The texts say "up to" the full numbers and state none of these constants (build_G_2026-10-01)
+  // G-FIX 2026-10-13: F1 - the divisor in the line above was synRipenK alone, so a synergy with a Lv-4 measure (Retrofitting, Risk data: stock, concrete, who, 5 + 4 - 2 = 7) stopped at f = 7 / 8 with both measures at max; it is now min(synRipenK, max.A + max.B - 2), max read from UPGRADES (synF), so every synergy reaches f = 1 at both maxima; synRipenK stays 8 for the rest (ADJUDICATION_G F1) (build_G_2026-10-01 fix round)
+  synRipenK: 8, synRipen0: 0.5, synTrailF: 4,
+  // G-M3 2026-10-13: a grand programme ripens (PLAN_G G3): g = clamp((sum of its partner measures' levels - their count) / grRipenK, grRipen0, 1) - four measures, or three where its two synergies share one; each ripening number goes in a straight line from its start value at g = grRipen0 to today's full value at g = 1 (grLerp): chain jumps grChainJumps0 -> grChainJumps (rounded down) and the first jump grChainFirst0 -> grChainFirst; the laser grLaserDmg0 -> grLaserDmg (its +1 target whole); the veil's radius grVeilR0 -> grVeilR; the aftershock's share grAsShare0 -> grAsShare; the orbit grOrbitN0 pieces, grOrbitN from g >= grOrbitStep. The shield keeps its own Green-defences rule. The texts say "up to" the full numbers (4, 60%, 50%, 35%, three) and state none of these (build_G_2026-10-01)
+  grRipenK: 10, grRipen0: 0.5,
+  grChainJumps0: 2, grChainFirst0: 0.45, grLaserDmg0: 1.2, grVeilR0: 160, grAsShare0: 0.20, grOrbitN0: 2, grOrbitStep: 0.75,
+  // G-M4 2026-10-13: the first card shows (PLAN_G G4). (a) The aimed shot's smear is 2.6 r x (1 + smearE x (through - 1)) long, at most smearCap r (through: the shot's pierce at launch, SHOT().through). (c) Its width (the 0.9 r radius across) grows smearW px per 0.2 of P.dmgMul over 1. (d) The player's halo: base alpha haloA0 + haloPerLv per Risk financing level, at most haloMax. (e) Land use: a wake wakeLen0 + wakePerLv px per level behind the disc while moving. Drawing only (build_G_2026-10-01)
+  smearE: 0.45, smearCap: 7, smearW: 0.6,
+  haloA0: 0.09, haloPerLv: 0.08, haloMax: 0.5,
+  wakeLen0: 8, wakePerLv: 3,
 }
 
 // ---------------------------------------------------------------- sound
@@ -1639,8 +1661,11 @@ const UPGRADES = {
             desc: l => l === 0 ? 'Standards applied to everything standing around you. Nothing dramatic happens; things simply do not fall.'
                                : `Enforced across a wider area (Lv ${l + 1}).`,
             src: 'UNDRR: “Earthquakes do not kill people; collapsing structures do.”' },
+  // G-M1 2026-10-13: the level cards branch on what the level does, read from the small-shot resolver (pulseSmall; RG4): a level that adds a small shot, a level that makes it full, any other level as before; strings_G.md S-G1a verbatim (build_G_2026-10-01)
   pulse:  { name: 'Early warning',    short: 'Warning',  max: 6, kind: 'measure', col: '#ffd166',
             desc: l => l === 0 ? 'Detects what is closest and answers it before it arrives.'
+                               : pulseSmall(l + 1) > pulseSmall(l) ? `Faster, and reaches past the first thing it meets. It adds one more shot, small until your next Early warning level (Lv ${l + 1}).`
+                               : pulseSmall(l + 1) < pulseSmall(l) ? `Faster, and reaches past the first thing it meets. Your small shot grows to full size (Lv ${l + 1}).`
                                : `Faster, and reaches past the first thing it meets (Lv ${l + 1}).`,
             // CORRECTED 2026-09-15: hedge restored, 24h of warning "can cut" damage by 30% (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
             src: 'UNDRR: 24 hours of warning ahead of a storm or heatwave can cut the damage that follows by 30%.' },
@@ -1687,8 +1712,9 @@ const UPGRADES = {
 // mandatory one; the flow cost was measured and the user retired it).
 const SYNERGIES = [
   { id: 'act', a: 'pulse', b: 'wave', name: 'Warning that is acted on', col: '#ffe08a',
-    gain: 'Warning fires 25% faster, drills reach 30% further, and one more leaves the emitter.',
-    apply: P => { P.rateMul *= 1.25; P.synWave = (P.synWave || 1) * 1.30 },
+    // G-M2 2026-10-13: the gain says "up to" and which parts grow, strings_G.md S-G2a verbatim; apply ripens the multipliers (SYN_PARTS, synRipen) - the +1 shot (SHOT) arrives whole. Was: "Warning fires 25% faster, drills reach 30% further, and one more leaves the emitter." / P.rateMul x 1.25; P.synWave x 1.30 (build_G_2026-10-01)
+    gain: 'Warning fires up to 25% faster, drills reach up to 30% further, and one more leaves the emitter. The 25% and 30% can start smaller and grow as you level Warning and Drills.',
+    apply: P => synRipen(P, 'act'),
     q: 'An early-warning system is installed and it works. Why does pairing it with regular drills multiply what it is worth?',
     opts: ['Because the alert reaches more people at once',
            'Because an alert only becomes safety if people already know what to do with it',
@@ -1698,8 +1724,9 @@ const SYNERGIES = [
     why: 'A warning buys time, and time is only worth something if the action is already known. UNDRR pairs the two deliberately: it asks for early warning <b>and</b> for micro-drills twice a year.' },
 
   { id: 'stock', a: 'field', b: 'armour', name: 'The whole building stock', col: '#e8c7ff',
-    gain: 'Codes cover 35% more ground, retrofitting stops 10% more, and what you stop bursts where it falls.',
-    apply: P => { P.synField = (P.synField || 1) * 1.35; P.armour = 1 - (1 - P.armour) * 0.90 },
+    // G-M2 2026-10-13: strings_G.md S-G2a verbatim; the multipliers ripen (synRipen), the burst on kill (SHOT().deathR) arrives whole. Was: "Codes cover 35% more ground, retrofitting stops 10% more, and what you stop bursts where it falls." / P.synField x 1.35; (1 - P.armour) x 0.90 (build_G_2026-10-01)
+    gain: 'Codes cover up to 35% more ground, retrofitting stops up to 10% more, and what you stop bursts where it falls. The 35% and 10% can start smaller and grow as you level Codes and Retrofit.',
+    apply: P => synRipen(P, 'stock'),
     q: 'You enforce building codes properly. Why is that still not enough on its own?',
     opts: ['Codes govern what gets built next — the buildings already standing are untouched',
            'Codes expire after a few years',
@@ -1720,8 +1747,9 @@ const SYNERGIES = [
     why: 'Monitoring is the input, not the paperwork. UNDRR puts loss data and risk assessment under <i>understanding risk</i>, ahead of everything that acts on it.' },
 
   { id: 'buffer', a: 'ring', b: 'speed', name: 'A buffer left empty', col: '#a8f0a0',
-    gain: 'The green belt is 45% wider and you move 10% faster.',
-    apply: P => { P.synRing = (P.synRing || 1) * 1.45; P.spd *= 1.10 },
+    // G-M2 2026-10-13: strings_G.md S-G2a verbatim; both multipliers ripen (synRipen). Was: "The green belt is 45% wider and you move 10% faster." / P.synRing x 1.45; P.spd x 1.10 (build_G_2026-10-01)
+    gain: 'The green belt is up to 45% wider and you move up to 10% faster. Both can start smaller and grow as you level Nature and Land use.',
+    apply: P => synRipen(P, 'buffer'),
     q: 'Mangroves protect a coast. What most often destroys that protection?',
     opts: ['Storms tearing them out',
            'Development building on the very belt that was protecting the place',
@@ -1731,8 +1759,9 @@ const SYNERGIES = [
     why: 'The defence and the land pressure want the same ground. Green infrastructure only keeps paying if land-use planning keeps the buffer empty.' },
 
   { id: 'concrete', a: 'hp', b: 'armour', name: 'Plans become concrete', col: '#ffb3ba',
-    gain: '+60 capacity, and retrofitting stops a further 8%.',
-    apply: P => { P.max += 60; P.hp += 60; P.armour = 1 - (1 - P.armour) * 0.92 },
+    // G-M2 2026-10-13: strings_G.md S-G2a verbatim; the +60 / +60 and the armour factor ripen (synRipen). Was: "+60 capacity, and retrofitting stops a further 8%." / P.max += 60; P.hp += 60; (1 - P.armour) x 0.92 (build_G_2026-10-01)
+    gain: 'Up to +60 capacity, and retrofitting stops up to a further 8%. Both can start smaller and grow as you level Finance and Retrofit.',
+    apply: P => synRipen(P, 'concrete'),
     q: 'Retrofitting is agreed, costed, and still never happens. What is usually missing?',
     opts: ['The engineering knowledge',
            'Public support',
@@ -1743,8 +1772,9 @@ const SYNERGIES = [
     why: 'UNDRR puts <i>resource resilience</i> beside <i>ready systems</i> in its calls to action. Why this game pairs them: the measure that is affordable is the measure that gets built.' },
 
   { id: 'who', a: 'wave', b: 'magnet', name: 'Drills that reach everyone', col: '#b9d8ff',
-    gain: 'Drills reach 25% further, you collect from 25% wider, and a shot that lands sends one on to the next thing.',
-    apply: P => { P.synWave = (P.synWave || 1) * 1.25; P.pickup *= 1.25 },
+    // G-M2 2026-10-13: strings_G.md S-G2a verbatim; the multipliers ripen (synRipen), the sent-on shot (SHOT().relay) arrives whole (RG1). Was: "Drills reach 25% further, you collect from 25% wider, and a shot that lands sends one on to the next thing." / P.synWave x 1.25; P.pickup x 1.25 (build_G_2026-10-01)
+    gain: 'Drills reach up to 25% further, you collect from up to 25% wider, and a shot that lands sends one on to the next thing. Both 25% figures can start smaller and grow as you level Drills and Data.',
+    apply: P => synRipen(P, 'who'),
     q: 'A city runs drills every year and the same people are still the ones who die. What does the risk data add?',
     opts: ['It proves the drills happened',
            'It shows who is not reached — the disabled, the isolated, the people not in the room',
@@ -1754,8 +1784,9 @@ const SYNERGIES = [
     why: 'UNDRR asks for disaggregated data on at-risk groups for this reason, and puts <i>inclusive of all community members</i> into the drill recommendation itself. An average is not a plan.' },
 
   { id: 'plan', a: 'field', b: 'speed', name: 'Where, and how', col: '#c7f0b8',
-    gain: 'Codes cover 25% more ground and you move 8% faster.',
-    apply: P => { P.synField = (P.synField || 1) * 1.25; P.spd *= 1.08 },
+    // G-M2 2026-10-13: strings_G.md S-G2a verbatim; both multipliers ripen (synRipen). Was: "Codes cover 25% more ground and you move 8% faster." / P.synField x 1.25; P.spd x 1.08 (build_G_2026-10-01)
+    gain: 'Codes cover up to 25% more ground and you move up to 8% faster. Both can start smaller and grow as you level Codes and Land use.',
+    apply: P => synRipen(P, 'plan'),
     q: 'Building codes say how to build. What question do they never answer?',
     opts: ['How much it costs',
            'Who inspects it',
@@ -1779,8 +1810,9 @@ const SYNERGIES = [
     // CORRECTED 2026-09-23: was "...and what you fire bursts where it lands." - since F3a a shot bursts once, where it stops - on the hit that spends its last pierce (a body or the boss), or in mid-air when its life runs out - so "lands" was untrue of a shot that missed (section F text, build_F_2026-09-23); CORRECTED again 2026-09-23: was "...and what you fire bursts where it stops." - since FX1 a shot bursts once, when it stops, on the last body it struck (a body or the boss), at that body's position at that moment (its last position if it has gone), and not at all if it struck nothing - so "where it stops" was untrue of a shot that struck a body and flew on, and "what you fire bursts" was untrue of a shot that struck nothing (section F text 2, build_F_2026-09-23)
     // CORRECTED 2026-09-23: was "..., fires 15% faster, and what you fire bursts on the last thing it hit." - relay shots (burst: 0) and split shards (no burst field) never burst, and the Drills ring bursts at each thing it strikes (fireWave hands it sh.burstR; the ring loop calls explode at every strike); now names what bursts and how - the aimed shots and the wide sweep on the last thing they hit (b.lastHit), Drills on everything they hit; "15%" and "A shot that hits nothing does not burst" kept, the latter still exact (pre-deploy text, predeploy_2026-09-23)
     // CORRECTED 2026-09-23: "Everything you have hits 15% harder and fires 15% faster." became two sentences - P.rateMul acts only in step() (fireWeapons), whose three callers are pulse (the aimed shots and the wide sweep), wave (Drills) and field (Building codes); the held beam (fireBeam, every frame), Green defences (ringCd 0.22), the corridor (T.laneTick), the monitoring sweep (sweepCd 0.5) and the evacuation pulse (FUSIONS[0].every) keep their own clocks, so "fires 15% faster" now names the four; "hits 15% harder" kept - P.dmgMul is in every damage line of the build (the only hits without it are the lifelines' own, the crews' strike-back and the Water service) (pre-deploy text, predeploy_2026-09-23)
-    gain: 'Everything you have hits 15% harder. Your aimed shots, the wide sweep, Drills and Building codes fire 15% faster. Your aimed shots and the wide sweep burst on the last thing they hit; a shot that hits nothing does not burst. Drills burst on everything they hit.',
-    apply: P => { P.dmgMul *= 1.15; P.rateMul *= 1.15 },
+    // G-M2 2026-10-13: both "15%" now "up to 15%" and a last sentence names the two that grow, strings_G.md S-G2a verbatim; the multipliers ripen (synRipen), the bursts (SHOT().burstR) arrive whole (RG1); the three CORRECTED lines above still hold of the rest. Was: "Everything you have hits 15% harder. Your aimed shots, the wide sweep, Drills and Building codes fire 15% faster. Your aimed shots and the wide sweep burst on the last thing they hit; a shot that hits nothing does not burst. Drills burst on everything they hit." / P.dmgMul x 1.15; P.rateMul x 1.15 (build_G_2026-10-01)
+    gain: 'Everything you have hits up to 15% harder. Your aimed shots, the wide sweep, Drills and Building codes fire up to 15% faster. Your aimed shots and the wide sweep burst on the last thing they hit; a shot that hits nothing does not burst. Drills burst on everything they hit. Both 15% figures can start smaller and grow as you level Invest and Upkeep.',
+    apply: P => synRipen(P, 'keep'),
     q: 'A country builds excellent flood defences and twenty years later they fail anyway. What went wrong?',
     opts: ['The defences were built to the wrong standard',
            'Climate change outpaced them entirely',
@@ -1789,6 +1821,32 @@ const SYNERGIES = [
     correct: 2,
     why: 'UNDRR asks for lifecycle resilience and maintenance pathways, not just construction. A defence is a commitment, not a purchase.' },
 ]
+
+// G-M2 2026-10-13: the ripening (PLAN_G G2; RG1). SYN_PARTS - each synergy's parts that ripen, as [what, full value]: a P field it multiplies (m), 'armour' (the share that gets through, 1 - P.armour, multiplied by m), or 'cap' (P.max and P.hp, + m). `see` and `lane` have none (all their parts arrive whole: RG1), and neither has the event parts of the others (act's shot, stock's kill ring, who's sent-on shot, keep's bursts), which SHOT reads from `syn` (build_G_2026-10-01)
+const SYN_PARTS = {
+  act: [['rateMul', 1.25], ['synWave', 1.30]], stock: [['synField', 1.35], ['armour', 0.90]], buffer: [['synRing', 1.45], ['spd', 1.10]],
+  concrete: [['cap', 60], ['armour', 0.92]], who: [['synWave', 1.25], ['pickup', 1.25]], plan: [['synField', 1.25], ['spd', 1.08]],
+  keep: [['dmgMul', 1.15], ['rateMul', 1.15]],
+}
+// G-M2 2026-10-13: f for a synergy at the live levels: clamp((lv.A + lv.B - 2) / min(T.synRipenK, max.A + max.B - 2), T.synRipen0, 1); 1 for a synergy with nothing that ripens (build_G_2026-10-01)
+// G-FIX 2026-10-13: F1 - the divisor was T.synRipenK alone; it is now capped at the pair's own level room, UPGRADES[a].max + UPGRADES[b].max - 2 (7 for stock, concrete and who; 8 or more for the rest, so they keep T.synRipenK), so f = 1 with both measures at max for every synergy (ADJUDICATION_G F1) (build_G_2026-10-01 fix round)
+function synF(id) {
+  if (!SYN_PARTS[id]) return 1
+  const sy = SYNERGIES.find(s => s.id === id)
+  return clamp((lv[sy.a] + lv[sy.b] - 2) / Math.min(T.synRipenK, UPGRADES[sy.a].max + UPGRADES[sy.b].max - 2), T.synRipen0, 1)
+}
+// G-M2 2026-10-13: how a ripened part is re-applied without compounding (the plan's design point): P.synF[id] holds the f the synergy's parts now stand at (0 before the take). Moving it from f0 to f1, a multiplier m acting as 1 + (m - 1) x f is divided out at f0 and multiplied in at f1 - so the field holds every other factor on it (levels, lifelines, trade-offs, mastery) times exactly the synergy's factor at f1, however many times it is re-read; the armour part does the same on 1 - P.armour (every other armour source also multiplies 1 - P.armour, so the order does not matter); concrete's +60s add m x (f1 - f0). Called by the synergy's apply (the take, f0 = 0) and by apply() when either of its measures levels. At f1 = 1 the factor is m itself, today's number (build_G_2026-10-01)
+function synRipen(P, id) {
+  const done = P.synF || (P.synF = {}), f0 = done[id] || 0, f1 = synF(id)
+  if (f1 === f0) return
+  const k = (m, f) => 1 + (m - 1) * f
+  for (const [what, m] of SYN_PARTS[id]) {
+    if (what === 'cap') { const d = m * (f1 - f0); P.max += d; P.hp += d }
+    else if (what === 'armour') P.armour = 1 - (1 - P.armour) / k(m, f0) * k(m, f1)
+    else P[what] = (P[what] || 1) / k(m, f0) * k(m, f1)
+  }
+  done[id] = f1
+}
 
 // One-line mechanism per pair, distilled from each synergy's own `why` (no new facts).
 // The pretesting literature's condition is that the correct mechanism ARRIVES after the
@@ -2347,12 +2405,14 @@ const fused = {}      // fusion id -> taken
 // CB-M4 2026-09-30: two rewordings, strings_CB.md S-C4 verbatim as ruled (PLAN_CB C4; ADJUDICATION_GR F1, F2): the chain's desc and gain say the shots "can" set off lightning, and the gain gives the cap (T.grChainPerSec, 12 a second); the shield's gain says the return does "at least double its damage, more with Resilient investment" (grReflect multiplies by P.dmgMul, which is never below 1). The Learning rows GRD.chain.desc / .gain and GRD.shield.gain changed with them (build_CB_2026-09-30)
 const GRANDS = [
   { id: 'chain', name: 'Warning chain', col: '#c4b5ff', arc: '#e4deff', needs: ['who', 'see'],
-    desc: 'Your aimed shots and the wide sweep can set off chain lightning. It jumps from the hazard they hit to others close by, up to 4 times.',
-    gain: 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not struck, up to 4 times. The first jump deals 60% of the shot\'s damage; each later jump deals 20% less than the one before.',
+    // G-M3 2026-10-13: desc and gain say the jumps and the first jump's share can start smaller and grow, strings_G.md S-G3a verbatim. Were: desc "...to others close by, up to 4 times."; gain "...The first jump deals 60% of the shot\'s damage; each later jump deals 20% less than the one before." (build_G_2026-10-01)
+    desc: 'Your aimed shots and the wide sweep can set off chain lightning. It jumps from the hazard they hit to others close by, up to 4 times. It can start with fewer jumps and grow as you level Drills, Data and Warning.',
+    gain: 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not struck, up to 4 times. The first jump deals up to 60% of the shot\'s damage; each later jump deals 20% less than the one before. The number of jumps and the 60% can start smaller and grow as you level Drills, Data and Warning.',
     take: 'Lightning now jumps from hazard to hazard.' },
   { id: 'laser', name: 'Line of sight', col: '#7fe0ff', needs: ['see', 'act'],
-    desc: 'A laser fires alongside your aimed shots, which keep firing. You get the Continuous beam if you lack it. It hits 50% harder and aims at one more target.',
-    gain: 'Your held beam becomes a laser: it hits 50% harder and aims at one more target. You get the beam if you lack it. Your aimed shots are unchanged.',
+    // G-M3 2026-10-13: "up to 50%" and the grow sentence, strings_G.md S-G3a verbatim. Were: desc "...It hits 50% harder and aims at one more target."; gain "Your held beam becomes a laser: it hits 50% harder and aims at one more target. You get the beam if you lack it. Your aimed shots are unchanged." (build_G_2026-10-01)
+    desc: 'A laser fires alongside your aimed shots, which keep firing. You get the Continuous beam if you lack it. It hits up to 50% harder and aims at one more target. The 50% can start smaller and grow as you level Data, Warning and Drills.',
+    gain: 'Your held beam becomes a laser: it hits up to 50% harder and aims at one more target. You get the beam if you lack it. Your aimed shots are unchanged. The 50% can start smaller and grow as you level Data, Warning and Drills.',
     take: 'Your beam is now a laser. Your shots still fire.' },
   { id: 'shield', name: 'Layered defence', col: '#a8f5d8', needs: ['buffer', 'stock'],
     desc: 'Some thrown things that would hit you are blocked and sent back as your own shots. The chance grows with each Green defences level. Only thrown things are blocked.',
@@ -2361,22 +2421,34 @@ const GRANDS = [
   // GR2-M1 2026-09-30: wave 2 (PLAN_GR2 W1-W4; strings_GR2.md S-W1 verbatim as ruled; RW7 ids and order: after wave 1). Colours in the YOURS band (OKLCH: veil C 0.129 H 349, aftershock C 0.159 H 258, orbit C 0.162 H 155; the aftershock's arc core C 0.033 H 263). Each shares T.grandCap with wave 1 through grandReady (build_GR2_2026-09-30)
   // GR2-FIX 2026-09-30: the note above corrected (ADJUDICATION_GR2 F1, F2). It said "after wave 1, so the offer order and the rail's rotation are unchanged" and "The orbit's desc is the RW1 wording ("but not heat")". Now every ready grand programme takes its turn in the rail's rotation, in GRANDS order (offerCards, F1), and the orbit's texts are the fix round's (F2, F4, F5; the GR2-FIX line above the orbit) (build_GR2_2026-09-30 fix round)
   { id: 'veil', name: 'Buffer of time', col: '#ff9ecf', needs: ['act', 'buffer'],
-    desc: 'Inside a ring around you, thrown things fly 40% slower and hazards move 25% slower. Your own shots and marked events are not slowed.',
-    gain: 'Inside a ring around you, thrown things fly 40% slower and hazards move 25% slower. So does the event that arrives with the words \u201cSeveral hazards, arriving together.\u201d Nothing outside the ring is slowed. Your own shots and events marked on the ground are not slowed.',
+    // G-M3 2026-10-13: a last sentence says the ring can start smaller and grow, strings_G.md S-G3a verbatim (the curly quotes kept as the \u escapes they were written in) (build_G_2026-10-01)
+    desc: 'Inside a ring around you, thrown things fly 40% slower and hazards move 25% slower. Your own shots and marked events are not slowed. The ring can start smaller and grow as you level Warning, Drills, Nature and Land use.',
+    gain: 'Inside a ring around you, thrown things fly 40% slower and hazards move 25% slower. So does the event that arrives with the words \u201cSeveral hazards, arriving together.\u201d Nothing outside the ring is slowed. Your own shots and events marked on the ground are not slowed. The ring can start smaller and grow as you level Warning, Drills, Nature and Land use.',
     take: 'Hazards and thrown things slow down near you.' },
   { id: 'aftershock', name: 'Built to last', col: '#5c9dff', arc: '#dde9ff', needs: ['keep', 'stock'],
-    desc: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it to another close by. This can happen twice in a row, but not more.',
-    gain: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it to the nearest hazard close by. It does 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, the burst that follows can send lightning once more, but not a third time.',   // GR2-FIX 2026-09-30: first sentence split (ADJUDICATION_GR2 F8): was "... to the nearest hazard close by, for 35% of the burst\'s damage."; the new second sentence is the Learning gain's own (build_GR2_2026-09-30 fix round)
+    // G-M3 2026-10-13: "up to 35%" and the grow sentence, strings_G.md S-G3a verbatim. Were: desc "...This can happen twice in a row, but not more."; gain "...It does 35% of the burst\'s damage. ...but not a third time." (build_G_2026-10-01)
+    desc: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it to another close by. This can happen twice in a row, but not more. The lightning can start weaker and grow as you level Invest, Upkeep, Codes and Retrofit.',
+    gain: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it to the nearest hazard close by. It does up to 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, the burst that follows can send lightning once more, but not a third time. The 35% can start smaller and grow as you level Invest, Upkeep, Codes and Retrofit.',   // GR2-FIX 2026-09-30: first sentence split (ADJUDICATION_GR2 F8): was "... to the nearest hazard close by, for 35% of the burst\'s damage."; the new second sentence is the Learning gain's own (build_GR2_2026-09-30 fix round)
     take: 'A burst that kills can now set off lightning.' },
   { id: 'orbit', name: 'Ground kept clear', col: '#62e89a', needs: ['plan', 'lane'],
     // GR2-FIX 2026-09-30: the orbit's desc, gain and take reworded (ADJUDICATION_GR2 F2, F4, F5, with F3's code): every surface says heat is left alone, in one form, "They leave heat alone." (grOrbit skips heat zones: no hit, no push); the damage is stated per hit - 9 (T.grOrbitDps x T.grOrbitCd x P.dmgMul), at most once every 0.3s on the same hazard (T.grOrbitCd, the hazard's own clock orbT) - not as a rate a second. Were: desc "Three pieces circle close around you. A hazard they touch is hurt and pushed away, but not heat. They do not block thrown things."; gain "Three pieces circle close around you, once every 2.4s. A hazard they touch takes 30 damage a second, more with Resilient investment, and is pushed away from you. They do not block thrown things."; take "Three pieces now circle you and push hazards away." (build_GR2_2026-09-30 fix round)
-    desc: 'Three pieces circle close around you. A hazard they touch is hurt and pushed away. They leave heat alone. They do not block thrown things.',
-    gain: 'Three pieces circle close around you, once every 2.4s. A hazard they touch takes 9 damage, more with Resilient investment, and is pushed away from you. The pieces hit the same hazard at most once every 0.3s. They leave heat alone. They do not block thrown things.',
-    take: 'Three pieces now circle you. They push hazards away but leave heat alone.' },
+    // G-M3 2026-10-13: "Up to three pieces", fewer at first, and the take without the count, strings_G.md S-G3a verbatim. Were: desc "Three pieces circle close around you. ..."; gain "Three pieces circle close around you, once every 2.4s. ..."; take "Three pieces now circle you. They push hazards away but leave heat alone." (build_G_2026-10-01)
+    // G-FIX 2026-10-13: F8 - the closing sentence of desc and gain was "More come as you level Codes, Land use and Upkeep." (gain: "; more come as you level ..."), plural, while at most one more piece comes (grOrbitN0 -> grOrbitN, at g >= T.grOrbitStep); now "The number grows as you level ...", true whether one or more are still to come, in the register of the other ripening sentences ("It grows as you level ...") (ADJUDICATION_G F8) (build_G_2026-10-01 fix round)
+    desc: 'Up to three pieces circle close around you. A hazard they touch is hurt and pushed away. They leave heat alone. They do not block thrown things. There can be fewer at first. The number grows as you level Codes, Land use and Upkeep.',
+    gain: 'Up to three pieces circle close around you, once every 2.4s. A hazard they touch takes 9 damage, more with Resilient investment, and is pushed away from you. The pieces hit the same hazard at most once every 0.3s. They leave heat alone. They do not block thrown things. There can be fewer pieces at first; the number grows as you level Codes, Land use and Upkeep.',
+    take: 'Pieces now circle you. They push hazards away but leave heat alone.' },
 ]
 const grand = {}      // GR-M1 2026-09-29: grand programme id -> taken, this run only (reset) (build_GR_2026-09-29)
 const grandTaken = () => GRANDS.filter(g => grand[g.id]).length
 const grandReady = g => !grand[g.id] && grandTaken() < T.grandCap && g.needs.every(id => syn[id])
+// G-M3 2026-10-13: the ripening of a grand programme (PLAN_G G3). grMeasures - its partner measures: the two measures of each synergy it needs, each once, in that order (four, or three where the two synergies share one); grG - g = clamp((the sum of their levels - their count) / T.grRipenK, T.grRipen0, 1), read live; grLerp(id, start, full) - a straight line from `start` at g = T.grRipen0 to `full` at g = 1, written so that at g = 1 it is `full` exactly; grFull - every ripening part at full (the orbit's only part, its third piece, is full from g = T.grOrbitStep) (build_G_2026-10-01)
+const grMeasuresC = {}   // the lists are fixed by GRANDS and SYNERGIES, so each is built once (grVeilK reads g for every body, every frame)
+const grMeasures = g => grMeasuresC[g.id] || (grMeasuresC[g.id] = [...new Set(g.needs.flatMap(id => { const s = SYNERGIES.find(x => x.id === id); return [s.a, s.b] }))])
+const grG = id => { const ks = grMeasures(GRANDS.find(g => g.id === id)); return clamp((ks.reduce((n, k) => n + lv[k], 0) - ks.length) / T.grRipenK, T.grRipen0, 1) }
+const grLerp = (id, start, full) => full - (full - start) * (1 - clamp((grG(id) - T.grRipen0) / (1 - T.grRipen0), 0, 1))
+const grFull = id => id === 'orbit' ? grG(id) >= T.grOrbitStep : grG(id) >= 1
+const grOrbitN = () => grG('orbit') >= T.grOrbitStep ? T.grOrbitN : T.grOrbitN0
+const grVeilR = () => grLerp('veil', T.grVeilR0, T.grVeilR)
 const grChainTimes = []   // GR-M2 2026-09-29: run-clock times of the chains started in the last second (at most T.grChainPerSec) (build_GR_2026-09-29)
 let grTint = 0, grTintCol = null   // GR-M6 2026-09-29: the take moment's tint - seconds left and its colour (build_GR_2026-09-29)
 // GR2-M3 / GR2-M4 2026-09-30: wave 2's run state - the aftershock's clock (run-clock times of the jumps started in the last second, at most T.grAsPerSec); the burst whose hits are being billed (grAsBurst: its damage, set by explode while it bills, null everywhere else); how many aftershock jumps stand above the code now running (grAsLine: RW3's own depth counter, 0 outside a line); and the orbit's angle (build_GR2_2026-09-30)
@@ -2407,9 +2479,10 @@ const MODS = {
   track:   { name: 'Tracking',    max: 3, col: '#57c7ff',
              desc: l => l === 0 ? 'What you fire turns toward what it was aimed at.'
                                 : `It turns harder, and gives up later (Lv ${l + 1}).` },
+  // G-M1 2026-10-13: both cards say the new shot is small until the next level-up, strings_G.md S-G1b verbatim (RG5). Were: "One more leaves the emitter every time it fires." / "One more again (Lv ${l + 1})." (build_G_2026-10-01)
   volley:  { name: 'Volley',      max: 3, col: '#ffd166',
-             desc: l => l === 0 ? 'One more leaves the emitter every time it fires.'
-                                : `One more again (Lv ${l + 1}).` },
+             desc: l => l === 0 ? 'One more leaves the emitter every time it fires. The new one is small until your next level-up.'
+                                : `One more again, small until your next level-up (Lv ${l + 1}).` },
   through: { name: 'Through',     max: 3, col: '#8ef6c6',
              desc: l => l === 0 ? 'What you fire passes through one more thing before it stops.'
                                 : `One more again (Lv ${l + 1}).` },
@@ -2460,18 +2533,31 @@ const mod = {}        // modifier id -> level, this run only
 // and it resolves for that hypothetical. That is what lets a card say what taking it will actually
 // do — "Projectiles 2 → 3" — instead of describing itself in adjectives, which was the whole
 // complaint about this layer's cards.
+// G-M1 2026-10-13: the small shots (PLAN_G G1; RG4, RG5). pulseSmall(l) - the small shots Early warning gives at level l: the full count the next level would give less the full count at l, so 1 at Lv 2 and Lv 4 (a small 2nd, a small 3rd) and 0 at Lv 1, 3, 5, 6 (the ladder's ceiling, 3, unchanged); the level cards read it to say what a level does (UPGRADES.pulse.desc, PLAIN UPG.pulse.descN). volleySmall - the Volley levels taken since the last P.level++ (each is a small shot until then; zeroed at every P.level++ and at reset, counted up in takeMod) (build_G_2026-10-01)
+const pulseFull = l => l > 0 ? Math.min(1 + Math.floor((l - 1) / 2), 3) : 0
+const pulseSmall = l => l > 0 ? Math.min(1 + Math.floor(l / 2), 3) - pulseFull(l) : 0
+let volleySmall = 0
+// G-M5 2026-10-13: run state, declared here so reset() can clear it: g5Opened - the run's first card screen has drawn its measures (offerCards); pairPulsed - the pairs whose two build-list rows have pulsed this run (once each); pairPulse - the measure rows pulsing now (syncHud) (build_G_2026-10-01)
+let g5Opened = false
+const pairPulsed = {}, pairPulse = {}
+// G-FIX 2026-10-13: F2 - pairWait: a ready pair's one pulse is waiting for the build list to be in view (syncHud sets it; step plays it once nothing covers the list, hudCovered) (ADJUDICATION_G F2) (build_G_2026-10-01 fix round)
+let pairWait = false
 const SHOT = o => {
   const L = (o && o.lv) || lv, Y = (o && o.syn) || syn, M = (o && o.mod) || mod
   const G = (o && o.grand) || grand   // GR-M3 2026-09-29: the grand programmes held, for the laser's extra target (build_GR_2026-09-29)
   // Extra projectiles: the streak tier, the "warning that is acted on" pair, and the deck.
   const extra = streakTier().shots + (Y.act ? 1 : 0) + (M.volley || 0)
+  // G-M1 2026-10-13: of the Volley levels in `extra`, those still small - volleySmall, plus (for a hypothetical) the levels it adds over the live deck, which would be taken on this screen; never more than the levels held. `extra` keeps counting them whole, so the Drills echo (fireWeapons) and the beam's cone (beamHalf, P2/RG8) are unchanged (build_G_2026-10-01)
+  const vSmall = Math.min(M.volley || 0, volleySmall + Math.max(0, (M.volley || 0) - (mod.volley || 0)))
   // `see` is the only thing that ever set P.synPierce, so the flag is read here instead of the
   // mutated field - one resolver, and no hypothetical has to fake a mutation to be asked.
   const pierce = (Y.see ? 2 : 0) + (M.through || 0)
   return {
     extra, pierce,
     // The totals a player actually sees, rather than the modifier terms that feed them.
-    shots:   Math.min(1 + Math.floor(((L.pulse || 0) - 1) / 2), 3) + extra,
+    // G-M1 2026-10-13: `shots` counts the full shots only; `small` the small ones (Early warning's pulseSmall and Volley's vSmall). A small shot is never counted as a full one (RG3) (build_G_2026-10-01)
+    shots:   pulseFull(L.pulse || 0) + extra - vSmall,
+    small:   pulseSmall(L.pulse || 0) + vSmall,
     through: 1 + Math.floor((L.pulse || 0) / 2) + pierce,
     // Turn rate in radians per second. Risk data is the measure that makes aiming possible at all -
     // you cannot send anything after what nobody is measuring - so it opens the behaviour, and the
@@ -2532,7 +2618,8 @@ const SHOT_ROWS = [
   // The emitters are additive since 2026-09-10, so the aimed shots are always part of the answer
   // and the two rows below are always meaningful - they used to blank on a beam build.
   { label: 'Emitter',        get: s => 'aimed shots' + (s.fan ? ' + a wide sweep' : '') + (s.beam ? ' + a held beam' : '') },
-  { label: 'Projectiles',    get: s => String(s.shots) },
+  // G-M1 2026-10-13: small shots printed apart, strings_G.md S-G1c as ruled (RG3): "${full}" with none, else "${full} + ${small} small" (build_G_2026-10-01)
+  { label: 'Projectiles',    get: s => s.small ? `${s.shots} + ${s.small} small` : String(s.shots) },
   { label: 'Passes through', get: s => s.through + (s.through === 1 ? ' thing' : ' things') },
   // The cone width is printed as whole degrees of the FULL cone (beamHalf is the half-angle).
   // Without it, Volley offered to a beam build moved no row at all and the card printed no
@@ -3184,6 +3271,8 @@ function reset(placeId) {
   seasonPend = null; seasonRest = 0; secSeen = false; specLast = null
   synMerge.length = 0; for (const k in cbFresh) delete cbFresh[k]   // CB-M3 2026-09-30: no merge moment crosses into the next run (build_CB_2026-09-30)
   uxMergeNew.length = 0; uxMergeQ.length = 0; uxMergeCur = null   // UX-M3 2026-09-30: nor does a moment in the middle of the screen, playing, waiting or not yet started, or the banner line one holds (build_UX_2026-09-30)
+  // G-M1 / G-M5 2026-10-13: no small Volley shot, first opening or pair already pulsed crosses into the next run (P is new, so its synF - the ripening applied, G-M2 - is too) (build_G_2026-10-01)
+  volleySmall = 0; g5Opened = false; for (const k in pairPulsed) delete pairPulsed[k]; for (const k in pairPulse) delete pairPulse[k]
   P.fuseHaste = 0
   lv.pulse = 1
   // The dial pays out the same way the place does: what the pressure built (more to
@@ -3581,7 +3670,10 @@ function trapTab(e, box) {
 const PLAIN = {
   'UPG.field.desc0': 'Building standards, applied to everything standing around you. Nothing dramatic happens. Things simply do not fall.',
   'UPG.pulse.desc0': 'It finds what is closest. It deals with it before it arrives.',
-  'UPG.pulse.descN': l => `Faster. It also goes past the first thing it meets (Lv ${l + 1}).`,
+  // G-M1 2026-10-13: the same three-way branch as UPGRADES.pulse.desc (pulseSmall; RG4), strings_G.md S-G1a Learning verbatim; the third branch is the old line (build_G_2026-10-01)
+  'UPG.pulse.descN': l => pulseSmall(l + 1) > pulseSmall(l) ? `Faster. It also goes past the first thing it meets. One more shot goes out. It stays small until your next Early warning level (Lv ${l + 1}).`
+                        : pulseSmall(l + 1) < pulseSmall(l) ? `Faster. It also goes past the first thing it meets. Your small shot grows to full size (Lv ${l + 1}).`
+                        : `Faster. It also goes past the first thing it meets (Lv ${l + 1}).`,
   'UPG.wave.desc0': 'Practised regularly. It does not stop the hazard. It moves people out of its way.',
   'UPG.armour.desc0': 'The buildings that are already there, made stronger. Less of every hit gets through.',
   'UPG.magnet.desc0': 'Monitoring, and records of losses. You see further out. Nothing is collected that was never measured.',
@@ -3590,15 +3682,17 @@ const PLAIN = {
   // LL-M1 2026-09-25: was "All you have built, working when it is needed." - replaced where it stands, never deleted (deleted, Learning would fall through to the Steady text); S-L1's Learning text verbatim (strings_LL.md) (build_LL_2026-09-25)
   'UPG.rate.desc0': 'Each level, lifelines repair 30% faster. You can stand in a ring 10% wider and still repair them.',
   'UPG.dmg.desc0': 'Money spent making things stronger first, not on rebuilding them after.',
-  'SYN.act.gain': 'Warning fires 25% faster. Drills reach 30% further. And one more shot goes out each time.',
-  'SYN.stock.gain': 'Codes cover 35% more ground. Retrofitting stops 10% more. What you stop bursts where it falls.',
-  'SYN.concrete.gain': '+60 capacity. Retrofitting also stops 8% more.',
-  'SYN.who.gain': 'Drills reach 25% further. You collect from 25% further away. A shot that lands sends another on to the next thing.',
+  // G-M2 2026-10-13: the Learning gains of act, stock, concrete, who (and keep, below) say "up to" and which parts grow, strings_G.md S-G2a verbatim. Were: "Warning fires 25% faster. Drills reach 30% further. And one more shot goes out each time." / "Codes cover 35% more ground. Retrofitting stops 10% more. What you stop bursts where it falls." / "+60 capacity. Retrofitting also stops 8% more." / "Drills reach 25% further. You collect from 25% further away. A shot that lands sends another on to the next thing." (build_G_2026-10-01)
+  'SYN.act.gain': 'Warning fires up to 25% faster. Drills reach up to 30% further. And one more shot goes out each time. The 25% and 30% can start smaller. They grow as you level Warning and Drills.',
+  'SYN.stock.gain': 'Codes cover up to 35% more ground. Retrofitting stops up to 10% more. What you stop bursts where it falls. The 35% and 10% can start smaller. They grow as you level Codes and Retrofit.',
+  'SYN.concrete.gain': 'Up to +60 capacity. Retrofitting also stops up to 8% more. Both can start smaller. They grow as you level Finance and Retrofit.',
+  'SYN.who.gain': 'Drills reach up to 25% further. You collect from up to 25% further away. A shot that lands sends another on to the next thing. Both 25% figures can start smaller. They grow as you level Drills and Data.',
   'SYN.lane.gain': 'A cleared corridor runs through you, in the direction you are moving. It wears down everything standing in it.',
   // CORRECTED 2026-09-23: was "... What you fire bursts where it lands." - since F3a a shot bursts once, where it stops - on the hit that spends its last pierce (a body or the boss), or in mid-air when its life runs out - so "lands" was untrue of a shot that missed (section F text, build_F_2026-09-23); CORRECTED again 2026-09-23: was "... What you fire bursts where it stops." - since FX1 a shot bursts once, when it stops, on the last body it struck (a body or the boss), at that body's position at that moment (its last position if it has gone), and not at all if it struck nothing - so "where it stops" was untrue of a shot that struck a body and flew on, and "What you fire bursts" was untrue of a shot that struck nothing (section F text 2, build_F_2026-09-23)
   // CORRECTED 2026-09-23: was "... What you fire bursts on the last thing it hit." - relay shots (burst: 0) and split shards (no burst field) never burst, and the Drills ring bursts at each thing it strikes (fireWave hands it sh.burstR; the ring loop calls explode at every strike); now the aimed shots and the wide sweep on the last thing they hit, Drills on everything they hit (pre-deploy text, predeploy_2026-09-23)
   // CORRECTED 2026-09-23: "Everything you have hits 15% harder and fires 15% faster." became two sentences, as in the English - P.rateMul acts only in step(): the aimed shots and the wide sweep, Drills, Building codes; "hits 15% harder" kept (P.dmgMul is in every damage line of the build) (pre-deploy text, predeploy_2026-09-23)
-  'SYN.keep.gain': 'Everything you have hits 15% harder. Your aimed shots, the wide sweep, Drills and Building codes fire 15% faster. Your aimed shots and the wide sweep burst on the last thing they hit. A shot that hits nothing does not burst. Drills burst on everything they hit.',
+  // G-M2 2026-10-13: strings_G.md S-G2a Learning verbatim. Was: "Everything you have hits 15% harder. Your aimed shots, the wide sweep, Drills and Building codes fire 15% faster. Your aimed shots and the wide sweep burst on the last thing they hit. A shot that hits nothing does not burst. Drills burst on everything they hit." (build_G_2026-10-01)
+  'SYN.keep.gain': 'Everything you have hits up to 15% harder. Your aimed shots, the wide sweep, Drills and Building codes fire up to 15% faster. Your aimed shots and the wide sweep burst on the last thing they hit. A shot that hits nothing does not burst. Drills burst on everything they hit. Both 15% figures can start smaller. They grow as you level Invest and Upkeep.',
   'GIST.act': 'A warning buys time. The drill turns that time into action people already know.',
   'GIST.stock': 'Codes set the rules for what gets built next. Retrofit reaches everything already standing.',
   'GIST.see': 'You cannot warn about what nobody is measuring. Data is the input.',
@@ -3618,22 +3712,24 @@ const PLAIN = {
   'FUS.buffer.gain': 'The green belt gets two more shards and reaches 25% further. It throws back what it hits.',
   // GR-M1 2026-09-29: the grand programmes' Learning desc and gain, strings_GR.md S-G1 verbatim (keys GRD.<id>.desc / .gain, the FUS pattern); names and the banner's `take` have none, so they fall through to the Steady text (build_GR_2026-09-29)
   // CB-M4 2026-09-30: GRD.chain.desc / .gain and GRD.shield.gain reworded, strings_CB.md S-C4 C4-3, C4-4, C4-6 verbatim (ADJUDICATION_GR F1, F2) (build_CB_2026-09-30)
-  'GRD.chain.desc': 'Your aimed shots and the wide sweep can set off lightning. It jumps from the hazard they hit to others close by. It can jump up to 4 times.',
-  'GRD.chain.gain': 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not hit yet. It can jump up to 4 times. The first jump does 60% of the shot\'s damage. Each jump after that does 20% less than the one before.',
-  'GRD.laser.desc': 'Your aimed shots keep firing. A laser fires too. If you do not have Continuous, you get its beam. The beam hits 50% harder and aims at one more target.',
-  'GRD.laser.gain': 'Your beam becomes a laser. It hits 50% harder and aims at one more target. If you have no beam, you get one. Your aimed shots stay the same.',
+  // G-M3 2026-10-13: the Learning desc and gain of chain, laser, veil, aftershock and orbit, strings_G.md S-G3a verbatim ("up to" on the number that ripens, and the grow sentences); the old texts are quoted in the GRANDS lines' G-M3 notes and differ by those additions (build_G_2026-10-01)
+  'GRD.chain.desc': 'Your aimed shots and the wide sweep can set off lightning. It jumps from the hazard they hit to others close by. It can jump up to 4 times. It can start with fewer jumps. It grows as you level Drills, Data and Warning.',
+  'GRD.chain.gain': 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not hit yet. It can jump up to 4 times. The first jump does up to 60% of the shot\'s damage. Each jump after that does 20% less than the one before. The number of jumps and the 60% can start smaller. They grow as you level Drills, Data and Warning.',
+  'GRD.laser.desc': 'Your aimed shots keep firing. A laser fires too. If you do not have Continuous, you get its beam. The beam hits up to 50% harder and aims at one more target. The 50% can start smaller. It grows as you level Data, Warning and Drills.',
+  'GRD.laser.gain': 'Your beam becomes a laser. It hits up to 50% harder and aims at one more target. If you have no beam, you get one. Your aimed shots stay the same. The 50% can start smaller. It grows as you level Data, Warning and Drills.',
   'GRD.shield.desc': 'Some thrown things that would hit you are stopped. They fly back as your own shots. The chance grows with each Green defences level. Only thrown things are stopped.',
   'GRD.shield.gain': 'It can block a thrown thing that would hit you. The chance is 20%, plus 8% for each Green defences level. At Lv 5 it is 60%. A blocked one flies back toward where it came from, as your shot. It does at least double its damage. Resilient investment makes it do more.',
   // GR2-M1 2026-09-30: wave 2's Learning desc and gain, strings_GR2.md S-W1 verbatim (keys GRD.<id>.desc / .gain); names and `take` have none (build_GR2_2026-09-30)
-  'GRD.veil.desc': 'There is a ring around you. Inside it, thrown things fly 40% slower. Hazards inside it move 25% slower. Your own shots are not slowed. Marked events are not slowed.',   // GR2-FIX 2026-09-30: "Hazards move 25% slower." -> "Hazards inside it move 25% slower." - the scope kept (ADJUDICATION_GR2 F6) (build_GR2_2026-09-30 fix round)
-  'GRD.veil.gain': 'There is a ring around you. Inside it, thrown things fly 40% slower. Hazards move 25% slower. So does the event that arrives with the words \u201cSeveral hazards, arriving together.\u201d Nothing outside the ring is slowed. Your own shots are not slowed. Events marked on the ground are not slowed.',
-  'GRD.aftershock.desc': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it. It jumps to another hazard close by. This can happen twice in a row, but not more.',
-  'GRD.aftershock.gain': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it. It goes to the nearest hazard close by. It does 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, there can be another burst. That burst can send lightning once more. It does not go on after that.',
+  'GRD.veil.desc': 'There is a ring around you. Inside it, thrown things fly 40% slower. Hazards inside it move 25% slower. Your own shots are not slowed. Marked events are not slowed. The ring can start smaller. It grows as you level Warning, Drills, Nature and Land use.',   // GR2-FIX 2026-09-30: "Hazards move 25% slower." -> "Hazards inside it move 25% slower." - the scope kept (ADJUDICATION_GR2 F6) (build_GR2_2026-09-30 fix round)
+  'GRD.veil.gain': 'There is a ring around you. Inside it, thrown things fly 40% slower. Hazards move 25% slower. So does the event that arrives with the words \u201cSeveral hazards, arriving together.\u201d Nothing outside the ring is slowed. Your own shots are not slowed. Events marked on the ground are not slowed. The ring can start smaller. It grows as you level Warning, Drills, Nature and Land use.',
+  'GRD.aftershock.desc': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it. It jumps to another hazard close by. This can happen twice in a row, but not more. The lightning can start weaker. It grows as you level Invest, Upkeep, Codes and Retrofit.',
+  'GRD.aftershock.gain': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it. It goes to the nearest hazard close by. It does up to 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, there can be another burst. That burst can send lightning once more. It does not go on after that. The 35% can start smaller. It grows as you level Invest, Upkeep, Codes and Retrofit.',
   // GR2-FIX 2026-09-30: the orbit's Learning desc and gain reworded as the Steady ones (ADJUDICATION_GR2 F2, F5): "They leave heat alone."; 9 damage a hit, at most once every 0.3s on the same hazard. Were: desc "Three pieces go round close to you. They hurt any hazard they touch and push it away. They do not stop thrown things."; gain "Three pieces circle close around you. They go round once every 2.4s. A hazard they touch takes 30 damage a second. Resilient investment makes it more. The pieces push the hazard away from you. They do not stop thrown things." (build_GR2_2026-09-30 fix round)
-  'GRD.orbit.desc': 'Three pieces go round close to you. They hurt hazards they touch and push them away. They leave heat alone. They do not stop thrown things.',
-  'GRD.orbit.gain': 'Three pieces circle close around you. They go round once every 2.4s. A hazard they touch takes 9 damage. Resilient investment makes it more. The pieces push the hazard away from you. They hit the same hazard at most once every 0.3s. They leave heat alone. They do not stop thrown things.',
+  // G-FIX 2026-10-13: F8 - orbit's Learning desc and gain: "More come as you level Codes, Land use and Upkeep." became "The number grows as you level Codes, Land use and Upkeep.", as the Steady texts (ADJUDICATION_G F8) (build_G_2026-10-01 fix round)
+  'GRD.orbit.desc': 'Up to three pieces go round close to you. They hurt hazards they touch and push them away. They leave heat alone. They do not stop thrown things. There can be fewer at first. The number grows as you level Codes, Land use and Upkeep.',
+  'GRD.orbit.gain': 'Up to three pieces circle close around you. They go round once every 2.4s. A hazard they touch takes 9 damage. Resilient investment makes it more. The pieces push the hazard away from you. They hit the same hazard at most once every 0.3s. They leave heat alone. They do not stop thrown things. There can be fewer pieces at first. The number grows as you level Codes, Land use and Upkeep.',
   'MOD.track.descN': l => `It turns more sharply, and gives up later (Lv ${l + 1}).`,
-  'MOD.volley.desc0': 'One more shot goes out every time it fires.',
+  'MOD.volley.desc0': 'One more shot goes out every time it fires. The new shot is small until you level up again.',   // G-M1 2026-10-13: strings_G.md S-G1b Learning verbatim; was "One more shot goes out every time it fires." (build_G_2026-10-01)
   // CORRECTED 2026-09-23: was "What you fire bursts where it lands. The burst reaches what stood next to it." - since F3a a shot bursts once, where it stops - on the hit that spends its last pierce (a body or the boss), or in mid-air when its life runs out - so "lands" was untrue of a shot that missed (section F text, build_F_2026-09-23); CORRECTED again 2026-09-23: was "What you fire bursts where it stops. The burst reaches what stood next to it." - since FX1 a shot bursts once, when it stops, on the last body it struck (a body or the boss), at that body's position at that moment (its last position if it has gone), and not at all if it struck nothing - so "where it stops" was untrue of a shot that struck a body and flew on, and "What you fire bursts" was untrue of a shot that struck nothing (section F text 2, build_F_2026-09-23)
   // CORRECTED 2026-09-23: was "What you fire bursts on the last thing it hit. ..." - relay shots (burst: 0) and split shards (no burst field) never burst, and the Drills ring bursts at each thing it strikes (fireWave hands it sh.burstR; the ring loop calls explode at every strike); now the aimed shots and the wide sweep on the last thing they hit, Drills on everything they hit (pre-deploy text, predeploy_2026-09-23)
   'MOD.frag.desc0': 'Your aimed shots and the wide sweep burst on the last thing they hit. The burst reaches what stood next to it. A shot that hits nothing does not burst. Drills burst on everything they hit.',
@@ -3701,7 +3797,8 @@ const PLAIN = {
   'BOSS.true.down': 'You beat it. You get all your capacity back and a lot of XP. Your recovery budget gets bigger.',
   'BOSS.true.passes': 'You did not beat it, but you lasted until it passed. It will not come back this run.',
   'BOSS.true.rep.down': bonus => `You beat it. You got all your capacity back and a lot of XP. It added <b>${bonus}</b> to the size of your recovery budget.`,
-  'BOSS.true.rep.passed': 'You did not beat it, but you lasted until it passed. Beating it gives all your capacity back and a lot of XP. Your recovery budget also gets bigger.',
+  // G-M6 2026-10-13: N6 (verify_UXBS_fix.md N6) - the budget clause back inside its condition, strings_G.md S-G6a verbatim (RG13); was "... Your recovery budget also gets bigger." (build_G_2026-10-01)
+  'BOSS.true.rep.passed': 'You did not beat it, but you lasted until it passed. Beating it gives all your capacity back and a lot of XP. Beating it also makes your recovery budget bigger.',
   // BS-M2 2026-09-30: the first-elite line, strings_BS.md S-B3 (b) verbatim (build_BS_2026-09-30)
   'ELITE.first': 'Hazards with a crown are bigger and harder to stop. They hit harder. They give more XP.',
   // BS-M4 2026-09-30: the secured line with a real save's repair, strings_BS_hp.md S-H2 (a) verbatim (ruling RH2) (build_BS_2026-09-30)
@@ -4236,7 +4333,8 @@ function fireService(L) {
   AU.play('mastery')
   burst(L.x, L.y, K.col, 40, 380)
   // D3 2026-09-22: the service ring is yours (X01 (a)) - its colour from the ring table and its own form, long dashes; it drew in the lifeline's colour, now the place's neutral (S01) (build_D_2026-09-22)
-  fx.push({ ring: true, noHit: true, x: L.x, y: L.y, r: 12, max: 520, life: 0.7, col: PAL.yours.ring.service, style: 'dash', hit: new Set() })
+  // G-M6 2026-10-13: pushed through fxPush, so it obeys T.fxCap (build_G_2026-10-01)
+  fxPush({ ring: true, noHit: true, x: L.x, y: L.y, r: 12, max: 520, life: 0.7, col: PAL.yours.ring.service, style: 'dash', hit: new Set() })
   shake = Math.max(shake, 10)
   syncHud()
 }
@@ -4596,8 +4694,9 @@ function tbossPhases(B) {
     B.tphase++
     hazardSurge(T.tbossSurgeN)
     AU.play('surge')
-    if (B.tphase === 1) { B.ringCd = 0.6; flash('More hazards may arrive', say('BOSS.true.phase1', 'The boss now fires a ring of shots too.'), B.col, { now: true, keep: true }) }   // UXBS-FIX 2026-09-30: F2, F8 (build_BS_2026-09-30 fix round)
-    else { B.laneCd = 0.8; flash('More hazards may arrive', say('BOSS.true.phase2', 'The boss now sweeps a lane across the ground too.'), B.col, { now: true, keep: true }) }   // UXBS-FIX 2026-09-30: F2, F8 (build_BS_2026-09-30 fix round)
+    // G-M6 2026-10-13: N1 - each phase line also carries { tbp: true }, so flashDropPhases can find it when the boss leaves (build_G_2026-10-01)
+    if (B.tphase === 1) { B.ringCd = 0.6; flash('More hazards may arrive', say('BOSS.true.phase1', 'The boss now fires a ring of shots too.'), B.col, { now: true, keep: true, tbp: true }) }   // UXBS-FIX 2026-09-30: F2, F8 (build_BS_2026-09-30 fix round)
+    else { B.laneCd = 0.8; flash('More hazards may arrive', say('BOSS.true.phase2', 'The boss now sweeps a lane across the ground too.'), B.col, { now: true, keep: true, tbp: true }) }   // UXBS-FIX 2026-09-30: F2, F8 (build_BS_2026-09-30 fix round)
   }
 }
 
@@ -4652,6 +4751,7 @@ function tbossDown(B) {
   tbossState = 'absorbed'
   // UXBS-FIX 2026-09-30: F2 - { now: true, keep: true } (flash). F3 - the line says the bonus makes the budget bigger (its SIZE, runFunds in die()), not that you got it; was "All your capacity back, a burst of XP and more budget." (fix_record_UXBS.md F3) (build_BS_2026-09-30 fix round)
   flash('Boss absorbed', say('BOSS.true.down', 'All your capacity back and a burst of XP. Your budget gets bigger.'), '#7ee787', { now: true, keep: true })
+  flashDropPhases()   // G-M6 2026-10-13: N1 (build_G_2026-10-01)
   AU.play('bossDown')
   shake = Math.max(shake, 26)
   tboss = null
@@ -4661,6 +4761,7 @@ function tbossDown(B) {
 // Not beaten in T.tbossLife s: it withdraws (the game's rule that events pass) and does not return this run.
 function tbossPass(B) {
   flash('The boss passes', say('BOSS.true.passes', 'Not absorbed, but outlasted. It will not return this run.'), B.col, { now: true, keep: true })   // UXBS-FIX 2026-09-30: F2 - { now: true, keep: true } (flash) (build_BS_2026-09-30 fix round)
+  flashDropPhases()   // G-M6 2026-10-13: N1 (build_G_2026-10-01)
   emit('smoke', B.x, B.y, 24, B.ramp, { scale: 1.5 })
   tbossState = 'passed'
   tboss = null
@@ -5086,7 +5187,8 @@ function updateGroundThings(dt) {
 // charges interacts with the place - hard defences are nearly free on a fault and a real
 // gamble in a delta. That interaction is the variable the game was missing.
 const TRADEOFFS = [
-  { id: 'levee', name: 'Hard defences', short: 'Levee', col: '#8892a6', from: 3,
+  // G-M5 2026-10-13: (b) levee and growth `from` 3 -> 4 (relief is already 4), so the 2nd level-up (P.level 3) cannot roll a trade-off and the special slot is free for the first pair (PLAN_G G5); no text states the level (strings_G.md S-G5c) (build_G_2026-10-01)
+  { id: 'levee', name: 'Hard defences', short: 'Levee', col: '#8892a6', from: 4,
     desc: 'A seawall, a levee, a channel. Almost everything stops at it, almost every time.',
     // CHANGED 2026-09-15: cost moved from contact damage to lifelines (sweep_2026-09-14 follow-up 1; levee_2026-09-15/)
     cost: 'Every hit you take is cut by 40%. But a flood sitting on a lifeline wears it down twice as fast.',
@@ -5095,7 +5197,7 @@ const TRADEOFFS = [
     // CORRECTED 2026-09-16: caveat spelling harmonised to "not UNDRR’s own analysis" (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
     // CORRECTED 2026-09-23: the Missouri development figure removed - a load-bearing figure resting on one tier-3 source that had drifted (pre-deploy check F1); the floodplain sentence now given as Mallea's view ("Mallea writes that ..."), with Mallea's "this trend quickly reversed" (capture P03 L382) and no figure; game half unchanged; tag unchanged but the re-read date (capture re-read 2026-09-23) (pre-deploy text, predeploy_2026-09-23)
     src: 'In this game, hard defences cut every hit by 40%, but a flood sitting on a lifeline wears it down twice as fast. Mallea writes that after the 1993 Midwest floods some communities were moved off the floodplain, but that this trend quickly reversed. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis. Re-read 2026-09-23.)' },
-  { id: 'growth', name: 'Rapid development', short: 'Growth', col: '#ffa94d', from: 3,
+  { id: 'growth', name: 'Rapid development', short: 'Growth', col: '#ffa94d', from: 4,   // G-M5 2026-10-13: was 3 (build_G_2026-10-01)
     desc: 'More gets built, faster. Everything you collect is worth 70% more.',
     cost: 'None of it waited for the plan. Every hazard now takes 20% more off you.',
     apply: P => { P.xpMul = (P.xpMul || 1) * 1.7; P.exposure = (P.exposure || 1) * 1.20 },
@@ -5180,8 +5282,14 @@ let flashCur = null
 // BF8 2026-09-23: flash() returns what became of the call - 'shown', 'queued' or 'dropped' - so the lifeline alarm can spend its 9 s throttle only on a line that will be seen; every other caller ignores the value (review_B F5) (build_B_2026-09-22)
 // BF9 2026-09-23: a line keeps its options as a fourth entry, in the waiting slot and in flashCur (flashNext passes them back), so a "ruled out" confirmation can be found by the { ban: true } flag its one caller passes (review_B F6) (build_B_2026-09-22)
 // UXBS-FIX 2026-09-30: F2 - the true boss's lines (warning, arrival, phases, defeat, withdrawal) and the first-elite line are never dropped (ADJUDICATION_UXBS F2): they pass { now: true } as the "secured" line does, so each shows at once, and { keep: true }, so when a later { now: true } line displaces one of them it waits even if the waiting slot is taken - an ordinary waiting line gives up the slot to it (that ordinary line is dropped), and a kept line already waiting stays (then two wait, kept lines only: at most six a run). Kept lines leave the queue only by being shown, by the warning's removal at the arrival (tbw, spawnTrueBoss) or by flashClear at reset. Every other line is handled as before (build_BS_2026-09-30 fix round)
+// G-M6 2026-10-13: N2 (verify_UXBS_fix.md N2) - event warnings outrank the five priority lines: a kept line that is not an event warning ({ now, keep } without evt: the true boss's two phase lines, its defeat and withdrawal lines, the first-elite line) no longer takes the screen from an event warning ({ evt: true }: an event's "inbound" line, the mid-boss's arrival, the true boss's warning and arrival) - it waits, as a displaced kept line does (an ordinary waiting line gives up the slot to it; kept lines already waiting stay), and is shown when the warning's 2.2 s run out; it returns 'queued' and is never dropped. An event warning still takes the screen from any line, as before (build_G_2026-10-01)
 function flash(title, sub, col, opt) {
   if (flashT > 0) {
+    if (opt && opt.now && opt.keep && !opt.evt && flashCur && flashCur[3] && flashCur[3].evt) {
+      for (let i = flashQ.length - 1; i >= 0; i--) if (!(flashQ[i][3] && flashQ[i][3].keep)) flashQ.splice(i, 1)
+      flashQ.push([title, sub, col, opt])
+      return 'queued'
+    }
     if (opt && opt.now) {
       if (flashCur && flashCur[3] && flashCur[3].keep) {   // UXBS-FIX 2026-09-30: F2 - a kept line displaced is never dropped (build_BS_2026-09-30 fix round)
         for (let i = flashQ.length - 1; i >= 0; i--) if (!(flashQ[i][3] && flashQ[i][3].keep)) flashQ.splice(i, 1)
@@ -5205,6 +5313,8 @@ function flashNext() {
   else $('flash').classList.remove('show')
 }
 function flashClear() { flashQ.length = 0; flashT = 0; $('flash').classList.remove('show') }
+// G-M6 2026-10-13: N1 (verify_UXBS_fix.md N1) - when the true boss leaves (absorbed, tbossDown; passed, tbossPass), its phase lines still waiting ({ tbp: true }) are dropped, so none says "now" of a boss that is gone; called after the leaving line, which may itself have pushed a phase line off the screen into the queue (build_G_2026-10-01)
+function flashDropPhases() { for (let i = flashQ.length - 1; i >= 0; i--) if (flashQ[i][3] && flashQ[i][3].tbp) flashQ.splice(i, 1) }
 // BF9 2026-09-23: called when the card screen closes - a "ruled out" confirmation is raised on the paused card screen, so it held the flash row after the screen closed and the mechanism line raised on close waited behind it or was dropped (review_B F6); it is found by its { ban: true } flag, never by its text; the waiting one is removed first, then the one on screen, whose place goes to the next waiting line as when a line runs out (build_B_2026-09-22)
 function flashEndBan() {
   for (let i = flashQ.length - 1; i >= 0; i--) if (flashQ[i][3] && flashQ[i][3].ban) flashQ.splice(i, 1)
@@ -5431,7 +5541,8 @@ function updateLifelines(dt) {
           hurtEnemy(e, T.defendPulseDmg, Math.cos(a) * 90, Math.sin(a) * 90)
         }
         // D3 2026-09-22: S01's seventh caller - the crews' strike-back is the place's, so it keeps the lifeline's own colour and takes the lifeline's own shape, a rounded square, rather than a round ring any of the six could be mistaken for (build_D_2026-09-22)
-        fx.push({ ring: true, noHit: true, x: L.x, y: L.y, r: 8, max: T.lifelineR,
+        // G-M6 2026-10-13: pushed through fxPush, so it obeys T.fxCap (build_G_2026-10-01)
+        fxPush({ ring: true, noHit: true, x: L.x, y: L.y, r: 8, max: T.lifelineR,
                   life: 0.3, col: K.col, style: 'square', hit: new Set() })
         AU.play('block')
       }
@@ -5520,7 +5631,8 @@ function makeElite(e) {
   e.dmg *= T.eliteDmg
   e.xp *= T.eliteXp
   // UXBS-FIX 2026-09-30: F2 - the line passes { now: true, keep: true } (flash), so it is never dropped; the flag is set from what flash() returns, only when the line is shown (it was set before the call, whatever became of it). The BS-M2 comment above said "queued like a hazard's arrival line"; it is not queued now (build_BS_2026-09-30 fix round)
-  if (!eliteSeen) eliteSeen = flash('Elite hazards', say('ELITE.first', 'A crown marks them. They are bigger and tougher, hit harder and are worth more XP.'), ELITE_COL, { now: true, keep: true }) === 'shown'
+  // G-M6 2026-10-13: N2 - the line can now wait behind an event warning ('queued'); a kept line is never dropped, so the flag is set unless it was (it is shown, now or when the warning ends), and the next elite does not raise it a second time (build_G_2026-10-01)
+  if (!eliteSeen) eliteSeen = flash('Elite hazards', say('ELITE.first', 'A crown marks them. They are bigger and tougher, hit harder and are worth more XP.'), ELITE_COL, { now: true, keep: true }) !== 'dropped'
   return e
 }
 
@@ -5688,6 +5800,13 @@ const rampAt = (ramp, k) => {
   return c[i]
 }
 
+// G-M6 2026-10-13: the fx cap on every push (PLAN_G G6, the BS Builder's particle note): every entry that was pushed into fx with no cap test now goes through here - it is pushed only while fx is not past T.fxCap, the test emit() and the capped callers already make. The one entry that carries damage, the Drills ring (fireWave: a ring without noHit), is a weapon, not a particle: at the cap it takes the place of the oldest particle (the first `p` entry), so Drills never stop hitting and fx does not grow; with no particle to give way it is pushed anyway. Returns whether it was pushed (build_G_2026-10-01)
+function fxPush(f) {
+  if (fx.length <= T.fxCap) { fx.push(f); return true }
+  if (f.ring && !f.noHit) { const i = fx.findIndex(o => o.p); if (i >= 0) fx.splice(i, 1); fx.push(f); return true }
+  return false
+}
+
 // n particles of one kind, in a cone or all round. `spread` in radians, `dir` its centre.
 function emit(kind, x, y, n, ramp, opts) {
   const K = PFX[kind] || PFX.spark
@@ -5762,7 +5881,8 @@ function explode (x, y, radius, dmg, col, opts = {}) {
   // death is - the situation the Residual sentence above describes, at the old ring life.
   // D3 2026-09-22: the blast's ring carries its caller's stroke form (`opts.style`: 'frag' or 'resid') as well as its colour (S01) (build_D_2026-09-22)
   // GR2-M3 2026-09-30: `opts.capFx` - the aftershock's burst pushes its ring only while fx is not past T.fxCap (W3: every link counts toward the cap); every other caller pushes it as before (build_GR2_2026-09-30)
-  if (!opts.capFx || fx.length <= T.fxCap) fx.push({ ring: true, noHit: true, x, y, r: 8, max: radius, life: opts.ringLife || 0.28, col, style: opts.style || 'frag', hit: new Set() })
+  // G-M6 2026-10-13: every caller's ring now goes through fxPush, so it is pushed only while fx is not past T.fxCap; `opts.capFx` is still passed by the aftershock and changes nothing more (build_G_2026-10-01)
+  fxPush({ ring: true, noHit: true, x, y, r: 8, max: radius, life: opts.ringLife || 0.28, col, style: opts.style || 'frag', hit: new Set() })
   emit('spark', x, y, 7, opts.ramp || 'gold', { boost: 1.1 })
   AU.play(opts.snd || 'block')
   // DX2 2026-09-23: `opts.n` - a burst from a shot standing for n shots (mergeN) knocks or pulls as n bursts do; its damage already arrives combined (build_D_2026-09-22 fix round)
@@ -5932,6 +6052,8 @@ function addBullet(b) {
       if (b.vol && o.vol === b.vol) continue                                                  // DX2 (1): never its own volley
       if (o.src !== b.src || o.col !== b.col || o.pierce !== o.pierce0 || o.relayed || o.turned) continue
       if (o.pierce0 !== b.pierce0 || o.burst !== b.burst || o.relay !== b.relay || o.split !== b.split) continue
+      // G-FIX 2026-10-13: F3 - only shots of one size merge: a small aimed shot (`small`, G-M1, fireVolley) with a small one, a full shot with a full one, so the merged shot's size still says which it is (the host keeps its own radius); every other shot has no `small` and merges as before (ADJUDICATION_G F3) (build_G_2026-10-01 fix round)
+      if (!!o.small !== !!b.small) continue
       if (b.lane && o.vx * b.vx + o.vy * b.vy < cl * Math.hypot(o.vx, o.vy)) continue         // DX2 (2): only its own lane
       const d = (o.x - b.x) ** 2 + (o.y - b.y) ** 2
       if (d < bd) { bd = d; best = o }
@@ -5942,10 +6064,12 @@ function addBullet(b) {
   return b
 }
 
-// One volley of `fan ? sh.shots + 4 : sh.shots` bullets, fanned about `base`. The two callers
+// G-FIX 2026-10-13: F7 - the count in the next line was `fan ? sh.shots + 4 : sh.shots`; it now states fireVolley's own `n`, with the small shots (G-M1 below); comment only (ADJUDICATION_G F7) (build_G_2026-10-01 fix round)
+// One volley of `fan ? sh.shots + 4 : sh.shots + (sh.small || 0)` bullets, fanned about `base`. The two callers
 // differ only in the numbers picked by `fan`.
+// G-M1 2026-10-13: the aimed volley is sh.shots full shots and then sh.small small ones (the last `small` places of the fan): a small shot is pelletK x the radius (r0, and so its smear and look) and pelletK x the damage, and every other field is the full shot's - speed, pierce, homing, burst, relay, split, Calibre, Spreading, Return, Gathering - so whatever acts on an aimed shot acts on it (RG7). Broadside's sweep (fan) counts the full shots only, as it did the whole count before, so a small shot reaches the sweep when it becomes full (build_G_2026-10-01)
 function fireVolley (sh, ST, base, fan) {
-  const n = fan ? sh.shots + 4 : sh.shots
+  const n = fan ? sh.shots + 4 : sh.shots + (sh.small || 0)
   // The fan has to open as the count climbs or eight shots leave as one thick shot.
   const spread = fan ? 1.9 / Math.max(1, n - 1) : 0.17 + Math.max(0, n - 3) * 0.035
   const dmg = (10 + lv.pulse * 4) * P.dmgMul * eff() * sh.heft * (fan ? 0.55 : 1)
@@ -5959,10 +6083,11 @@ function fireVolley (sh, ST, base, fan) {
   const vol = ++volN        // DX2 2026-09-23: this call's volley id, and its step as each shot's lane - the merge never joins two of these, and joins a shot only in its lane (build_D_2026-09-22 fix round)
   for (let i = 0; i < n; i++) {
     const a = base + (i - (n - 1) / 2) * spread
+    const sm = !fan && i >= sh.shots, k = sm ? T.pelletK : 1   // G-M1 2026-10-13: a small shot (build_G_2026-10-01)
     AU.play('shot')
     // D1 2026-09-22: added through addBullet (the merge), with its source (build_D_2026-09-22)
     addBullet({ src: fan ? 'fan' : 'aim', vol, lane: spread, x: P.x, y: P.y, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd,
-                   r: r0, r0, dmg, life, life0: life,
+                   r: r0 * k, r0: r0 * k, dmg: dmg * k, life, life0: life, small: sm,
                    // D2 2026-09-22: the fallback is the palette's tier 0, like STREAKS[0] (build_D_2026-09-22)
                    col: ST.col || PAL.yours.tier[0], trail: ST.trail, split: ST.split,
                    pierce: sh.through, pierce0: sh.through,
@@ -5996,7 +6121,7 @@ function fireBeam (dt, sh) {
   for (const B of bossesUp()) if (B.state === 'active' && tgts.length < sh.beamTgts && dist2(B, P) < reach * reach) tgts.push(B)   // BS-M3 2026-09-30: each body on the field (build_BS_2026-09-30)
   if (!tgts.length) return
   // GR-M3 2026-09-29: the laser multiplies the beam's damage by T.grLaserDmg (PLAN_GR X3); the hit test below (reach, beamHalf) is unchanged - the laser is only drawn wider (build_GR_2026-09-29)
-  const dps = (26 + lv.pulse * 9) * P.dmgMul * eff() * sh.heft * (grand.laser ? T.grLaserDmg : 1)
+  const dps = (26 + lv.pulse * 9) * P.dmgMul * eff() * sh.heft * (grand.laser ? grLerp('laser', T.grLaserDmg0, T.grLaserDmg) : 1)   // G-M3 2026-10-13: the laser's multiplier ripens, T.grLaserDmg0 -> T.grLaserDmg; its extra target (SHOT().beamTgts) is whole (build_G_2026-10-01)
   const lines = []
   for (const T0 of tgts) {
     const a = Math.atan2(T0.y - P.y, T0.x - P.x)
@@ -6030,7 +6155,8 @@ function fireBeam (dt, sh) {
 function fireWave (sh, scale) {
   // D3 2026-09-22: the drills ring and its Volley echo are two ring kinds - their own colour and stroke form from the ring table (S01) (build_D_2026-09-22)
   const echo = scale < 1
-  fx.push({ ring: true, x: P.x, y: P.y, r: 10,
+  // G-M6 2026-10-13: pushed through fxPush, so it obeys T.fxCap (build_G_2026-10-01)
+  fxPush({ ring: true, x: P.x, y: P.y, r: 10,
             max: (120 + lv.wave * 34) * (P.synWave || 1) * scale,
             dmg: (18 + lv.wave * 9) * P.dmgMul * eff() * scale, life: 0.42,
             col: echo ? PAL.yours.ring.echo : PAL.yours.ring.shock, style: echo ? 'echo' : 'shock',
@@ -6087,7 +6213,8 @@ function updateFusions(dt) {
       }
       P.fuseHaste = 1.5    // moving faster in the pulse's wake — evacuation is movement
       // D3 2026-09-22: the evacuation push's colour from the ring table and its own form, a double ring (S01) (build_D_2026-09-22)
-      fx.push({ ring: true, noHit: true, x: P.x, y: P.y, r: 12, max: 260, dmg: 0,
+      // G-M6 2026-10-13: pushed through fxPush, so it obeys T.fxCap (build_G_2026-10-01)
+      fxPush({ ring: true, noHit: true, x: P.x, y: P.y, r: 12, max: 260, dmg: 0,
                 life: 0.5, col: PAL.yours.ring.evac, style: 'double', hit: new Set() })
       AU.play('dodge')
     }
@@ -6275,8 +6402,10 @@ function grChain(b, from) {
   if (grChainTimes.length >= T.grChainPerSec) return
   grChainTimes.push(t)
   const G0 = GRANDS.find(g => g.id === 'chain')
-  let dmg = b.dmg * T.grChainFirst
-  for (let k = 0; k < T.grChainJumps && tgt; k++) {
+  // G-M3 2026-10-13: the first jump's share and the jumps ripen with g: T.grChainFirst0 -> T.grChainFirst, T.grChainJumps0 -> T.grChainJumps rounded down (grLerp) (build_G_2026-10-01)
+  let dmg = b.dmg * grLerp('chain', T.grChainFirst0, T.grChainFirst)
+  const jumps = Math.floor(grLerp('chain', T.grChainJumps0, T.grChainJumps))
+  for (let k = 0; k < jumps && tgt; k++) {
     struck.add(tgt)
     const tx = tgt.x, ty = tgt.y
     if (fx.length <= T.fxCap) fx.push({ arc: true, pts: grArcPts(x, y, tx, ty), x: tx, y: ty, vx: 0, vy: 0,
@@ -6299,7 +6428,8 @@ function grArcPts(x0, y0, x1, y1) {
 }
 
 // GR2-M2 2026-09-30: the slowing veil (PLAN_GR2 W2, ruling RW2): the factor on a thing's own movement this frame - k while the veil is held and its centre is within T.grVeilR px of yours, 1 otherwise. Callers: a body's step (T.grVeilBody, on its own speed only - its knock is not slowed), the compound event (updateBoss, T.grVeilBody, on its walk, strafe and charge - not its knock, not a timer, so its strikes come when they would), a thrown thing (updateEbullets, T.grVeilThrown, on its flight - its flight clock is not slowed). Multiplied on top of any other slowing (RW2), e.g. a body's speed already carrying P.hazSlow. Your shots (`bullets`) and events are never passed here (G4). During a hold nothing moves, so it has nothing to slow (build_GR2_2026-09-30)
-const grVeilK = (o, k) => grand.veil && dist2(o, P) < T.grVeilR * T.grVeilR ? k : 1
+// G-M3 2026-10-13: the ring's radius ripens, T.grVeilR0 -> T.grVeilR (grVeilR()); the slowing test and the drawn ring read the same radius (build_G_2026-10-01)
+const grVeilK = (o, k) => { if (!grand.veil) return 1; const R = grVeilR(); return dist2(o, P) < R * R ? k : 1 }
 
 // GR2-M3 2026-09-30: the aftershock (PLAN_GR2 W3 as ruling RW3 reads it). Called from hurtEnemy when a burst (grAsBurst = its damage) kills body e. Unless the line already holds T.grAsDepth jumps (grAsLine, RW3's own depth counter - not the Residual guard), lightning jumps from e to the nearest hazard - a body or the compound event - within T.grAsR px, for T.grAsShare of that burst's damage (the burst's damage already carries P.dmgMul, so none is added: G7). At most T.grAsPerSec jumps start in any second of run time; a jump that finds nothing in reach is not counted. If the jump kills a body and the line is still short of T.grAsDepth, one Fragmenting-sized burst (radius SHOT().burstR, the same damage as the burst that set this jump off) goes off where it fell, in the aftershock's colour with Fragmenting's stroke form, whatever the first burst was (RW3); its kills may set off the line's next jump. That kill's own Residual burst is held back (inResidual) so the kill sets off one burst, not two; the last jump's kill is billed with the Residual guard as it stands, so it bursts as any kill does and starts nothing more. A jump starts no Warning chain, Relay or split (G6); it is not counted in beltBlocked (G5). The arc is drawn in the chain lightning's style (fx arc, within T.fxCap) in the aftershock's own colour; the burst's ring is pushed only under T.fxCap (explode, opts.capFx) (build_GR2_2026-09-30)
 function grAftershock(e, dmg) {
@@ -6315,7 +6445,7 @@ function grAftershock(e, dmg) {
   while (grAsTimes.length && grAsTimes[0] <= t - 1) grAsTimes.shift()
   if (grAsTimes.length >= T.grAsPerSec) return
   grAsTimes.push(t)
-  const g = GRANDS.find(x => x.id === 'aftershock'), tx = tgt.x, ty = tgt.y, ad = dmg * T.grAsShare
+  const g = GRANDS.find(x => x.id === 'aftershock'), tx = tgt.x, ty = tgt.y, ad = dmg * grLerp('aftershock', T.grAsShare0, T.grAsShare)   // G-M3 2026-10-13: the share ripens, T.grAsShare0 -> T.grAsShare; the depth and the rate are whole (build_G_2026-10-01)
   if (fx.length <= T.fxCap) fx.push({ arc: true, pts: grArcPts(e.x, e.y, tx, ty), x: tx, y: ty, vx: 0, vy: 0,
                                       life: T.grAsArcT, max: T.grAsArcT, col: g.col, core: g.arc })
   AU.play('ember')
@@ -6338,8 +6468,8 @@ function grOrbit(dt) {
   if (!grand.orbit) return
   grOrbAng = (grOrbAng + dt * TAU / T.grOrbitTurn) % TAU
   const hit = T.grOrbitDps * T.grOrbitCd * P.dmgMul, R = T.grOrbitR, pr = T.grOrbitPieceR
-  const pcs = []
-  for (let k = 0; k < T.grOrbitN; k++) { const a = grOrbAng + k * TAU / T.grOrbitN; pcs.push(P.x + Math.cos(a) * R, P.y + Math.sin(a) * R) }
+  const pcs = [], N = grOrbitN()   // G-M3 2026-10-13: T.grOrbitN0 pieces, T.grOrbitN from g >= T.grOrbitStep (build_G_2026-10-01)
+  for (let k = 0; k < N; k++) { const a = grOrbAng + k * TAU / N; pcs.push(P.x + Math.cos(a) * R, P.y + Math.sin(a) * R) }
   const touch = o => { for (let k = 0; k < pcs.length; k += 2) if ((o.x - pcs[k]) ** 2 + (o.y - pcs[k + 1]) ** 2 < (pr + o.r) ** 2) return true; return false }
   for (const e of enemies.slice()) {   // a copy: hurtEnemy splices the dead out
     if (e.behaviour === 'zone') continue   // GR2-FIX 2026-09-30: heat zones skipped entirely - no hit, no knock, no clock (ADJUDICATION_GR2 F3, RW1 re-ruled), the same test the field aura (B1) and Practiced evacuation use (build_GR2_2026-09-30 fix round)
@@ -6360,20 +6490,27 @@ function grOrbit(dt) {
 // the spot and says the mechanism out loud on the field once the cards close; the question
 // about WHY the pair compounds is asked in the debrief when the run ends (2026-09-01 — the
 // card was a question gate before that, and every second level a mandatory one).
+// G-M5 2026-10-13: the test, by name, so the HUD's pair dot (syncHud) uses exactly the same one (P3); availableSynergy's result is unchanged (build_G_2026-10-01)
+const pairReady = sy => !syn[sy.id] && lv[sy.a] > 0 && lv[sy.b] > 0
+                        && !banished[sy.a] && !banished[sy.b]
 function availableSynergy() {
   // A banished measure stays banished: a pair containing one is not offered.
-  return SYNERGIES.find(sy => !syn[sy.id] && lv[sy.a] > 0 && lv[sy.b] > 0
-                              && !banished[sy.a] && !banished[sy.b]) || null
+  return SYNERGIES.find(pairReady) || null
 }
 
 // SY-M3 2026-09-29: the sentence S-Y3 adds after a synergy's gist, and the Combos panel prints under its pair - " This pair opens " + the name of the modifier it opens (MOD_OPENS) + "." - or '' for the four that open none (ruling RS3) (build_SY_2026-09-29)
 const pairOpens = id => { const k = Object.keys(MOD_OPENS).find(m => MOD_OPENS[m] === id); return k ? ' This pair opens ' + MODS[k].name + '.' : '' }
 // SY-M3 2026-09-29: the aimed shots' trail colour - the synergy taken most recently (synLast); a synergy granted another way (the dev panel, a test hook) falls back to the last one held in SYNERGIES order; null when none is held (build_SY_2026-09-29)
-function synTrailCol() {
-  if (synLast && syn[synLast]) return SYNERGIES.find(s => s.id === synLast).col
+// G-M2 2026-10-13: the same choice by id (synTrailId), so the trail's length can read that synergy's f; synTrailCol returns its colour as before (build_G_2026-10-01)
+function synTrailId() {
+  if (synLast && syn[synLast]) return synLast
   let c = null
-  for (const sy of SYNERGIES) if (syn[sy.id]) c = sy.col
+  for (const sy of SYNERGIES) if (syn[sy.id]) c = sy.id
   return c
+}
+function synTrailCol() {
+  const id = synTrailId()
+  return id ? SYNERGIES.find(s => s.id === id).col : null
 }
 
 // SY-M4 2026-09-29: the Combos panel on the card screen (PLAN_SY Y4; S-Y4 verbatim; rulings RS4, RS6, RS7). Read from the live data every time the screen opens - SYNERGIES, FUSIONS (and their `needs`), MOD_OPENS (through pairOpens), MODS, UPGRADES[*].short, lv, syn, fused, banished - so it cannot drift from the game. Rows: the 9 pairs in SYNERGIES order, the 3 programmes in FUSIONS order, and Tracking. Each row is a <details> (RS6): its summary - always visible, keyboard-reachable - holds the first line, the status and, for a pair, the sentence naming what it opens (for a programme, its "Needs" line); the gain, or what the programme or Tracking does, is behind the disclosure, collapsed, never truncated. Status words with the existing marks (pillMark, named per S-Y4: .ph "part-way", .pd "owned"); "ruled out" (RS4) only where it is true of the code: a pair with a banished measure is never offered (availableSynergy), and a programme whose synergy is not held and whose pair has a banished measure can never be ready; it has no mark, as "not started" has none (build_SY_2026-09-29)
@@ -6384,12 +6521,19 @@ function combosHtml() {
   const pill = (c, word) => `<span class="cb-st${c ? ' ' + c : ''}">${word}${!c || c === 'rx' ? '' : '<span aria-hidden="true">' + pillMark(c, CB_MARK) + '</span>'}</span>`
   const status = (own, out, part) => own ? pill('pd', 'owned') : out ? pill('rx', 'ruled out') : part ? pill('ph', 'part-way') : pill('', 'not started')
   const row = (sum, body) => `<details class="cb"><summary>${sum}</summary><p>${body}</p></details>`
+  // G-M2 / G-M3 2026-10-13: a held synergy's or grand programme's ripening word after its status pill, strings_G.md S-G2b and S-G3c verbatim (RG10): "growing" while a part that ripens is below full, with the title "It grows as you level {A} and {B}." (a programme: its partner measures, "{X}, {Y} and {Z}"; the shield: "It grows with each Green defences level."), else "full strength" with no title. The word is text, read after "owned" (build_G_2026-10-01)
+  // G-FIX 2026-10-13: F4 - below full with none of its partner measures able to level any more (`ks`: each at its max, or ruled out - a ruled-out measure is never offered again; Green defences can still gain the Planting site's one level, as noReach reads it), the row shows no ripening word and no title: neither "growing" nor "full strength" is true then. Was: `ripe = (grows, title) => grows ? growing : full strength` (ADJUDICATION_G F4) (build_G_2026-10-01 fix round)
+  const canLevel = k => lv[k] < UPGRADES[k].max && (!banished[k] || (k === 'ring' && !worksDone.includes('planting')))
+  const ripe = (grows, title, ks) => grows ? (ks.some(canLevel) ? `<span class="cb-rp" title="${title}">growing</span>` : '') : '<span class="cb-rp">full strength</span>'
+  const names = ks => ks.length > 1 ? ks.slice(0, -1).join(', ') + ' and ' + ks[ks.length - 1] : ks.join('')
   let h = '<h3 id="combos-t">Combos</h3><p class="cb-intro">Own both measures of a pair. Then its synergy card can appear when you level up.</p>'
   h += '<h4>Synergies</h4>'
   for (const sy of SYNERGIES) {
     const op = pairOpens(sy.id).trim()
     h += row(`<span class="cb-l1">${UPGRADES[sy.a].short} + ${UPGRADES[sy.b].short} → ${sy.name}</span>`
       + status(syn[sy.id], banished[sy.a] || banished[sy.b], lv[sy.a] > 0 || lv[sy.b] > 0)
+      // G-FIX 2026-10-13: F4 - its two measures as the ones that can still level (ripe's `ks`) (build_G_2026-10-01 fix round)
+      + (syn[sy.id] ? ripe(synF(sy.id) < 1, `It grows as you level ${UPGRADES[sy.a].short} and ${UPGRADES[sy.b].short}.`, [sy.a, sy.b]) : '')
       + (op ? `<span class="cb-op">${op}</span>` : ''),
       say('SYN.' + sy.id + '.gain', sy.gain))
   }
@@ -6411,6 +6555,10 @@ function combosHtml() {
     const capOut = !grand[g.id] && gFull
     h += row(`<span class="cb-l1">${g.name}</span>`
       + status(grand[g.id], capOut || lost, syn[A.id] || syn[B.id])
+      // G-M3 2026-10-13: a held programme's ripening word (S-G3c, RG10): growing until grFull, with its partner measures in the title; the shield by its own Green-defences rule (build_G_2026-10-01)
+      // G-FIX 2026-10-13: F4 - the measures that can still level (ripe's `ks`): the shield's Green defences, any other programme's grMeasures (build_G_2026-10-01 fix round)
+      + (grand[g.id] ? (g.id === 'shield' ? ripe(lv.ring < UPGRADES.ring.max, 'It grows with each Green defences level.', ['ring'])
+                                          : ripe(!grFull(g.id), `It grows as you level ${names(grMeasures(g).map(k => UPGRADES[k].short))}.`, grMeasures(g))) : '')
       + `<span class="cb-op">Needs the synergies “${A.name}” (you: ${syn[A.id] ? 'yes' : 'no'}) and “${B.name}” (you: ${syn[B.id] ? 'yes' : 'no'}).${capOut ? ` You already have ${T.grandCap}, the most a run allows.` : ''}</span>`,
       say('GRD.' + g.id + '.gain', g.gain))
   }
@@ -6632,7 +6780,9 @@ function offerCards(fromLevelUp) {
       ${modOpenedBy(md)}
       ${shotChanges({ mod: Object.assign({}, mod, { [md]: l + 1 }) })}`
     el.onclick = () => {
-      mod[md] = l + 1; syncHud()
+      mod[md] = l + 1
+      if (md === 'volley') volleySmall++   // G-M1 2026-10-13: the new Volley shot is small until the next P.level++ (RG5) (build_G_2026-10-01)
+      syncHud()
       picksLeft--
       if (picksLeft > 0) offerCards()
       else closeCards()
@@ -6646,6 +6796,12 @@ function offerCards(fromLevelUp) {
   // LL-M2 2026-09-25: the rebuild card takes one of these slots (build_LL_2026-09-25)
   const want = ((sy || tr || fu || gr || md) ? 2 : 3) - (rbKind ? 1 : 0)   // GR-M1 2026-09-29: `gr` takes one of the three, as `fu` does (build_GR_2026-09-29)
   const chosen = []
+  // G-M5 2026-10-13: (a) the run's first card screen (the first opening that draws measures; g5Opened) draws its first measure slot from the partners of the measures held - a measure not yet held, not ruled out, that would complete a pair whose other measure is held and not ruled out and whose synergy is not taken (completesHtml's condition) - whenever one exists; the other slots, and every later opening (a pick, a reroll, a banish, a level-up), draw as before. The partner card is the first measure card on the screen (PLAN_G G5) (build_G_2026-10-01)
+  if (!g5Opened) {
+    g5Opened = true
+    const part = pool.filter(k => lv[k] === 0 && pairsWith(k).some(({ other, sy }) => lv[other] > 0 && !banished[other] && !syn[sy.id]))
+    if (part.length && want > 0) { const k = part[(Math.random() * part.length) | 0]; chosen.push(k); pool.splice(pool.indexOf(k), 1) }
+  }
   while (chosen.length < want && pool.length) chosen.push(pool.splice((Math.random() * pool.length) | 0, 1)[0])
   for (const id of chosen) {
     const u = UPGRADES[id], l = lv[id]
@@ -7258,19 +7414,39 @@ function apply(id) {
   if (id === 'magnet') P.pickup  *= 1.40
   if (id === 'armour') P.armour   = 1 - (1 - P.armour) * 0.88
   if (id === 'hp')     { P.max += 25; P.hp = Math.min(P.max, P.hp + 25) }
+  // G-M2 2026-10-13: a held synergy with this measure in it re-reads its f (synRipen: never compounding) (build_G_2026-10-01)
+  for (const sy of SYNERGIES) if (syn[sy.id] && SYN_PARTS[sy.id] && (sy.a === id || sy.b === id)) synRipen(P, sy.id)
   syncHud()
 }
 
 // CB-M3 2026-09-30: the build list's rows are named for the merge moment - a measure row by data-k (its UPGRADES id), a synergy row by data-sy - and a synergy in its merge moment (cbFresh) carries the class `fresh` and its colour as --mc (CSS: it appears as the copies arrive, with a short glow; under reduced motion it is simply highlighted). The list is rewritten only when its rows change (hudRows), so the frequent calls between (each mote picked up) do not restart that animation; the text of every row is as before (build_CB_2026-09-30)
 let hudRows = null
 const cbFresh = {}
+// G-FIX 2026-10-13: F2 - true while a full-screen overlay covers the build list: the card screen (#cards.show), the run report (#over.show), the place select (#start without .gone), How to play or a hint card (#howto, #hint not hidden) - every `position:fixed;inset:0` layer above the field (CSS) (build_G_2026-10-01 fix round)
+function hudCovered() {
+  return $('cards').classList.contains('show') || $('over').classList.contains('show') || !$('start').classList.contains('gone')
+    || !$('howto').hidden || !$('hint').hidden
+}
 function syncHud() {
   $('lvl').textContent = 'Lv ' + P.level
   const owned = Object.keys(UPGRADES).filter(k => lv[k] > 0)
+  // G-M5 2026-10-13: (c) a filled dot after a measure row whose pair is ready - exactly availableSynergy's test (pairReady; P3, RG9) - named by strings_G.md S-G5a's recommended form (RG9); (d) when a pair first becomes ready this run, its two measure rows pulse once for 1.0 s (class `pp`; a still highlight under reduced motion, CSS) - once per pair per run (pairPulsed), cleared by a timer as the CB merge mark is (build_G_2026-10-01)
+  const ready = SYNERGIES.filter(pairReady)
+  // G-FIX 2026-10-13: F2 - the one pulse waits while a card screen or another full overlay covers the list (hudCovered): the pair stays unpulsed and pairWait is set, and step calls syncHud again once nothing covers it, so it plays then, once; the reduced-motion still highlight is the same class, so it follows the same rule (ADJUDICATION_G F2) (build_G_2026-10-01 fix round)
+  const covered = hudCovered()
+  pairWait = false
+  for (const sy of ready) if (!pairPulsed[sy.id]) {
+    if (covered) { pairWait = true; continue }
+    pairPulsed[sy.id] = true; pairPulse[sy.a] = pairPulse[sy.b] = true
+    setTimeout(() => { delete pairPulse[sy.a]; delete pairPulse[sy.b]; syncHud() }, 1000)
+  }
+  const PAIR_DOT = 'Pair ready. Its synergy card can appear when you level up.'
   const rows = owned.map(k =>
-    `<div class="wpn" data-k="${k}"><i style="background:${UPGRADES[k].col}"></i><b>${UPGRADES[k].short}</b><span>${lv[k]}</span></div>`)
+    `<div class="wpn${pairPulse[k] ? ' pp' : ''}" data-k="${k}"><i style="background:${UPGRADES[k].col}"></i><b>${UPGRADES[k].short}</b><span>${lv[k]}</span>${ready.some(sy => sy.a === k || sy.b === k) ? `<i class="pr" role="img" aria-label="${PAIR_DOT}" title="${PAIR_DOT}"></i>` : ''}</div>`)
+  // G-M2 2026-10-13: a held synergy's row carries its colour as a 1 px edge (the CB merge row's --mc form) at an alpha that follows f (class `rp`, --rp); a synergy with nothing that ripens (lane, see) shows full alpha from the take (RG2, P4); while the merge mark (fresh) is on, it shows instead (build_G_2026-10-01)
   for (const sy of SYNERGIES) if (syn[sy.id]) {
-    rows.push(`<div class="wpn sy${cbFresh[sy.id] ? ' fresh' : ''}" data-sy="${sy.id}"${cbFresh[sy.id] ? ` style="--mc:${sy.col}"` : ''}><i style="background:${sy.col}"></i><b>${sy.name}</b></div>`)
+    const rp = cbFresh[sy.id] ? '' : ` style="--rp:rgba(${rgbOf(sy.col)},${synF(sy.id).toFixed(3)})"`
+    rows.push(`<div class="wpn sy${cbFresh[sy.id] ? ' fresh' : ' rp'}" data-sy="${sy.id}"${cbFresh[sy.id] ? ` style="--mc:${sy.col}"` : rp}><i style="background:${sy.col}"></i><b>${sy.name}</b></div>`)
   }
   for (const k of MOD_IDS) if (mod[k]) {
     rows.push(`<div class="wpn md"><i style="background:${MODS[k].col}"></i><b>${MODS[k].name}</b><span>${mod[k]}</span></div>`)
@@ -7469,6 +7645,7 @@ function step(dt) {
   if (holdLeft > 0) { holdLeft = Math.max(0, holdLeft - dt); if (holdLeft === 0) endHold() }
   if (grTint > 0) grTint = Math.max(0, grTint - dt)   // GR-M6 2026-09-29: the take moment's tint runs out (build_GR_2026-09-29)
   uxMergeStep(dt)   // UX-M3 2026-09-30: the merge moment in the middle of the screen runs on (build_UX_2026-09-30)
+  if (pairWait && !hudCovered()) syncHud()   // G-FIX 2026-10-13: F2 - a waiting pair pulse plays once the list is in view (syncHud, hudCovered) (build_G_2026-10-01 fix round)
 
   // ---- player
   let ix = (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0)
@@ -7751,7 +7928,8 @@ function step(dt) {
           if (sent) {
             AU.play('relay')
             // D3 2026-09-22: the relay's launch mark takes its own form, a dotted ring, so it no longer reads as a small drills ring (S01's eighth caller, added after the round) (build_D_2026-09-22)
-            fx.push({ ring: true, noHit: true, x: bx, y: by, r: 4, max: 26, life: 0.22,
+            // G-M6 2026-10-13: pushed through fxPush, so it obeys T.fxCap (build_G_2026-10-01)
+            fxPush({ ring: true, noHit: true, x: bx, y: by, r: 4, max: 26, life: 0.22,
                       col: PAL.yours.ring.relay, style: 'dot', hit: new Set() })
           }
         }
@@ -7822,6 +8000,7 @@ function step(dt) {
       let leveled = false
       while (P.xp >= P.need) {
         P.xp -= P.need; P.level++
+        volleySmall = 0                       // G-M1 2026-10-13: every Volley shot taken before this level-up is full from now on (RG5) (build_G_2026-10-01)
         P.need = Math.round(P.need * T.xpCurve + T.xpAdd)
         if (P.relief) heal(P.max * P.relief)
         heal(P.max * DIFF.levelHeal)          // BS-M4 2026-09-30: a small repair per level, before any choice, by difficulty (PLAN_BS H1; was T.levelHeal 0.20, "the certain reward" - ruling RH6) (build_BS_2026-09-30)
@@ -8012,7 +8191,8 @@ function renderReport() {
     hls.splice(hlBoss, 0, row(TBOSS_COL, `Boss — ${TBOSS_NAMES[PLACE.id] || TBOSS_NAMES.delta}`,
       // UXBS-FIX 2026-09-30: F3 - the two lines below say the boss adds to the SIZE of the recovery budget (as the budget row in the folds says: "... set the SIZE of it"), not that you got it; were "Absorbed. It paid all capacity back, a burst of XP and <b>${tbossBonus}</b> more recovery budget." / "Not absorbed, but outlasted. Absorbing it pays all capacity back, a burst of XP and more recovery budget." (fix_record_UXBS.md F3) (build_BS_2026-09-30 fix round)
       tbossState === 'absorbed' ? say('BOSS.true.rep.down', `Absorbed. It paid all capacity back and a burst of XP. It also added <b>${tbossBonus}</b> to the size of your recovery budget.`, tbossBonus)
-      : tbossState === 'passed' ? say('BOSS.true.rep.passed', 'Not absorbed, but outlasted. Absorbing it pays all capacity back and a burst of XP. It also makes your recovery budget bigger.')
+      // G-M6 2026-10-13: N6 - strings_G.md S-G6a verbatim (RG13); was "... It also makes your recovery budget bigger." (build_G_2026-10-01)
+      : tbossState === 'passed' ? say('BOSS.true.rep.passed', 'Not absorbed, but outlasted. Absorbing it pays all capacity back and a burst of XP. Absorbing it also makes your recovery budget bigger.')
       : 'It was still on the field when the run ended.'))
   // FX3 2026-09-23: the F3d line below made true (review F-07) - it said the highlight is "the fold row's title"; the fold row's title adds a difficulty suffix whenever DIFF.pay is set and not 1, and the highlight's title has none (build_F_2026-09-23 fix round)
   // F3d 2026-09-23: the recovery budget said out loud (part 4 N4) - one highlight: the fold row's title without its difficulty suffix (DIFF.name and DIFF.pay, added when DIFF.pay is set and not 1) and one sentence, the C8 strings verbatim (section_C_2026-09-22/drafter_record.md section 7, restated in drafter_record_r2.md section 6), gated on runFunds > 0 as the stat tile and the fold row are, and on the three-highlight gate like every row here. It sits below the unconditional rows and above every slot-gated one, so the "Run N" row after it no longer hangs off the else chain: its condition is written out (not first, not best), which is exactly what the else chain gave it. The fold row further down is untouched (build_F_2026-09-23)
@@ -8864,6 +9044,15 @@ function draw() {
   // pickup radius, faint
   ctx.strokeStyle = 'rgba(87,199,255,.10)'
   ctx.beginPath(); ctx.arc(P.x, P.y, P.pickup, 0, TAU); ctx.stroke()
+  // G-M4 2026-10-13: (e) Risk data from Lv 3 - one tick across the pickup ring per Risk data level (3 at Lv 3, 4 at Lv 4), evenly spaced from the top, in the measure's colour; still, so nothing moves under reduced motion. Lv 1 and Lv 2 keep their own forms (a wider ring, homing) (PLAN_G G4) (build_G_2026-10-01)
+  if (lv.magnet >= 3) {
+    ctx.save(); ctx.strokeStyle = 'rgba(87,199,255,.55)'; ctx.lineWidth = 2; ctx.beginPath()
+    for (let k = 0; k < lv.magnet; k++) {
+      const a = -Math.PI / 2 + k * TAU / lv.magnet, c = Math.cos(a), s = Math.sin(a)
+      ctx.moveTo(P.x + c * (P.pickup - 6), P.y + s * (P.pickup - 6)); ctx.lineTo(P.x + c * (P.pickup + 6), P.y + s * (P.pickup + 6))
+    }
+    ctx.stroke(); ctx.restore()
+  }
 
   // A saved service is running at full stretch. It is running on YOU, so it is drawn on you,
   // and it fades as it runs out.
@@ -8878,7 +9067,7 @@ function draw() {
 
   // GR2-M2 2026-09-30: the slowing veil (PLAN_GR2 W2) - a soft ring at its edge, T.grVeilR px out: a wide faint band in its colour, then its edge as a rippling line (a gentle wave, 9 crests, drifting) over a dark pass so it reads on every ground; under reduced motion the line is a still circle. Its shape, one wide ring around you, is its non-colour mark. Drawn under everything else yours (build_GR2_2026-09-30)
   if (grand.veil) {
-    const vc = rgbOf(GRANDS.find(g => g.id === 'veil').col), R = T.grVeilR, n = SMALL ? 48 : 96
+    const vc = rgbOf(GRANDS.find(g => g.id === 'veil').col), R = grVeilR(), n = SMALL ? 48 : 96   // G-M3 2026-10-13: the ripened radius, as grVeilK reads it (build_G_2026-10-01)
     ctx.strokeStyle = `rgba(${vc},.10)`; ctx.lineWidth = 16
     ctx.beginPath(); ctx.arc(P.x, P.y, R, 0, TAU); ctx.stroke()
     ctx.beginPath()
@@ -9119,11 +9308,11 @@ function draw() {
 
   // GR2-M4 2026-09-30: the patrol orbit (PLAN_GR2 W4) - each piece a solid hexagon (T.grOrbitPieceR across its corners, turned with the orbit) in the programme's colour with a dark 2 px edge, so it reads on every ground and apart from the round belt shards and the synergy diamonds; behind each a short trail along the circle (a quarter of the gap to the next piece, fading), none under reduced motion (build_GR2_2026-09-30)
   if (grand.orbit) {
-    const oc = GRANDS.find(g => g.id === 'orbit').col, R = T.grOrbitR, s = T.grOrbitPieceR
-    for (let k = 0; k < T.grOrbitN; k++) {
-      const a = grOrbAng + k * TAU / T.grOrbitN, x = P.x + Math.cos(a) * R, y = P.y + Math.sin(a) * R
+    const oc = GRANDS.find(g => g.id === 'orbit').col, R = T.grOrbitR, s = T.grOrbitPieceR, N = grOrbitN()   // G-M3 2026-10-13: the pieces grOrbit uses (grOrbitN()) (build_G_2026-10-01)
+    for (let k = 0; k < N; k++) {
+      const a = grOrbAng + k * TAU / N, x = P.x + Math.cos(a) * R, y = P.y + Math.sin(a) * R
       if (!reduceMotion) {
-        const len = TAU / T.grOrbitN / 4
+        const len = TAU / N / 4
         for (let j = 0; j < 3; j++) {
           ctx.strokeStyle = `rgba(${rgbOf(oc)},${(.34 - j * .1).toFixed(2)})`; ctx.lineWidth = SMALL ? 5 : 6
           ctx.beginPath(); ctx.arc(P.x, P.y, R, a - len * (j + 1) / 3, a - len * j / 3); ctx.stroke()
@@ -9242,21 +9431,26 @@ function draw() {
   const trailCol = synTrailCol()
   if (trailCol) {
     // GR-M6 2026-09-29: supersedes the SY-M3 line above on size - the trail is now twice as wide (2.5 -> 5) and 1.6x as long (five radii -> eight: from r to 9r) (PLAN_GR X6) (build_GR_2026-09-29)
+    // G-M2 2026-10-13: the trail's length ripens with that synergy (synTrailId): 8 r + T.synTrailF x f r from the back of the shot (was 8 r: from r to 9 r); f is 1 for a synergy with nothing that ripens (PLAN_G G2) (build_G_2026-10-01)
+    const trailEnd = 9 + T.synTrailF * synF(synTrailId())
     ctx.strokeStyle = `rgba(${rgbOf(trailCol)},.8)`; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath()
     for (const b of bullets) {
       if (b.src !== 'aim') continue
       const sp = Math.hypot(b.vx, b.vy) || 1, ux = b.vx / sp, uy = b.vy / sp
-      ctx.moveTo(b.x - ux * b.r, b.y - uy * b.r); ctx.lineTo(b.x - ux * b.r * 9, b.y - uy * b.r * 9)
+      ctx.moveTo(b.x - ux * b.r, b.y - uy * b.r); ctx.lineTo(b.x - ux * b.r * trailEnd, b.y - uy * b.r * trailEnd)
     }
     ctx.stroke(); ctx.lineCap = 'butt'
   }
+  // G-M4 2026-10-13: (a) an aimed shot's smear (src 'aim', small shots too) is 2.6 r x (1 + T.smearE x (through - 1)) long, at most T.smearCap r - `through` is the shot's pierce at launch (pierce0 = SHOT().through then), so Early warning Lv 2 / 4 / 6 and every Through level draw at once; the dart shape is not touched (DX1 stays); (c) its width (the 0.9 r radius across) grows T.smearW px per 0.2 of P.dmgMul over 1 (Resilient investment, and everything else on P.dmgMul). Every other shot's smear is as before (PLAN_G G4) (build_G_2026-10-01)
+  const smearWide = T.smearW * Math.max(0, P.dmgMul - 1) / 0.2
   for (const [col, list] of smearCols) {
     ctx.fillStyle = `rgba(${rgbOf(col)},.22)`; ctx.beginPath()
     for (const b of list) {
       const ahead = b.look === 'pull' ? 1 : -1
       const sx0 = b.x + ahead * b.vx * .012, sy0 = b.y + ahead * b.vy * .012, ang = Math.atan2(b.vy, b.vx)
-      ctx.moveTo(sx0 + Math.cos(ang) * b.r * 2.6, sy0 + Math.sin(ang) * b.r * 2.6)
-      ctx.ellipse(sx0, sy0, b.r * 2.6, b.r * .9, ang, 0, TAU)
+      const aim = b.src === 'aim', sl = aim ? Math.min(2.6 * (1 + T.smearE * ((b.pierce0 || 1) - 1)), T.smearCap) : 2.6, sw = b.r * .9 + (aim ? smearWide : 0)
+      ctx.moveTo(sx0 + Math.cos(ang) * b.r * sl, sy0 + Math.sin(ang) * b.r * sl)
+      ctx.ellipse(sx0, sy0, b.r * sl, sw, ang, 0, TAU)
     }
     ctx.fill()
   }
@@ -9332,12 +9526,34 @@ function draw() {
   drawEvents('telegraph')
 
   // player — a place, not a person: a lit disc standing on ground it does not leave
-  ctx.fillStyle = 'rgba(247,244,238,.09)'
-  ctx.beginPath(); ctx.arc(P.x, P.y, P.r * (2.05 + Math.sin(t * 3) * .12), 0, TAU); ctx.fill()
+  // G-M4 2026-10-13: (e) Land use - a short wake behind the disc while you move: a round-capped line straight back from the disc's edge, T.wakeLen0 + T.wakePerLv px per Land-use level, in the measure's colour; drawn under reduced motion too (it moves only as you do). Under the halo and the disc (PLAN_G G4) (build_G_2026-10-01)
+  if (lv.speed > 0 && P.moving) {
+    ctx.save(); ctx.strokeStyle = 'rgba(126,231,135,.45)'; ctx.lineWidth = P.r * .7; ctx.lineCap = 'round'; ctx.beginPath()
+    const wl = P.r + T.wakeLen0 + T.wakePerLv * lv.speed
+    ctx.moveTo(P.x - P.hx * P.r, P.y - P.hy * P.r); ctx.lineTo(P.x - P.hx * wl, P.y - P.hy * wl); ctx.stroke(); ctx.restore()
+  }
+  // G-M4 2026-10-13: (d) Risk financing - the halo's base alpha rises T.haloPerLv per level from T.haloA0 (the old .09), at most T.haloMax; its 0.48 Hz breathing (sin(t x 3)) stops under reduced motion, the halo then held at its middle size (PLAN_G G4: the carried gap) (build_G_2026-10-01)
+  ctx.fillStyle = `rgba(247,244,238,${Math.min(T.haloMax, T.haloA0 + T.haloPerLv * lv.hp).toFixed(3)})`
+  ctx.beginPath(); ctx.arc(P.x, P.y, P.r * (2.05 + (reduceMotion ? 0 : Math.sin(t * 3) * .12)), 0, TAU); ctx.fill()
   ctx.fillStyle = P.inv > 0 && ((t * 20) | 0) % 2 ? '#ffffff' : '#f7f4ee'
   ctx.beginPath(); ctx.arc(P.x, P.y, P.r, 0, TAU); ctx.fill()
   ctx.fillStyle = 'rgba(11,13,16,.5)'
   ctx.beginPath(); ctx.arc(P.x, P.y, P.r * .42, 0, TAU); ctx.fill()
+  // G-M4 2026-10-13: (b) Retrofitting - one plating arc per level on the disc's edge (four at max, Lv 4), each a quarter's middle 0.9 rad, starting at the top, in the measure's colour (#c9d1d9) over a dark pass, 3 px - thicker than the 2 px rings round you, so it is told by shape and weight, not colour alone (PLAN_G G4) (build_G_2026-10-01)
+  if (lv.armour > 0) {
+    ctx.save(); ctx.lineCap = 'butt'
+    for (const [col, w] of [['rgba(8,10,13,.55)', 5], ['#c9d1d9', 3]]) {
+      ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath()
+      for (let k = 0; k < lv.armour; k++) { const a = -Math.PI / 2 + k * Math.PI / 2; ctx.moveTo(P.x + Math.cos(a - .45) * (P.r + 2), P.y + Math.sin(a - .45) * (P.r + 2)); ctx.arc(P.x, P.y, P.r + 2, a - .45, a + .45) }
+      ctx.stroke()
+    }
+    ctx.restore()
+  }
+  // G-M4 2026-10-13: (e) Maintenance - a ring of spaced round dots on you (RG11: round cap, a near-zero dash of 0.1, a gap of 7 px, 2 px wide - the gap over three times the stroke, the pattern of the lifeline repair-reach ring, so it cannot read as a works site's 9 / 9 dashed ring), 8 px out from the disc, in the measure's colour; still (PLAN_G G4) (build_G_2026-10-01)
+  if (lv.rate > 0) {
+    ctx.save(); ctx.strokeStyle = 'rgba(255,122,47,.75)'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.setLineDash([0.1, 7])
+    ctx.beginPath(); ctx.arc(P.x, P.y, P.r + 8, 0, TAU); ctx.stroke(); ctx.restore()
+  }
   // UX-M1 2026-09-30: the SY-M3 / GR-M6 marks circling you (one diamond per synergy held) are removed (PLAN_UX U1, the user's choice): nothing unexplained orbits you now. The aimed shots' trail, the take ring and the banner are unchanged (build_UX_2026-09-30)
   ctx.restore()
 
@@ -9562,6 +9778,7 @@ function initDev() {
   const devLevel = () => {
     if (over) return
     P.xp = 0; P.level++
+    volleySmall = 0   // G-M1 2026-10-13: a level-up here too, as in the level-up loop (RG5) (build_G_2026-10-01)
     P.need = Math.round(P.need * T.xpCurve + T.xpAdd)
     heal(P.max * DIFF.levelHeal)   // BS-M4 2026-09-30: the per-difficulty key, as the level-up loop (ruling RH6) (build_BS_2026-09-30)
     picksLeft += T.picksPerLevel
