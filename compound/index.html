@@ -731,6 +731,9 @@
     font-size:11px;font-weight:800;letter-spacing:.04em;background:rgba(255,224,138,.12);
     border:1px solid rgba(255,224,138,.4);color:#ffe08a}
   .redo-done{margin-top:12px;font-size:12.5px;opacity:.75;text-align:left}
+  /* QC-M3 2026-10-13: the "Why not" line after a wrong pick - the explanation's size and spacing, at full opacity; its label in bold words, in the verdict's "bad" colour, so the words carry it and the colour only repeats them (build_Q_2026-10-13) */
+  .redo-whynot{font-size:12.5px;line-height:1.6;margin-top:10px;text-align:left}
+  .redo-whynot b{font-weight:800;color:#ff9d9d}
   /* start screen: what the debriefs have accumulated — one line, never folded */
   #learnhead{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
     opacity:.7;margin:6px auto 10px;line-height:1.7}
@@ -1272,7 +1275,10 @@ const T = {
   lifelineHit: 8,                  // one arriving hazard spends itself on it for this much
   lifelineDps: 5,                  // per second, per heat zone or flood front sitting on it
   leveeFloodWear: 2,              // Hard defences: each flood front on a lifeline wears it this many times as fast (user decision 2026-09-15)
-  lifelineRepair: 11,              // per second, standing with it and nothing else on it
+  // XL-M2 2026-10-13: R3 - lifelineRepair 11 -> 16; the comment was "per second, standing with it and nothing else on it", false under R1 (RX7). R1 - while something sits on it, standing there still repairs at llRepairUnder x the full rate, net of the wear (RX4: 0.6). R2 - the player's repair reach starts at llRepairR (was lifelineR 46), still x (1 + lifelineReachLv per Maintenance level); what counts as sitting on it, the crews' pulse hit test and every hit test keep lifelineR (PLAN_XP R1-R3, the user's three picks) (build_XP_2026-10-13)
+  lifelineRepair: 16,              // per second at Maintenance 0, standing within the repair reach with nothing on it
+  llRepairUnder: 0.6,              // share of that rate while something sits on it, applied net of the wear
+  llRepairR: 70,                   // the player's repair reach at Maintenance 0, px from the centre
   llTargetP: 0.22,                 // share of chasers that head for a lifeline instead of you
   llReach: 1250,                   // ...but only one close enough that you could get there
 
@@ -2734,48 +2740,49 @@ function learnAnswer(right) {
 //
 // Nothing here introduces a new figure. These are questions about how two measures relate
 // under one hazard, which is the kind of claim the mechanics already carry.
+// QT1-M1 2026-10-13: Q-T1 pair-question text - 124 stem and option strings below replaced verbatim from the insertion set (RULINGS_QT1_final RQF-1: strings_QT1 -> strings_QT1_fix as RF-1 rules -> strings_QT1_fix2); lane.wui withdrawn (RQF-2), untouched; no why, correct or source line changed (build_Q_2026-10-13)
 const PLACE_Q = {
   act: {   // early warning + drills
     alpine: { q: 'The valley siren gives you minutes, not hours. What decides whether those minutes save anybody?',
-             opts: ['How loud the siren is',
-                    'How accurate the forecast was',
+             opts: ['How loud the siren is, and how far up the valley it carries',
+                    'How good the forecast behind the siren was',
                     'Whether the valley had already decided to climb rather than drive',
-                    'How fast help can get up the valley'],
+                    'How fast help can get up the valley once the siren sounds'],
              correct: 2,
              why: 'After the Big Thompson Canyon flood, studies found that people who climbed to higher ground had the greatest chance of surviving. They also found that those who tried to drive out through the canyon were at the highest risk. The road followed the river. Minutes are only enough for an action that was chosen beforehand. Choosing it is the whole job of the drill.' },
     basin: { q: 'The gauge upstream gives the town four hours. What decides whether four hours is enough?',
-             opts: ['The accuracy of the forecast',
+             opts: ['How accurate the gauge reading and the forecast are',
                     'Whether the leaving has been walked before, and whether anyone believes the gauge',
-                    'The height of the levee',
+                    'The height of the levee along the river',
                     'How many phones are in the town'],
              correct: 1,
              why: 'Lead time is only worth what the town can do inside it. A warning nobody has rehearsed against, or nobody trusts, converts to nothing.' },
     metro: { q: 'A city alert reaches every phone in seconds. Why do people still die?',
-             opts: ['The alert is too quiet',
-                    'It says something is coming; it does not tell a stranger in a basement where the stairs are',
-                    'Phones fail in emergencies',
-                    'It arrives too early'],
+             opts: ['The alert is too quiet for people to hear it',
+                    'It does not tell a stranger in a basement where the stairs are',
+                    'Phones fail and the network goes down in emergencies',
+                    'It only reaches the people who have signed up for an alert app'],
              correct: 1,
              why: 'Reach is not the hard part in a dense city. Knowing what to do, in the specific building you happen to be in, is — and that is rehearsal, not broadcast.' },
     delta: { q: 'A surge warning reaches the delta six hours out and the town still loses people. What was missing?',
-             opts: ['A louder siren',
-                    'A route people had already walked, and somewhere to walk it to',
+             opts: ['A louder siren that people could hear',
+                    'A route people had already walked',
                     'A more accurate surge model',
-                    'Higher sea defences'],
+                    'Higher sea defences in front of the town'],
              correct: 1,
              why: 'Six hours is enough time only if the leaving is already worked out. A warning buys time; the drill is what turns time into distance.' },
     fault: { q: 'Earthquakes give no useful warning at all. What is there left for a drill to do?',
              opts: ['Nothing — drills only matter where there is warning',
-                    'Make the first ten seconds automatic, because that is all the warning there is',
+                    'Make the first ten seconds automatic',
                     'Speed up the emergency services',
                     'Predict the aftershocks'],
              correct: 1,
              // CORRECTED 2026-09-16: drill purpose in UNDRR's own hedge ("tends to"), scoped to earthquakes; "exactly that" dropped (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
              why: 'With no forecast, the only rehearsal that helps is of the response itself. UNDRR gives the reason for its earthquake micro-drill: under stress, thinking tends to slow or shut down, so the trained reflex has to bypass it.' },
     wui:   { q: 'A fire warning goes out and the road out of the valley jams. What did the drill need to have settled?',
-             opts: ['Which way to go, and when it is already too late to go',
-                    'How to fight the fire from home',
-                    'Who owns the road',
+             opts: ['Which way to go, and when it is already too late',
+                    'How to fight the fire from home until it passes',
+                    'Who owns the road out of the valley',
                     'The exact arrival time of the front'],
              correct: 0,
              why: 'Late evacuation kills people in cars. The drill has to fix both the route and the moment after which leaving is the more dangerous option.' },
@@ -2783,42 +2790,42 @@ const PLACE_Q = {
   stock: { // codes + retrofitting
     alpine: { q: 'The red zone here is an absolute ban on new building. So what is still standing inside it?',
              opts: ['Nothing \u2014 that is what an absolute ban means',
-                    'Everything that was already there when the map was drawn',
+                    'Everything that was already there',
                     'Only farm buildings and sheds',
                     'Only what was granted an exception'],
              correct: 1,
              why: 'The ban is on new building. What already stands remains. It may not be expanded or changed in use, but it stays in the runout. What protects it at the building itself is object protection \u2014 deflectors, reinforced walls. That is retrofitting under a mountain name. Galt\u00fcr is endangered by 26 avalanche tracks, with 111 buildings counted in their runout zones in 2000.' },
     delta: { q: 'New coastal housing is raised and built to standard. What is still at sea level?',
-             opts: ['Nothing — the standard covers the district',
-                    'Everything built before the standard, which is most of the waterfront',
-                    'Only the roads',
-                    'The newest blocks'],
+             opts: ['Nothing — the standard covers the whole district, old and new',
+                    'Everything built before the standard, most of the waterfront',
+                    'Only the roads, since the houses have all been raised',
+                    'The blocks built most recently'],
              correct: 1,
              why: 'A standard applies from the day it is written. The waterfront was finished long before that day, and raising it is a separate and much larger job.' },
     wui:   { q: 'New homes at the wildland edge have ember-resistant vents and screens. Why does the neighbourhood still burn?',
-             opts: ['The new measures do not work',
-                    'The older houses beside them were never retrofitted, and fire does not check the build date',
+             opts: ['The new measures do not work against embers',
+                    'The older houses beside them were never retrofitted',
                     'Ember screens make fires worse',
-                    'The new homes are too close together'],
+                    'The fire starts in the new homes and spreads out'],
              correct: 1,
              why: 'Fire spreads house to house. One unretrofitted roof is a source for the street, so the standard only protects a neighbourhood once most of the neighbourhood has it.' },
-    basin: { q: 'The new estate is built above the flood level. What did that not fix?',
+    basin: { q: 'The new estate is built above the flood level. What did that NOT fix?',
              opts: ['Nothing — the problem is solved',
-                    'The old centre, which is below it and was there first',
+                    'The old centre',
                     'The estate\u2019s drainage',
                     'The river\u2019s course'],
              correct: 1,
              why: 'Building the new part safely is the easy half. The existing town is the flood risk, and it is reached only by retrofit, relocation or defence.' },
     fault: { q: 'A city enforces a modern seismic code for thirty years. Why do its buildings still fall?',
-             opts: ['Codes weaken with age',
-                    'Because most of the city was built before the code, and a code does not reach backwards',
-                    'Because codes are voluntary',
-                    'Because new buildings are the most dangerous'],
+             opts: ['Because the code was never applied to the new buildings',
+                    'Because most of the city was built before the code',
+                    'Because the code is voluntary across most of the city',
+                    'Because new buildings are the most dangerous in the city'],
              correct: 1,
              why: 'Enforcement fixes what goes up next. Everything already standing is only reached by retrofitting, which is why UNDRR names existing assets separately.' },
     metro: { q: 'The new towers meet the code. The disaster still happens in the old blocks. Why?',
-             opts: ['Old buildings are always beyond saving',
-                    'The code governs new construction; the old stock is a separate, larger and much harder job',
+             opts: ['Old buildings are always beyond saving, whatever the code says',
+                    'The code governs new construction',
                     'The towers shelter the old blocks',
                     'Old blocks are outside the city boundary'],
              correct: 1,
@@ -2826,88 +2833,89 @@ const PLACE_Q = {
   },
   see: {   // risk data + early warning
     alpine: { q: 'The slope above the village has not come down in living memory. What does that record tell you?',
-             opts: ['That the slope is stable',
+             opts: ['That the slope is stable \u2014 the record shows it has held',
                     'That the return period is longer than the village is old',
                     'That the forest above it is holding',
-                    'Very little \u2014 these events also emerge where there is no record of previous ones'],
+                    'Very little \u2014 these events also emerge where there is no record'],
              correct: 3,
              why: 'The IPCC states it for mountains: as glaciers retreat and permafrost thaws, the resulting landslides, floods and cascading events \u201cwill also emerge where there is no record of previous events\u201d (high confidence). At Bondo in 2017 the village had a warning because the slope had been fitted with instruments for years. The slope\u2019s movement had been measured from 2012. The rock came away at 09:31. The debris-flow alarm went off at 09:34. No record does not mean no hazard. It only means nothing was measured.' },
     delta: { q: 'Before a surge warning can mean anything, what has to exist?',
              opts: ['A siren network',
-                    'Tide and surge records, so a given reading can be compared with what that level did last time',
-                    'A sea wall',
+                    'Tide and surge records',
+                    'A sea wall built for the surge',
                     'A public information campaign'],
              correct: 1,
              why: 'A warning is a measurement interpreted against history. Without the record there is a number on a screen and no way to say whether it is bad.' },
     fault: { q: 'Earthquake early warning buys seconds. What has to already be in the ground for it to work at all?',
              opts: ['A prediction model',
-                    'A dense sensor network, installed and still maintained',
+                    'A dense sensor network, still maintained',
                     'A public alert app',
                     'A seismic building code'],
              correct: 1,
              why: 'The warning is the detection of the fast wave somewhere else. No instruments, no detection — and instruments that stopped being serviced are the same as no instruments.' },
     metro: { q: 'A city wants to warn about heat. What is usually missing?',
-             opts: ['A national forecast',
-                    'Temperature measured where people actually are — indoors, at night, in the densest blocks',
+             opts: ['A forecast for the whole country',
+                    'Temperature measured where people actually are',
                     'More weather stations at the airport',
-                    'A colour-coded scale'],
+                    'A colour-coded scale for heat warnings'],
              correct: 1,
              why: 'The airport reading is not the reading that kills. Heat risk is indoor, nocturnal and unevenly distributed, and a warning built on the wrong measurement warns the wrong people.' },
     basin: { q: 'The town wants flood warnings. What has to exist upstream first?',
-             opts: ['A gauge, and a record long enough to know what the reading means',
-                    'A larger budget',
-                    'A taller levee',
+             opts: ['A gauge, and a record',
+                    'A larger budget for flood defence',
+                    'A taller levee along the river',
                     'A faster siren'],
              correct: 0,
              why: 'A warning is a reading interpreted against history. Without the record there is a number and nothing to compare it to.' },
     wui:   { q: 'Why can a fire service warn about some valleys and not others?',
-             opts: ['Some valleys burn less',
-                    'It can only warn where fuel, weather and terrain are actually being measured',
-                    'Warnings are issued alphabetically',
-                    'Only populated valleys get warnings'],
+             opts: ['Some valleys burn less often, so they never need a warning',
+                    'It can only warn where fuel, weather and terrain are actually measured',
+                    'It can warn anywhere, but it chooses not to in some valleys',
+                    'It can warn about any valley it can see on a map'],
              correct: 1,
              why: 'You cannot warn about a hazard nobody is monitoring. Understanding risk sits ahead of everything that acts on it for this reason.' },
   },
   buffer: { // green defences + land-use planning
+    // FINAL-FIX 2026-10-13: F-07 - the right option a strict cut of its original that keeps "closed" with "standing" (verify_final_XLQT1 F-07; ADJUDICATION_final) (build_XP_2026-10-13 final fix)
     alpine: { q: 'The forest above the village stops avalanches and rockfall, and costs nothing. What is the catch?',
-             opts: ['It protects only while it stays closed and standing \u2014 and a storm or a fire can change that in an instant',
+             opts: ['It protects only while it stays closed and standing',
                     'It works against rockfall but not against avalanches',
                     'It stops working once the trees are fully mature',
                     'It has to be replanted after every hard winter'],
              correct: 0,
              why: 'Roughly half of Swiss forest protects settlements, roads or railway lines below it. But the protection comes from the standing trees, not from the map. The more open a forest is, the worse it protects. The zone plan attacks the same problem from the other end. It sets aside strips of land that must be kept free for protection measures.' },
     fault: { q: 'What is open ground worth to a city on a fault?',
-             opts: ['Nothing — earthquakes are not stopped by parks',
-                    'Somewhere to be when the buildings are the hazard — which is why it is also the first thing built on',
+             opts: ['Nothing — earthquakes are not stopped by parks, so the land is better built on',
+                    'Somewhere to be when the buildings are the hazard',
                     'It reduces the shaking',
-                    'It stabilises the ground'],
+                    'Only its price as building land, since nobody gathers there after an earthquake'],
              correct: 1,
              why: 'Open space is the assembly area and the space debris falls into instead of onto people. It survives only if planning defends it against its own value as a site.' },
     wui:   { q: 'A cleared defensible space is cut around the houses. What removes it again?',
-             opts: ['Fire',
-                    'Nothing dramatic — regrowth, and the next owner who likes the trees close',
-                    'Drought',
+             opts: ['Fire — the next one',
+                    'Nothing dramatic — regrowth',
+                    'A long drought',
                     'Council policy'],
              correct: 1,
              why: 'Defensible space is a condition, not a construction. It reverts unless somebody keeps choosing it, which makes it a planning and maintenance question rather than a one-off job.' },
     metro: { q: 'Parks measurably cool a city. Why do they shrink?',
-             opts: ['Maintenance costs',
+             opts: ['Their maintenance costs more than the city can pay',
                     'They are the only land in a dense city not already earning something',
-                    'People stop using them',
-                    'They increase flood risk'],
+                    'People stop using them once the city grows around them',
+                    'They increase flood risk in the streets around them'],
              correct: 1,
              why: 'Green space competes with development for the same ground, and the cooling it provides does not appear on anyone\u2019s balance sheet. That is a land-use decision, not a horticultural one.' },
     delta: { q: 'The mangrove belt in front of the town is thinning every year. What is taking it?',
-             opts: ['Storms',
-                    'The town — the belt is flat, coastal, serviced land and somebody wants to build on it',
-                    'Salt',
-                    'Disease'],
+             opts: ['Storm damage',
+                    'The town',
+                    'Salt water',
+                    'Tree disease'],
              correct: 1,
              why: 'The defence and the development want the same ground. Green infrastructure keeps paying only while planning keeps the buffer empty.' },
     basin: { q: 'The floodplain was left empty for a reason. What usually fills it anyway?',
-             opts: ['Forest',
-                    'Development, because flat riverside land is cheap and the last flood is out of living memory',
-                    'Farmland only',
+             opts: ['Forest, because the land is too wet to build on',
+                    'Development, because the last flood is out of living memory',
+                    'Farmland only, and never houses or roads',
                     'Nothing — floodplains stay empty'],
              correct: 1,
              why: 'A floodplain is a part of the river that is dry most of the time. Building on it does not remove it from the river.' },
@@ -2916,41 +2924,41 @@ const PLACE_Q = {
     alpine: { q: 'Barriers are designed for every avalanche track above the village, and almost none get built. What does the valley do instead?',
              opts: ['Abandons the tracks it cannot protect',
                     'Builds one a decade, worst track first',
-                    'Draws a hazard map instead \u2014 the measure it can afford',
+                    'Draws a hazard map',
                     'Insures the buildings and leaves the slope alone'],
              correct: 2,
              why: 'This is where Alpine hazard zoning came from. After the extreme avalanches and debris flows of the 1950s and 1960s, the structures needed a lot of money. With limited money, they could not be built in every endangered area. So passive measures were introduced, hazard zone maps among them. Zoning is what a place does when it cannot pay for concrete.' },
     delta: { q: 'Raising the houses is agreed to be the right measure. Why is so little raised?',
-             opts: ['It does not work',
-                    'It costs more than most owners have, and the grant is smaller than the waterfront',
-                    'Permission is refused',
+             opts: ['It does not work in a real flood',
+                    'It costs more than most owners have',
+                    'The planners refuse permission to raise them',
                     'There are no contractors'],
              correct: 1,
              why: 'A measure everyone agrees with and nobody can pay for does not exist. Financing is what turns a correct answer into a raised house.' },
     wui:   { q: 'Screening a roof and vents is cheap next to the price of a house. Why is it still not done?',
-             opts: ['Owners do not believe in fire',
+             opts: ['Owners do not believe in fire, though every one of them could easily pay for it',
                     'Cheap is not free, and people at the edge are often there because it was what they could afford',
-                    'It is illegal in some areas',
-                    'It spoils the view'],
+                    'It costs nearly as much as building the whole house again',
+                    'It is cheap, but it spoils the view'],
              correct: 1,
              why: 'Low-cost is not the same as accessible. The households most exposed are frequently the ones with the least spare capital, which is what risk financing exists to bridge.' },
     basin: { q: 'Flood-proofing the old centre is designed, costed and approved. What is missing?',
              opts: ['Engineering',
-                    'The money — which becomes easy to find the week after a flood and hard the week before',
+                    'The money',
                     'Political will',
                     'A contractor'],
              correct: 1,
              why: 'Prevention competes with the visible for the same budget and loses until the event makes it visible. Financing arranged in advance is what breaks that cycle.' },
     metro: { q: 'Upgrading the substation is on the plan. What actually decides whether it happens?',
-             opts: ['The engineering difficulty',
-                    'Whether anyone will fund invisible work in a place that has not failed yet',
-                    'Public consultation',
+             opts: ['How hard the engineering will be',
+                    'Whether anyone will fund invisible work',
+                    'What the public consultation decides',
                     'The age of the equipment'],
              correct: 1,
              why: 'Nobody opens a substation upgrade. Its success is that nothing happens, which is exactly the kind of outcome budgets are worst at buying.' },
     fault: { q: 'The retrofit programme is designed, costed and approved. Ten years on, almost nothing is strengthened. What stopped it?',
              opts: ['The engineering was wrong',
-                    'The money, which arrives readily after an earthquake and reluctantly before one',
+                    'The money',
                     'Public opposition',
                     'A lack of contractors'],
              correct: 1,
@@ -2959,86 +2967,88 @@ const PLACE_Q = {
   who: {   // drills + risk data
     alpine: { q: 'The village drills every year, and the rock avalanche killed nobody in the village. Who did it kill?',
              opts: ['The rescue teams who went in first',
-                    'People the drill never met \u2014 walkers on the path below the face',
+                    'People the drill never met',
                     'The oldest residents, who could not move fast enough',
                     'Nobody \u2014 the drill did its job'],
              correct: 1,
              why: 'At Bondo there were no deaths or injuries in the residential area. But eight hikers coming down from the Sciora hut were buried. A drill reaches the people who live there. People who are only visiting are invisible to it. Only exposure data says how many of them are up there on a given day. In Austria, hotels and hostels were found to be extraordinarily prone to mountain hazards \u2014 torrential flooding above all.' },
     delta: { q: 'Everyone in the delta has been told about the surge. Who is still lost?',
              opts: ['Nobody, if the message went out',
-                    'Whoever cannot leave on their own, and nobody holds a list of who that is',
+                    'Whoever cannot leave on their own',
                     'Recent arrivals',
-                    'People who ignore warnings'],
+                    'Only the people the message did not reach'],
              correct: 1,
              why: 'A message reaching everyone is not everyone being able to act on it. Disaggregated data is how the people who need help leaving get named before the day.' },
-    fault: { q: 'The schools drill every month. Who does that drill not cover?',
-             opts: ['Nobody — children tell their families',
-                    'Everyone who is not in a school: night, home, and the people living alone',
-                    'Teachers',
-                    'Younger children'],
+    fault: { q: 'The schools drill every month. Who does that drill NOT cover?',
+             opts: ['Nobody — children tell their families what to do',
+                    'Everyone who is not in a school',
+                    'The teachers who run the drill',
+                    'The youngest children in the school'],
              correct: 1,
              why: 'Drills happen where institutions are. Most hours of most lives are somewhere else, and the loss data is what shows which somewhere-else keeps appearing in the casualty list.' },
-    basin: { q: 'The town has practised the flood evacuation. Who is missed?',
+    // FINAL-FIX 2026-10-13: F-06 - the stem narrowed (the evacuation goes up a floor, for everyone, so "People without cars" and "Visitors" are clearly wrong); the right option a strict cut of its original that keeps "upstairs" (verify_final_XLQT1 F-06; ADJUDICATION_final) (build_XP_2026-10-13 final fix)
+    basin: { q: 'The town has practised the flood evacuation: everyone goes to an upper floor. Who is missed?',
              opts: ['Nobody, after enough practice',
-                    'Whoever cannot climb — the ground-floor households the route assumes will simply go upstairs',
+                    'Whoever cannot climb upstairs',
                     'People without cars',
                     'Visitors'],
              correct: 1,
              why: 'The plan works for the people it can picture. Data on who is actually there — age, mobility, floor level — is what puts the rest into it.' },
     metro: { q: 'A city drills every year and the same people die every time. What is the data for?',
-             opts: ['Proving the drill happened',
-                    'Showing who the drill never reaches — the isolated, the disabled, the people not in the room',
+             opts: ['Proving that the drill happened every year',
+                    'Showing who the drill never reaches',
                     'Reducing the cost of drills',
-                    'Choosing the drill date'],
+                    'Choosing the best date for the drill'],
              correct: 1,
              why: 'An average is not a plan. Disaggregated data is what turns "we ran a drill" into "we know who it missed".' },
     wui:   { q: 'Everyone in the valley has been told the evacuation route. Who is still likely to be left?',
              opts: ['Nobody, once it is announced',
-                    'Whoever cannot drive it alone, and nobody has a list of who that is',
+                    'Whoever cannot drive it alone',
                     'People who arrived recently',
                     'Only those who refuse'],
              correct: 1,
              why: 'The plan works for the people it can picture. Loss data on at-risk groups is how the ones it cannot picture get into it.' },
   },
   plan: {  // codes + land-use planning
-    alpine: { q: 'Your chalet is built to standard and sits just outside the hazard zone. What has the standard not covered?',
+    alpine: { q: 'Your chalet is built to standard and sits just outside the hazard zone. What has the standard NOT covered?',
              opts: ['Snow load on the roof, which is a separate rule',
                     'Fire, which the zone plan does not deal with',
                     'Nothing \u2014 outside the zone is outside the hazard',
-                    'The event that goes past the line: outside the zone no special construction requirement applies at all'],
+                    'The event that goes past the line'],
              correct: 3,
              why: 'The construction requirements apply only inside the legally binding zones. So a building outside them can be exposed to the modelled pressures, with nothing required of it. At Galt\u00fcr in 1999 the snow reached areas the hazard maps had shown as safe. The pressure limits were changed afterwards, and the zones were to be extended when the maps were revised. The code is only ever as good as the line somebody drew.' },
     fault: { q: 'Every building in the district meets the seismic code. What can still be wrong?',
-             opts: ['Nothing',
-                    'Some of them are on the trace, or on ground that liquefies — and the code does not choose the site',
+             opts: ['Nothing, if every building meets the code',
+                    'Some of them are on ground that liquefies',
                     'The code is too old',
                     'The inspections were rushed'],
              correct: 1,
              why: 'Codes make a building resist shaking. They say nothing about whether the ground under it will stay solid, which is a mapping and zoning decision.' },
-    wui:   { q: 'The house is built to the fire standard. What did the standard not decide?',
-             opts: ['The materials',
+    wui:   { q: 'The house is built to the fire standard. What did the standard NOT decide?',
+             opts: ['How well the walls of the house had to resist fire',
                     'Whether a house belonged at the top of a slope covered in fuel',
-                    'The roof design',
-                    'The water supply'],
+                    'What the roof had to be covered with to resist fire',
+                    'How the vents had to be built to keep out burning embers'],
              correct: 1,
              why: 'Slope and fuel do most of the work in a wildfire. The best-built house in the worst location is still in the worst location.' },
     metro: { q: 'The tower meets every standard. What question is still open?',
-             opts: ['Its height',
-                    'Whether the district should be there, and what happens to it when the system beneath it fails',
-                    'Its energy rating',
-                    'The fire escapes'],
+             opts: ['How strong its frame has to be against wind and earthquakes',
+                    'Whether the district should be there, and what happens when the system beneath it fails',
+                    'How much energy it is allowed to use for heating',
+                    'Where its fire escapes go and how wide they must be'],
              correct: 1,
              why: 'A compliant building in a place that floods, or that loses power for a week, is compliant and unusable. Location and dependency are planning questions.' },
-    delta: { q: 'Every house in the new district is built to code, on the seaward side of the road. What did the code not decide?',
-             opts: ['The materials',
-                    'Whether a district belonged there at all',
-                    'The inspection schedule',
+    delta: { q: 'Every house in the new district is built to code, on the seaward side of the road. What did the code NOT decide?',
+             opts: ['The materials used across the district',
+                    'Whether a district belonged there',
+                    'How the walls and foundations are built',
                     'The roof pitch'],
              correct: 1,
              why: 'Codes govern construction; planning governs location. A well-built house below the surge line is still below the surge line.' },
+    // FINAL-FIX 2026-10-13: F-05 - the right option restored to its original whole, which carries what the explanation's "two" refers to; the code distractor lengthened (the tie keeps the right option from being strictly longest) (verify_final_XLQT1 F-05; ADJUDICATION_final) (build_XP_2026-10-13 final fix)
     basin: { q: 'A well-built house in the floodplain. Which measure failed?',
-             opts: ['The building code',
-                    'Land-use planning, which decides where — the code only decides how',
+             opts: ['The building code, which sets how the house is built',
+                    'Land-use planning, which decides where \u2014 the code only decides how',
                     'The drainage',
                     'None; it was bad luck'],
              correct: 1,
@@ -3047,7 +3057,7 @@ const PLACE_Q = {
   lane: {  // land-use planning + maintenance (added 2026-09-03; the ninth pair's five cases)
     delta: { q: 'The drainage canal to the pumping station is on every map, and the district still floods to a metre. What is wrong with the canal?',
              opts: ['It was dug too narrow for the city that grew around it',
-                    'It has been built on and filled with waste \u2014 both halves of keeping it open are missing',
+                    'It has been built on and filled with waste',
                     'The pumping station at the end of it is undersized',
                     'The tide holds the water in until the storm has passed'],
              correct: 1,
@@ -3055,7 +3065,7 @@ const PLACE_Q = {
     fault: { q: 'The city designates emergency routes so rescue can reach the centre. What actually keeps one passable?',
              opts: ['Signing it clearly and keeping it clear of parked cars',
                     'Building it wider than the traffic needs',
-                    'The condition of the buildings along it \u2014 a facade tall enough to reach the far kerb closes the road when it falls',
+                    'The condition of the buildings along it',
                     'A second designated route running parallel to it'],
              correct: 2,
              why: 'Italy\u2019s emergency-limit-condition survey counts a building as interfering with the access route when its damage or collapse could block the road for rescue vehicles. The test is geometry. A front is interfering when its height at the eaves exceeds the distance to the far edge of the road. Tokyo works the same problem from the other side. It removes utility poles and extends seismic support to buildings along its designated routes. The corridor is only as clear as what stands beside it.' },
@@ -3070,25 +3080,27 @@ const PLACE_Q = {
              opts: ['Nobody needs to \u2014 a widened channel stays wide',
                     'The landowners, under a maintenance duty in the water law',
                     'The municipalities, each for its own stretch',
-                    'The state, against a recorded roughness benchmark, with the power to clear land it does not own'],
+                    'The state, against a recorded roughness benchmark'],
              correct: 3,
              why: 'The Dutch state secretary for infrastructure put it plainly. The big projects bought a drop in the water level. Vegetation growing in the river bed raises the water level. The two cannot be separated, so roughness has to be held everywhere in the bed. The tool is a vegetation register recording the maximum permitted roughness. Behind it is a duty to tolerate removal as a last resort. A maintenance duty on owners was examined and dropped. Leaving it to the state was judged sufficient, and the duty was expected to carry high social costs. The corridor is a number somebody is permanently answerable for.' },
+    // FINAL-FIX 2026-10-13: F-09 - "for the road" restored, so "allowed to pay" has its object (verify_final_XLQT1 F-09; ADJUDICATION_final) (build_XP_2026-10-13 final fix)
     metro: { q: 'The city designs certain streets to carry cloudburst water away. What stops them carrying it?',
              opts: ['Kerbs built too low to hold the water on the road',
                     'Traffic, which cannot be kept off them in a storm',
-                    'Blocked inlets \u2014 and a funding rule about whether anyone is allowed to pay for the road to be a flood way at all',
+                    'Blocked inlets and a rule about whether anyone is allowed to pay for the road',
                     'The sewer, which takes the water before the street can'],
              correct: 2,
              why: 'Copenhagen\u2019s combined sewer is the city\u2019s only system for surface runoff, and it cannot handle extreme rainfall. That is exactly why the city\u2019s cloudburst plan designates roads with high kerbstones as drainage routes. Two things then decide whether the street carries anything. The first is whether its inlets are clear. Uncollected waste often clogs storm drains and manholes, as the Dhaka study found. The second is whether the law let anyone fund the work. Back in 2012 the utilities could only pay for projects that dealt directly with waste water. So the city asked for the law to be changed.' },
     alpine: { q: 'The valley has one road in, and a retention basin above the village. Which of the two is finished?',
-             opts: ['The road \u2014 it is built, and it is there',
-                    'Neither: the road is open because a service closes it and shoots the slope when the snow requires it, and the basin holds only until it fills',
-                    'The basin \u2014 it is engineered for the design event',
-                    'Both, until an event larger than the design arrives'],
+             opts: ['The road \u2014 it is built, and it stays open whatever the weather and snow do',
+                    'Neither: the road is open because a service closes it when the snow requires it, and the basin holds only until it fills',
+                    'The basin \u2014 it is engineered for the design event and holds whatever comes down',
+                    'Both, until an event larger than the one they were designed for arrives'],
              correct: 1,
              why: 'On a mountain road, the standing avalanche measures are warning, closure, evacuation and artificial triggering. The road is open because a service decides it may be, based on the day\u2019s weather and snow. And a basin is storage, not a solution. At Bondo the debris flows filled the basin. Less than half of the 500,000 to 800,000 cubic metres that reached the village was captured. In a valley the corridor is a job in both directions.' },
   },
   keep: {  // resilient investment + maintenance
+    // FINAL-FIX 2026-10-13: F-08 - the original words after "holding" restored, so the option is one complete sentence (verify_final_XLQT1 F-08; ADJUDICATION_final) (build_XP_2026-10-13 final fix)
     alpine: { q: 'A staircase of check dams has held the torrent above the village for a century. How does it fail?',
              opts: ['One goes unrepaired, lets go of what it was holding, and takes the ones below it with it',
                     'It silts up until it is full, and is then simply harmless',
@@ -3098,48 +3110,106 @@ const PLACE_Q = {
              why: 'A staircase of check dams is a hundred-year programme of building and repair. Timber and stone in the nineteenth century, reinforced concrete in the twentieth. The staircase works only while somebody keeps maintaining it and repairs it after damage. When one dam fails, it releases the material stored behind it. That can start a cascade, breaking the dams downstream. The maintenance cost is a large part of what makes the decision hard.' },
     delta: { q: 'The sea wall was built to a good standard. What decides whether it holds?',
              opts: ['The standard it was built to',
-                    'Whether anyone has inspected it since — a wall is a commitment, not a purchase',
+                    'Whether anyone has inspected it since',
                     'The height of the surge',
-                    'Its length'],
+                    'How long the wall is'],
              correct: 1,
              why: 'Defences fail at their weakest maintained point, not their design standard. The inspection regime is part of the structure.' },
     fault: { q: 'The building was retrofitted twenty years ago. What could still fail?',
-             opts: ['Nothing — a retrofit is permanent',
-                    'The parts nobody has looked at since: fixings, connections, the things behind the plaster',
+             opts: ['Nothing — a retrofit is permanent once it is done',
+                    'The parts nobody has looked at since',
                     'The foundations only',
                     'The new steel'],
              correct: 1,
              why: 'A retrofit is a set of connections doing a job quietly for decades. Corrosion, alteration and later works undo them, and none of it is visible from the street.' },
     wui:   { q: 'The firebreak was cut. Why does it stop working?',
              opts: ['Fires jump firebreaks anyway',
-                    'It grows back — a firebreak is a maintenance schedule, not a construction project',
+                    'It grows back',
                     'It was cut too narrow',
                     'It was cut in the wrong place'],
              correct: 1,
              why: 'Vegetation management is the whole measure. Cut once and photographed, it reverts to fuel within a few seasons.' },
     basin: { q: 'Excellent flood defences, built once, fail twenty years later. What went wrong?',
              opts: ['Built to the wrong standard',
-                    'Never maintained — the investment was treated as finished on the day it opened',
+                    'Never maintained',
                     'Climate change alone',
                     'Population growth'],
              correct: 1,
              why: 'A defence is a commitment, not a purchase. Lifecycle maintenance is the half with no ribbon and no photograph.' },
     metro: { q: 'The pumps were installed, inspected once, and forgotten. When does that become a disaster?',
-             opts: ['Immediately',
-                    'On the first day they are actually needed, which is also the first day anyone checks',
+             opts: ['Immediately, as soon as they are forgotten',
+                    'On the first day they are actually needed',
                     'Never, if they were good pumps',
-                    'When the warranty ends'],
+                    'When the warranty on the pumps runs out'],
              correct: 1,
              why: 'Unmaintained protection fails silently and is discovered in use. That is the worst possible moment to learn it.' },
   },
 }
 
+// QC-M1 2026-10-13: THE DEPTH SCHEMA - three depths of one question, chosen by the difficulty setting (PLAN_Q Q2, Q3) (build_Q_2026-10-13)
+// QC-FIX 2026-10-13: F7 - "two optional keys" -> "three" (depth, alt, whyNot); F3 - variants go only where a question is asked: the
+// generic SYNERGIES question is not asked today, since every pair has a PLACE_Q variant at all six places (ADJUDICATION_QC) (build_XP_2026-10-13)
+// Any question object that is asked may carry three optional keys: a POOL_Q item, a PLACE_Q place variant (PLACE_Q[pair][place]) or an
+// EVENT_Q entry - write variants there. The generic question on a SYNERGIES pair (questionFor's fallback) is not asked: every pair has
+// a PLACE_Q variant at every place, so a variant written on it reaches no player. With none of the keys the question is asked exactly as before.
+//   depth: 1, 2 or 3 - the depth today's question (its own q / opts / correct) is. Absent = QUIZ_DEPTH_BASE (2).
+//          1 recall (the rule the explanation states) · 2 apply (what to do in a case like the run's) · 3 judge (the trade-off
+//          or the failure, one step, never a chain) - PLAN_Q Q2.
+//   alt:   { <depth>: { q, opts, correct, whyNot? } } - the question at the OTHER depths. Keys are the numbers 1, 2, 3; never the
+//          question's own depth (that one is ignored). An alt has no `why`: every depth shares the base `why`. An alt has no `id`
+//          or `form`: the pool record and the scheduler stay keyed on the base's `id` (the topic).
+//   whyNot (QC-M3): optional, on the base or on an alt - an array aligned with THAT version's opts: one plain-text sentence
+//          (no HTML) per wrong option, null at `correct` (and null for a wrong option that has no line). Shown only after a
+//          wrong pick of that option.
+// A Drafter's example (shape only - not a real question):
+//   { id: 'Q99', form: 'judgment', depth: 2, q: '...', opts: ['a', 'b', 'c', 'd'], correct: 1, why: '...',
+//     whyNot: ['...', null, '...', '...'],
+//     alt: { 1: { q: '...', opts: ['a', 'b', 'c', 'd'], correct: 0 },
+//            3: { q: '...', opts: ['a', 'b', 'c', 'd'], correct: 2, whyNot: ['...', '...', null, '...'] } } },
+// Every alt is four options, like the base. The audit (tools/quiz_audit.py) counts every depth and checks this shape.
+// QC-M2 2026-10-13: the setting's target depth (PLAN_Q Q2, the default mapping the user chose, status log 2026-10-13 09:49): Learning 1, Steady 2,
+// Pressed and Exposed 3. One question per slot is asked at the target depth where it has a version there, else as today (Q3) (build_Q_2026-10-13)
+const QUIZ_DEPTH = { learn: 1, steady: 2, pressed: 3, exposed: 3 }
+const QUIZ_DEPTH_BASE = 2          // the depth of a question that names none
+const QUIZ_DEPTHS = [1, 2, 3]      // the depths that exist (QC-M4's dev control cycles through them)
+// QC-M2 2026-10-13: the depth this debrief asks: the dev panel's forced depth (QC-M4) when one is set, else the setting's (build_Q_2026-10-13)
+function quizTarget() {
+  return (dev.on && dev.depth) || QUIZ_DEPTH[DIFF.id] || QUIZ_DEPTH_BASE
+}
+// QC-M2 2026-10-13: the version of one question to show: the base if it is the target depth, else alt[target] if written, else the
+// base (the fallback - so a bank with no alt asks exactly what it asked before). `why` is always the base's; `depth` is the depth
+// shown, `want` the depth asked for (they differ on a fallback) (build_Q_2026-10-13)
+// QC-FIX 2026-10-13: F1 - a variant is used only if it is well formed (quizAltFault); a malformed one falls back to the base, and in
+// dev mode a console warning names the topic (the base's id, else the start of its q) and the fault. A null or absent alt[target] is
+// no variant, as before. F8 - `depth` is read as a number (+Q.depth), so '3' and 3 behave the same (ADJUDICATION_QC) (build_XP_2026-10-13)
+function quizAltFault(a) {
+  if (typeof a !== 'object' || Array.isArray(a)) return 'not an object'
+  if (typeof a.q !== 'string' || !a.q.length) return 'q is not a non-empty string'
+  if (!Array.isArray(a.opts) || a.opts.length < 2 || a.opts.some(o => typeof o !== 'string' || !o.length)) return 'opts is not an array of at least two non-empty strings'
+  if (!Number.isInteger(a.correct) || a.correct < 0 || a.correct >= a.opts.length) return 'correct is not an integer index into opts'
+  if (a.whyNot !== undefined && (!Array.isArray(a.whyNot) || a.whyNot.length !== a.opts.length || a.whyNot.some(w => w !== null && typeof w !== 'string'))) return 'whyNot is not an array of null / strings as long as opts'
+  return ''
+}
+function quizAsk(Q, target = quizTarget()) {
+  const own = +Q.depth || QUIZ_DEPTH_BASE
+  let a = own !== target && Q.alt && Q.alt[target]
+  if (a) {
+    const fault = quizAltFault(a)
+    if (fault) {
+      if (dev.on) console.warn('quiz variant ignored: ' + (Q.id || JSON.stringify(String(Q.q).slice(0, 48))) + ' alt[' + target + ']: ' + fault)
+      a = null
+    }
+  }
+  const v = a || Q
+  return { q: v.q, opts: v.opts, correct: v.correct, why: Q.why, whyNot: v.whyNot, depth: a ? target : own, want: target }
+}
+
 // The question actually asked: this place's version if there is one, otherwise the pair's
 // own. Everything else about the synergy — the pair, the bonus, the cooldown — is untouched.
+// QC-M2 2026-10-13: the place's version (or the pair's own) is then asked at the target depth by quizAsk; `themed` as before (build_Q_2026-10-13)
 function questionFor(sy) {
   const v = PLACE_Q[sy.id] && PLACE_Q[sy.id][PLACE.id]
-  return v ? { q: v.q, opts: v.opts, correct: v.correct, why: v.why, themed: true }
-           : { q: sy.q, opts: sy.opts, correct: sy.correct, why: sy.why, themed: false }
+  return Object.assign(quizAsk(v || sy), { themed: !!v })
 }
 
 // ---------------------------------------------------------------- mastery
@@ -3470,12 +3540,13 @@ let DIFF = DIFFS.steady
 const ONBOARD_COPY = {
   'S3.1': { title: 'You move. You never aim.', body: 'Move with WASD or the arrow keys, or drag on a touch screen. Some measures fire by themselves; others work in the background. Space or EVAC makes you dash the way you move, with a wait between dashes. Touching hazards takes capacity, your red bar.' },
   'S3.2': { title: 'Level up: pick a card', body: 'Destroyed hazards drop blue dots. Walk near them to collect them and fill the blue bar at the top. At each level the game pauses and you pick one card. Once you own two measures that go together, a synergy card offering more can appear.' },
-  'S3.3': { title: 'The map: defend, dodge, build', body: "Lifelines are services like hospitals. Stand in a hurt one's ring: you hit harder there, and it repairs once nothing sits on it. Ground marks warn of events. Most marked events cannot be shot: move away. Stand in a dashed ring to build a bonus." },
+  // XL-M3 2026-10-13: S3.3 and S4.3 - "it repairs once nothing sits on it" -> "it repairs fastest once nothing sits on it", strings_XL.md S-R1 verbatim (ruling RX1): under R1 it also repairs, more slowly, while something sits on it (build_XP_2026-10-13)
+  'S3.3': { title: 'The map: defend, dodge, build', body: "Lifelines are services like hospitals. Stand in a hurt one's ring: you hit harder there, and it repairs fastest once nothing sits on it. Ground marks warn of events. Most marked events cannot be shot: move away. Stand in a dashed ring to build a bonus." },
   'S3.4': { title: 'After the run: questions', body: 'You can answer questions. Right answers keep their share of the recovery budget and grow your streak. Wrong answers lose both. Keep a streak of two or more to power up your next run. Spend the budget on the start screen for permanent upgrades.' },
   'S3.5': { next: 'Next', back: 'Back', skip: 'Skip', start: 'Start playing' },
   'S4.1': { title: 'Level up: pick one card', body: 'Play is paused. Click or tap one card to take it. Reroll draws new cards. Banish stops a measure being offered this run. Both are limited for the whole run.', ok: 'Got it' },
   'S4.2': { title: 'Measures that go together', body: 'You own both of these measures. Take it: an extra effect, some capacity back. When cards close, a line says why they fit, unless another synergy or programme replaces it.', ok: 'Got it' },
-  'S4.3': { title: 'A lifeline is under attack', body: 'Find it on the map; its health is listed bottom-right. Stand inside its ring: you hit harder there, and it repairs once nothing sits on it. Losing it costs you.', ok: 'Got it' },
+  'S4.3': { title: 'A lifeline is under attack', body: 'Find it on the map; its health is listed bottom-right. Stand inside its ring: you hit harder there, and it repairs fastest once nothing sits on it. Losing it costs you.', ok: 'Got it' },
   'S4.4': { title: 'Get out of the way', body: "Marks show where it will hit, or a wall's path and direction. It cannot be shot: move away, or press Space or EVAC. Some marks keep hurting after they land.", ok: 'Got it' },
   'S4.5': { title: 'Build a bonus here', body: 'Stand inside the dashed ring for a few seconds to build it. Leaving drains progress. Once built, its bonus lasts the whole run. Unbuilt sites disappear after 15 seconds.', ok: 'Got it' },
   // CORRECTED 2026-09-23: "Questions are skippable." now says what Skip does - finish() ends every question left, releaseFunds pays right answers only, learnAnswer is not called (section C, section_C_2026-09-22)
@@ -5407,7 +5478,8 @@ function llNewSite(L) {
 const failCap = () => Math.min(DIFF.fail || T.lifelineFailCap, lifelines.length)
 
 // LL-M1 2026-09-25: Maintenance's repair reach, the player's only - the zone where standing counts as being at a lifeline: T.lifelineR, 10% wider per Maintenance level (T.lifelineReachLv), so 46 px at level 0 and 73.6 px at level 6. It gates the repair and the crews' pulse (the `here` of updateLifelines) and is drawn as a dotted ring once it passes T.lifelineR; what counts as sitting on a lifeline, what the pulse hits and every hit test keep T.lifelineR (build_LL_2026-09-25)
-const repairReach = () => T.lifelineR * (1 + T.lifelineReachLv * lv.rate)
+// XL-M2 2026-10-13: R2 - the reach now starts at T.llRepairR (70 px), not T.lifelineR, so it is 70 px at Maintenance 0 and 112 px at level 6, and the dotted ring (drawn while the reach passes T.lifelineR) shows at every level, 0 included (RX2); the LL-M1 line above keeps its 46 / 73.6 px and "once it passes" from before this build (RX7) (build_XP_2026-10-13)
+const repairReach = () => T.llRepairR * (1 + T.lifelineReachLv * lv.rate)
 
 function hitLifeline(L, amount) {
   // LL-M3 2026-09-25: a secured lifeline takes no hit and raises no alarm, whatever calls this (build_LL_2026-09-25)
@@ -5520,6 +5592,7 @@ function updateLifelines(dt) {
     }
     L.under = under; L.inbound = inbound
     // LL-M1 2026-09-25: "standing there" reads the repair reach (T.lifelineR at Maintenance 0, wider per level) in place of T.lifelineR; it gates the pulse and the repair below; `under` above and the pulse's own hit test keep T.lifelineR (build_LL_2026-09-25)
+    // XL-M2 2026-10-13: the repair reach is now T.llRepairR at Maintenance 0, wider per level (R2; the line above says T.lifelineR, true before this build, RX7); the rest of the line holds (build_XP_2026-10-13)
     const here = dist2(L, P) < (repairReach() + P.r) ** 2
 
     // THE ACT. Standing on one that is hurt or occupied is the only state that pays for it -
@@ -5556,12 +5629,16 @@ function updateLifelines(dt) {
     const casc = P.cascade && L.kind !== 'power' ? T.cascadeMul : 1
     // Hard defences (2026-09-15): with the card, each flood front here counts leveeFloodWear times (exact up to the 4-occupier cap).
     // SY-M1 2026-09-29: held zones and fronts wear nothing while a hold runs, but they still count as sitting on it (`under`), so it is not repaired under them: the repair rule is unchanged (ruling RS5) (build_SY_2026-09-29)
-    if (under) { if (!holdOn()) hitLifeline(L, T.lifelineDps * (DIFF.llDmg || 1) * Math.min(under, 4) * casc * dt * (trade.levee ? 1 + (T.leveeFloodWear - 1) * underF / under : 1) * (underK / under)) }   // UXBS-FIX 2026-09-30: F4 - x underK / under (1 with no elite on it) (build_BS_2026-09-30 fix round)
-    else if (L.hp < 100 && here) {
+    // XL-M2 2026-10-13: R1 (RX4) - standing within the reach while something sits on it now repairs at T.llRepairUnder x the full rate, Maintenance's x(1 + 0.3 per level) included, applied net of the wear in one step: below 0 the net goes through hitLifeline (the alarm, the loss), above 0 it repairs. The SY-M1 line above ("so it is not repaired under them: the repair rule is unchanged") was true before this build (RX7): during a hold the occupiers still wear nothing and still count as `under`, so the reduced rate applies. A full lifeline with the net at or above 0 stays full and says nothing (no "repaired" line every frame); a save that reaches 100 while occupied secures it as before. With nothing on it, or nobody there, each term is computed as before, so those cases are unchanged (build_XP_2026-10-13)
+    const wearDt = under && !holdOn() ? T.lifelineDps * (DIFF.llDmg || 1) * Math.min(under, 4) * casc * dt * (trade.levee ? 1 + (T.leveeFloodWear - 1) * underF / under : 1) * (underK / under) : 0   // UXBS-FIX 2026-09-30: F4 - x underK / under (1 with no elite on it) (build_BS_2026-09-30 fix round)
+    const repDt = here && (under || L.hp < 100) ? (under ? T.lifelineRepair * (1 + lv.rate * 0.3) * T.llRepairUnder * dt : T.lifelineRepair * (1 + lv.rate * 0.3) * dt) : 0
+    const netDt = repDt - wearDt
+    if (netDt < 0) hitLifeline(L, -netDt)
+    else if (netDt > 0 && L.hp < 100) {
       // Maintenance is the only way one comes back, and the only place in the game where
       // that measure does something you can watch happening.
       // LL-M2 2026-09-25: since this build a LOST one can also come back, through the rebuild card (rebuildLifeline), at a price; comment only (build_LL_2026-09-25)
-      L.hp = Math.min(100, L.hp + T.lifelineRepair * (1 + lv.rate * 0.3) * dt)
+      L.hp = Math.min(100, L.hp + netDt)
       // Standing there until it is whole again deserves the same voice losing it has —
       // the defend-repair loop is the lifeline mechanic, and it has to close audibly.
       if (L.hp >= 100) {
@@ -6344,7 +6421,8 @@ function updateEbullets(dt) {
       P.inv = T.invuln; shake = Math.max(shake, 7); AU.play('hurt')
       burst(b.x, b.y, b.col, 7, 150)
       gone = true
-      if (P.hp <= 0) { over = true; ebullets.length = 0; return die() }
+      // FINAL-FIX 2026-10-13: `over = true` taken out of this line - in god mode die() returns at once, so the run stopped with `over` set (the 2026-09-30 "froze at 3:44" report; verify_final_XLQT1 F-13); die() sets `over` itself on every other path (build_XP_2026-10-13 final fix)
+      if (P.hp <= 0) { ebullets.length = 0; return die() }
     }
 
     if (!gone && b.life <= 0) {
@@ -7125,22 +7203,25 @@ function bankShare(n) {
 function buildDebrief() {
   const list = []
   const got = SYNERGIES.filter(sy => syn[sy.id])
+  // QC-M2 2026-10-13: each of the three kinds is asked at the target depth (quizAsk; questionFor for pairs); every item also carries
+  // whyNot (QC-M3), depth (the depth shown) and want (the depth asked for). The pool record and poolAskedRun stay on the topic's id (build_Q_2026-10-13)
   if (got.length) {
     const sy = pick(got), Q = questionFor(sy)
-    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, kind: 'syn',
+    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'syn',
                 tag: `Why it compounds · ${sy.name}` + (Q.themed ? ` · ${PLACE.name}` : '') })
   }
   const evs = [...new Set(eventsSeen)].filter(k => EVENT_Q[k])
   if (evs.length) {
-    const k = pick(evs), Q = EVENT_Q[k]
-    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, kind: 'event',
+    const k = pick(evs), Q = quizAsk(EVENT_Q[k])
+    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'event',
                 tag: `What you could only dodge · ${EVENTS[k].name}` })
   }
   while (list.length < T.debriefN) {
     const c = nextPoolQuestion()
     if (!c) break
     poolAskedRun[c.q.id] = true
-    list.push({ q: c.q.q, opts: c.q.opts, correct: c.q.correct, why: c.q.why, kind: 'pool', id: c.q.id,
+    const Q = quizAsk(c.q)
+    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'pool', id: c.q.id,
                 tag: 'Field question · ' + (c.anyP ? 'every place' : PLACE.name) })
   }
   return list
@@ -7294,6 +7375,8 @@ function mountDebrief() {
       `<div class="redo-pay" style="display:none"><b>+0</b> budget</div>` +
       `<p class="redo-why" style="display:none"></p><div class="redo-earnwrap"></div>`
     wrap.querySelector('h3').textContent = Q.q
+    // QC-M4 2026-10-13: dev mode only - the depth shown on the tag ("· d3"), and the depth asked for when it fell back ("· d2 (no d3)") (build_Q_2026-10-13)
+    if (dev.on) wrap.querySelector('.qpair').insertAdjacentText('beforeend', ` · d${Q.depth}` + (Q.want !== Q.depth ? ` (no d${Q.want})` : ''))
     box.appendChild(wrap)
     const ob = wrap.querySelector('.redo-opts')
     // Shuffled on screen, canonical in the data: the bank's answer positions are skewed and
@@ -7335,6 +7418,16 @@ function mountDebrief() {
         v.className = 'redo-verdict ' + (right ? 'good' : 'bad')
         v.style.display = ''
         const why = wrap.querySelector('.redo-why')
+        // QC-M3 2026-10-13: after a WRONG pick whose option has a "Why not" line (Q.whyNot[oi], a string), one line before the explanation:
+        // the label in bold words, then the line as plain text. Nothing after a right pick or a skip. It sits before .redo-why in the
+        // block, so a screen reader reaches it in reading order; the label's words, not its colour, say what it is (build_Q_2026-10-13)
+        if (!right && Q.whyNot && typeof Q.whyNot[oi] === 'string') {
+          const wn = document.createElement('p')
+          wn.className = 'redo-whynot'
+          wn.innerHTML = '<b>Why your pick is wrong:</b> '
+          wn.appendChild(document.createTextNode(Q.whyNot[oi]))
+          wrap.insertBefore(wn, why)
+        }
         why.innerHTML = Q.why
         why.style.display = ''
         const earn = []
@@ -9103,6 +9196,7 @@ function draw() {
       continue
     }
     // LL-M1 2026-09-25: the repair reach, once Maintenance widens it past the lifeline's own ring - a faint DOTTED outer ring (ruling RL3: round dots, 2 px, one every 7.1 px, so it does not read as a works site's dashed ring); static, so it adds no motion; it differs from the solid inner ring by pattern and radius, never by colour alone (build_LL_2026-09-25)
+    // XL-M2 2026-10-13: the reach now starts past the lifeline's own ring (T.llRepairR 70 px > T.lifelineR 46 px), so this test draws the dotted ring at every Maintenance level, 0 included (RX2: kept as it is); "once Maintenance widens it" above was true before this build (RX7) (build_XP_2026-10-13)
     const reach = repairReach()
     if (reach > T.lifelineR) {
       ctx.save()
@@ -9130,7 +9224,8 @@ function draw() {
     if (onSite === L) {
       ctx.globalAlpha = .11 + .05 * Math.sin(t * 8)
       ctx.fillStyle = k.col
-      ctx.beginPath(); ctx.arc(L.x, L.y, T.lifelineR, 0, TAU); ctx.fill()
+      // FINAL-FIX 2026-10-13: the fill is drawn at the repair reach (`reach`, the dotted ring above), not T.lifelineR, so what lights up is the zone that set onSite (verify_final_XLQT1 F-12); the solid ring below stays the lifeline's own (build_XP_2026-10-13 final fix)
+      ctx.beginPath(); ctx.arc(L.x, L.y, reach, 0, TAU); ctx.fill()
       ctx.globalAlpha = 1
       ctx.strokeStyle = k.col; ctx.lineWidth = 3
       ctx.beginPath(); ctx.arc(L.x, L.y, T.lifelineR, 0, TAU); ctx.stroke()
@@ -9854,6 +9949,15 @@ function initDev() {
     syncHud(); syncModBtns() })
   B('Clear response', () => { for (const k of MOD_IDS) delete mod[k]; syncHud(); syncModBtns() })
   syncModBtns()
+
+  // QC-M4 2026-10-13: force the debrief's target depth for testing - off (the setting's, QUIZ_DEPTH) -> 1 -> 2 -> 3 -> off. Read by
+  // quizTarget when the next debrief is built (at the run's end); a question with no version at that depth still falls back (build_Q_2026-10-13)
+  SEP('Quiz · debrief depth')
+  const depthLabel = () => 'Quiz depth: ' + (dev.depth ? 'd' + dev.depth + ' forced' : 'by setting') + ' · next debrief'
+  B('', b => { const i = QUIZ_DEPTHS.indexOf(dev.depth) + 1
+               dev.depth = i < QUIZ_DEPTHS.length ? QUIZ_DEPTHS[i] : 0
+               b.textContent = depthLabel(); b.classList.toggle('on', !!dev.depth) })
+    .textContent = depthLabel()
 }
 if (DEV) initDev()
 
