@@ -547,6 +547,9 @@
   /* DL-M3 2026-10-14: the plain-language switch under the dial, on the old #presswrap / #pressnote spacing; its note never changes, so it needs no min-height (build_DIAL_2026-10-14) */
   #plainwrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
   #plainnote{font-size:11.5px;opacity:.55;margin:6px 0 14px;line-height:1.5}
+  /* PL-S3 2026-10-15: P6 - the start screen's Sources switch and its note, under the plain-language switch, with that switch's two rules copied, so the two rows look alike (build_POLISH_2026-10-15) */
+  #srcwrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
+  #srcnote{font-size:11.5px;opacity:.55;margin:6px 0 14px;line-height:1.5}
 
   /* institutional capacity: the bounded meta layer, bought with recovery budget */
   /* The capacity layer folds (2026-09-01). On a phone the start screen ran 2039px before
@@ -916,11 +919,15 @@
   <!-- DL-FIX 2026-10-15: FX1 (check_DIAL.md F1; PLAN_DIAL D12, the user's choice of one line above the dial) - says what the four step names describe; it comes before #diffwrap in the markup, so a screen reader reads it, then the four buttons, then the step note (build_DIAL_2026-10-14 fix round) -->
   <div id="diffhead">How fast does this place grow?</div>
   <!-- DL-FIX2 2026-10-15: FX10 (review_DIAL.md F2) - the four step buttons are one group named by the line above (role="group", aria-labelledby="diffhead"), and the step note is a polite live region, so a screen reader hears the note change after a press (build_DIAL_2026-10-14 fix round 2) -->
-  <div id="diffwrap" role="group" aria-labelledby="diffhead"></div>
+  <!-- PL-M3 2026-10-15: P3 (a) (rereview_DIAL.md (c) 3) - the group also points at the step note (aria-describedby="diffnote"), so a screen reader can read the current step's note on entering the group, not only when it changes; nothing else on the dial changes (build_POLISH_2026-10-15) -->
+  <div id="diffwrap" role="group" aria-labelledby="diffhead" aria-describedby="diffnote"></div>
   <div id="diffnote" aria-live="polite"></div>
   <!-- DL-M2 / DL-M3 2026-10-14: the growth-pressure row (#presswrap, #pressnote) replaced by the plain-language switch and its note, filled by offerPlain() (build_DIAL_2026-10-14) -->
   <div id="plainwrap"></div>
   <div id="plainnote"></div>
+  <!-- PL-S3 2026-10-15: P6 - the Sources switch and its note, filled by offerSrc(); the same switch state as the card bar's Sources button (build_POLISH_2026-10-15) -->
+  <div id="srcwrap"></div>
+  <div id="srcnote"></div>
   <div id="metahead"></div>
   <div id="metawrap"></div>
   <div id="metanote"></div>
@@ -2362,7 +2369,8 @@ const EVENT_Q = {
            // CORRECTED 2026-09-23: was "when the circles filled" - since B3 a circle hurts from its own landing for ROCK_LIVE (0.35 s) and is drawn filled for exactly that window (section C, section_C_2026-09-22)
            'Where you were standing while the circles were filled',
            'How fast you were firing',
-           'Your difficulty setting'],
+           // PL-M1 2026-10-15: P1 (review_DIAL.md F6) - this wrong option was "Your difficulty setting"; no player text calls the dial a difficulty setting since the DIAL deploy. The new one is wrong by the why below (a rock catches you only inside its circle while it is filled; the hit test, eventHits and P.inv, reads no lifeline) and uses the game's own word "lifelines"; stem, other options, correct and why unchanged (build_POLISH_2026-10-15)
+           'How many lifelines you still had'],
     correct: 1,
     // CORRECTED 2026-09-22: was "cannot be absorbed, only avoided" (USGS names rockfall measures that lessen the hazard; armour cuts the hit in the game) (sweep 3, sweep3_2026-09-22/source_verification.md E1b E1b-Q; round 2: F6, standing in a circle is necessary for a hit, not the only decider (P.inv grace), sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     // CORRECTED 2026-09-23: was "inside its circle when it lands" - a circle hurts while it is drawn filled, from its rock landing for ROCK_LIVE (0.35 s) (B3); USGS sentence and tag unchanged (section C, section_C_2026-09-22)
@@ -3282,7 +3290,8 @@ let introSeen = {}                        // hazard kinds already introduced thi
 // DL-M2 2026-10-14: growth pressure removed (PLAN_DIAL D2, D9): its store (PRESS_KEY 'compoundPressureV1', pressStore, pressSave), the PRESSURE state and PRESS_MUL are gone; the key is no longer read and is left in place in the browser; nothing else read them (build_DIAL_2026-10-14)
 // P6-A1 2026-09-25: the card screen's Sources switch is remembered per browser - its own store on the compoundOnboardV1 pattern (JSON under one key, every read and write in try/catch). Not a field of compoundOnboardV1 itself: onboardStore() keeps only intro and hints, and onboardMark() writes that back, so the next hint would erase it. Absent, unreadable or throwing storage gives false (hidden, the default), and the switch then holds for the page load only (build_P6_2026-09-25)
 const SRC_KEY = 'compoundSourcesV1'
-function srcStore() { try { return !!JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown } catch (e) { return false } }
+// PL-FIX 2026-10-15: FX-E (check_POLISH.md F5) - a stored `shown` that is not true or false now gives false (off, the default), as plainStore() falls back for a value that is not a boolean; a stored true still gives on. It read "return !!JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown", so "false", 1 or "no" turned the switch on (build_POLISH_2026-10-15 fix round)
+function srcStore() { try { const v = JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown; return typeof v === 'boolean' ? v : false } catch (e) { return false } }
 function srcSave(on) { try { localStorage.setItem(SRC_KEY, JSON.stringify({ shown: on })) } catch (e) {} }
 let srcShown = srcStore()                 // Sources switch on the card bar: true shows every card's source line
 const banished = {}                       // measure id -> ruled out for this run
@@ -3744,6 +3753,33 @@ function trapTab(e, box) {
   const i = f.indexOf(document.activeElement)
   f[i < 0 ? (e.shiftKey ? f.length - 1 : 0) : (i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus()
 }
+// PL-M3 2026-10-15: P3 (b) (rereview_DIAL.md (c) 4) - Space presses a focused start-screen button once, as the debrief's spaceClicks
+// does (mountDebrief): the game's first keydown listener cancels Space page-wide, so the browser never clicks on it; a repeat keydown
+// does not click again. One listener on #start, so the buttons the start screen rebuilds (the dial, the switch, the shop, the dev
+// door) need no binding of their own. It does nothing while #start is gone (a run, the card screen, the report), so a button left
+// focused there is never pressed by a dash. The window listeners still get the key afterwards, as before: doDodge returns at once,
+// because the sim is paused behind the start screen; Enter and every other key are not touched (build_POLISH_2026-10-15)
+$('start').addEventListener('keydown', e => {
+  if (e.key !== ' ' || $('start').classList.contains('gone')) return
+  const b = e.target
+  if (!b || b.tagName !== 'BUTTON') return
+  e.preventDefault()
+  if (!e.repeat) b.click()
+})
+// PL-FIX 2026-10-15: FX-D (check_POLISH.md F3) - the same for the card screen: Space presses a focused button inside #cards once
+// (the card bar's Reroll, Banish, Sources and Combos - every button the screen has), and a repeat keydown does not press it again.
+// The cards themselves are not buttons (div.card, chosen by click or tap; no tabindex), so Space never takes a card. It does
+// nothing while #cards is not shown, or while a hint card or How to play is open (their own keydown listener keeps those keys).
+// No button inside #cards has a Space handler of its own, so none is pressed twice. The window listeners still get the key
+// afterwards, as before: doDodge returns at once, because offerCards() pauses the sim; Enter and every other key are not
+// touched (build_POLISH_2026-10-15 fix round)
+$('cards').addEventListener('keydown', e => {
+  if (e.key !== ' ' || !$('cards').classList.contains('show') || hintOpen || !$('howto').hidden) return
+  const b = e.target
+  if (!b || b.tagName !== 'BUTTON') return
+  e.preventDefault()
+  if (!e.repeat) b.click()
+})
 
 // ---- Learning: plain versions (S6) --------------------------------------------------------------
 // CORRECTED 2026-09-23: comment made true - the rows it said were held without an entry got entries in section C, except six kept as is (section C round 2, section_C_2026-09-22)
@@ -4126,11 +4162,26 @@ function offerMeta() {
   // The layer's own argument, said once, above the nodes. Every node below is one of the
   // ten measures held permanently rather than picked mid-run, and the loop it sits in is a
   // named one — the citation is the file's own, already carried by the run report.
+  // PL-FIX 2026-10-15: FX-B (check_POLISH.md F7) - the Building Back Better sentence now says what the run report's budget row says
+  // (FX-A, same words): what Sendai para. 19(k) says - in recovery it is critical to prevent the creation of and to reduce disaster
+  // risk, by "Building Back Better" - and no more; it no longer says the framework names this loop, or anything about restoring
+  // the last disaster's vulnerability (so "the loop it sits in is a named one" above no longer describes the text). The first
+  // and last sentences and <b>Building Back Better</b> are unchanged. It read "What a run protected is what pays for them —
+  // recovery spent reducing the next disaster rather than restoring the last one’s vulnerability, which the Sendai Framework
+  // names in its own recovery clause: <b>Building Back Better</b>." (build_POLISH_2026-10-15 fix round)
+  // PL-FIX2 2026-10-15: FX-G (review_POLISH.md M1) - one sentence added after the Building Back Better one, the same words as the
+  // run report's budget row: Sendai para. 19(k) names two means, "by "Building Back Better" and increasing public education and
+  // awareness of disaster risk", so the note no longer reads as if Building Back Better were the whole method. "It also says to do
+  // both by" is the source's "by ... and" (the same two aims, the same "by"); "helping people learn and know more about disaster
+  // risk" is "increasing public education and awareness of disaster risk" (learn = education, know = awareness, more = increasing,
+  // people = public). Every other word, <b>Building Back Better</b> and the first and last sentences are unchanged
+  // (build_POLISH_2026-10-15 fix round 2)
   $('metanote').innerHTML = st.funds || Object.keys(st.lv).length
     ? 'Each of these is one of the ten measures, <b>held permanently instead of picked mid-run</b>. ' +
-      'What a run protected is what pays for them — recovery spent reducing the next disaster ' +
-      'rather than restoring the last one’s vulnerability, which the Sendai Framework names in ' +
-      'its own recovery clause: <b>Building Back Better</b>. Every node has a ceiling, and the ' +
+      'What a run protected is what pays for them. That way, recovery cuts the risk of the next ' +
+      'disaster. The Sendai Framework says it is critical to do this, and to prevent new risk. It ' +
+      'says to do both by <b>Building Back Better</b>. It also says to do both by helping people ' +
+      'learn and know more about disaster risk. Every node has a ceiling, and the ' +
       'budget is released by the debrief, not by surviving.'
     : 'Empty for now — a run sets how big its recovery budget is, and the debrief after it ' +
       'decides how much of that you keep. Each node here is one of the ten measures, held ' +
@@ -8461,14 +8512,20 @@ function renderReport() {
             (DIFF.pay && DIFF.pay !== 1 ? ` · ${DIFF.name} step ×${DIFF.pay}` : ''),
             // P6-B8 2026-09-25: F4 - S-B2 verbatim (ruling R-S2): the sentence names all four terms runFunds adds in die() (time, lifelines standing, works built, compound events absorbed); a second sentence names the DIFFICULTY setting's multiplier, shown only when DIFF.pay is set and not 1, the title's own condition above. It read "Time held, lifelines standing and works built set the SIZE of it: <b>${runFunds}</b>. " (build_P6_2026-09-25)
             // BS-M5 2026-09-30: a fifth term, the true boss's bonus (strings_BS.md S-B4 rewrite #1 verbatim); it read "Time held, lifelines still standing, works built and compound events absorbed set the SIZE of it" (build_BS_2026-09-30)
-            `Time held, lifelines still standing, works built, compound events absorbed and the boss absorbed set the SIZE of it` +
+            // PL-FIX 2026-10-15: FX-F (check_POLISH.md F8) - the next line's "7.97 on both scorers" and "6.88" are the Drafting Builder's two scorers (r4_fk.py's counting and fx_score.py's; strings_POLISH.md PL-M2 S1). The Checker's c3_fk.py gives 7.97 -> 6.88 on its HEUR method and 7.35 -> 6.14 on its DICT method (check_POLISH.md C3); comment only (build_POLISH_2026-10-15 fix round)
+            // PL-M2 2026-10-15: P2 (rereview_DIAL.md N2) - this sentence graded 7.97 on both scorers alone (as on the Planned step, where DIFF.pay is 1); the least change to grade 6.88: one "absorbed" dropped (it still covers both: compound events and the boss) and "the SIZE of it" -> "its SIZE". The same five runFunds terms (die()); it read "Time held, lifelines still standing, works built, compound events absorbed and the boss absorbed set the SIZE of it" (build_POLISH_2026-10-15)
+            `Time held, lifelines still standing, works built, compound events and the boss absorbed set its SIZE` +
             (DIFF.pay && DIFF.pay !== 1 ? `. The ${DIFF.name} step pays ${DIFF.pay} times that: <b>${runFunds}</b>. ` : `: <b>${runFunds}</b>. `) +   // DL-FIX2 2026-10-15: FX9, see the title above (build_DIAL_2026-10-14 fix round 2)
             (dN && quizRight
               ? `What you keep is what you could explain — <b>${quizRight} of ${dN}</b> right released <b>${learnFunds}</b>. `
               // CORRECTED 2026-09-23: was "the questions went unanswered" - this branch runs whenever quizRight is 0 and questions were asked, including a debrief answered in full and all wrong (if (right) { quizRight++; debrief.right++ } else quizWrong++); the closing citation sentence is unchanged (section C round 2, section_C_2026-09-22)
-              : dN ? `Nothing was released: no question was answered right, and this budget is not bought by surviving. `
+              // PL-M2 2026-10-15: P2 - split in two (7.61 -> 4.64 on both scorers); it read "Nothing was released: no question was answered right, and this budget is not bought by surviving. " (build_POLISH_2026-10-15)
+              : dN ? `Nothing was released: no question was answered right. This budget is not bought by surviving. `
                    : `There was nothing to ask this run, so all of it was released. `) +
-            'It becomes standing capacity on the start screen: recovery spent reducing the next disaster rather than restoring the last one’s vulnerability. That loop is the framework’s own recovery clause: Building Back Better. (Sendai Framework ¶19(k), read 2026-08-30)')
+            // PL-M2 2026-10-15: P2 - the closing sentences, each now grade 7 or below on both scorers (they graded 15.64 and 8.01). What is released goes to the recovery budget on the start screen (bankShare / releaseFunds -> metaStore().funds, shown by offerMeta), where it buys META nodes, "held permanently" (METALV, every run). The paraphrase stays inside Sendai para. 19(k) (prevent the creation of and reduce disaster risk by "Building Back Better", in recovery); the term and the citation are unchanged. It read "It becomes standing capacity on the start screen: recovery spent reducing the next disaster rather than restoring the last one’s vulnerability. That loop is the framework’s own recovery clause: Building Back Better." (build_POLISH_2026-10-15)
+            // PL-FIX 2026-10-15: FX-A (check_POLISH.md F1, F4) - the last two sentences replaced by two that say only what Sendai para. 19(k) says: in the post-disaster recovery phase "it is critical to prevent the creation of and to reduce disaster risk by" Building Back Better. "do this" is the sentence before it (recovery cuts the risk of the next disaster: "to reduce disaster risk"); "prevent new risk" is "prevent the creation of ... disaster risk"; "do both by" is "by". Nothing about putting an old risk back, and no claim that the framework names this loop. The first two sentences, the term and the citation are unchanged; each new sentence is grade 7 or below on both of c3_fk.py's methods. It read "It does not put the old risk back. That loop is what the framework calls Building Back Better." (build_POLISH_2026-10-15 fix round)
+            // PL-FIX2 2026-10-15: FX-G (review_POLISH.md M1) - one sentence added before the citation, the same words as the start-screen meta note ($('metanote')): Sendai para. 19(k) names two means, "by "Building Back Better" and increasing public education and awareness of disaster risk"; "It says to do both by Building Back Better." alone read as the whole method. "It also says to do both by" is the source's "by ... and"; "helping people learn and know more about disaster risk" is "increasing public education and awareness of disaster risk" (learn = education, know = awareness, more = increasing, people = public). It follows all three branches above, like the rest of this literal; every other word, the term and the citation are unchanged; the new sentence grades 6.88 on c3_fk.py (DICT and HEUR), r4_text.py (V3 and VG) and quiz_audit.py's fk() (6.9) (build_POLISH_2026-10-15 fix round 2)
+            'You can spend what is released on the start screen, on measures you keep for every run. That way, recovery cuts the risk of the next disaster. The Sendai Framework says it is critical to do this, and to prevent new risk. It says to do both by Building Back Better. It also says to do both by helping people learn and know more about disaster risk. (Sendai Framework ¶19(k), read 2026-08-30)')
         })()
       : '') +
     row('#8fe3ff', 'Evacuate',
@@ -9787,6 +9844,22 @@ function offerPlain() {
   // DL-FIX 2026-10-15: FX4 (check_DIAL.md F5) - the note names messages too: PLAIN's 104 entries are 58 card texts and 46 pop-up messages and report lines; GLOSS's 15 lines are the explanations; two sentences for grade 7 or below (fx_score.py) (build_DIAL_2026-10-14 fix round)
   $('plainnote').textContent = 'Many cards and messages in plainer English. Some key words get short explanations.'
 }
+// PL-S3 2026-10-15: P6 (PLAN_POLISH; the user, 2026-10-15) - the Sources switch on the start screen, under the plain-language switch and on offerPlain()'s pattern: the button is made once and then updated in place, so keyboard focus stays on it after a press; aria-pressed; its state word in an aria-hidden span, so the accessible name is "Sources", as on the card bar. It reads and writes the card bar's own state - srcShown, saved by srcSave() under SRC_KEY - so a press here shows on the next card screen (offerCards() sets #cards.srcon from srcShown at every opening) and a press on the card bar shows here when the start screen is drawn again (the three render calls below). Nothing stored, or storage that throws: off (srcStore()). Space presses it through PL-M3's #start listener. The card bar's own button is unchanged. Its note does not change with the state (build_POLISH_2026-10-15)
+function offerSrc() {
+  const wrap = $('srcwrap')
+  let b = wrap.querySelector('button')
+  if (!b) {
+    b = document.createElement('button')
+    b.onclick = () => { srcShown = !srcShown; srcSave(srcShown); offerSrc() }
+    wrap.appendChild(b)
+  }
+  b.className = 'dbtn' + (srcShown ? ' on' : '')
+  b.innerHTML = `Sources<span aria-hidden="true">: ${srcShown ? 'on' : 'off'}</span>`
+  b.setAttribute('aria-pressed', srcShown ? 'true' : 'false')
+  // PL-FIX 2026-10-15: FX-C (check_POLISH.md F2) - the first sentence is now true of every card kind: the rebuild card's tier line says "Trade-off" but it has no source line (offerCards, rbKind), and only measure cards and the TRADEOFFS cards print div.src. The second sentence is unchanged. It read "Shows the source line on measure and trade-off cards." (build_POLISH_2026-10-15 fix round)
+  // PL-FIX2 2026-10-15: FX-H (review_POLISH.md N2) - "some key-word explanations" -> "some explanations of key words", the Plain English note's two words (offerPlain(): "Some key words get short explanations."); "some" still counts the explanations (only the glosses marked withsrc go with the Sources switch, CSS #cards:not(.srcon) .card .gloss.withsrc, and glosses print only with Plain English on, glossHtml()); the first sentence is unchanged; 7.19 -> 5.81 on quiz_audit.py's counter, 5.86 -> 5.81 on c3_fk.py (build_POLISH_2026-10-15 fix round 2)
+  $('srcnote').textContent = 'Shows the source line on cards that have one. With Plain English on, it also shows some explanations of key words.'
+}
 
 // The difficulty row sits above the places, because it changes what choosing a place means.
 // DL-FIX2 2026-10-15: FX10 (review_DIAL.md F2) - the four buttons are made once (the first call) and afterwards updated in place, as offerPlain() above does, so a pressed button stays in the page and keeps keyboard focus; each carries aria-pressed true / false; class and colour styles as before, so the look does not change; the note is rewritten only when its text changes, so the live region (#diffnote, aria-live polite) speaks only on a real change (build_DIAL_2026-10-14 fix round 2)
@@ -9975,14 +10048,16 @@ if (DEV) initDev()
 $('again').onclick = () => { AU.start(PLACE.id); $('over').classList.remove('show'); reset(); last = 0 }
 $('elsewhere').onclick = () => {
   $('over').classList.remove('show'); $('start').classList.remove('gone')
-  offerPlaces(); offerDiffs(); offerPlain(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
+  // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
+  offerPlaces(); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   reset(); paused = true
 }
 // P01 2026-09-23: the door - the shop before the next run: "Somewhere else"'s body, plus the AU.start that "Same place again" makes, with this place kept among the three so the next run can start here (build_F_2026-09-23)
 $('spendfirst').onclick = () => {
   AU.start(PLACE.id)
   $('over').classList.remove('show'); $('start').classList.remove('gone')
-  offerPlaces(PLACE.id); offerDiffs(); offerPlain(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
+  // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
+  offerPlaces(PLACE.id); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   reset(); paused = true
 }
 // P01 2026-09-23: set from the shop's own test (offerMeta's canBuy, verbatim), so the door opens only when something can be bought - the fast path then says what is unspent and the third button shows; otherwise the end screen is exactly as before. `banked` is false while the debrief still holds this run's budget (build_F_2026-09-23)
@@ -10004,7 +10079,8 @@ if (COARSE) {
   $('ctrlspace').style.display = 'none'
   $('ctrlevac').innerHTML = '<b>the EVAC button</b>'
 }
-offerPlaces(); offerDiffs(); offerPlain(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
+// PL-S3 2026-10-15: offerSrc() added after offerPlain(): the start screen's Sources switch, drawn at boot from the stored state (build_POLISH_2026-10-15)
+offerPlaces(); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
 reset(PLACE_IDS[0])
 paused = true          // the sim idles behind the place-select rather than running a ghost run
 requestAnimationFrame(frame)
