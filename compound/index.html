@@ -431,7 +431,9 @@
      the start screen 2208px tall inside a 720px viewport, and the place cards, which are
      the control that STARTS the run, began 946px down. Each row that wraps states its own
      width here, at `#start div#x` specificity, so the declared number is the one that runs. */
-  #start div#diffwrap, #start div#presswrap{max-width:640px}
+  /* DL-M2 / DL-M3 2026-10-14: #presswrap left with the growth-pressure row; the plain-language switch and its note take its width (build_DIAL_2026-10-14) */
+  /* DL-FIX 2026-10-15: FX6 (check_DIAL.md F7) - #plainnote taken out of the 640px rule below, so "#start div{max-width:430px}" holds it in the same column as #diffnote, as the old #pressnote was; #plainwrap keeps 640px (build_DIAL_2026-10-14 fix round) */
+  #start div#diffwrap, #start div#plainwrap{max-width:640px}
   #start div#metawrap{max-width:720px}
   #start div#metanote{max-width:640px}
   #start div#metaearn{max-width:640px}
@@ -450,7 +452,10 @@
     border-color:rgba(126,231,135,.45)!important;color:#7ee787!important}
   .devbtn:hover{opacity:.9}
   .devbtn.on{opacity:1;background:rgba(126,231,135,.08)}
-  #diffnote{font-size:12px;opacity:.6;margin:10px 0 16px;min-height:2.6em;line-height:1.5}
+  /* DL-FIX 2026-10-15: FX3 (check_DIAL.md F3) - min-height 2.6em -> 4.5em, three lines at line-height 1.5, so the screen below does not move when the step changes: the longest step notes after FX2 (N-1 192 and N-4 193 characters) are estimated at 3 lines in the 430px column at 12px (scratchpad dial_fix/fx_score.py, 0.50-0.55 em per character, no browser); the phone rule further down holds 4 (build_DIAL_2026-10-14 fix round) */
+  #diffnote{font-size:12px;opacity:.6;margin:10px 0 16px;min-height:4.5em;line-height:1.5}
+  /* DL-FIX 2026-10-15: FX1 (check_DIAL.md F1; PLAN_DIAL D12) - the line above the dial, in #metahead's type (11px, weight 800, uppercase, .08em, opacity .55) but not a fold: no pointer, no hover. Its gap below is padding, because "#start div{margin:auto}" outranks a bare id (build_DIAL_2026-10-14 fix round) */
+  #diffhead{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.55;padding:0 0 8px}
   .card.place{width:272px;text-align:left}
   .card.place .prev{height:78px;margin:-18px -18px 13px;border-radius:14px 14px 0 0;
     background-size:cover;background-position:center;position:relative;overflow:hidden}
@@ -538,11 +543,10 @@
   #combos .ph .pm{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
   #combos .pd .pm{background:currentColor}
 
-  /* growth-pressure dial on the start screen */
-  #presswrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
-  #pressnote{font-size:11.5px;opacity:.55;margin:6px 0 14px;min-height:2.4em;line-height:1.5}
-  /* GP-FIX 2026-09-29 (the Lead, design layer; verify_GP F6): at 375 px three of the four notes take 3 lines and Planned 2, so the start screen moved by a line when the dial changed; room for 3 lines below 480 px (build_GP_2026-09-29) */
-  @media (max-width:480px){#pressnote{min-height:4.5em}}
+  /* DL-M2 2026-10-14: the growth-pressure row's rules (#presswrap, #pressnote and its 480 px min-height) went with the row (build_DIAL_2026-10-14) */
+  /* DL-M3 2026-10-14: the plain-language switch under the dial, on the old #presswrap / #pressnote spacing; its note never changes, so it needs no min-height (build_DIAL_2026-10-14) */
+  #plainwrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
+  #plainnote{font-size:11.5px;opacity:.55;margin:6px 0 14px;line-height:1.5}
 
   /* institutional capacity: the bounded meta layer, bought with recovery budget */
   /* The capacity layer folds (2026-09-01). On a phone the start screen ran 2039px before
@@ -672,7 +676,7 @@
     #over .two{flex-direction:column}
     #start h1{font-size:24px}
     #start p{font-size:12.5px}
-    #diffnote{font-size:11.5px;min-height:3.4em}
+    #diffnote{font-size:11.5px;min-height:6em}   /* DL-FIX 2026-10-15: FX3 (check_DIAL.md F3) - 3.4em -> 6em, four lines at line-height 1.5: N-1 and N-4 after FX2 (192 and 193 characters) are estimated at 4 lines in a 335px column at 11.5px (fx_score.py) (build_DIAL_2026-10-14 fix round) */
     .dbtn{padding:7px 13px;font-size:12px}
     #season b{font-size:19px}
     #flash b{font-size:15px}
@@ -909,10 +913,14 @@
     to evacuate when something is already on top of you. That is the whole control scheme.<br><br>
     <b>Risk is local.</b> Choose where you are. The hazards, the order they arrive in, and
     which of the ten measures is worth taking first are not the same in any two of these.</p>
-  <div id="diffwrap"></div>
-  <div id="diffnote"></div>
-  <div id="presswrap"></div>
-  <div id="pressnote"></div>
+  <!-- DL-FIX 2026-10-15: FX1 (check_DIAL.md F1; PLAN_DIAL D12, the user's choice of one line above the dial) - says what the four step names describe; it comes before #diffwrap in the markup, so a screen reader reads it, then the four buttons, then the step note (build_DIAL_2026-10-14 fix round) -->
+  <div id="diffhead">How fast does this place grow?</div>
+  <!-- DL-FIX2 2026-10-15: FX10 (review_DIAL.md F2) - the four step buttons are one group named by the line above (role="group", aria-labelledby="diffhead"), and the step note is a polite live region, so a screen reader hears the note change after a press (build_DIAL_2026-10-14 fix round 2) -->
+  <div id="diffwrap" role="group" aria-labelledby="diffhead"></div>
+  <div id="diffnote" aria-live="polite"></div>
+  <!-- DL-M2 / DL-M3 2026-10-14: the growth-pressure row (#presswrap, #pressnote) replaced by the plain-language switch and its note, filled by offerPlain() (build_DIAL_2026-10-14) -->
+  <div id="plainwrap"></div>
+  <div id="plainnote"></div>
   <div id="metahead"></div>
   <div id="metawrap"></div>
   <div id="metanote"></div>
@@ -3271,19 +3279,7 @@ let endReason = null                                  // 'services' when the fai
 let learnFunds = 0                                    // ...and what its debrief added on top
 let METALV = {}                                       // institutional-capacity levels, cached from storage (hot paths read this)
 let introSeen = {}                        // hazard kinds already introduced this run
-// F3d 2026-09-23: growth pressure is remembered between sessions (part 4 P11a) - its own store on the learnStore pattern; absent, unreadable or throwing storage gives 0 (Planned), the old start, and a stored value is clamped to the four settings as the dev hook's setPressure clamps it. The multipliers are untouched (build_F_2026-09-23)
-// GP-FIX 2026-09-29: "The multipliers are untouched" above is true of build F only; GP-M1 below replaced them with PRESS_MUL (verify_GP F9; build_GP_2026-09-29 fix round)
-const PRESS_KEY = 'compoundPressureV1'
-function pressStore() { try { return Math.max(0, Math.min(3, +JSON.parse(localStorage.getItem(PRESS_KEY) || '0') | 0)) } catch (e) { return 0 } }
-function pressSave(n) { try { localStorage.setItem(PRESS_KEY, JSON.stringify(n)) } catch (e) {} }
-let PRESSURE = pressStore()               // growth-pressure dial (start screen; survives runs like DIFF)
-// GP-M1 2026-09-29: growth pressure's three multipliers, one row per setting (PRESS order), replacing the three linear formulas (1 + 0.18 / 0.22 / 0.10 * PRESSURE) - Planned stays 1 on all three, Growing keeps the old formulas' values at PRESSURE 1, Booming and Unchecked are the user's values (PLAN_GP G1, final table); read by reset (xp, exposure) and the spawn rate in update (spawn) (build_GP_2026-09-29; GP-FIX 2026-09-29: "resetRun" became "reset", the function that reads them, function reset(placeId) - verify_GP F7)
-const PRESS_MUL = [
-  { spawn: 1,    xp: 1,    exposure: 1 },      // Planned
-  { spawn: 1.18, xp: 1.22, exposure: 1.10 },   // Growing
-  { spawn: 1.4,  xp: 1.5,  exposure: 1.25 },   // Booming
-  { spawn: 2,    xp: 2.1,  exposure: 2 },      // Unchecked
-]
+// DL-M2 2026-10-14: growth pressure removed (PLAN_DIAL D2, D9): its store (PRESS_KEY 'compoundPressureV1', pressStore, pressSave), the PRESSURE state and PRESS_MUL are gone; the key is no longer read and is left in place in the browser; nothing else read them (build_DIAL_2026-10-14)
 // P6-A1 2026-09-25: the card screen's Sources switch is remembered per browser - its own store on the compoundOnboardV1 pattern (JSON under one key, every read and write in try/catch). Not a field of compoundOnboardV1 itself: onboardStore() keeps only intro and hints, and onboardMark() writes that back, so the next hint would erase it. Absent, unreadable or throwing storage gives false (hidden, the default), and the switch then holds for the page load only (build_P6_2026-09-25)
 const SRC_KEY = 'compoundSourcesV1'
 function srcStore() { try { return !!JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown } catch (e) { return false } }
@@ -3345,13 +3341,7 @@ function reset(placeId) {
   volleySmall = 0; g5Opened = false; for (const k in pairPulsed) delete pairPulsed[k]; for (const k in pairPulse) delete pairPulse[k]
   P.fuseHaste = 0
   lv.pulse = 1
-  // The dial pays out the same way the place does: what the pressure built (more to
-  // collect), and what it costs (more arrives, and everything takes more off you).
-  // GP-M1 2026-09-29: the two multipliers read the setting's row of PRESS_MUL (was 1 + 0.22 * PRESSURE and 1 + 0.10 * PRESSURE) (build_GP_2026-09-29)
-  if (PRESSURE > 0) {
-    P.xpMul = (P.xpMul || 1) * PRESS_MUL[PRESSURE].xp
-    P.exposure = (P.exposure || 1) * PRESS_MUL[PRESSURE].exposure
-  }
+  // DL-M2 2026-10-14: growth pressure's xp and exposure terms removed (PLAN_DIAL D2); at Planned (PRESSURE 0) the block they sat in never ran, so P.xpMul and P.exposure come out of reset exactly as they did there (build_DIAL_2026-10-14)
   // Institutional capacity: bounded, bought between runs with what earlier runs protected.
   P.max += 8 * (METALV.reserves || 0); P.hp = P.max
   P.spd *= 1 + 0.04 * (METALV.routes || 0)
@@ -3474,7 +3464,8 @@ const HAZARD_IDS = Object.keys(HAZARDS)
 // of the tuning: T stays the single source and these scale it at the point of use.
 const DIFFS = {
   learn: {
-    name: 'Learning', short: 'Learn', col: '#7ee787',
+    // DL-M1 2026-10-14: the dial's first step - display name Learning -> Planned (name and the unused short), id, numbers and colour unchanged (PLAN_DIAL D1, D2) (build_DIAL_2026-10-14)
+    name: 'Planned', short: 'Planned', col: '#7ee787',
     // CORRECTED 2026-09-23: "A short, readable run." dropped - Learning measured the longest mode (comment below); replaced by what DIFFS.learn sets, dmg 0.60 and warn 1.9 (section C, section_C_2026-09-22)
     // CORRECTED 2026-09-23: "you get more warning" now names its exception - DIFF.warn scales only fireEvent's warnings; a compound event's arrival (T.bossWarn), its charge wind-up (T.bossWind) and its siege strikes (warn: 1.05) keep their times on every difficulty (section C round 2, section_C_2026-09-22)
     // CORRECTED 2026-09-23: "compound events" became the game's own words for them - in play a compound event is announced as "Several hazards, arriving together." (spawnBoss), and the term is defined only in the run report ("The word for several of them arriving together is a compound event"), while this blurb is on the start screen before any run (section C round 3, section_C_2026-09-22)
@@ -3482,7 +3473,10 @@ const DIFFS = {
     // CORRECTED 2026-09-23: "Hazards build up more slowly." and "Hits are softer" held only for the first part of a run - Learning's rampTime() knee is at 210 s (3:30; T.hardAt * DIFF.len * T.pace), after which DIFF.hard 11 makes its clock grow faster than any other setting's (it passes Steady's at 3:43.5 and Exposed's at 4:26.5), and its hit multiplier (1 + rampTime() / T.dmgRamp) * DIFF.dmg passes Steady's at 4:38.4 (never Pressed's or Exposed's); both now sit under "At first,", "Later, it gets hard quickly." says what follows, and the warning clause (now its own sentence) and "Many cards in plainer English." are unchanged (section C round 5, section_C_2026-09-22)
     // DX9 2026-09-23: Steady's crossing in the line above corrected to 3:43.5 (223.548 s), the same figure as the D10 comment on DIFFS - a cascade of review F12; the line's other figures are not part of this round; comment only (build_D_2026-09-22 fix round)
     // GP 2026-09-29: Exposed's crossing in the line two above recomputed after GP-M2 changed Exposed's ramp and len - 4:14.3 -> 4:26.5 (266.538 s); "never Pressed's or Exposed's" rechecked and still holds at their GP-M2 dmg 1.5 and 2 (no crossing in 0-3600 s, and both grow faster than Learning's after that) (scratchpad gp_build/gp_ramp.js); the Steady figures are not part of GP; comment only (build_GP_2026-09-29)
-    blurb: 'At first, hazards build up more slowly and hits are softer. Later, it gets hard quickly. You get more warning, except from several hazards arriving together. Many cards in plainer English.',
+    // DL-M4 2026-10-14: the step note, strings_DIAL.md N-1 - the Learning blurb with its last sentence, "Many cards in plainer English.", moved to the plain-language switch (PLAN_DIAL D5; DL-M3); every other word unchanged (build_DIAL_2026-10-14)
+    // DL-FIX 2026-10-15: FX2 (check_DIAL.md F2), for the same wording on all three steps that carry it - the warning sentence split in two, the exception kept: DIFF.warn is read only in fireEvent (its warn and warnBought lines); a compound event's arrival (T.bossWarn), its wind-up (T.bossWind), its siege strikes (warn: 1.05) and the true boss's lead (T.tbossLead) have no DIFF factor, so they are the same as on Growing; the game's phrase "several hazards arriving together" kept (build_DIAL_2026-10-14 fix round)
+    // DL-FIX2 2026-10-15: FX8 (review_DIAL.md F1) - "But for several hazards arriving together, the warning ..." could be read as the idiom "but for" (= "except for"), which reverses it; now "But the warning for several hazards arriving together is the same as on Growing.", the same claim (DIFF.warn is read only in fireEvent's warn and warnBought lines; T.bossWarn, T.bossWind, the siege strike's warn: 1.05, T.tbossLead and T.tbLaneWarn carry no DIFF factor) and the game's phrase "several hazards arriving together" in the same form; the first three sentences unchanged (build_DIAL_2026-10-14 fix round 2)
+    blurb: 'At first, hazards build up more slowly and hits are softer. Later, it gets hard quickly. You get more warning. But the warning for several hazards arriving together is the same as on Growing.',
     // len went 2.0 -> 1.0 when T.pace landed (2026-09-04). pace multiplies the knee's real-time
     // position by itself, and Learning's knee was already the furthest out, so it compounded twice
     // and the gentlest mode measured 8:49 against its own blurb's "a short, readable run". At 1.0 it
@@ -3493,25 +3487,36 @@ const DIFFS = {
     levelHeal: 0.08, tbossAt: 240,
   },
   steady: {
-    name: 'Steady', short: 'Steady', col: '#57c7ff',
-    blurb: 'The tuned run, and a longer one.',
+    // DL-M1 2026-10-14: display name Steady -> Growing, the first-time default (PLAN_DIAL D7); DL-M4: the step note, strings_DIAL.md N-2 (was "The tuned run, and a longer one."): ramp, dmg, spawn, warn and llDmg are 1 here, so those five of T's numbers run unscaled; len 1.25 still moves the rampTime() knee to 262.5 s (T.hardAt 105 x len 1.25 x T.pace 2), against 210 s for T's own hardAt x pace (build_DIAL_2026-10-14)
+    // DL-FIX 2026-10-15: FX7 (check_DIAL.md F8) - the line above said "so T's numbers run unscaled"; len 1.25 is not 1, so it now names the five factors that are 1 and the knee that len moves; comment only (build_DIAL_2026-10-14 fix round)
+    name: 'Growing', short: 'Growing', col: '#57c7ff',
+    // DL-FIX 2026-10-15: FX5 (check_DIAL.md F6) - "The tuned run." -> "The standard run." ("tuned" is jargon for this reader); "at the game's normal level" kept, true as above (build_DIAL_2026-10-14 fix round)
+    blurb: 'The standard run. Hazards, hits and warnings are at the game\'s normal level.',
     ramp: 1, dmg: 1, spawn: 1, warn: 1, len: 1.25, pay: 1.3,
     fail: 3, llDmg: 1,
     levelHeal: 0.05, tbossAt: 210,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
   },
   pressed: {
-    name: 'Pressed', short: 'Pressed', col: '#ffd166',
+    // DL-M1 2026-10-14: display name Pressed -> Booming (PLAN_DIAL D1, D2) (build_DIAL_2026-10-14)
+    name: 'Booming', short: 'Booming', col: '#ffd166',
     // CORRECTED 2026-09-23: "less warning" now names its exception, as the Learning blurb does - DIFF.warn scales only fireEvent's warnings; a compound event's arrival (T.bossWarn), its charge wind-up (T.bossWind) and its siege strikes (warn: 1.05) keep their times on every difficulty (section C round 3, section_C_2026-09-22)
-    blurb: 'Faster, harder, and a longer haul before the late clock bites. You get less warning, except from several hazards arriving together.',
+    // DL-M4 2026-10-14: the step note, strings_DIAL.md N-3 - "than on Growing" names the comparison (its rampTime() clock and its hit multiplier (1 + rampTime() / T.dmgRamp) * DIFF.dmg are above Growing's at every second, scratchpad dial_build/test_dial.js, section E, 0-3600 s by 0.001 s); the late-clock clause dropped (plain reading; nothing it said is contradicted); the warning sentence verbatim (build_DIAL_2026-10-14)
+    // DL-FIX 2026-10-15: FX2 (check_DIAL.md F2) - the warning sentence split in two, the exception kept, as on Planned above (DIFF.warn only in fireEvent) (build_DIAL_2026-10-14 fix round)
+    // DL-FIX2 2026-10-15: FX8 (review_DIAL.md F1) - the exception sentence reworded as on Planned above, same claim; the first two sentences unchanged (build_DIAL_2026-10-14 fix round 2)
+    blurb: 'Hazards build up faster and hit harder than on Growing. You get less warning. But the warning for several hazards arriving together is the same as on Growing.',
     // GP-M2 2026-09-29: ramp 1.35 -> 1.5, dmg 1.20 -> 1.5, spawn 1.15 -> 1.35, warn 0.78 -> 0.7, len 1.55 -> 1.6, llDmg 1.2 -> 1.25 (the user's list, PLAN_GP G3); pay 1.7 and fail 3 kept (build_GP_2026-09-29)
     ramp: 1.5, dmg: 1.5, spawn: 1.35, warn: 0.7, len: 1.6, pay: 1.7,
     fail: 3, llDmg: 1.25,
     levelHeal: 0.03, tbossAt: 180,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
   },
   exposed: {
-    name: 'Exposed', short: 'Exposed', col: '#ff4d5e',
+    // DL-M1 2026-10-14: display name Exposed -> Unchecked (PLAN_DIAL D1, D2) (build_DIAL_2026-10-14)
+    name: 'Unchecked', short: 'Unchecked', col: '#ff4d5e',
     // CORRECTED 2026-09-23: "Everything arrives sooner" became "Hazards build up faster" - arrivals (liveHazards, events, compound events, works, pickups, surges) run on the unscaled clock t, and DIFF.ramp enters only rampTime(), which drives the spawn rate and hazard health, speed and damage; "tells you later" became "You get less warning", with the exception the other blurbs name (section C round 3, section_C_2026-09-22)
-    blurb: 'Hazards build up faster and hit harder, for as long as you can hold it. You get less warning, except from several hazards arriving together.',
+    // DL-M4 2026-10-14: the step note, strings_DIAL.md N-4 - "faster than on Growing" (not "than on Booming": Booming's rampTime() clock runs ahead of this one's between about 407 and 440 s, scratchpad dial_build/test_dial.js, section E, 0-3600 s by 0.001 s), "the hardest of the four steps" (its hit multiplier is the highest at every second), "the least warning" (warn 0.5, the lowest); "for as long as you can hold it" dropped (build_DIAL_2026-10-14)
+    // DL-FIX 2026-10-15: FX2 (check_DIAL.md F2) - the warning sentence split in two, the exception kept, as on Planned above (DIFF.warn only in fireEvent) (build_DIAL_2026-10-14 fix round)
+    // DL-FIX2 2026-10-15: FX8 (review_DIAL.md F1 + F4) - the exception sentence reworded as on Planned above, same claim; "hits are the hardest of the four steps" (hits are not steps) -> "hits are harder than on any other step", the same claim: its hit factor (1 + rampTime() / T.dmgRamp) * DIFF.dmg is the highest of the four at every point of a run (scratchpad dial_fix2/hitcheck.py and review r4_numbers_out.txt, 0-3600 s by 0.001 s); the second sentence unchanged (build_DIAL_2026-10-14 fix round 2)
+    blurb: 'Hazards build up faster than on Growing, and hits are harder than on any other step. You get the least warning. But the warning for several hazards arriving together is the same as on Growing.',
     // GP-M2 2026-09-29: ramp 1.75 -> 2, dmg 1.45 -> 2, spawn 1.30 -> 2, warn 0.58 -> 0.5, len 1.9 -> 2, llDmg 1.4 -> 1.5 (the user's list, PLAN_GP G3); pay 2.2 and fail 2 kept (build_GP_2026-09-29)
     ramp: 2, dmg: 2, spawn: 2, warn: 0.5, len: 2, pay: 2.2,
     fail: 2, llDmg: 1.5,
@@ -3520,19 +3525,30 @@ const DIFFS = {
 }
 const DIFF_IDS = Object.keys(DIFFS)
 for (const k of DIFF_IDS) DIFFS[k].id = k
-let DIFF = DIFFS.steady
+// DL-M1 2026-10-14: the chosen step is remembered per browser (PLAN_DIAL D8), its own store on the SRC_KEY pattern (JSON under one key, every read and write in try/catch). Absent, unreadable, throwing or unknown (not one of DIFF_IDS) gives 'steady', Growing, the first-time step (D7). compoundPressureV1 is not read (D9) (build_DIAL_2026-10-14)
+const DIAL_KEY = 'compoundDialV1'
+function dialStore() { try { const id = JSON.parse(localStorage.getItem(DIAL_KEY) || '{}').id; return DIFF_IDS.includes(id) ? id : 'steady' } catch (e) { return 'steady' } }
+function dialSave(id) { try { localStorage.setItem(DIAL_KEY, JSON.stringify({ id })) } catch (e) {} }
+let DIFF = DIFFS[dialStore()]
+// DL-M3 2026-10-14: the plain-language switch (PLAN_DIAL D4, D11): one switch for the PLAIN sentences (say()) and the GLOSS lines (glossHtml()), on every step. Its own store on the SRC_KEY pattern; absent, unreadable or throwing storage, or a stored value that is not true or false, gives true - on, the default (D4) (build_DIAL_2026-10-14)
+const PLAIN_KEY = 'compoundPlainV1'
+function plainStore() { try { const v = JSON.parse(localStorage.getItem(PLAIN_KEY) || '{}').on; return typeof v === 'boolean' ? v : true } catch (e) { return true } }
+function plainSave(on) { try { localStorage.setItem(PLAIN_KEY, JSON.stringify({ on })) } catch (e) {} }
+let plainOn = plainStore()               // the switch under the dial: true shows the plain versions and the term glosses
 
 // ---------------------------------------------------------------- onboarding + plain language (2026-09-14)
 // Accessibility feedback on the web demo (Feedback_Accessibility_2026-09-14.md): a player who has never
 // played this kind of game had no way in, and Learning read like the technical version. Four pieces, all
 // built from the adjudicated copy (a11y_2026-09-14/draft_copy.md, final, with adjudication.md) and none of it
 // written fresh: a how-to-play overlay that a first visit has to step through (user decision), six
-// pausing hint cards shown once each, plain versions of in-run text on Learning only, and term glosses on
-// Learning only.
+// pausing hint cards shown once each, plain versions of in-run text, and term glosses. The last two were
+// on Learning only until the DIAL build; since DL-M3 both follow the plain-language switch (plainOn) on
+// every step.
 //
 // TDZ: everything here is read at CALL time, and none of it is reachable from resize() (the note at the
 // top of the script). Only the button wiring and one keydown listener run at module init. The block sits
-// after `let DIFF` because say() and glossHtml() read DIFF.
+// after `let plainOn` because say() and glossHtml() read plainOn.
+// DL-FIX2 2026-10-15: FX11 (review_DIAL.md F9) - the two sentences above said "on Learning only" and "after `let DIFF` because say() and glossHtml() read DIFF"; since DL-M3 they read plainOn (say() and glossHtml() below); comment only (build_DIAL_2026-10-14 fix round 2)
 
 // The copy, one entry per row id of the draft. A row the Lead revises is a one-line swap here. The two
 // onboarding rows that live in the markup instead are S2.1 (the start paragraph) and S2.2 (the button
@@ -3731,8 +3747,9 @@ function trapTab(e, box) {
 
 // ---- Learning: plain versions (S6) --------------------------------------------------------------
 // CORRECTED 2026-09-23: comment made true - the rows it said were held without an entry got entries in section C, except six kept as is (section C round 2, section_C_2026-09-22)
-// say(id, current, arg) returns `current` untouched on every difficulty but Learning, so the text there
-// is byte-identical to before. On Learning it returns that row's plain version. Rows the copy keeps
+// DL-FIX 2026-10-15: FX7 (check_DIAL.md F8) - the next two lines said say() acts only on Learning; since DL-M3 it follows the plain-language switch (plainOn) on every step; comment only (build_DIAL_2026-10-14 fix round)
+// say(id, current, arg) returns `current` untouched while the plain-language switch is off, so the text there
+// is byte-identical to before. With it on, on any step, it returns that row's plain version. Rows the copy keeps
 // UNCHANGED have no entry and fall through to `current`. The rows once held back without one - by
 // adjudication D3 (UNDRR lines with no support in that round's capture) or D2 (two false game lines), and
 // TRD.growth.src and TRD.levee.src by the Builder guard after the delta adjudication - got entries in
@@ -3877,8 +3894,9 @@ const PLAIN = {
   // LL-M2 2026-09-25: the rebuild card's cost, S-L2's Learning text verbatim (strings_LL.md); TRD.rebuild.desc is absent on purpose - the desc falls through to the Steady line (build_LL_2026-09-25)
   'TRD.rebuild.cost': 'The most capacity you can have drops by 25%. This lasts until the run ends.',
 }
+// DL-M3 2026-10-14: say() and glossHtml() gate on the plain-language switch (plainOn) instead of DIFF.id === 'learn' (PLAN_DIAL D4); the comments above that say "Learning" describe the gate before this build; PLAIN and GLOSS are unchanged (build_DIAL_2026-10-14)
 function say(id, cur, arg) {
-  if (DIFF.id !== 'learn') return cur
+  if (!plainOn) return cur
   const p = PLAIN[id]
   return p == null ? cur : typeof p === 'function' ? p(arg) : p
 }
@@ -3924,7 +3942,7 @@ const GLOSS_TERMS = {
 }
 // P6-A2 2026-09-25: a pair may carry a third item, true when the gloss travels with the card's source line; it is then marked `withsrc` and shows only while the Sources switch is on (CSS). A two-item pair prints exactly as before (build_P6_2026-09-25)
 function glossHtml(pairs) {
-  if (DIFF.id !== 'learn' || !pairs.length) return ''
+  if (!plainOn || !pairs.length) return ''   // DL-M3 2026-10-14: was DIFF.id !== 'learn' (build_DIAL_2026-10-14)
   return pairs.map(([label, id, withSrc]) => `<div class="gloss${withSrc ? ' withsrc' : ''}"><b>${label}</b>${GLOSS[id]}</div>`).join('')
 }
 const glossTerms = (key, text) =>
@@ -7786,7 +7804,7 @@ function step(dt) {
   // because the player was walled in. The cause was not the ramp alone: player damage never
   // scaled against enemy health, so weapon damage and the XP curve moved with this.
   const rate = (T.spawnBase + rampTime() / T.spawnRamp) * SEASON.rate * (PLACE.bite.rateMul || 1) * DIFF.spawn
-    * PRESS_MUL[PRESSURE].spawn   // growth pressure: more gets built, so more is in the way (GP-M1 2026-09-29: was 1 + 0.18 * PRESSURE; build_GP_2026-09-29)
+    // DL-M2 2026-10-14: growth pressure's spawn term (* PRESS_MUL[PRESSURE].spawn, 1 at Planned) removed from the end of the product above; the factors before it and their order are unchanged (PLAN_DIAL D2) (build_DIAL_2026-10-14)
   spawnAcc += dt * rate
   while (spawnAcc >= 1 && enemies.length < T.enemyCap) { spawnAcc--; spawn() }
 
@@ -8315,13 +8333,7 @@ function renderReport() {
   html += sec('Where you were',
     row(DIFF.col, DIFF.name, DIFF.blurb) +
     row(PLACE.col, PLACE.name, PLACE.blurb) +
-    (PRESSURE > 0
-      ? row('#ffa94d', 'Growth pressure — ' + PRESS[PRESSURE].n,
-            // GP-G2 2026-09-29: "more arrived, worth more, and all of it took more off you" now names XP the way the PRESS notes do (blue dots) (build_GP_2026-09-29)
-            // GP-FIX 2026-09-29: the GP-G2 line above describes the row before this fix. The note already gives each effect with its figure, so the past-tense list after it ("blue dots were worth more, more hazards arrived, and each one took more off you") was cut; each effect is now stated once (verify_GP F5; build_GP_2026-09-29 fix round)
-            // SY-FIX 2026-09-29: one tense (ADJUDICATION_SY F14): the note is in the present, so the tail is too - "moved" became "move", a statement of how the setting works, which the note beside it also is; nothing else changed (build_SY_2026-09-29 fix round)
-            PRESS[PRESSURE].note + ' Growth and exposure move together. That coupling is the choice the dial exists to make visible.')
-      : '') +
+    // DL-M2 2026-10-14: the growth-pressure row ("Growth pressure - " + the setting's name and note, shown when PRESSURE > 0) removed with the setting (PLAN_DIAL D2) (build_DIAL_2026-10-14)
     row('#7ee787', 'In your favour', PLACE.boon.text) +
     row('#ff9d9d', 'Against you', PLACE.bite.text))
 
@@ -8444,12 +8456,13 @@ function renderReport() {
     (runFunds > 0
       ? (() => {
           const dN = debrief ? debrief.list.length : 0
+          // DL-FIX2 2026-10-15: FX9 (review_DIAL.md F5) - the step name in the title and in the sentence below reads as a setting's name, not a verb ("Growing pays 1.3 times that" read as a verb phrase): " · Growing step ×1.3" and "The Growing step pays 1.3 times that"; every other word, the DIFF.pay !== 1 condition and the numbers unchanged (build_DIAL_2026-10-14 fix round 2)
           return row('#ffd166', `Recovery budget — ${learnFunds} of ${runFunds} released` +
-            (DIFF.pay && DIFF.pay !== 1 ? ` · ${DIFF.name} ×${DIFF.pay}` : ''),
+            (DIFF.pay && DIFF.pay !== 1 ? ` · ${DIFF.name} step ×${DIFF.pay}` : ''),
             // P6-B8 2026-09-25: F4 - S-B2 verbatim (ruling R-S2): the sentence names all four terms runFunds adds in die() (time, lifelines standing, works built, compound events absorbed); a second sentence names the DIFFICULTY setting's multiplier, shown only when DIFF.pay is set and not 1, the title's own condition above. It read "Time held, lifelines standing and works built set the SIZE of it: <b>${runFunds}</b>. " (build_P6_2026-09-25)
             // BS-M5 2026-09-30: a fifth term, the true boss's bonus (strings_BS.md S-B4 rewrite #1 verbatim); it read "Time held, lifelines still standing, works built and compound events absorbed set the SIZE of it" (build_BS_2026-09-30)
             `Time held, lifelines still standing, works built, compound events absorbed and the boss absorbed set the SIZE of it` +
-            (DIFF.pay && DIFF.pay !== 1 ? `. ${DIFF.name} pays ${DIFF.pay} times that: <b>${runFunds}</b>. ` : `: <b>${runFunds}</b>. `) +
+            (DIFF.pay && DIFF.pay !== 1 ? `. The ${DIFF.name} step pays ${DIFF.pay} times that: <b>${runFunds}</b>. ` : `: <b>${runFunds}</b>. `) +   // DL-FIX2 2026-10-15: FX9, see the title above (build_DIAL_2026-10-14 fix round 2)
             (dN && quizRight
               ? `What you keep is what you could explain — <b>${quizRight} of ${dN}</b> right released <b>${learnFunds}</b>. `
               // CORRECTED 2026-09-23: was "the questions went unanswered" - this branch runs whenever quizRight is 0 and questions were asked, including a debrief answered in full and all wrong (if (right) { quizRight++; debrief.right++ } else quizWrong++); the closing citation sentence is unchanged (section C round 2, section_C_2026-09-22)
@@ -9758,50 +9771,48 @@ function draw() {
 }
 
 // ---------------------------------------------------------------- boot
-// Growth pressure: the exposure dial, chosen with the place. Self-set, continuous-ish, and
-// paid in both directions — more arrives AND more is worth collecting — because that
-// coupling is the game's own risk-creation reasoning, cast in the genre's favourite mechanic;
-// it was not checked against a UNDRR source (the documented basis is the same GAR 2025
-// exposure-growth reading the Rapid-development trade-off card already carries; no new
-// figures ride on this dial).
-// GP-G2 2026-09-29: the four notes name XP in the game's own words - "blue dots" (the how-to, ONBOARD_COPY S3.2) and "worth N% more" (the Rapid development card, TRADEOFFS growth, and the School lifeline) - and give PRESS_MUL's xp and exposure figures; the spawn figure is left in words ("More / Many more / Far more hazards arrive"), because it scales only the ordinary stream, below T.enemyCap, and not surges, events or compound events (strings_GP.md) (build_GP_2026-09-29)
-// GP-FIX 2026-09-29: the GP-G2 line above describes the notes before this fix. The notes now say "XP" (the user asked for it by name) and use the game's own phrase for the same multiplier, "Everything you collect is worth ..." (the Rapid development card and the School lifeline), because xpMulNow() scales every mote, the preparation squares included (P.xp += m.v * xpMulNow(), the motes loop in step); the hazard clause says only that the usual (ordinary) stream comes faster (PRESS_MUL spawn scales the trickle rate below T.enemyCap, not surges, events or compound events); "every hit" because every "P.hp -=" line multiplies by P.exposure; Planned names what it is the baseline of (verify_GP F1-F4, F10, F11; build_GP_2026-09-29 fix round)
-// SY-FIX 2026-09-29: the GP-FIX line above describes the notes before this fix. "Everything you collect is worth ..." was not true of pickups, which give no XP (ADJUDICATION_SY F5), and "XP" was tied to nothing a player sees (F6). Each note now says "XP (the blue bar)": everything that gives XP fills the blue bar (#xpbar, drawn from P.xp / P.need), the blue dots and the preparation squares alike (P.xp += m.v * xpMulNow() is the only line that adds XP), and nothing else fills it - so the wording holds for every XP source and for nothing else. The parenthesis follows the how-to's own "capacity, your red bar" (ONBOARD_COPY S3.1). "You get N% more XP" is true of every mote: PRESS_MUL xp multiplies P.xpMul at reset, and xpMulNow() multiplies every mote's value. The numbers are PRESS_MUL's, unchanged (build_SY_2026-09-29 fix round)
-const PRESS = [
-  { n: 'Planned',   note: 'Growth follows the plan. XP (the blue bar), hazards and hits stay normal. The other settings\' numbers are measured from here.' },
-  { n: 'Growing',   note: 'You get 22% more XP (the blue bar). The usual stream of hazards comes faster, and every hit hurts 10% more.' },
-  { n: 'Booming',   note: 'You get 50% more XP (the blue bar). The usual stream of hazards comes much faster, and every hit hurts 25% more.' },
-  { n: 'Unchecked', note: 'You get 2.1 times as much XP (the blue bar). The usual stream of hazards comes far faster, and every hit hurts twice as much.' },
-]
-function offerPressure() {
-  const wrap = $('presswrap'); wrap.innerHTML = ''
-  PRESS.forEach((p, i) => {
-    const b = document.createElement('button')
-    b.className = 'dbtn' + (PRESSURE === i ? ' on' : '')
-    b.textContent = p.n
-    b.style.borderColor = PRESSURE === i ? '#ffa94d' : ''
-    b.style.color = PRESSURE === i ? '#ffa94d' : ''
-    // F3d 2026-09-23: the choice is written to its store as it is made (part 4 P11a) (build_F_2026-09-23)
-    b.onclick = () => { PRESSURE = i; pressSave(i); offerPressure() }
+// DL-M2 2026-10-14: growth pressure's names and notes (PRESS) and its row (offerPressure, #presswrap, #pressnote) removed; the dial is one row now, offerDiffs below (PLAN_DIAL D1, D2) (build_DIAL_2026-10-14)
+// DL-M3 2026-10-14: the plain-language switch under the dial (PLAN_DIAL D4, D11), on the Sources switch's pattern: a button with aria-pressed, its state word in an aria-hidden span so the accessible name is "Plain English" (strings_DIAL.md T-1, T-2, T-3). The button is made once and then updated in place, so keyboard focus stays on it after a press; its note (T-4) does not change with the state. No colour of its own: a dial colour would read as a fifth step (build_DIAL_2026-10-14)
+function offerPlain() {
+  const wrap = $('plainwrap')
+  let b = wrap.querySelector('button')
+  if (!b) {
+    b = document.createElement('button')
+    b.onclick = () => { plainOn = !plainOn; plainSave(plainOn); offerPlain() }
     wrap.appendChild(b)
-  })
-  $('pressnote').textContent = 'Growth pressure — ' + PRESS[PRESSURE].note
+  }
+  b.className = 'dbtn' + (plainOn ? ' on' : '')
+  b.innerHTML = `Plain English<span aria-hidden="true">: ${plainOn ? 'on' : 'off'}</span>`
+  b.setAttribute('aria-pressed', plainOn ? 'true' : 'false')
+  // DL-FIX 2026-10-15: FX4 (check_DIAL.md F5) - the note names messages too: PLAIN's 104 entries are 58 card texts and 46 pop-up messages and report lines; GLOSS's 15 lines are the explanations; two sentences for grade 7 or below (fx_score.py) (build_DIAL_2026-10-14 fix round)
+  $('plainnote').textContent = 'Many cards and messages in plainer English. Some key words get short explanations.'
 }
 
 // The difficulty row sits above the places, because it changes what choosing a place means.
+// DL-FIX2 2026-10-15: FX10 (review_DIAL.md F2) - the four buttons are made once (the first call) and afterwards updated in place, as offerPlain() above does, so a pressed button stays in the page and keeps keyboard focus; each carries aria-pressed true / false; class and colour styles as before, so the look does not change; the note is rewritten only when its text changes, so the live region (#diffnote, aria-live polite) speaks only on a real change (build_DIAL_2026-10-14 fix round 2)
 function offerDiffs() {
-  const wrap = $('diffwrap'); wrap.innerHTML = ''
-  for (const id of DIFF_IDS) {
-    const D = DIFFS[id]
-    const b = document.createElement('button')
-    b.className = 'dbtn' + (DIFF.id === id ? ' on' : '')
-    b.textContent = D.name
-    b.style.borderColor = DIFF.id === id ? D.col : ''
-    b.style.color = DIFF.id === id ? D.col : ''
-    b.onclick = () => { DIFF = D; offerDiffs() }
-    wrap.appendChild(b)
+  const wrap = $('diffwrap')
+  let bs = wrap.querySelectorAll('button')
+  if (bs.length !== DIFF_IDS.length) {
+    wrap.innerHTML = ''
+    for (const id of DIFF_IDS) {
+      const D = DIFFS[id]
+      const b = document.createElement('button')
+      b.textContent = D.name
+      b.onclick = () => { DIFF = D; dialSave(id); offerDiffs() }   // DL-M1 2026-10-14: the step is written to its store as it is chosen (PLAN_DIAL D8) (build_DIAL_2026-10-14)
+      wrap.appendChild(b)
+    }
+    bs = wrap.querySelectorAll('button')
   }
-  $('diffnote').textContent = DIFF.blurb
+  DIFF_IDS.forEach((id, i) => {
+    const D = DIFFS[id], b = bs[i], on = DIFF.id === id
+    b.className = 'dbtn' + (on ? ' on' : '')
+    b.style.borderColor = on ? D.col : ''
+    b.style.color = on ? D.col : ''
+    b.setAttribute('aria-pressed', on ? 'true' : 'false')
+  })
+  const note = $('diffnote')
+  if (note.textContent !== DIFF.blurb) note.textContent = DIFF.blurb
 }
 
 // The door to the playtest panel, on the start screen where it is actually wanted — the panel is
@@ -9964,14 +9975,14 @@ if (DEV) initDev()
 $('again').onclick = () => { AU.start(PLACE.id); $('over').classList.remove('show'); reset(); last = 0 }
 $('elsewhere').onclick = () => {
   $('over').classList.remove('show'); $('start').classList.remove('gone')
-  offerPlaces(); offerDiffs(); offerPressure(); offerMeta(); offerLearn(); offerDev()
+  offerPlaces(); offerDiffs(); offerPlain(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   reset(); paused = true
 }
 // P01 2026-09-23: the door - the shop before the next run: "Somewhere else"'s body, plus the AU.start that "Same place again" makes, with this place kept among the three so the next run can start here (build_F_2026-09-23)
 $('spendfirst').onclick = () => {
   AU.start(PLACE.id)
   $('over').classList.remove('show'); $('start').classList.remove('gone')
-  offerPlaces(PLACE.id); offerDiffs(); offerPressure(); offerMeta(); offerLearn(); offerDev()
+  offerPlaces(PLACE.id); offerDiffs(); offerPlain(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   reset(); paused = true
 }
 // P01 2026-09-23: set from the shop's own test (offerMeta's canBuy, verbatim), so the door opens only when something can be bought - the fast path then says what is unspent and the third button shows; otherwise the end screen is exactly as before. `banked` is false while the debrief still holds this run's budget (build_F_2026-09-23)
@@ -9993,7 +10004,7 @@ if (COARSE) {
   $('ctrlspace').style.display = 'none'
   $('ctrlevac').innerHTML = '<b>the EVAC button</b>'
 }
-offerPlaces(); offerDiffs(); offerPressure(); offerMeta(); offerLearn(); offerDev()
+offerPlaces(); offerDiffs(); offerPlain(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
 reset(PLACE_IDS[0])
 paused = true          // the sim idles behind the place-select rather than running a ghost run
 requestAnimationFrame(frame)
@@ -10182,7 +10193,7 @@ window.__surv = {
     askedRun: Object.keys(poolAskedRun), right: poolRight, wrong: poolWrong,
     next: (() => { const c = nextPoolQuestion(); return c ? { id: c.q.id, any: !!c.anyP } : null })(),
     store: poolStore() }),
-  setPressure (n) { PRESSURE = Math.max(0, Math.min(3, n | 0)); return PRESSURE },
+  setPressure () { return 0 },   // DL-M1 2026-10-14: a no-op kept so older check scripts do not throw; growth pressure is gone, and 0 (Planned) is what every run now plays (PLAN_DIAL D2) (build_DIAL_2026-10-14)
   economy: () => ({ rerollsUsed, banishLeft, banished: Object.keys(banished) }),
   metaState: () => ({ store: metaStore(), cached: Object.assign({}, METALV), lastRunFunds: runFunds }),
   metaGrant (n) { const s2 = metaStore(); s2.funds += n | 0; metaSave(s2); offerMeta(); return s2.funds },
