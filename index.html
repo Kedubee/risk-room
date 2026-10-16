@@ -111,6 +111,14 @@
     overflow:hidden;transition:transform .12s,border-color .12s,background .12s}
   a.card:hover{transform:translateY(-4px);border-color:var(--accent);background:#191d23}
   .card.soon{opacity:.62}
+  /* A card's extra link sits under the card, not inside it: the card is itself one link, and a link cannot hold
+     another. The wrapper is the grid item; the card fills the cell above its link, so a card with a link ends higher
+     than a card without one in the same row. */
+  .cardwrap{display:flex;flex-direction:column;gap:8px}
+  .cardwrap>.card{flex:1}
+  .guidelink{align-self:flex-start;font-size:13px;font-weight:700;color:var(--paper);text-decoration:none;
+    padding:7px 13px;border-radius:99px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05)}
+  .guidelink:hover,.guidelink:focus-visible{border-color:var(--accent);color:var(--accent)}
   .art{height:112px;position:relative;overflow:hidden}
   .art canvas{display:block;width:100%;height:100%}
   .art::after{content:'';position:absolute;inset:0;
@@ -167,7 +175,7 @@
   <div class="grid" id="grid"></div>
 
   <footer>
-    <b>These are prototypes, not published material.</b> They are internship work in
+    <b>These are prototypes.</b> They are internship work in
     progress, not an official publication of any organisation, and no organisation has
     endorsed them. Where a game cites a body of guidance, the citation is to that
     organisation's own published material and is named on the card or inside the game.<br><br>
@@ -301,6 +309,8 @@ const GAMES = [
           'the next one.',
     meta: ['UNDRR guidance', 'Six places', 'Four difficulties', 'No install'],
     art: 'compound',
+    // The label is the guide's own title words; the path names index.html so the hub still works opened from disk.
+    guide: { href: 'compound/guide/index.html', label: 'Teacher\'s guide' },
   },
   {
     id: 'quake', href: 'quake/index.html', status: 'play',
@@ -372,7 +382,17 @@ for (const G of GAMES) {
       `<div class="meta">${G.meta.map(m => `<b>${m}</b>`).join('')}</div>` +
       (G.note ? `<div class="note">${G.note}</div>` : '') +
     `</div>`
-  grid.appendChild(el)
+  const wrap = document.createElement('div')
+  wrap.className = 'cardwrap'
+  wrap.appendChild(el)
+  if (G.guide) {
+    const gl = document.createElement('a')
+    gl.className = 'guidelink'
+    gl.href = G.guide.href
+    gl.innerHTML = `${G.guide.label} <span aria-hidden="true">&rarr;</span>`
+    wrap.appendChild(gl)
+  }
+  grid.appendChild(wrap)
   const cv = el.querySelector('canvas')
   PAINT[G.art](cv.getContext('2d'), cv.width, cv.height)
 }
