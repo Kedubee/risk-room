@@ -71,7 +71,7 @@ td.objs{white-space:nowrap;color:var(--accent);font-weight:700}
 .checks li::before{content:"";position:absolute;left:4px;top:15px;width:12px;height:12px;border-radius:4px;border:2px solid var(--amber)}
 .result{display:flex;gap:18px;align-items:center;background:var(--card);border-radius:18px;padding:16px 18px;margin:0 0 18px}
 .result p{margin:0;font-size:15px}
-.tiles{display:grid;grid-template-columns:repeat(5,minmax(0,44px));gap:6px;flex:0 1 auto;max-width:100%}
+.tiles{display:grid;grid-template-columns:repeat(5,minmax(0,44px));gap:6px;flex:none;max-width:100%}
 .tile{height:44px;min-width:0;overflow:hidden;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
 .tile b{font-size:15px}
 .tile span{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
@@ -80,7 +80,7 @@ td.objs{white-space:nowrap;color:var(--accent);font-weight:700}
 .gaps-h{margin-top:26px}
 .gaps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .gaps li{background:#fff;border:1px solid var(--border);border-left:5px solid var(--red);border-radius:14px;padding:12px 14px;font-size:14.5px}
-.pub{background:var(--card);border-radius:18px;padding:18px 20px 6px;font-size:14px;color:#333}
+.pub{background:var(--card);border-radius:18px;padding:18px 20px 6px;font-size:14px;color:#333;overflow-wrap:anywhere}
 .notes{font-size:13.5px;color:#333;padding-left:22px}
 .notes li{margin:0 0 8px;overflow-wrap:anywhere}
 @media (max-width:760px){
@@ -104,6 +104,8 @@ td.objs{white-space:nowrap;color:var(--accent);font-weight:700}
   section{padding-top:24px;break-inside:auto}
   .gcard,.group,.result,.callout,tr{break-inside:avoid}
   a{color:inherit}
+  .obj .num{background:#fff;color:var(--c);border:2px solid var(--c)}
+  .tile.strong{background:#fff;color:var(--green);border:2px solid var(--green)}
 }
 .sr-h{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
 </style>
