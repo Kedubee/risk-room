@@ -51,10 +51,11 @@
   WHAT A RUN IS MADE OF (2026-08-21: the run had too few variables in it — every run opened
   with the same hazard at the same second, the map was empty, and every card was upside)
 
-    PLACES    chosen before anything else, three of five offered. A place decides which
+    PLACES    chosen before anything else, all six shown. A place decides which
               hazards exist, when they start and how much of the stream they are, plus one
               thing in your favour and one against. The same ten measures do not rank the
               same way in a delta as they do on a fault; that is the point.
+              // SX-FIX 2026-10-17: FX-3 (PLAN_SIX D11; check_SIX.md F4) - "three of five offered" above corrected to "all six shown": PLACES has six, and since build_SIX the start screen shows all of them (build_SIX_2026-10-17 fix round)
     SEASONS   the mix shifts every seasonLen and is announced. `quiet` is the one that
               matters: less arrives, the ramp does not pause, and preparation scatters
               across the map to be gone and fetched.
@@ -180,8 +181,9 @@
     99 questions in a regression were place-specific.
 
   ON RUN LENGTH — the two-minute target is RETIRED (user decision, 2026-08-27). A run now
-  carries five places, four difficulties, fifteen compound events, a works layer, an event
+  carries six places, four difficulties, fifteen compound events, a works layer, an event
   layer and forty questions, and the user's call is that a long run is fine.
+  // SX-FIX 2026-10-17: FX-3 (PLAN_SIX D11; check_SIX.md F4) - "five places" above corrected to "six places" (PLACES has six); the other counts in that sentence were not checked in this fix round (build_SIX_2026-10-17 fix round)
 
   What replaces it is one property, and it is a teaching requirement rather than a difficulty
   one: A RUN MUST END. The report is the only place the content is read rather than dodged —
@@ -851,6 +853,8 @@
   .howbar button#how-next{background:var(--accent);border:2px solid var(--accent);color:#0b0d10}
   .howbar button:focus-visible,#hint-ok:focus-visible,.dbtn.howbtn:focus-visible{outline:3px solid #fff;
     outline-offset:2px}
+  /* SX-FIX 2026-10-17: FX-1 (PLAN_SIX D8; check_SIX.md F1) - the focus ring of a card the player chooses (tabindex 0, role button, set by cardKeyable): the rule above, shown on keyboard focus only (build_SIX_2026-10-17 fix round) */
+  .card:focus-visible{outline:3px solid #fff;outline-offset:2px}
   #hint{position:fixed;inset:0;z-index:25;display:flex;align-items:center;justify-content:center;
     overflow-y:auto;overscroll-behavior:contain;padding:20px 16px;background:rgba(6,8,11,.72);cursor:default}
   .hintcard{width:100%;max-width:420px;margin:auto;padding:20px 20px 18px;border-radius:16px;text-align:left;
@@ -3716,7 +3720,8 @@ $('howbtn').onclick = () => howOpen(false)
 $('hint-ok').onclick = () => hintDismiss()
 
 // Keyboard for both layers. The game's own keydown (registered earlier, so it runs first) cancels Space
-// and the arrows page-wide (8.14) and nothing answered Enter, Escape or Tab, so these are handled here.
+// and the arrows page-wide (8.14) and answers neither Enter, Escape nor Tab, so these are handled here.
+// SX-FIX2 2026-10-17: FX2-3 (PLAN_SIX D15; review_SIX.md n2) - the line above corrected; it ended "and nothing answered Enter, Escape or Tab, so these are handled here." Since the first fix round that no longer holds for a focused card: cardKeys (below; a listener on #start and one on #cards, so it runs before every window listener) takes Enter and Space on a focused card while that card's screen is up and no hint card or How to play is open, and stops them, so neither this listener nor the game's own gets that press. While a hint card or How to play is open, cardKeys lets the key through and this listener handles it as before (build_SIX_2026-10-17 fix round 2)
 // Enter is taken over too: a focused button is clicked once, by this, and never also by the browser.
 addEventListener('keydown', e => {
   const k = e.key
@@ -3759,6 +3764,7 @@ function trapTab(e, box) {
 // door) need no binding of their own. It does nothing while #start is gone (a run, the card screen, the report), so a button left
 // focused there is never pressed by a dash. The window listeners still get the key afterwards, as before: doDodge returns at once,
 // because the sim is paused behind the start screen; Enter and every other key are not touched (build_POLISH_2026-10-15)
+// SX-FIX 2026-10-17: FX-3 (PLAN_SIX D11) - the last sentence above holds for this listener and every button. A focused place card (tabindex 0, role button since FX-1) is the exception: cardKeys (below) takes Enter and Space on it, chooses the card and stops the key there, so the window listeners do not get that press (build_SIX_2026-10-17 fix round)
 $('start').addEventListener('keydown', e => {
   if (e.key !== ' ' || $('start').classList.contains('gone')) return
   const b = e.target
@@ -3768,11 +3774,12 @@ $('start').addEventListener('keydown', e => {
 })
 // PL-FIX 2026-10-15: FX-D (check_POLISH.md F3) - the same for the card screen: Space presses a focused button inside #cards once
 // (the card bar's Reroll, Banish, Sources and Combos - every button the screen has), and a repeat keydown does not press it again.
-// The cards themselves are not buttons (div.card, chosen by click or tap; no tabindex), so Space never takes a card. It does
+// The cards themselves are not <button>s (div.card), so this listener never takes a card; Enter or Space on a focused card is cardKeys' (below). It does
 // nothing while #cards is not shown, or while a hint card or How to play is open (their own keydown listener keeps those keys).
 // No button inside #cards has a Space handler of its own, so none is pressed twice. The window listeners still get the key
 // afterwards, as before: doDodge returns at once, because offerCards() pauses the sim; Enter and every other key are not
 // touched (build_POLISH_2026-10-15 fix round)
+// SX-FIX 2026-10-17: FX-3 (PLAN_SIX D11) - the third line above corrected; it read "The cards themselves are not buttons (div.card, chosen by click or tap; no tabindex), so Space never takes a card." Since FX-1 a card has tabindex 0 and role button. The rest of the comment holds for this listener and every button; on a focused card cardKeys takes Enter and Space and stops them, so the window listeners do not get that press (build_SIX_2026-10-17 fix round)
 $('cards').addEventListener('keydown', e => {
   if (e.key !== ' ' || !$('cards').classList.contains('show') || hintOpen || !$('howto').hidden) return
   const b = e.target
@@ -3780,6 +3787,45 @@ $('cards').addEventListener('keydown', e => {
   e.preventDefault()
   if (!e.repeat) b.click()
 })
+// SX-FIX 2026-10-17: FX-1 (PLAN_SIX D7, D8; check_SIX.md F1) - every card the player chooses by click or tap (the six place cards, offerPlaces; every card the level-up screen builds, offerCards) is made reachable by Tab and named for a screen reader: tabindex 0 and role button; its accessible name is its own h3 (aria-labelledby) and its description the rest of the text the card shows (aria-describedby; FX2-1 below) - text the card already shows, no new string. The ids are new and unique in the page: a counter that only grows, so a reroll, a pick with picks left or a banish never repeats one, and no other id in the file starts with "cardname-" or "carddesc-". Nothing else on the card changes (since FX2-1 its other text elements carry ids too), and no code moves focus onto a card (build_SIX_2026-10-17 fix round)
+// SX-FIX2 2026-10-17: FX2-3 (PLAN_SIX D15) - the line above corrected in two places; it read "its description the paragraph right under that h3 (aria-describedby)" and "Nothing else on the card changes, and no code moves focus onto a card" (build_SIX_2026-10-17 fix round 2)
+// SX-FIX2 2026-10-17: FX2-1 (PLAN_SIX D13; review_SIX.md M1) - the description is everything else a sighted player sees on the card. Every child of the card that has text, except its h3 (the name) and the banish mark (.banx), gets an id here, "carddesc-<n>-<i>" in document order (the order on screen), and cardDescribe lists in aria-describedby those of them the game's CSS shows at that moment. The card's text all sits in these children, and they are siblings, so no visible text is left out and none is read twice. The CSS hides two of them while the card screen's Sources switch is off (#cards:not(.srcon)): the source line (.src) and a gloss flagged withsrc (.gloss.withsrc); they are listed only while it is on, and the Sources button calls cardDescribe on every card of the open screen after it sets that class. A place card is never inside #cards, so nothing on it is hidden. No string, class, style or text order changes (build_SIX_2026-10-17 fix round 2)
+let cardKeyN = 0
+function cardKeyable(el) {
+  const h = el.querySelector('h3')
+  if (!h) return
+  const n = ++cardKeyN
+  el.setAttribute('tabindex', '0')
+  el.setAttribute('role', 'button')
+  h.id = 'cardname-' + n
+  el.setAttribute('aria-labelledby', h.id)
+  let i = 0
+  for (const c of el.children) if (c !== h && !c.classList.contains('banx') && c.textContent.trim()) c.id = 'carddesc-' + n + '-' + (++i)
+  cardDescribe(el)
+}
+function cardDescribe(el) {
+  const off = el.closest('#cards:not(.srcon)')
+  const ids = []
+  for (const c of el.children) if (c.id.indexOf('carddesc-') === 0 && !(off && c.matches('.src, .gloss.withsrc'))) ids.push(c.id)
+  if (ids.length) el.setAttribute('aria-describedby', ids.join(' '))
+  else el.removeAttribute('aria-describedby')
+}
+// SX-FIX 2026-10-17: FX-2 (PLAN_SIX D7, D9, D10; check_SIX.md F1) - Enter or Space on a focused card chooses it exactly as a click does (the card's own click(), so its onclick runs as for the mouse). One listener on #start (the place cards) and one on #cards (the level-up cards), registered after the Space listeners above, which ignore everything but a button. It acts only while that screen is up and no hint card or How to play is open; otherwise the key goes on as before (a dash in a run, the hint card's or How to play's own keys). The press is cancelled and stopped here, so the window listeners never get it: no Evacuate when play resumes (the game's first listener calls doDodge on Space), no hint card dismissed, no How to play page turned, and the browser makes no click of its own. A repeat keydown chooses nothing. While Banish is armed (#cards.banish), the press on a card that shows the banish mark (.banx, which only a measure card carries) rules it out, as a click on that mark does (D10); on any other card it chooses it. Buttons, every other key, the mouse and touch are unchanged (build_SIX_2026-10-17 fix round)
+function cardKeys(box, up) {
+  box.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return
+    const c = e.target
+    if (!c || !c.classList || !c.classList.contains('card') || c.getAttribute('role') !== 'button') return
+    if (!up() || hintOpen || !$('howto').hidden) return
+    e.preventDefault(); e.stopPropagation()
+    if (e.repeat) return
+    const x = box.classList.contains('banish') ? c.querySelector('.banx') : null
+    if (x) x.click()
+    else c.click()
+  })
+}
+cardKeys($('start'), () => !$('start').classList.contains('gone'))
+cardKeys($('cards'), () => $('cards').classList.contains('show'))
 
 // ---- Learning: plain versions (S6) --------------------------------------------------------------
 // CORRECTED 2026-09-23: comment made true - the rows it said were held without an entry got entries in section C, except six kept as is (section C round 2, section_C_2026-09-22)
@@ -7018,6 +7064,8 @@ function offerCards(fromLevelUp) {
   }
   // CB-M6 2026-09-30: the trade-off card, if one was rolled, takes the last slot (built above) (build_CB_2026-09-30)
   if (trEl) wrap.appendChild(trEl)
+  // SX-FIX 2026-10-17: FX-1 (PLAN_SIX D7, D8) - every card on this screen, whatever its kind, made reachable by Tab and named (cardKeyable); all of them are in the row by now, and the card bar and the Combos panel come after them (build_SIX_2026-10-17 fix round)
+  for (const c of [...wrap.children]) if (c.classList.contains('card')) cardKeyable(c)
 
   // Draft economy. Rerolls are bought by Risk data — commissioning a study is paying to
   // change your option menu; the banish is saying out loud what will NOT be funded here.
@@ -7034,16 +7082,20 @@ function offerCards(fromLevelUp) {
   bb.textContent = `Banish (${banishLeft})`
   bb.disabled = banishLeft <= 0
   bb.title = 'Rule one measure out for this run.'
-  bb.onclick = () => { $('cards').classList.toggle('banish'); bb.classList.toggle('armed') }
+  // SX-FIX2 2026-10-17: FX2-2 (PLAN_SIX D14; review_SIX.md m1) - Banish says whether it is armed, as the Sources and Combos switches beside it do: aria-pressed "false" when the bar is built (it is built unarmed: offerCards removes #cards.banish above), and every press sets it from the armed class in the same statement that toggles that class (classList.toggle returns the class's new state). No new string (build_SIX_2026-10-17 fix round 2)
+  bb.setAttribute('aria-pressed', 'false')
+  bb.onclick = () => { $('cards').classList.toggle('banish'); bb.setAttribute('aria-pressed', bb.classList.toggle('armed') ? 'true' : 'false') }
   bar.appendChild(bb)
-  // P6-A1 2026-09-25: the Sources switch (T1-1 (a); text S-A1 as ruled in R-S7: "▸ Sources" off, "▾ Sources" on, accessible name "Sources", no tooltip). The glyph sits in its own aria-hidden span, so the name is the word. It sets one class on #cards and never redraws the cards: off, the default, the source line of the measure and trade-off cards is hidden; on, it shows as before (build_P6_2026-09-25)
+  // P6-A1 2026-09-25: the Sources switch (T1-1 (a); text S-A1 as ruled in R-S7: "▸ Sources" off, "▾ Sources" on, accessible name "Sources", no tooltip). The glyph sits in its own aria-hidden span, so the name is the word. It sets one class on #cards, re-lists each card's description (cardDescribe, since FX2-1) and never redraws the cards: off, the default, the source line of the measure and trade-off cards is hidden; on, it shows as before (build_P6_2026-09-25)
   const sb = document.createElement('button')
   const sbSet = () => {
     sb.innerHTML = `<span aria-hidden="true">${srcShown ? '▾' : '▸'}</span> Sources`
     sb.setAttribute('aria-pressed', srcShown ? 'true' : 'false')
   }
   sbSet()
-  sb.onclick = () => { srcShown = !srcShown; srcSave(srcShown); $('cards').classList.toggle('srcon', srcShown); sbSet() }
+  // SX-FIX2 2026-10-17: FX2-3 (PLAN_SIX D15) - the P6-A1 line above corrected; it read "It sets one class on #cards and never redraws the cards" (build_SIX_2026-10-17 fix round 2)
+  // SX-FIX2 2026-10-17: FX2-1 (PLAN_SIX D13) - after the class is set, every card on the open screen re-lists its description, so the source line and a withsrc gloss are in it exactly while they show (cardDescribe); the same loop as the one that made the cards keyable above (build_SIX_2026-10-17 fix round 2)
+  sb.onclick = () => { srcShown = !srcShown; srcSave(srcShown); $('cards').classList.toggle('srcon', srcShown); sbSet(); for (const c of [...wrap.children]) if (c.classList.contains('card')) cardDescribe(c) }
   bar.appendChild(sb)
   // SY-M4 2026-09-29: the Combos switch, beside Sources and in its pattern (PLAN_SY Y4; S-Y4 Y4-a verbatim: "▸ Combos" off, "▾ Combos" on, accessible name "Combos", the glyph in an aria-hidden span, aria-pressed, no tooltip); aria-controls names the panel. The panel follows the bar, rebuilt from the live data at every opening of this screen (combosHtml), shown or hidden as the player last left it; Escape closes it and nothing else (combosClose, called from the onboarding keydown listener) (build_SY_2026-09-29)
   const cb = document.createElement('button')
@@ -9903,15 +9955,13 @@ function offerDev() {
   wrap.appendChild(b)
 }
 
-// Three of the five places, so the choice is a real one and no two sessions open the same.
-// P01 2026-09-23: `keep`, optional - a place id that is always one of the three (the door keeps the place just played, so the next run can start there); without it the draw is exactly as before (build_F_2026-09-23)
+// All six places, in PLACE_IDS order, every time the start screen opens.
+// SX-M2 2026-10-17: PLAN_SIX D3 - the line above corrected; it read "Three of the five places, so the choice is a real one and no two sessions open the same." (build_SIX_2026-10-17)
+// SX-M2 2026-10-17: PLAN_SIX D2 - `keep` is accepted and ignored: every place is on screen, so the place just played is too, and the callers still pass it unchanged. It was (P01 2026-09-23, build_F_2026-09-23) a place id that was always one of the three (build_SIX_2026-10-17)
 function offerPlaces(keep) {
   const wrap = $('startwrap'); wrap.innerHTML = ''
-  const pool = PLACE_IDS.slice(), three = []
-  const keepAt = pool.indexOf(keep)
-  if (keepAt >= 0) three.push(pool.splice(keepAt, 1)[0])
-  while (three.length < 3 && pool.length) three.push(pool.splice((Math.random() * pool.length) | 0, 1)[0])
-  for (const id of three) {
+  // SX-M1 2026-10-17: PLAN_SIX D1 - a card for every id in PLACE_IDS, in that order, with no random draw: the draw of three (pool, three, keepAt and one Math.random per drawn place) removed; each card below is built exactly as before, its preview's random tile offset included (PLAN_SIX D4) (build_SIX_2026-10-17)
+  for (const id of PLACE_IDS) {
     const pl = PLACES[id]
     const roster = Object.keys(pl.roster)
       .sort((a, b) => pl.roster[a].at - pl.roster[b].at)
@@ -9933,6 +9983,7 @@ function offerPlaces(keep) {
       </div>
       <div class="phist">${hist ? `${hist.n} run${hist.n > 1 ? 's' : ''} here · best <b>${hist.kills}</b> hazard${hist.kills === 1 ? '' : 's'} killed · <b>lv ${hist.lv}</b>` : 'no runs here yet'}</div>`
     el.onclick = () => { AU.start(id); $('start').classList.add('gone'); reset(id); last = 0 }
+    cardKeyable(el)   // SX-FIX 2026-10-17: FX-1 (PLAN_SIX D7, D8) - the place card made reachable by Tab and named (build_SIX_2026-10-17 fix round)
     wrap.appendChild(el)
   }
 }
@@ -10052,7 +10103,8 @@ $('elsewhere').onclick = () => {
   offerPlaces(); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   reset(); paused = true
 }
-// P01 2026-09-23: the door - the shop before the next run: "Somewhere else"'s body, plus the AU.start that "Same place again" makes, with this place kept among the three so the next run can start here (build_F_2026-09-23)
+// P01 2026-09-23: the door - the shop before the next run: "Somewhere else"'s body, plus the AU.start that "Same place again" makes; offerPlaces(PLACE.id) still passes this place, which is on screen anyway, since all six places are (PLAN_SIX D1, D2), so the next run can start here (build_F_2026-09-23)
+// SX-FIX 2026-10-17: FX-3 (PLAN_SIX D11; check_SIX.md F2) - the line above corrected; it ended "with this place kept among the three so the next run can start here" (build_SIX_2026-10-17 fix round)
 $('spendfirst').onclick = () => {
   AU.start(PLACE.id)
   $('over').classList.remove('show'); $('start').classList.remove('gone')
