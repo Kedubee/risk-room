@@ -2005,7 +2005,7 @@ let groundPat = null, vignette = null
 const COARSE = matchMedia('(pointer: coarse)').matches
 const SMALL = COARSE && Math.min(innerWidth, innerHeight) < 820
 // ART-G 2026-10-17: G1 - the camera zoom, drawing only (PLAN_ART.md, "The camera zoom instead of the robot's outline": x2 on a PC,
-// x1.5 on a phone [ART-H 2026-10-17: H2 - the two phone cases are x1.25 since the user's answers of 2026-10-17, PLAN_ART.md "The zoom tuned"; desktop stays x2 (build_ART_2026-10-17)]; the Lead's refinement of 2026-10-17: three cases, one table, the default kept) (build_ART_2026-10-17). draw() scales the field
+// x1.5 on a phone [ART-H 2026-10-17: H2 - the two phone cases are x1.25 since the user's answers of 2026-10-17, PLAN_ART.md "The zoom tuned"; desktop stays x2 (build_ART_2026-10-17)] [ZOOMDEV-Y 2026-10-18: Y3 - desktop is x1 since the user's choice of 2026-10-18, PLAN_ZOOMDEV.md "The values chosen"; the two phone cases stay x1.25 (build_ZOOMDEV_2026-10-17)]; the Lead's refinement of 2026-10-17: three cases, one table, the default kept) (build_ART_2026-10-17). draw() scales the field
 // about the screen's centre (you) by zoomNow(); the ground fill and the edge pointers follow the same factor. Every game value that
 // reads W and H (the spawn rings, the synergy ring's cap) and everything drawn in screen space (the vignette, the tint, the merge
 // banner, the boss bars, the stick) still read the window's own size, so no game number and no screen-space size changes.
@@ -2015,7 +2015,7 @@ const SMALL = COARSE && Math.min(innerWidth, innerHeight) < 820
 // narrower. SMALL itself is fixed at load (the line above); the orientation follows the window, so a phone turned sideways moves
 // between the two mobile cases.
 const ZOOM_DEFAULT = 1
-const ZOOM = { desktop: 2, mobileLandscape: 1.25, mobilePortrait: 1.25 }   // ART-H 2026-10-17: H1 - the two phone cases 1.5 -> 1.25, desktop 2 and ZOOM_DEFAULT 1 kept (the user's answers of 2026-10-17, PLAN_ART.md "The zoom tuned"); was const ZOOM = { desktop: 2, mobileLandscape: 1.5, mobilePortrait: 1.5 } (build_ART_2026-10-17)
+const ZOOM = { desktop: 1, mobileLandscape: 1.25, mobilePortrait: 1.25 }   // ZOOMDEV-Y 2026-10-18: Y1 - desktop 2 -> 1, the two phone cases 1.25 and ZOOM_DEFAULT 1 kept (the user's choice of 2026-10-18, PLAN_ZOOMDEV.md "The values chosen"); was const ZOOM = { desktop: 2, mobileLandscape: 1.25, mobilePortrait: 1.25 }   // ART-H 2026-10-17: H1 - the two phone cases 1.5 -> 1.25, desktop 2 and ZOOM_DEFAULT 1 kept (the user's answers of 2026-10-17, PLAN_ART.md "The zoom tuned"); was const ZOOM = { desktop: 2, mobileLandscape: 1.5, mobilePortrait: 1.5 } (build_ART_2026-10-17) (build_ZOOMDEV_2026-10-17)
 const zoomCase = () => !SMALL ? 'desktop' : innerWidth >= innerHeight ? 'mobileLandscape' : 'mobilePortrait'
 const zoomNow = () => ZOOM[zoomCase()] || ZOOM_DEFAULT
 // P6-B1 2026-09-25: T2-0 - the reduced-motion flag: the OS setting, read at load and again on every change (the Lead's decision: no in-game toggle yet). Every motion this build adds reads it: set, each beat shows at its final state at once, and the sounds keep their order. The CSS rule of the same name covers what CSS animates, which this flag alone could not stop (build_P6_2026-09-25)
@@ -11685,6 +11685,46 @@ function initDev() {
   B('Next season', () => nextSeason())
   B('Clear field', () => { enemies.length = 0; ebullets.length = 0 })
   B('End run → report', () => { const g = dev.god; dev.god = false; die(); dev.god = g })
+
+  // ZOOMDEV 2026-10-17: Z1 - the zoom dial for the current screen case (PLAN_ZOOMDEV.md Z1, as changed by the Lead to a dial on the user's answer of 2026-10-17): one row of stops from ZOOM_DEFAULT up to the value in the file's ZOOM line for that case, 0.1 apart, the file's value the top stop when it is off the grid (desktop x1.0 ... x2.0, 11 stops; each phone case x1.0, x1.1, x1.2, x1.25, 4 stops) [ZOOMDEV-Y 2026-10-18: Y2, Y3 - each row now runs from ZOOM_DEFAULT up to ZOOM_DIAL_TOP, the values shipped before the user's choice of 2026-10-18, PLAN_ZOOMDEV.md "The values chosen" (desktop x2, the two phone cases x1.25), with ZOOM_DIAL_TOP's value the top stop when off the grid; the file's ZOOM line now gives desktop x1 and the phone cases x1.25, and the file's value is always one of the stops; the stop counts stay 11 and 4; the stop equal to ZOOM_DEFAULT is labelled original and the stop equal to the file's value file (desktop's x1 carries both) (build_ZOOMDEV_2026-10-17)]. A press sets ZOOM[case], which draw() reads through zoomNow() on its next call; the stop in use carries the 'on' class; the line above the row shows the case and the three values; on every window resize (a phone turned fires one) the line is redrawn and the row rebuilt when the case changed. Developer text only (build_ZOOMDEV_2026-10-17)
+  // ZOOMDEV 2026-10-17: Z2 - the dial's choice remembered per case in this browser under its own key (the DIAL_KEY pattern: one JSON object, try/catch on every read and write), read and applied only here, when dev mode turns on; a saved value that is not one of that case's stops, or a case the file does not name, is ignored; the top stop (the file's value) removes that case's saved value [ZOOMDEV-Y 2026-10-18: Y2, Y3 - now the stop equal to the file's value removes it, which on desktop is x1, no longer the top stop, since the user's choice of 2026-10-18, PLAN_ZOOMDEV.md "The values chosen" (build_ZOOMDEV_2026-10-17)]. ZOOM_FILE is the file's table, copied before any saved value is applied (build_ZOOMDEV_2026-10-17)
+  SEP('Zoom · this screen')
+  const ZOOMDEV_KEY = 'compoundZoomDevV1'
+  const ZOOM_FILE = Object.assign({}, ZOOM)
+  const ZOOM_DIAL_TOP = { desktop: 2, mobileLandscape: 1.25, mobilePortrait: 1.25 }   // ZOOMDEV-Y 2026-10-18: Y2 - the dial's top stop per case: the values shipped before the user's choice of 2026-10-18, PLAN_ZOOMDEV.md "The values chosen" (build_ZOOMDEV_2026-10-17)
+  const zStops = c => { const top = Math.max(ZOOM_DIAL_TOP[c], ZOOM_FILE[c]), o = []   // ZOOMDEV-Y 2026-10-18: Y2 - the top is ZOOM_DIAL_TOP's value (the file's, if that is higher); was const zStops = c => { const top = ZOOM_FILE[c], o = [] (build_ZOOMDEV_2026-10-17)
+    for (let n = Math.round(ZOOM_DEFAULT * 10); n / 10 < top - 1e-9; n++) o.push(n / 10)
+    o.push(top); if (!o.includes(ZOOM_FILE[c])) { o.push(ZOOM_FILE[c]); o.sort((p, q) => p - q) } return o }   // ZOOMDEV-Y 2026-10-18: Y2 - the file's value is always one of the stops; was o.push(top); return o } (build_ZOOMDEV_2026-10-17)
+  const zSaved = {}
+  try { const o = JSON.parse(localStorage.getItem(ZOOMDEV_KEY) || '{}')
+        for (const c of Object.keys(ZOOM_FILE)) if (zStops(c).includes(o[c])) { zSaved[c] = o[c]; ZOOM[c] = o[c] } } catch (e) {}
+  const zSave = () => { try { localStorage.setItem(ZOOMDEV_KEY, JSON.stringify(zSaved)) } catch (e) {} }
+  const zLine = document.createElement('div')
+  zLine.style.fontSize = '10px'; zLine.style.padding = '0 2px'; zLine.style.whiteSpace = 'pre-line'; zLine.style.opacity = '.8'
+  panel.appendChild(zLine)
+  const zRow = document.createElement('div')
+  zRow.style.display = 'flex'; zRow.style.flexWrap = 'wrap'; zRow.style.gap = '4px'; zRow.style.maxWidth = '80vw'
+  panel.appendChild(zRow)
+  let zRowFor = null, zBtns = []
+  const zSync = () => {
+    const c = zoomCase()
+    if (c !== zRowFor) {
+      zRowFor = c; zRow.textContent = ''; zBtns = []
+      zStops(c).forEach((v, i, a) => {
+        const b = document.createElement('button')
+        b.textContent = '×' + v + (v === ZOOM_DEFAULT ? ' original' : '') + (v === ZOOM_FILE[c] ? (v === ZOOM_DEFAULT ? ' ·' : '') + ' file' : '')   // ZOOMDEV-Y 2026-10-18: Y2 - labelled by value: the stop equal to ZOOM_DEFAULT original, the stop equal to the file's value file, both on one stop when they coincide; was b.textContent = '×' + v + (i === 0 ? ' original' : i === a.length - 1 ? ' file' : '') (build_ZOOMDEV_2026-10-17)
+        b.onclick = () => { ZOOM[c] = v
+          if (v === ZOOM_FILE[c]) delete zSaved[c]; else zSaved[c] = v   // ZOOMDEV-Y 2026-10-18: Y2 - the file's stop removes the saved value, any other stop saves it; was if (i === a.length - 1) delete zSaved[c]; else zSaved[c] = v (build_ZOOMDEV_2026-10-17)
+          zSave(); zSync() }
+        zRow.appendChild(b); zBtns.push([v, b])
+      })
+    }
+    for (const [v, b] of zBtns) b.classList.toggle('on', v === ZOOM[c])
+    zLine.textContent = 'Now: ' + c + ' ×' + ZOOM[c] + (c in zSaved ? ' · saved here' : ' · file value') + '\n' +
+      Object.keys(ZOOM_FILE).map(k => k + ' ×' + ZOOM[k] + (k in zSaved ? '*' : '')).join(' · ') + '  (* saved here)'
+  }
+  zSync()
+  addEventListener('resize', zSync)
 
   // ART-D 2026-10-17: D1-D3 - asset checks (PLAN_ART "Queued after Builder C"): every enemy asset on screen on demand, whatever the place, without the run ending (with god mode on). Developer text only (build_ART_2026-10-17)
   SEP('Assets · check')
