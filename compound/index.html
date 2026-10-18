@@ -994,6 +994,10 @@
   /* PL-S3 2026-10-15: P6 - the start screen's Sources switch and its note, under the plain-language switch, with that switch's two rules copied, so the two rows look alike (build_POLISH_2026-10-15) */
   #srcwrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
   #srcnote{font-size:11.5px;opacity:.55;margin:6px 0 14px;line-height:1.5}
+  /* ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch and its note, under the Sources switch, with that switch's two rules copied, so the rows look alike; T5 - #zoomsay, the polite live region that says the new zoom after a press, kept off the screen by the usual visually-hidden rule (build_ZOOMTOG_2026-10-18) */
+  #zoomwrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
+  #zoomnote{font-size:11.5px;opacity:.55;margin:6px 0 14px;line-height:1.5}
+  #zoomsay{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
 
   /* institutional capacity: the bounded meta layer, bought with recovery budget */
   /* The capacity layer folds (2026-09-01). On a phone the start screen ran 2039px before
@@ -1372,6 +1376,8 @@
 <button id="dodge">EVAC · SPACE</button>
 <div id="svc"></div>
 
+<!-- ZOOMTOG 2026-10-18: T5 - the polite live region the Zoom switch writes after each press (zoomStep), outside #start and #cards, so it is in the page on both screens; off the screen (CSS #zoomsay) (build_ZOOMTOG_2026-10-18) -->
+<div id="zoomsay" aria-live="polite" aria-atomic="true"></div>
 <div id="cards"><div id="cardwrap"></div></div>
 <div id="lvlup">Level up</div>
 
@@ -1408,6 +1414,9 @@
   <!-- PL-S3 2026-10-15: P6 - the Sources switch and its note, filled by offerSrc(); the same switch state as the card bar's Sources button (build_POLISH_2026-10-15) -->
   <div id="srcwrap"></div>
   <div id="srcnote"></div>
+  <!-- ZOOMTOG 2026-10-18: T3 - the Zoom switch and its note, filled by offerZoom(); the same state as the card bar's Zoom button (build_ZOOMTOG_2026-10-18) -->
+  <div id="zoomwrap"></div>
+  <div id="zoomnote"></div>
   <div id="metahead"></div>
   <div id="metawrap"></div>
   <div id="metanote"></div>
@@ -2017,7 +2026,23 @@ const SMALL = COARSE && Math.min(innerWidth, innerHeight) < 820
 const ZOOM_DEFAULT = 1
 const ZOOM = { desktop: 1, mobileLandscape: 1.25, mobilePortrait: 1.25 }   // ZOOMDEV-Y 2026-10-18: Y1 - desktop 2 -> 1, the two phone cases 1.25 and ZOOM_DEFAULT 1 kept (the user's choice of 2026-10-18, PLAN_ZOOMDEV.md "The values chosen"); was const ZOOM = { desktop: 2, mobileLandscape: 1.25, mobilePortrait: 1.25 }   // ART-H 2026-10-17: H1 - the two phone cases 1.5 -> 1.25, desktop 2 and ZOOM_DEFAULT 1 kept (the user's answers of 2026-10-17, PLAN_ART.md "The zoom tuned"); was const ZOOM = { desktop: 2, mobileLandscape: 1.5, mobilePortrait: 1.5 } (build_ART_2026-10-17) (build_ZOOMDEV_2026-10-17)
 const zoomCase = () => !SMALL ? 'desktop' : innerWidth >= innerHeight ? 'mobileLandscape' : 'mobilePortrait'
-const zoomNow = () => ZOOM[zoomCase()] || ZOOM_DEFAULT
+// ZOOMTOG 2026-10-18: T1 / T2 / T4 / T5 - the players' Zoom switch (PLAN_ZOOMTOG.md). ZOOM_STEPS are its four values in press order. zoomPick is the
+// player's choice, one value for every screen case, or null when none is stored: then the zoom is the table's value for the case, as before (T1).
+// It is remembered per browser under its own key on the SRC_KEY pattern (one JSON object, try/catch on every read and write); a stored value
+// that is not one of ZOOM_STEPS, or a store that does not parse, gives null (T4). zoomPick is read only by zoomNow() below, and zoomNow() only by
+// draw and the switch's own labels, so no game number reads it (T5). Precedence: the player's choice, when set, over the table; the dev dial
+// (initDev) edits the table, so its value shows while no player's choice is set, and its line says when one is overriding it. zoomDevSync is
+// the dial's redraw, set by initDev, so a press of the switch redraws the dial's line (build_ZOOMTOG_2026-10-18)
+// ZOOMTOG-FU 2026-10-18: F-a (the Lead's follow-up, T1 / T4) - a choice equal to the screen case's own table value is no choice: a stored value
+// equal to ZOOM[zoomCase()] at load (the file's value then: initDev has not run) reads as null, and zoomPickSave(null) removes the key, so the
+// default applies again and the dev dial is not overridden there; every other listed value is stored and read as before (build_ZOOMTOG_2026-10-18)
+const ZOOM_STEPS = [1, 1.25, 1.5, 2]
+const ZOOMPICK_KEY = 'compoundZoomV1'
+function zoomPickStore() { try { const v = JSON.parse(localStorage.getItem(ZOOMPICK_KEY) || '{}').zoom; return ZOOM_STEPS.includes(v) && v !== ZOOM[zoomCase()] ? v : null } catch (e) { return null } }   // ZOOMTOG-FU 2026-10-18: F-a - "&& v !== ZOOM[zoomCase()]" added; was ... return ZOOM_STEPS.includes(v) ? v : null ... (build_ZOOMTOG_2026-10-18)
+function zoomPickSave(z) { try { if (z === null) localStorage.removeItem(ZOOMPICK_KEY); else localStorage.setItem(ZOOMPICK_KEY, JSON.stringify({ zoom: z })) } catch (e) {} }   // ZOOMTOG-FU 2026-10-18: F-a - null removes the key; was try { localStorage.setItem(ZOOMPICK_KEY, JSON.stringify({ zoom: z })) } catch (e) {} (build_ZOOMTOG_2026-10-18)
+let zoomPick = zoomPickStore()
+let zoomDevSync = null
+const zoomNow = () => zoomPick || ZOOM[zoomCase()] || ZOOM_DEFAULT   // ZOOMTOG 2026-10-18: T5 - "zoomPick ||" added in front; was const zoomNow = () => ZOOM[zoomCase()] || ZOOM_DEFAULT (build_ZOOMTOG_2026-10-18)
 // P6-B1 2026-09-25: T2-0 - the reduced-motion flag: the OS setting, read at load and again on every change (the Lead's decision: no in-game toggle yet). Every motion this build adds reads it: set, each beat shows at its final state at once, and the sounds keep their order. The CSS rule of the same name covers what CSS animates, which this flag alone could not stop (build_P6_2026-09-25)
 const RM_Q = matchMedia('(prefers-reduced-motion: reduce)')
 let reduceMotion = RM_Q.matches
@@ -8155,6 +8180,10 @@ function offerCards(fromLevelUp) {
   cp.hidden = !combosShown
   cb.onclick = () => { combosShown = !combosShown; cp.hidden = !combosShown; cbSet() }
   bar.appendChild(cb)
+  // ZOOMTOG 2026-10-18: T3 / T5 - the Zoom switch, last on the bar, after Combos (the bar wraps at 375 px, #cardbar{flex-wrap:wrap}); the bar's own button style; one press is one step (zoomStep), the same state as the start screen's Zoom button; its label and accessible name from zoomPaint (build_ZOOMTOG_2026-10-18)
+  const zb = document.createElement('button')
+  zb.className = 'zoombtn'; zb.onclick = zoomStep; zoomPaint(zb)
+  bar.appendChild(zb)
   combosUi = { btn: cb, panel: cp, set: cbSet }
   wrap.appendChild(bar)
   wrap.appendChild(cp)
@@ -11554,6 +11583,41 @@ function offerSrc() {
   // PL-FIX2 2026-10-15: FX-H (review_POLISH.md N2) - "some key-word explanations" -> "some explanations of key words", the Plain English note's two words (offerPlain(): "Some key words get short explanations."); "some" still counts the explanations (only the glosses marked withsrc go with the Sources switch, CSS #cards:not(.srcon) .card .gloss.withsrc, and glosses print only with Plain English on, glossHtml()); the first sentence is unchanged; 7.19 -> 5.81 on quiz_audit.py's counter, 5.86 -> 5.81 on c3_fk.py (build_POLISH_2026-10-15 fix round 2)
   $('srcnote').textContent = 'Shows the source line on cards that have one. With Plain English on, it also shows some explanations of key words.'
 }
+// ZOOMTOG 2026-10-18: T2 / T3 / T5 - the players' Zoom switch, on the start screen (offerZoom, under Sources) and on the card bar (offerCards).
+// zoomStep is the one action of a press: the next of ZOOM_STEPS above the zoom now (from the table's value when nothing is chosen), after x2
+// back to x1; stored at once; draw reads zoomNow() on the next frame, which frame() runs under the start screen and the card screen too, so the
+// picture changes at once. Every Zoom button carries the class zoombtn, so one press repaints both places. The label shows the value
+// ("Zoom: ×1.25"); the accessible name is set by aria-label in words ("Zoom: 1.25 times"), so a screen reader is not left to say "×"; after a
+// press the same words go into the polite live region #zoomsay, so the new value is announced without sight. The button is made once on the
+// start screen and updated in place, as offerSrc() does, so keyboard focus stays on it after a press (build_ZOOMTOG_2026-10-18)
+// ZOOMTOG-FU 2026-10-18: F-b (the Lead's follow-up, WORDS / T5; WCAG 2.5.3 label in name) - the two lines above no longer hold on the name: there is
+// no aria-label, so the accessible name is the visible label itself ("Zoom: ×1.25"); the live region's words are zoomSay(): "Zoom: normal size"
+// at x1, else "Zoom: <value> times closer", written once per press. F-a: a step that lands on the screen case's own table value clears the
+// choice (zoomPick null, the key removed) instead of storing it; the cycle order is unchanged (build_ZOOMTOG_2026-10-18)
+const zoomSay = () => zoomNow() === 1 ? 'Zoom: normal size' : 'Zoom: ' + zoomNow() + ' times closer'   // ZOOMTOG-FU 2026-10-18: F-b - was const zoomName = () => 'Zoom: ' + zoomNow() + ' times' (build_ZOOMTOG_2026-10-18)
+function zoomPaint(b) { b.textContent = 'Zoom: ×' + zoomNow() }   // ZOOMTOG-FU 2026-10-18: F-b - the aria-label removed; was ...; b.setAttribute('aria-label', zoomName()) } (build_ZOOMTOG_2026-10-18)
+function zoomLabels() { for (const b of document.querySelectorAll('.zoombtn')) zoomPaint(b) }
+function zoomStep() {
+  const now = zoomNow()
+  const next = ZOOM_STEPS.find(s => s > now + 1e-9) || ZOOM_STEPS[0]   // ZOOMTOG-FU 2026-10-18: F-a - the step into `next`, then the case's own value clears the choice; was zoomPick = ZOOM_STEPS.find(s => s > now + 1e-9) || ZOOM_STEPS[0] (build_ZOOMTOG_2026-10-18)
+  zoomPick = next === ZOOM[zoomCase()] ? null : next   // ZOOMTOG-FU 2026-10-18: F-a (build_ZOOMTOG_2026-10-18)
+  zoomPickSave(zoomPick)
+  zoomLabels()
+  $('zoomsay').textContent = zoomSay()   // ZOOMTOG-FU 2026-10-18: F-b - was zoomName() (build_ZOOMTOG_2026-10-18)
+  if (zoomDevSync) zoomDevSync()
+}
+function offerZoom() {
+  const wrap = $('zoomwrap')
+  let b = wrap.querySelector('button')
+  if (!b) {
+    b = document.createElement('button')
+    b.className = 'dbtn zoombtn'
+    b.onclick = zoomStep
+    wrap.appendChild(b)
+  }
+  zoomPaint(b)
+  $('zoomnote').textContent = 'Each press moves the view closer, then back to ×1. Closer shows less of the field around you.'
+}
 
 // The difficulty row sits above the places, because it changes what choosing a place means.
 // DL-FIX2 2026-10-15: FX10 (review_DIAL.md F2) - the four buttons are made once (the first call) and afterwards updated in place, as offerPlain() above does, so a pressed button stays in the page and keeps keyboard focus; each carries aria-pressed true / false; class and colour styles as before, so the look does not change; the note is rewritten only when its text changes, so the live region (#diffnote, aria-live polite) speaks only on a real change (build_DIAL_2026-10-14 fix round 2)
@@ -11722,7 +11786,11 @@ function initDev() {
     for (const [v, b] of zBtns) b.classList.toggle('on', v === ZOOM[c])
     zLine.textContent = 'Now: ' + c + ' ×' + ZOOM[c] + (c in zSaved ? ' · saved here' : ' · file value') + '\n' +
       Object.keys(ZOOM_FILE).map(k => k + ' ×' + ZOOM[k] + (k in zSaved ? '*' : '')).join(' · ') + '  (* saved here)'
+    // ZOOMTOG 2026-10-18: T5 - the precedence on the dial's line: while a player's choice is stored (zoomPick), zoomNow() gives it on every screen case and the dial's value waits under it; the line then says so on a third row. And the players' Zoom buttons are repainted, since with no choice they show the table's value, which the dial just set (build_ZOOMTOG_2026-10-18)
+    if (zoomPick) zLine.textContent += '\nPlayer Zoom switch ×' + zoomPick + ' overrides this dial (drawn now: ×' + zoomNow() + ')'
+    zoomLabels()
   }
+  zoomDevSync = zSync   // ZOOMTOG 2026-10-18: T5 - a press of the players' switch redraws this line (zoomStep) (build_ZOOMTOG_2026-10-18)
   zSync()
   addEventListener('resize', zSync)
 
@@ -11822,6 +11890,7 @@ $('elsewhere').onclick = () => {
   $('over').classList.remove('show'); $('start').classList.remove('gone')
   // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
   offerPlaces(); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
+  offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
   reset(); paused = true
 }
 // P01 2026-09-23: the door - the shop before the next run: "Somewhere else"'s body, plus the AU.start that "Same place again" makes; offerPlaces(PLACE.id) still passes this place, which is on screen anyway, since all six places are (PLAN_SIX D1, D2), so the next run can start here (build_F_2026-09-23)
@@ -11831,6 +11900,7 @@ $('spendfirst').onclick = () => {
   $('over').classList.remove('show'); $('start').classList.remove('gone')
   // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
   offerPlaces(PLACE.id); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
+  offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
   reset(); paused = true
 }
 // P01 2026-09-23: set from the shop's own test (offerMeta's canBuy, verbatim), so the door opens only when something can be bought - the fast path then says what is unspent and the third button shows; otherwise the end screen is exactly as before. `banked` is false while the debrief still holds this run's budget (build_F_2026-09-23)
@@ -11854,6 +11924,7 @@ if (COARSE) {
 }
 // PL-S3 2026-10-15: offerSrc() added after offerPlain(): the start screen's Sources switch, drawn at boot from the stored state (build_POLISH_2026-10-15)
 offerPlaces(); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
+offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
 reset(PLACE_IDS[0])
 paused = true          // the sim idles behind the place-select rather than running a ghost run
 requestAnimationFrame(frame)
