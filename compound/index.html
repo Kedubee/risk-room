@@ -1158,6 +1158,31 @@
   .ll.crit u i{background:#ff4d5e}
   .ll.dead{opacity:.3}
   .ll.dead b{text-decoration:line-through}
+  /* PT2-P7c 2026-10-19: PLAN_PT2 P7c (the user's choice: preview H2, playtest_2026-10-19/previews/h2.css) - the bottom HUD around the
+     capacity bar: the build list (#weapons) to the left of the bar, its rows right-aligned; the lifeline list (#lifelines) to its right, its
+     rows left-aligned; the services line (#svc) and EVAC (#dodge) above the bar, centred - on computers and on phones. These rules come after
+     every earlier rule for these blocks, so they win by order where the weight is equal; "body.touch" is named where an earlier touch rule
+     would outweigh them (EVAC and the services line on a touch screen of any width). Computer: the bar 300 px wide, 22 px up; each list
+     22 px clear of the bar's end (50% +/- 172 px), 14 px up; the services line 44 px up; EVAC 78 px up. Phone (760 px and narrower): the bar
+     min(46vw, 170px); each list 7 px clear of its end and no wider than the room to the screen's edge less 4 px, its rows wrapping inside
+     it (the preview's lifeline rows ran off a 375 px screen); the build list keeps its 24 px glow room (GR2-M5, GR2-FIX), so its box sits
+     24 px further out than its rows; the services line 40 px and EVAC 72 px up, above the safe area. Sizes, colours and words unchanged
+     (build_PT2_2026-10-19) */
+  #hpwrap{width:300px;bottom:22px}
+  #weapons{left:auto;right:calc(50% + 172px);bottom:14px;align-items:flex-end}
+  #lifelines{right:auto;left:calc(50% + 172px);bottom:14px;align-items:flex-start}
+  #svc, body.touch #svc{right:auto;left:50%;transform:translateX(-50%);bottom:44px;white-space:nowrap}
+  #dodge, body.touch #dodge{right:auto;left:50%;transform:translateX(-50%);bottom:78px}
+  body.touch #dodge{bottom:calc(78px + env(safe-area-inset-bottom))}
+  @media (max-width:760px){
+    #hpwrap{width:min(46vw,170px);bottom:calc(14px + env(safe-area-inset-bottom))}
+    #weapons{left:auto;right:calc(50% + min(23vw,85px) + 7px - 24px);max-width:calc(50% - min(23vw,85px) - 11px)}
+    .wpn{justify-content:flex-end;text-align:right}
+    #lifelines{left:calc(50% + min(23vw,85px) + 7px);bottom:calc(10px + env(safe-area-inset-bottom));max-width:calc(50% - min(23vw,85px) - 11px)}
+    .ll{flex-wrap:wrap;row-gap:2px}
+    #svc, body.touch #svc{bottom:calc(40px + env(safe-area-inset-bottom))}
+    #dodge, body.touch #dodge{bottom:calc(72px + env(safe-area-inset-bottom))}
+  }
   #over .two{display:flex;gap:10px;justify-content:center}
   #over .two button.alt{background:transparent;border:1px solid rgba(255,255,255,.22)}
 
@@ -1412,6 +1437,70 @@
     body:not(.small) #start div#metaearn{max-width:none}
     body:not(.small) #start div#learnhead{max-width:none;margin:2px 0 4px}
   }
+  /* PT2-F1 2026-10-19: PLAN_PT2 F1 - the capacity heading's hand fold hides the eight nodes, the note and the earned line at every width again.
+     At the two-column break the grid rule above (body:not(.small) #start div#metawrap{display:grid}, two ids) outranked the fold rule
+     (#metahead.folded ~ #metawrap, one id on each side); this rule names three ids, so it outranks both. The fold still opens at every
+     start-screen opening (offerMeta, metaFold; unchanged) (build_PT2_2026-10-19) */
+  #start div#metahead.folded ~ div#metawrap, #start div#metahead.folded ~ div#metanote, #start div#metahead.folded ~ div#metaearn{display:none}
+  /* PT2-P9 2026-10-19: PLAN_PT2 P9 - the start screen as the user chose it: on a computer the Lead's preview S3 (S1's larger type and spacing,
+     each section in a filled block with a coloured left edge), on a phone the single column of preview S2 with S3's blocks. The blocks are
+     real wrappers in the markup (div.sblk: .sbintro, .sbdial, .sbswitch with a div.sbsw per switch, #capblk .sbcap, #placeblk .sbplaces);
+     the values are the previews' (playtest_2026-10-19/previews/s1.css, s3.css, class names changed: pvblk -> sblk, intro -> sbintro,
+     dial -> sbdial, swgrid -> sbswitch, sw -> sbsw, places -> sbplaces, cap -> sbcap). The rules come after PT-P5's, as the previews were laid
+     over it, so they win by order where the weight is equal; PT-P5's #startside grid placements no longer place anything (the children are
+     inside the blocks now; the heading and How to play keep their row 1 / column 1 and 2 inside the intro block's own grid, as in the
+     picture), and its "#startside > p" rule no longer matches (the intro paragraph is in its block). Added beyond the previews: in the single
+     column the places' and the capacity blocks keep their rows' own widths (#startwrap 900 px, #metawrap 720 px) plus the block's padding,
+     so the cards and the nodes wrap as before instead of in the 430 px prose column. No player text is added, removed or changed
+     (build_PT2_2026-10-19) */
+  #start div.sblk{max-width:430px;margin:0 auto 12px;border:0;border-left:3px solid rgba(255,255,255,.25);border-radius:10px;
+    background:rgba(255,255,255,.045);padding:14px 16px}
+  #start div.sblk.sbintro{border-left-color:#ff8a3d;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:12px}
+  #start div.sblk.sbdial{border-left-color:#8fe3ff}
+  #start div.sblk.sbswitch{border-left-color:#7ee787;display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+  #start div.sbsw{margin:0 0 10px}
+  #start div.sblk.sbplaces{border-left-color:#c4b5ff;max-width:932px}
+  #start div.sblk.sbcap{border-left-color:#ffd166;padding:10px 14px;max-width:748px}
+  #start div.sblk.sbintro > p{grid-column:1 / -1}
+  #start div.sblk.sbintro h1{margin:0;text-align:left}
+  #start div.sblk.sbintro #howbtn{margin:0}
+  @media (min-width:1200px){
+    body:not(.small) #start{padding:28px 40px}
+    body:not(.small) #start div.wide{max-width:1820px;gap:44px}
+    body:not(.small) #start div#startside{flex:0 0 430px;column-gap:16px;display:flex;flex-direction:column;gap:14px}
+    body:not(.small) #start h1{font-size:34px}
+    body:not(.small) #start div#diffhead{font-size:12px;margin-top:4px}
+    body:not(.small) #start div#diffwrap button{font-size:14px;padding:9px 18px}
+    body:not(.small) #start div#diffnote{font-size:13px;line-height:1.55;margin:10px auto 16px}
+    body:not(.small) #start div#plainwrap button, body:not(.small) #start div#srcwrap button,
+    body:not(.small) #start div#zoomwrap button, body:not(.small) #start div#fxwrap button{font-size:14px;padding:9px 18px}
+    body:not(.small) #start div#plainnote, body:not(.small) #start div#srcnote,
+    body:not(.small) #start div#zoomnote, body:not(.small) #start div#fxnote{font-size:12.5px;line-height:1.55;margin:7px auto 16px}
+    body:not(.small) #start div#startwrap{gap:16px;margin:0 0 10px}
+    body:not(.small) #start #startwrap .card.place{padding:15px 18px 13px}
+    body:not(.small) #start .card.place .prev{height:30px;margin:-15px -18px 10px}
+    body:not(.small) #start .card.place .tier{font-size:10.5px;margin-bottom:4px}
+    body:not(.small) #start .card.place h3{font-size:18px;margin-bottom:5px}
+    body:not(.small) #start .card.place p{font-size:13.5px;line-height:1.6}
+    body:not(.small) #start .card.place .roster{margin-top:10px;gap:6px}
+    body:not(.small) #start .card.place .roster span{font-size:11.5px;padding:2px 9px}
+    body:not(.small) #start .card.place .edge{margin-top:10px;padding-top:9px;font-size:12.5px;line-height:1.6}
+    body:not(.small) #start .card.place .phist{margin-top:9px;padding-top:7px;font-size:11.5px}
+    body:not(.small) #start div#metahead{font-size:12px;margin:8px 0 0;padding:6px 0}
+    body:not(.small) #start div#metawrap{gap:10px;margin:6px 0 4px}
+    body:not(.small) #start #metawrap .mbtn{padding:9px 12px;font-size:12.5px;gap:3px}
+    body:not(.small) #start #metawrap .mbtn .mof{font-size:10.5px}
+    body:not(.small) #start #metawrap .mbtn .mfx{font-size:12px}
+    body:not(.small) #start div#metanote{font-size:12.5px;margin:8px 0 6px}
+    body:not(.small) #start div#learnhead{font-size:11.5px;margin:6px 0 6px}
+    body:not(.small) #start div.sblk{max-width:none;margin:0}
+    body:not(.small) #start div.sblk.sbintro > p{font-size:14.5px;line-height:1.7;margin:12px 0 2px;text-align:left}
+    body:not(.small) #start div.sblk.sbdial div#diffnote{margin:10px auto 0}
+    body:not(.small) #start div.sbsw div{margin-bottom:0}
+    body:not(.small) #start div.sblk.sbplaces{order:-1;padding:14px}
+    body:not(.small) #start div#startmain{gap:16px}
+    body:not(.small) #start div.sblk.sbcap div#metawrap{margin-bottom:0}
+  }
 </style>
 </head>
 <body>
@@ -1455,6 +1544,8 @@
 <div id="start"><div class="wide">
   <!-- PT-P5 2026-10-19: PLAN_PT P5 - two wrappers, #startside (the heading, How to play, the intro, the dial and the four switches) and #startmain (the capacity section, the Understanding line, the place cards, Art credits and the dev door), around the same children in the same order, so a screen reader and a phone see the page as before; on a computer window at the two-column break and wider the CSS puts them side by side (build_PT_2026-10-19) -->
   <div id="startside">
+  <!-- PT2-P9 2026-10-19: PLAN_PT2 P9 (preview S3) - each section of the start screen in its own block (div.sblk), around the same children in the same order: the intro (the heading, How to play and the intro paragraph), the growth dial, the four switches (each switch and its note in a div.sbsw, two by two), and in #startmain the capacity section (#capblk) and the six places (#placeblk). No player text is added, removed or changed; the CSS draws each block as a filled panel with a coloured left edge (build_PT2_2026-10-19) -->
+  <div class="sblk sbintro">
   <h1>Compound</h1>
   <button id="howbtn" class="dbtn howbtn" type="button">How to play</button>
   <p>You are a place that hazards keep arriving at. You cannot stop them coming — you can only decide what you build, and how fast. Aiming and firing are automatic. Each time you level up, pick one card; measures that go together offer more. When the run ends, you can answer questions, and what you answer carries into the next run.
@@ -1463,32 +1554,46 @@
     to evacuate when something is already on top of you. That is the whole control scheme.<br><br>
     <b>Risk is local.</b> Choose where you are. The hazards, the order they arrive in, and
     which of the ten measures is worth taking first are not the same in any two of these.</p>
+  </div><!-- PT2-P9 2026-10-19: end of the intro block (build_PT2_2026-10-19) -->
+  <div class="sblk sbdial"><!-- PT2-P9 2026-10-19: the growth dial's block (build_PT2_2026-10-19) -->
   <!-- DL-FIX 2026-10-15: FX1 (check_DIAL.md F1; PLAN_DIAL D12, the user's choice of one line above the dial) - says what the four step names describe; it comes before #diffwrap in the markup, so a screen reader reads it, then the four buttons, then the step note (build_DIAL_2026-10-14 fix round) -->
   <div id="diffhead">How fast does this place grow?</div>
   <!-- DL-FIX2 2026-10-15: FX10 (review_DIAL.md F2) - the four step buttons are one group named by the line above (role="group", aria-labelledby="diffhead"), and the step note is a polite live region, so a screen reader hears the note change after a press (build_DIAL_2026-10-14 fix round 2) -->
   <!-- PL-M3 2026-10-15: P3 (a) (rereview_DIAL.md (c) 3) - the group also points at the step note (aria-describedby="diffnote"), so a screen reader can read the current step's note on entering the group, not only when it changes; nothing else on the dial changes (build_POLISH_2026-10-15) -->
   <div id="diffwrap" role="group" aria-labelledby="diffhead" aria-describedby="diffnote"></div>
   <div id="diffnote" aria-live="polite"></div>
+  </div><!-- PT2-P9 2026-10-19: end of the dial block (build_PT2_2026-10-19) -->
+  <div class="sblk sbswitch"><!-- PT2-P9 2026-10-19: the four switches' block; each switch with its note in a div.sbsw (build_PT2_2026-10-19) -->
+  <div class="sbsw"><!-- PT2-P9 2026-10-19 (build_PT2_2026-10-19) -->
   <!-- DL-M2 / DL-M3 2026-10-14: the growth-pressure row (#presswrap, #pressnote) replaced by the plain-language switch and its note, filled by offerPlain() (build_DIAL_2026-10-14) -->
   <div id="plainwrap"></div>
   <div id="plainnote"></div>
+  </div><div class="sbsw"><!-- PT2-P9 2026-10-19 (build_PT2_2026-10-19) -->
   <!-- PL-S3 2026-10-15: P6 - the Sources switch and its note, filled by offerSrc(); the same switch state as the card bar's Sources button (build_POLISH_2026-10-15) -->
   <div id="srcwrap"></div>
   <div id="srcnote"></div>
+  </div><div class="sbsw"><!-- PT2-P9 2026-10-19 (build_PT2_2026-10-19) -->
   <!-- ZOOMTOG 2026-10-18: T3 - the Zoom switch and its note, filled by offerZoom(); the same state as the card bar's Zoom button (build_ZOOMTOG_2026-10-18) -->
   <div id="zoomwrap"></div>
   <div id="zoomnote"></div>
+  </div><div class="sbsw"><!-- PT2-P9 2026-10-19 (build_PT2_2026-10-19) -->
   <!-- PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch and its note, filled by offerFx(), under the Zoom switch (build_PT_2026-10-19) -->
   <div id="fxwrap"></div>
   <div id="fxnote"></div>
+  </div></div><!-- PT2-P9 2026-10-19: end of the last switch and of the switches' block (build_PT2_2026-10-19) -->
   </div><!-- PT-P5 2026-10-19: end of #startside (build_PT_2026-10-19) -->
   <div id="startmain"><!-- PT-P5 2026-10-19 (build_PT_2026-10-19) -->
+  <!-- PT2-F2 2026-10-19: PLAN_PT2 F2 - the markup keeps today's order (capacity, the Understanding line, the places), which is the single column's drawn and Tab order. On a computer window at the two-column break and wider the places are drawn first, so startOrder() in the script moves #placeblk in front of #capblk there and back after #learnhead below it, so Tab follows the drawn order in both layouts (build_PT2_2026-10-19) -->
+  <div class="sblk sbcap" id="capblk"><!-- PT2-P9 2026-10-19: the capacity section's block (build_PT2_2026-10-19) -->
   <div id="metahead"></div>
   <div id="metawrap"></div>
   <div id="metanote"></div>
   <div id="metaearn"></div>
+  </div><!-- PT2-P9 2026-10-19: end of the capacity block (build_PT2_2026-10-19) -->
   <div id="learnhead"></div>
+  <div class="sblk sbplaces" id="placeblk"><!-- PT2-P9 2026-10-19: the six places' block (build_PT2_2026-10-19) -->
   <div id="startwrap"></div>
+  </div><!-- PT2-P9 2026-10-19: end of the places block (build_PT2_2026-10-19) -->
   <!-- ART-E 2026-10-17: E2 - the "Art credits" button: after the place cards, before the dev door; it opens #credits (credOpen in the script) (build_ART_2026-10-17) -->
   <div id="credwrap"><button id="credbtn" class="dbtn credbtn" type="button">Art credits</button></div>
   <div id="devwrap"></div>
@@ -2126,7 +2231,7 @@ let zoomPick = zoomPickStore()
 let zoomDevSync = null
 const zoomNow = () => zoomPick || ZOOM[zoomCase()] || ZOOM_DEFAULT   // ZOOMTOG 2026-10-18: T5 - "zoomPick ||" added in front; was const zoomNow = () => ZOOM[zoomCase()] || ZOOM_DEFAULT (build_ZOOMTOG_2026-10-18)
 // P6-B1 2026-09-25: T2-0 - the reduced-motion flag: the OS setting, read at load and again on every change (the Lead's decision: no in-game toggle yet). Every motion this build adds reads it: set, each beat shows at its final state at once, and the sounds keep their order. The CSS rule of the same name covers what CSS animates, which this flag alone could not stop (build_P6_2026-09-25)
-const RM_Q = matchMedia('(prefers-reduced-motion: reduce)')
+// PT2-P8 2026-10-19: PLAN_PT2 P8 - the line below and the listener on it are gone: the device's reduced-motion setting no longer sets or moves the Effects state; with no stored choice effects are on. Was: const RM_Q = matchMedia('(prefers-reduced-motion: reduce)') (build_PT2_2026-10-19)
 // PT-P1 2026-10-19: PLAN_PT P1 - the start screen's Effects switch (offerFx). fxPick is the player's choice: true = effects on (full motion),
 // false = off (reduced motion), null = no choice stored. With no choice, reduceMotion follows the OS setting (RM_Q) at load and on every
 // change event, as before; a press stores a choice per browser under FX_KEY, on the SRC_KEY pattern (one JSON object, try/catch on every
@@ -2138,12 +2243,14 @@ const FX_KEY = 'compoundEffectsV1'
 function fxStore() { try { const v = JSON.parse(localStorage.getItem(FX_KEY) || '{}').on; return typeof v === 'boolean' ? v : null } catch (e) { return null } }
 function fxSave(on) { try { localStorage.setItem(FX_KEY, JSON.stringify({ on })) } catch (e) {} }
 let fxPick = fxStore()
-let reduceMotion = fxPick === null ? RM_Q.matches : !fxPick   // PT-P1 2026-10-19: was let reduceMotion = RM_Q.matches (build_PT_2026-10-19)
+let reduceMotion = fxPick === null ? false : !fxPick   // PT2-P8 2026-10-19: with no stored choice effects are on (reduceMotion false), whatever the device setting; was let reduceMotion = fxPick === null ? RM_Q.matches : !fxPick (build_PT2_2026-10-19)   // PT-P1 2026-10-19: was let reduceMotion = RM_Q.matches (build_PT_2026-10-19)
 const rmClass = () => { document.body.classList.toggle('rm', reduceMotion) }   // PT-P1 2026-10-19 (build_PT_2026-10-19)
 rmClass()   // PT-P1 2026-10-19 (build_PT_2026-10-19)
-const rmSync = e => { if (fxPick === null) reduceMotion = e.matches; rmClass(); if ($('fxwrap') && $('fxwrap').firstChild) offerFx() }   // PT-P1 2026-10-19: the OS change moves the state only while no choice is stored, and the switch is redrawn; was const rmSync = e => { reduceMotion = e.matches } (build_PT_2026-10-19)
-if (RM_Q.addEventListener) RM_Q.addEventListener('change', rmSync)
-else if (RM_Q.addListener) RM_Q.addListener(rmSync)        // older Safari has only the old name
+// PT2-P8 2026-10-19: PLAN_PT2 P8 - the device setting's change listener is gone, so a change of that setting no longer moves the state; the state changes only by a press (offerFx). The comments above (PT-P1, P6-B1) and the PT-P1 notes on the four body.rm CSS rules that say the state follows the OS setting while no choice is stored describe the build before this item; they are left as they were. Was:
+// const rmSync = e => { if (fxPick === null) reduceMotion = e.matches; rmClass(); if ($('fxwrap') && $('fxwrap').firstChild) offerFx() }   // PT-P1 2026-10-19: the OS change moves the state only while no choice is stored, and the switch is redrawn; was const rmSync = e => { reduceMotion = e.matches } (build_PT_2026-10-19)
+// if (RM_Q.addEventListener) RM_Q.addEventListener('change', rmSync)
+// else if (RM_Q.addListener) RM_Q.addListener(rmSync)        // older Safari has only the old name
+// (build_PT2_2026-10-19)
 // Playtest tools, off unless the URL says ?dev=1 (or #dev) — a player on the public site
 // never sees them. dev.on is the runtime truth: the URL only decides whether initDev()
 // runs at boot, and __surv.devInit() can turn it on from the console when the URL was
@@ -2178,6 +2285,21 @@ addEventListener('resize', resize); resize()
 // module init - see the note there.
 if (COARSE) document.body.classList.add('touch')
 if (SMALL) document.body.classList.add('small')   // PT-P5 2026-10-19: PLAN_PT P5 - the start screen's two-column layout is for a window that is not SMALL (a phone keeps one column whatever its width); CSS reads SMALL through this class (build_PT_2026-10-19)
+// PT2-F2 2026-10-19: PLAN_PT2 F2 - Tab follows the drawn order on the start screen. In the two-column layout (the CSS's own condition: a
+// window 1,200 CSS px wide or wider that is not SMALL) the six places are drawn above the capacity section, so their block (#placeblk) is put
+// in front of the capacity block (#capblk) in the page; in the single column it stands where the markup has it, after the Understanding line
+// (#learnhead), so that column's order is today's. Run once now and again whenever the window crosses the break; it only moves the block
+// when it is in the wrong place, so nothing moves on a load that needs no move. No card, handler or text changes (build_PT2_2026-10-19)
+const START_WIDE = matchMedia('(min-width:1200px)')
+const startOrder = () => {
+  const pl = $('placeblk'), cap = $('capblk'), lh = $('learnhead')
+  if (!pl || !cap || !lh) return
+  if (START_WIDE.matches && !SMALL) { if (pl.nextElementSibling !== cap) cap.parentNode.insertBefore(pl, cap) }
+  else if (lh.nextElementSibling !== pl) lh.parentNode.insertBefore(pl, lh.nextSibling)
+}
+startOrder()
+if (START_WIDE.addEventListener) START_WIDE.addEventListener('change', startOrder)
+else if (START_WIDE.addListener) START_WIDE.addListener(startOrder)   // older Safari has only the old name
 
 const stick = { on: false, id: null, ox: 0, oy: 0, x: 0, y: 0, dx: 0, dy: 0 }
 const STICK_R = 58
@@ -11216,6 +11338,22 @@ function bulletMark(list, look, col) {
   }
 }
 
+// PT2-P7b 2026-10-19: PLAN_PT2 P7b - the inner frame the edge pointers are drawn in (mark, in draw), in screen px: { l, r, t, b }. Base, from
+// the Lead's preview (make_ptr.js): on a computer 70 px in from each side, 96 px from the top and 170 px from the bottom; on a phone (SMALL)
+// 40, 80 and 210. Then it is pushed further in wherever the HUD reaches further, so no pointer sits on it: the top edge 22 px below the lowest
+// of the top bar, the alarm strip (as many rows as it has) and the sound button (phones); the bottom edge 22 px above the highest of the
+// capacity bar, the build list, the lifeline list, the services line and EVAC, as P7c places them (the build list as tall as it has grown).
+// 22 px is the largest arrowhead (13 px, a boss) with room to spare. A block that is not drawn (no size) is skipped. If the HUD leaves less
+// than 60 px between the edges (a very short window), the frame is the middle 60 px of the screen's height (build_PT2_2026-10-19)
+function ptrFrame() {
+  const side = SMALL ? 40 : 70, pad = 22
+  let ft = SMALL ? 80 : 96, fb = H - (SMALL ? 210 : 170)
+  const box = id => { const e = $(id); if (!e || typeof e.getBoundingClientRect !== 'function') return null; const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null }
+  for (const id of ['topbar', 'alarm', 'mute']) { const r = box(id); if (r) ft = Math.max(ft, r.bottom + pad) }
+  for (const id of ['hpwrap', 'weapons', 'lifelines', 'svc', 'dodge']) { const r = box(id); if (r) fb = Math.min(fb, r.top - pad) }
+  if (fb - ft < 60) { ft = H / 2 - 30; fb = H / 2 + 30 }
+  return { l: side, r: W - side, t: ft, b: fb }
+}
 function draw() {
   const sx = (Math.random() - .5) * shake, sy = (Math.random() - .5) * shake
   ctx.save()
@@ -11796,11 +11934,18 @@ function draw() {
   // something you cannot see.
   // D11 2026-09-22: a pointer has a family shape as well as a colour (X01 (c)) - the place's things keep the plain triangle; what is theirs (an event's warning, the compound event) gets an arrowhead notched at the back, over a dark outline (build_D_2026-09-22)
   // DX4 2026-09-23: a place pointer also carries the non-colour signature its object carries on the field, drawn upright just inside the pointer (`sig`): a lifeline its own mark (the rounded square and its glyph, lifelineSprite, at 0.6), a works site its glyph (worksGlyph), a pickup its star with 3 / 4 / 5 points - the neutrals alone are dE 0.012-0.092 apart, so shape has to tell them apart (review F4; U1: shape always goes with colour). A lifeline's pointer that turns red while it is under attack or inbound takes the theirs arrowhead, as PAL assigns that red pointer to theirs, and keeps the lifeline's mark (review F15) (build_D_2026-09-22 fix round)
+  // PT2-P7b 2026-10-19: PLAN_PT2 P7b - a pointer is drawn inside an inner frame clear of the HUD, not at the very edge. Whether it shows is
+  // unchanged (the thing is outside the zoomed view, 26 px in from its edge); where it sits is the thing's screen point clamped into the frame
+  // ptrFrame() gives (pf), arrowhead and signature alike; sizes, colours, alpha and the rotation toward the thing are unchanged. The frame is
+  // read once per drawn frame, and only on a frame that draws a pointer (build_PT2_2026-10-19)
+  let pf = null
   const mark = (wx, wy, col, size, alpha, theirs, sig) => {
     const lx = (wx - P.x) * z + W / 2, ly = (wy - P.y) * z + H / 2, m = 26   // ART-G 2026-10-17: G1 - the thing's point on the zoomed screen, so a pointer shows exactly when it is outside the zoomed view (26 px in from its edge, as before) and sits at that edge; was const lx = wx - P.x + W / 2, ly = wy - P.y + H / 2, m = 26 (build_ART_2026-10-17)
     if (lx > m && lx < W - m && ly > m && ly < H - m) return
+    pf = pf || ptrFrame()   // PT2-P7b 2026-10-19 (build_PT2_2026-10-19)
+    const px = clamp(lx, pf.l, pf.r), py = clamp(ly, pf.t, pf.b)   // PT2-P7b 2026-10-19: the pointer's place inside the frame; was clamp(lx, m, W - m), clamp(ly, m, H - m) at both uses below (build_PT2_2026-10-19)
     ctx.save()
-    ctx.translate(clamp(lx, m, W - m), clamp(ly, m, H - m))
+    ctx.translate(px, py)   // PT2-P7b 2026-10-19: was ctx.translate(clamp(lx, m, W - m), clamp(ly, m, H - m)) (build_PT2_2026-10-19)
     ctx.rotate(Math.atan2(ly - H / 2, lx - W / 2))
     ctx.globalAlpha = alpha
     ctx.fillStyle = col
@@ -11817,7 +11962,7 @@ function draw() {
     if (sig) {                 // DX4: the signature, upright, size + 13 px back from the pointer toward the middle of the screen
       const ang = Math.atan2(ly - H / 2, lx - W / 2), back = size + 13
       ctx.save()
-      ctx.translate(clamp(lx, m, W - m) - Math.cos(ang) * back, clamp(ly, m, H - m) - Math.sin(ang) * back)
+      ctx.translate(px - Math.cos(ang) * back, py - Math.sin(ang) * back)   // PT2-P7b 2026-10-19: was ctx.translate(clamp(lx, m, W - m) - Math.cos(ang) * back, clamp(ly, m, H - m) - Math.sin(ang) * back) (build_PT2_2026-10-19)
       ctx.globalAlpha = alpha
       sig()
       ctx.globalAlpha = 1
@@ -11976,7 +12121,7 @@ function offerFx() {
   b.className = 'dbtn' + (reduceMotion ? '' : ' on')
   b.innerHTML = `Effects<span aria-hidden="true">: ${reduceMotion ? 'off' : 'on'}</span>`
   b.setAttribute('aria-pressed', reduceMotion ? 'false' : 'true')
-  $('fxnote').textContent = 'Off shows fewer moving effects. Until you press it, it follows your device\'s setting.'
+  $('fxnote').textContent = 'Off shows fewer moving effects. It is on until you turn it off.'   // PT2-P8 2026-10-19: PLAN_PT2 P8 - the note's second sentence says what the code now does: on with no stored choice (reduceMotion false), off only after a press, which this browser keeps (fxSave); the device setting no longer counts. Was: 'Off shows fewer moving effects. Until you press it, it follows your device\'s setting.' (build_PT2_2026-10-19)
 }
 
 // The difficulty row sits above the places, because it changes what choosing a place means.
