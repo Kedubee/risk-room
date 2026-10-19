@@ -1501,6 +1501,61 @@
     body:not(.small) #start div#startmain{gap:16px}
     body:not(.small) #start div.sblk.sbcap div#metawrap{margin-bottom:0}
   }
+  /* PT3-P11 2026-10-19: PLAN_PT3 P11 - the computer start screen on one screen (the user's approach, the Lead's preview
+     playtest_2026-10-19/previews/FITR2_tags_tight_1902x945.png; its rules roster.css then tight_keepstrip.css, values unchanged, in the
+     previews' order, after every earlier start-screen rule as the previews were laid over the page): at 1,200 px and wider on a window that
+     is not SMALL, each place card is a two-column grid with the hazard tags (.roster) in the place name's row, right-aligned, and the card's
+     text left-aligned; the colour strip (.prev) kept at 22 px; gaps and paddings tightened; "Art credits" (#credwrap) raised to the
+     Understanding line's row at the right. The tags lose their arrival times in offerPlaces (script). Markup and Tab order unchanged
+     (build_PT3_2026-10-19) */
+  @media (min-width:1200px){
+    body:not(.small) #start #startwrap .card.place{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;align-items:center}
+    body:not(.small) #start #startwrap .card.place > *{grid-column:1 / -1}
+    body:not(.small) #start #startwrap .card.place .prev{grid-row:1}
+    body:not(.small) #start #startwrap .card.place .tier{grid-row:2}
+    body:not(.small) #start #startwrap .card.place h3{grid-row:3;grid-column:1;margin:0}
+    body:not(.small) #start #startwrap .card.place .roster{grid-row:3;grid-column:2;justify-content:flex-end;margin:0;gap:4px}
+    body:not(.small) #start #startwrap .card.place .roster span{font-size:11px;padding:1px 8px}
+    body:not(.small) #start #startwrap .card.place p{grid-row:4;margin-top:6px}
+    body:not(.small) #start #startwrap .card.place .edge{grid-row:5}
+    body:not(.small) #start #startwrap .card.place .phist{grid-row:6}
+    body:not(.small) #start #startwrap .card.place{text-align:left;justify-items:stretch}
+    body:not(.small) #start #startwrap .card.place .tier, body:not(.small) #start #startwrap .card.place .edge,
+    body:not(.small) #start #startwrap .card.place .phist{justify-self:stretch;text-align:left}
+    body:not(.small) #start #startwrap .card.place > div{max-width:none;margin-left:0;margin-right:0}
+    body:not(.small) #start{padding:18px 32px}
+    body:not(.small) #start div.wide{max-width:1880px;gap:28px}
+    body:not(.small) #start div#startside{gap:10px}
+    body:not(.small) #start div.sblk{padding:12px 14px}
+    body:not(.small) #start div.sblk.sbintro > p{margin:8px 0 0}
+    body:not(.small) #start div#diffnote{margin:8px auto 0}
+    body:not(.small) #start div#plainnote, body:not(.small) #start div#srcnote,
+    body:not(.small) #start div#zoomnote, body:not(.small) #start div#fxnote{margin:6px auto 8px}
+    body:not(.small) #start div#startmain{gap:12px}
+    body:not(.small) #start div.sblk.sbplaces{padding:12px}
+    body:not(.small) #start div#startwrap{gap:12px;margin:0}
+    body:not(.small) #start .card.place .prev{height:22px}
+    body:not(.small) #start div#metahead{margin:0;padding:2px 0}
+    body:not(.small) #start div#metawrap{gap:8px;margin:4px 0 0}
+    body:not(.small) #start #metawrap .mbtn{padding:6px 10px}
+    body:not(.small) #start div#metanote{margin:6px 0 0}
+    body:not(.small) #start div#learnhead{margin:4px 0 0}
+    body:not(.small) #start div#credwrap{align-self:flex-end;margin:-30px 0 0}
+  }
+  /* PT3-P10 2026-10-19: PLAN_PT3 P10 - the phone build list (the user's choice (a)+(c)). On a phone (body.small, set from SMALL) the build
+     list in play (#weapons) shows each row as its colour dot and its level only: the name (b) is hidden, and the other text (span) is hidden
+     except the level of a measure row (data-k) and of a response row (.md); the pair-ready dot (i.pr) is a mark, not text, and stays; the
+     merge moment (.fresh glow, the ghost copies - measure rows cloned to the body, so their name is hidden by .ghost) and the ripening
+     edge (.rp) draw round what is left. On the card screen (level-up cards and
+     banish mode) offerCards adds, on a phone only, the same rows with their names (#cardbuild, syncHud's markup) below the card bar and the
+     Combos panel, in the screen's own flow, so it covers no card or button and goes with the screen when it closes; two columns, left-aligned.
+     Computers unchanged; no player text added (build_PT3_2026-10-19) */
+  body.small #weapons .wpn > b, body.small .wpn.ghost > b{display:none}
+  body.small #weapons .wpn > span{display:none}
+  body.small #weapons .wpn[data-k] > span, body.small #weapons .wpn.md > span{display:inline}
+  #cardbuild{width:100%;max-width:420px;display:grid;grid-template-columns:1fr 1fr;gap:5px 14px;margin:4px auto 0;
+    padding:10px 6px 0;border-top:1px solid rgba(255,255,255,.12);pointer-events:none}
+  #cardbuild .wpn{justify-content:flex-start;text-align:left;min-width:0}
 </style>
 </head>
 <body>
@@ -8620,6 +8675,8 @@ function offerCards(fromLevelUp) {
   combosUi = { btn: cb, panel: cp, set: cbSet }
   wrap.appendChild(bar)
   wrap.appendChild(cp)
+  // PT3-P10 2026-10-19: PLAN_PT3 P10 - on a phone (SMALL) the build list with its names, on this screen only: the rows syncHud last wrote (hudRows), in #cardbuild after the card bar and the Combos panel (CSS #cardbuild); syncHud keeps it current while the screen is up; it goes when the screen closes or is rebuilt (build_PT3_2026-10-19)
+  if (SMALL) { const bl = document.createElement('div'); bl.id = 'cardbuild'; bl._rows = hudRows || ''; bl.innerHTML = bl._rows; wrap.appendChild(bl) }
 
   // Belt and braces: a card screen with nothing takeable must never show.
   if (!wrap.querySelector('.card')) { closeCards(); return }
@@ -9190,6 +9247,8 @@ function syncHud() {
   }
   const html = rows.join('')
   if (html !== hudRows) { hudRows = html; $('weapons').innerHTML = html }   // CB-M3 2026-09-30: only when the rows change (build_CB_2026-09-30)
+  // PT3-P10 2026-10-19: PLAN_PT3 P10 - the card screen's named copy of the list (phones only; offerCards), rewritten only when its rows change (build_PT3_2026-10-19)
+  const cbl = SMALL ? $('cardbuild') : null; if (cbl && cbl._rows !== html) { cbl._rows = html; cbl.innerHTML = html }
 }
 
 // CB-M3 2026-09-30: the merge moment (PLAN_CB C3; ruling RC4), played by closeCards for each synergy taken on the card screen just closed (synMerge). The synergy's row is marked fresh (syncHud, CSS .wpn.fresh): it appears as the copies arrive and glows briefly. Unless reduced motion is set, a copy of each of its two measure rows is laid over that row and travels to the synergy's row, shrinking and fading as it goes (0.65 s), then is removed; the measure rows and their levels stay in the list - nothing is taken out of it. A copy is made only where both rows are laid out and inside the list's visible box (on a phone the list is cut at 38vh). Under reduced motion nothing travels and the row is simply highlighted. After 2.4 s the mark is cleared. The banner (flash) is not touched. No text: the copies are aria-hidden (build_CB_2026-09-30)
@@ -12176,7 +12235,8 @@ function offerPlaces(keep) {
     const pl = PLACES[id]
     const roster = Object.keys(pl.roster)
       .sort((a, b) => pl.roster[a].at - pl.roster[b].at)
-      .map(k => `<span>${HAZARDS[k].name}${pl.roster[k].at ? ' · ' + pl.roster[k].at + 's' : ''}</span>`).join('')
+      // PT3-P11 2026-10-19: PLAN_PT3 P11 - each hazard tag names the hazard only, its arrival time removed (the user's words; "Flood · 20s" -> "Flood"), on computers and phones alike; the tags keep their order by arrival (build_PT3_2026-10-19)
+      .map(k => `<span>${HAZARDS[k].name}</span>`).join('')
     // A place you have played is a place you have a mark in. Shown on the card, because
     // the choice of where to go is the moment that mark is worth knowing.
     const hist = runsStore().place[id]
