@@ -741,14 +741,14 @@
   .wpn.fresh{margin:-2px -6px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);
     box-shadow:0 0 0 1px var(--mc);animation:cb-merge 1.6s ease-out both}
   @keyframes cb-merge{0%,35%{opacity:0;box-shadow:0 0 0 0 transparent}55%{opacity:1;box-shadow:0 0 14px 4px var(--mc)}100%{opacity:1;box-shadow:0 0 0 1px var(--mc)}}
-  @media (prefers-reduced-motion: reduce){ .wpn.fresh{animation:none} }
+  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: the OS setting while no choice is stored, else the player's choice). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .wpn.fresh{animation:none}
   /* G-M2 2026-10-13: a held synergy's row, outside its merge mark: the same 1 px edge as .fresh, in its colour at an alpha that follows its ripening f (--rp, set by syncHud) (build_G_2026-10-01) */
   .wpn.sy.rp{margin:-2px -6px;padding:2px 6px;border-radius:6px;box-shadow:0 0 0 1px var(--rp)}
   /* G-M5 2026-10-13: (c) the pair-ready dot after a measure row - a filled round dot (shape, not colour alone; named by role img); (d) the one pulse of a ready pair's two rows, 1.0 s, a still highlight under reduced motion. The negative margin keeps the list from moving, as .fresh does (build_G_2026-10-01) */
   .wpn i.pr{width:7px;height:7px;border-radius:50%;background:#ffe08a;flex:none}
   .wpn.pp{margin:-2px -6px;padding:2px 6px;border-radius:6px;background:rgba(255,224,138,.16);animation:g-pp 1s ease-out both}
   @keyframes g-pp{0%{box-shadow:0 0 0 0 rgba(255,224,138,0)}40%{box-shadow:0 0 12px 3px rgba(255,224,138,.7)}100%{box-shadow:0 0 0 1px rgba(255,224,138,.5)}}
-  @media (prefers-reduced-motion: reduce){ .wpn.pp{animation:none;box-shadow:0 0 0 1px rgba(255,224,138,.6)} }
+  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: the OS setting while no choice is stored, else the player's choice). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .wpn.pp{animation:none;box-shadow:0 0 0 1px rgba(255,224,138,.6)}
 
   #cards{position:fixed;inset:0;z-index:20;display:none;align-items:flex-start;
     justify-content:center;overflow-y:auto;overscroll-behavior:contain;
@@ -946,7 +946,7 @@
   .card.grand .tier,.card.grand .gate{color:#c4b5ff}
   @keyframes gr-glow{0%,100%{box-shadow:0 0 8px 1px rgba(143,227,255,.30)}50%{box-shadow:0 0 22px 5px rgba(143,227,255,.62)}}
   @keyframes gr-glow-g{0%,100%{box-shadow:0 0 12px 2px rgba(196,181,255,.40)}50%{box-shadow:0 0 30px 8px rgba(196,181,255,.75)}}
-  @media (prefers-reduced-motion: reduce){ .card.fuse{animation:none} .card.grand{box-shadow:0 0 22px 5px rgba(196,181,255,.58)} }
+  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: the OS setting while no choice is stored, else the player's choice). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .card.fuse{animation:none} :where(body.rm) .card.grand{box-shadow:0 0 22px 5px rgba(196,181,255,.58)}
 
   /* card-screen economy: reroll + banish */
   #cardbar{width:100%;display:flex;gap:8px;justify-content:center;margin-top:2px;pointer-events:auto}
@@ -963,7 +963,7 @@
   .card{position:relative}
   #cards.banish .card:not(.syn):not(.trade):not(.fuse) .banx{opacity:1}
   #cards.banish .card:not(.syn):not(.trade):not(.fuse){border-color:rgba(255,77,94,.5)}
-  /* P6-A1 2026-09-25: the Sources switch on the card bar (T1-1 (a)). Off, the default, the source line of the measure and trade-off cards leaves the face; on (#cards.srcon), it shows exactly as before, the same element and style (build_P6_2026-09-25) */
+  /* P6-A1 2026-09-25: the Sources switch on the card bar (T1-1 (a)). Off, the source line of the measure and trade-off cards leaves the face; on (#cards.srcon), the default, it shows exactly as before, the same element and style (build_P6_2026-09-25) (PT-P3 2026-10-19: PLAN_PT P3 - corrected; it read "Off, the default, the source line ...; on (#cards.srcon), it shows" (build_PT_2026-10-19)) */
   #cards:not(.srcon) .card .src{display:none}
   /* P6-A2 2026-09-25: a Learning gloss flagged `withsrc` goes with the source line (build_P6_2026-09-25) */
   #cards:not(.srcon) .card .gloss.withsrc{display:none}
@@ -1004,6 +1004,9 @@
   /* ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch and its note, under the Sources switch, with that switch's two rules copied, so the rows look alike; T5 - #zoomsay, the polite live region that says the new zoom after a press, kept off the screen by the usual visually-hidden rule (build_ZOOMTOG_2026-10-18) */
   #zoomwrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
   #zoomnote{font-size:11.5px;opacity:.55;margin:6px 0 14px;line-height:1.5}
+  /* PT-P1 2026-10-19: PLAN_PT P1 - the start screen's Effects switch and its note, under the Zoom switch, with that switch's two rules copied, so the rows look alike (build_PT_2026-10-19) */
+  #fxwrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
+  #fxnote{font-size:11.5px;opacity:.55;margin:6px 0 14px;line-height:1.5}
   #zoomsay{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
 
   /* institutional capacity: the bounded meta layer, bought with recovery budget */
@@ -1013,6 +1016,7 @@
      what stood between a new player and the game was eight disabled buttons. The head is
      the toggle and always shows the budget; the layer unfolds itself the moment something
      is actually affordable, and a manual toggle wins from then on. */
+  /* PT-P4 2026-10-19: PLAN_PT P4 - the last sentence above no longer holds: the layer is open every time the start screen opens, whether or not anything is affordable; the head still folds it by hand, until the start screen next opens (offerMeta, metaFold) (build_PT_2026-10-19) */
   #metahead{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
     opacity:.55;margin-top:6px;cursor:pointer;user-select:none;padding:7px 0}
   #metahead:hover{opacity:.8}
@@ -1206,7 +1210,7 @@
     border:1px solid rgba(255,255,255,.25);cursor:pointer;opacity:.7}
   .rskip:hover{opacity:1}
   /* P6-B1 2026-09-25: T2-0 - reduced motion, the OS setting (the Lead's decision: no in-game toggle yet). The one CSS motion this build adds is the streak picture's single pass (P6-B6, .redo-art); under this rule it shows its still, final frame at once. The payout count is driven by script, so the script reads the same setting (reduceMotion) (build_P6_2026-09-25) */
-  @media (prefers-reduced-motion: reduce){ .redo-art *{animation:none!important} }
+  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: the OS setting while no choice is stored, else the player's choice). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .redo-art *{animation:none!important}
   /* P6-B3 2026-09-25: F2 - a mark besides colour on the marked options: the tick or cross and S-B1's label on a line of their own inside the button, and a second pixel of border drawn inside it (an inset ring, so nothing moves), as the how-to picture's marked options have 2 px (build_P6_2026-09-25) */
   .opt.right{box-shadow:inset 0 0 0 1px #3fb950} .opt.wrong{box-shadow:inset 0 0 0 1px #f85149}
   .redo-lbl{display:block;margin-top:6px;font-size:11.5px;font-weight:800;letter-spacing:.02em}
@@ -1360,6 +1364,54 @@
     #credits{padding:12px 10px}
     #credits-t{font-size:20px}
   }
+  /* PT-P5 2026-10-19: PLAN_PT P5 - the start screen's layout. The two wrappers (#startside, #startmain; markup) are plain full-width blocks
+     everywhere, so below the break - a phone (body.small, set from SMALL in the script) or any window narrower than 1200 CSS px - the page
+     is the single column it was, child for child. At 1200 px and wider on a window that is not SMALL: the settings in a left column of 360 px
+     (the heading and How to play on one row, the intro, the dial, then the four switches two by two, each note under its switch) and, on the
+     right, the six place cards in a 3 x 2 grid of compact cards (a 34 px picture strip, tighter spacing, slightly smaller type; every word
+     kept), the capacity section under them (its eight nodes four to a row), then the Understanding line, Art credits and the dev door. The
+     places come first in the right column by `order`, so the reading order (the markup) is unchanged. No player text is removed or changed.
+     Every rule names #start or a child of it at id specificity, so the "#start div" trap (8.2 above) does not reach them; the intro is
+     #startside > p, because "#start p" also matches each card's paragraph (build_PT_2026-10-19) */
+  #start div#startside, #start div#startmain{max-width:none;margin:0}
+  @media (min-width:1200px){
+    body:not(.small) #start{padding:16px 24px}
+    body:not(.small) #start div.wide{max-width:1680px;width:100%;display:flex;gap:28px;align-items:flex-start}
+    body:not(.small) #start div#startside{flex:0 0 360px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:12px;align-items:start}
+    body:not(.small) #start div#startside > *{grid-column:1 / -1}
+    body:not(.small) #start h1{grid-row:1;grid-column:1;text-align:left;align-self:center;margin:0}
+    body:not(.small) #start #howbtn{grid-row:1;grid-column:2;justify-self:end;margin:0}
+    body:not(.small) #start div#startside > p{grid-row:2;font-size:12.5px;line-height:1.55;margin:10px 0 12px}
+    body:not(.small) #start div#diffhead{grid-row:3}
+    body:not(.small) #start div#diffwrap{grid-row:4;max-width:none}
+    body:not(.small) #start div#diffnote{grid-row:5;margin:6px auto 8px}
+    body:not(.small) #start div#plainwrap{grid-row:6;grid-column:1;max-width:none}
+    body:not(.small) #start div#plainnote{grid-row:7;grid-column:1;margin:4px auto 10px}
+    body:not(.small) #start div#srcwrap{grid-row:6;grid-column:2}
+    body:not(.small) #start div#srcnote{grid-row:7;grid-column:2;margin:4px auto 10px}
+    body:not(.small) #start div#zoomwrap{grid-row:8;grid-column:1}
+    body:not(.small) #start div#zoomnote{grid-row:9;grid-column:1;margin:4px auto 0}
+    body:not(.small) #start div#fxwrap{grid-row:8;grid-column:2}
+    body:not(.small) #start div#fxnote{grid-row:9;grid-column:2;margin:4px auto 0}
+    body:not(.small) #start div#startmain{flex:1 1 0;min-width:0;display:flex;flex-direction:column}
+    body:not(.small) #start div#startwrap{order:-1;max-width:none;width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 4px}
+    body:not(.small) #start #startwrap .card.place{width:auto;max-width:none;margin:0;padding:11px 14px 10px}
+    body:not(.small) #start .card.place .prev{height:34px;margin:-11px -14px 8px}
+    body:not(.small) #start .card.place .prev span{bottom:7px}
+    body:not(.small) #start .card.place .tier{margin-bottom:2px}
+    body:not(.small) #start .card.place h3{font-size:15px;margin-bottom:2px}
+    body:not(.small) #start .card.place p{font-size:12px;line-height:1.45;margin:0}
+    body:not(.small) #start .card.place .roster{margin-top:7px;gap:4px}
+    body:not(.small) #start .card.place .roster span{font-size:10px;padding:1px 7px}
+    body:not(.small) #start .card.place .edge{margin-top:7px;padding-top:6px;font-size:11px;line-height:1.45}
+    body:not(.small) #start .card.place .phist{margin-top:6px;padding-top:5px}
+    body:not(.small) #start div#metahead{max-width:none;margin:2px 0 0;padding:4px 0}
+    body:not(.small) #start div#metawrap{max-width:none;width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:4px 0 2px}
+    body:not(.small) #start #metawrap .mbtn{max-width:none;padding:5px 8px;gap:2px}
+    body:not(.small) #start div#metanote{max-width:none;margin:4px 0 4px;min-height:0}
+    body:not(.small) #start div#metaearn{max-width:none}
+    body:not(.small) #start div#learnhead{max-width:none;margin:2px 0 4px}
+  }
 </style>
 </head>
 <body>
@@ -1401,6 +1453,8 @@
 </div></div>
 
 <div id="start"><div class="wide">
+  <!-- PT-P5 2026-10-19: PLAN_PT P5 - two wrappers, #startside (the heading, How to play, the intro, the dial and the four switches) and #startmain (the capacity section, the Understanding line, the place cards, Art credits and the dev door), around the same children in the same order, so a screen reader and a phone see the page as before; on a computer window at the two-column break and wider the CSS puts them side by side (build_PT_2026-10-19) -->
+  <div id="startside">
   <h1>Compound</h1>
   <button id="howbtn" class="dbtn howbtn" type="button">How to play</button>
   <p>You are a place that hazards keep arriving at. You cannot stop them coming — you can only decide what you build, and how fast. Aiming and firing are automatic. Each time you level up, pick one card; measures that go together offer more. When the run ends, you can answer questions, and what you answer carries into the next run.
@@ -1424,6 +1478,11 @@
   <!-- ZOOMTOG 2026-10-18: T3 - the Zoom switch and its note, filled by offerZoom(); the same state as the card bar's Zoom button (build_ZOOMTOG_2026-10-18) -->
   <div id="zoomwrap"></div>
   <div id="zoomnote"></div>
+  <!-- PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch and its note, filled by offerFx(), under the Zoom switch (build_PT_2026-10-19) -->
+  <div id="fxwrap"></div>
+  <div id="fxnote"></div>
+  </div><!-- PT-P5 2026-10-19: end of #startside (build_PT_2026-10-19) -->
+  <div id="startmain"><!-- PT-P5 2026-10-19 (build_PT_2026-10-19) -->
   <div id="metahead"></div>
   <div id="metawrap"></div>
   <div id="metanote"></div>
@@ -1433,6 +1492,7 @@
   <!-- ART-E 2026-10-17: E2 - the "Art credits" button: after the place cards, before the dev door; it opens #credits (credOpen in the script) (build_ART_2026-10-17) -->
   <div id="credwrap"><button id="credbtn" class="dbtn credbtn" type="button">Art credits</button></div>
   <div id="devwrap"></div>
+  </div><!-- PT-P5 2026-10-19: end of #startmain (build_PT_2026-10-19) -->
 </div></div>
 
 <!-- How to play (S3) and the pausing hint cards (S4), 2026-09-14. Direct children of body on purpose
@@ -2067,8 +2127,21 @@ let zoomDevSync = null
 const zoomNow = () => zoomPick || ZOOM[zoomCase()] || ZOOM_DEFAULT   // ZOOMTOG 2026-10-18: T5 - "zoomPick ||" added in front; was const zoomNow = () => ZOOM[zoomCase()] || ZOOM_DEFAULT (build_ZOOMTOG_2026-10-18)
 // P6-B1 2026-09-25: T2-0 - the reduced-motion flag: the OS setting, read at load and again on every change (the Lead's decision: no in-game toggle yet). Every motion this build adds reads it: set, each beat shows at its final state at once, and the sounds keep their order. The CSS rule of the same name covers what CSS animates, which this flag alone could not stop (build_P6_2026-09-25)
 const RM_Q = matchMedia('(prefers-reduced-motion: reduce)')
-let reduceMotion = RM_Q.matches
-const rmSync = e => { reduceMotion = e.matches }
+// PT-P1 2026-10-19: PLAN_PT P1 - the start screen's Effects switch (offerFx). fxPick is the player's choice: true = effects on (full motion),
+// false = off (reduced motion), null = no choice stored. With no choice, reduceMotion follows the OS setting (RM_Q) at load and on every
+// change event, as before; a press stores a choice per browser under FX_KEY, on the SRC_KEY pattern (one JSON object, try/catch on every
+// read and write; a value that does not parse, a field that is not true or false, or a store that throws reads as no choice), and from
+// then on the choice overrides the OS until it is pressed again. Every reader of reduceMotion reads the variable when it runs, so it
+// follows at once; the four CSS rules that were under @media (prefers-reduced-motion: reduce) now hang on the class rm on <body>, which
+// rmClass() keeps equal to reduceMotion (build_PT_2026-10-19)
+const FX_KEY = 'compoundEffectsV1'
+function fxStore() { try { const v = JSON.parse(localStorage.getItem(FX_KEY) || '{}').on; return typeof v === 'boolean' ? v : null } catch (e) { return null } }
+function fxSave(on) { try { localStorage.setItem(FX_KEY, JSON.stringify({ on })) } catch (e) {} }
+let fxPick = fxStore()
+let reduceMotion = fxPick === null ? RM_Q.matches : !fxPick   // PT-P1 2026-10-19: was let reduceMotion = RM_Q.matches (build_PT_2026-10-19)
+const rmClass = () => { document.body.classList.toggle('rm', reduceMotion) }   // PT-P1 2026-10-19 (build_PT_2026-10-19)
+rmClass()   // PT-P1 2026-10-19 (build_PT_2026-10-19)
+const rmSync = e => { if (fxPick === null) reduceMotion = e.matches; rmClass(); if ($('fxwrap') && $('fxwrap').firstChild) offerFx() }   // PT-P1 2026-10-19: the OS change moves the state only while no choice is stored, and the switch is redrawn; was const rmSync = e => { reduceMotion = e.matches } (build_PT_2026-10-19)
 if (RM_Q.addEventListener) RM_Q.addEventListener('change', rmSync)
 else if (RM_Q.addListener) RM_Q.addListener(rmSync)        // older Safari has only the old name
 // Playtest tools, off unless the URL says ?dev=1 (or #dev) — a player on the public site
@@ -2104,6 +2177,7 @@ addEventListener('resize', resize); resize()
 // COARSE and SMALL are declared above, next to resize(), because resize() reads SMALL at
 // module init - see the note there.
 if (COARSE) document.body.classList.add('touch')
+if (SMALL) document.body.classList.add('small')   // PT-P5 2026-10-19: PLAN_PT P5 - the start screen's two-column layout is for a window that is not SMALL (a phone keeps one column whatever its width); CSS reads SMALL through this class (build_PT_2026-10-19)
 
 const stick = { on: false, id: null, ox: 0, oy: 0, x: 0, y: 0, dx: 0, dy: 0 }
 const STICK_R = 58
@@ -4299,10 +4373,11 @@ let learnFunds = 0                                    // ...and what its debrief
 let METALV = {}                                       // institutional-capacity levels, cached from storage (hot paths read this)
 let introSeen = {}                        // hazard kinds already introduced this run
 // DL-M2 2026-10-14: growth pressure removed (PLAN_DIAL D2, D9): its store (PRESS_KEY 'compoundPressureV1', pressStore, pressSave), the PRESSURE state and PRESS_MUL are gone; the key is no longer read and is left in place in the browser; nothing else read them (build_DIAL_2026-10-14)
-// P6-A1 2026-09-25: the card screen's Sources switch is remembered per browser - its own store on the compoundOnboardV1 pattern (JSON under one key, every read and write in try/catch). Not a field of compoundOnboardV1 itself: onboardStore() keeps only intro and hints, and onboardMark() writes that back, so the next hint would erase it. Absent, unreadable or throwing storage gives false (hidden, the default), and the switch then holds for the page load only (build_P6_2026-09-25)
+// P6-A1 2026-09-25: the card screen's Sources switch is remembered per browser - its own store on the compoundOnboardV1 pattern (JSON under one key, every read and write in try/catch). Not a field of compoundOnboardV1 itself: onboardStore() keeps only intro and hints, and onboardMark() writes that back, so the next hint would erase it. Absent, unreadable or throwing storage gives true (shown, the default), and the switch then holds for the page load only (build_P6_2026-09-25) (PT-P3 2026-10-19: PLAN_PT P3 - corrected; it read "gives false (hidden, the default)" (build_PT_2026-10-19))
 const SRC_KEY = 'compoundSourcesV1'
-// PL-FIX 2026-10-15: FX-E (check_POLISH.md F5) - a stored `shown` that is not true or false now gives false (off, the default), as plainStore() falls back for a value that is not a boolean; a stored true still gives on. It read "return !!JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown", so "false", 1 or "no" turned the switch on (build_POLISH_2026-10-15 fix round)
-function srcStore() { try { const v = JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown; return typeof v === 'boolean' ? v : false } catch (e) { return false } }
+// PL-FIX 2026-10-15: FX-E (check_POLISH.md F5) - a stored `shown` that is not true or false now gives the default (off then; on since PT-P3), as plainStore() falls back for a value that is not a boolean; a stored true still gives on. It read "return !!JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown", so "false", 1 or "no" turned the switch on (build_POLISH_2026-10-15 fix round) (PT-P3 2026-10-19: PLAN_PT P3 - corrected; it read "now gives false (off, the default)" (build_PT_2026-10-19))
+// PT-P3 2026-10-19: PLAN_PT P3 - Sources on by default: no key, a value that does not parse, a `shown` that is not true or false, or a store that throws gives true; a stored true or false is kept. Every reader follows srcShown as before: the start screen switch (offerSrc), the card bar's button and #cards.srcon (offerCards); was function srcStore() { try { const v = JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown; return typeof v === 'boolean' ? v : false } catch (e) { return false } } (build_PT_2026-10-19)
+function srcStore() { try { const v = JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown; return typeof v === 'boolean' ? v : true } catch (e) { return true } }
 function srcSave(on) { try { localStorage.setItem(SRC_KEY, JSON.stringify({ shown: on })) } catch (e) {} }
 let srcShown = srcStore()                 // Sources switch on the card bar: true shows every card's source line
 const banished = {}                       // measure id -> ruled out for this run
@@ -4420,15 +4495,24 @@ function doDodge() {
 }
 
 // ---------------------------------------------------------------- input
+// PT-P6 2026-10-19: PLAN_PT P6 - a key pressed or held on a card screen (the start screen with the place cards, or the level-up screen
+// #cards) never moves the player after that screen closes. keyMute holds every key whose keydown came while one of them was up (A / D and
+// the arrows also move the card highlight there, by the listener after cardKeys); such a key is not entered in `keys` - its auto-repeat
+// included - until its keyup. closeCards also mutes every key that was already held when the level-up screen opened and empties `keys`
+// (reset() empties it when a place card starts a run, as before). M and Space keep their own actions, as before; blur forgets both maps.
+// The harness's __surv.key writes `keys` directly and is not affected (build_PT_2026-10-19)
+let keyMute = {}
+const cardScreenUp = () => !$('start').classList.contains('gone') || $('cards').classList.contains('show')
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase()
   if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k)) e.preventDefault()
   if (k === 'm') AU.toggle()
   if (k === ' ' && !e.repeat) doDodge()
-  keys[k] = true
+  if (cardScreenUp()) keyMute[k] = true   // PT-P6 2026-10-19 (build_PT_2026-10-19)
+  if (!keyMute[k]) keys[k] = true   // PT-P6 2026-10-19: was keys[k] = true (build_PT_2026-10-19)
 })
-addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false })
-addEventListener('blur', () => { keys = {} })
+addEventListener('keyup', e => { const k = e.key.toLowerCase(); keys[k] = false; delete keyMute[k] })   // PT-P6 2026-10-19: was addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false }) (build_PT_2026-10-19)
+addEventListener('blur', () => { keys = {}; keyMute = {} })   // PT-P6 2026-10-19: was addEventListener('blur', () => { keys = {} }) (build_PT_2026-10-19)
 
 // ---------------------------------------------------------------- hazards
 // Enemies are hazard impacts reaching the place you are defending, not creatures. You are
@@ -4477,7 +4561,7 @@ const HAZARD_IDS = Object.keys(HAZARDS)
 // SP-M1 / SP-M3 / SP-M4 / SP-M5 2026-10-19: PLAN_SPLIT S1-S5 - every number the melee / ranged split adds, in one table beside HAZARDS (which stays as it was). kinds: the three that split (S1: Earthquake, Storm, Wildfire; flood fronts, heat zones, bosses and elites do not). melee / ranged: multipliers on today's body (health, touch damage, speed, size - size is the hit radius e.r, and the drawn sprite follows it). hold / holdBand / sideW / side: a ranged body comes to `hold` px from what it is after, at full speed when it is more than holdBand px off that distance, and sidesteps at that distance (sin(age x sideW + phase) x side of its speed). chip: the ranged Earthquake's rock chip, read by enemyFire as a storm's or a fire's shoot entry is (r and life are the Builder's: r = the storm shard's 4.5; life 2.5 s, so it flies about 1.19 x its range, as the storm's and the fire's do). ring: the ranged mark (S5), a thin pale steady dashed ring `gap` px out from the body, two-tone (a dark wider pass under it). Every value a first guess for the measurement (build_SPLIT_2026-10-18)
 const SPLIT = {
   kinds: { quake: true, storm: true, fire: true },
-  melee: { hp: 1.3, dmg: 1.6, spd: 1.1, r: 1.15 },   // SP-T3 2026-10-19: the Lead's tuning round (measure_SPLIT.md M4) - was `melee: { hp: 1.3, dmg: 1.3, spd: 1.1, r: 1.15 },`; touch damage x1.6, still above ranged on every multiplier (build_SPLIT_2026-10-18 tuning)
+  melee: { hp: 1.3, dmg: 1.5, spd: 1.1, r: 1.15 },   // PT-M1 2026-10-19: PLAN_PT M1 - touch damage x1.6 -> x1.5, so an elite's touch (x T.eliteDmg 1.6 on the plain body) is again above a melee body's and the elite line "hit harder" holds of every hit; melee stays above ranged on every multiplier; was `melee: { hp: 1.3, dmg: 1.6, spd: 1.1, r: 1.15 },   // SP-T3 2026-10-19: the Lead's tuning round (measure_SPLIT.md M4) - was `melee: { hp: 1.3, dmg: 1.3, spd: 1.1, r: 1.15 },`; touch damage x1.6, still above ranged on every multiplier (build_SPLIT_2026-10-18 tuning)` (build_PT_2026-10-19)
   ranged: { hp: 0.75, dmg: 0.7, spd: 0.9, r: 0.9 },
   hold: 260, holdBand: 40, sideW: 1.6, side: 0.8,
   chip: { every: 3.2, n: 1, spread: 0, spd: 190, dmg: 4, range: 400, r: 4.5, life: 2.5 },   // SP-T2 2026-10-19: the Lead's tuning round (measure_SPLIT.md M4) - was `chip: { every: 3.2, n: 1, spread: 0, spd: 190, dmg: 6, range: 400, r: 4.5, life: 2.5 },`; the rock chip's damage 6 -> 4 (build_SPLIT_2026-10-18 tuning)
@@ -4914,6 +4998,32 @@ function cardKeys(box, up) {
 }
 cardKeys($('start'), () => !$('start').classList.contains('gone'))
 cardKeys($('cards'), () => $('cards').classList.contains('show'))
+// PT-P6 2026-10-19: PLAN_PT P6 - the cards by keyboard. Left arrow or A moves keyboard focus to the previous card, right arrow or D to the next,
+// on the screen that is up: the place cards (#startwrap) while the start screen is up, else the level-up cards (#cardwrap, banish mode
+// included) while #cards is shown; only cards made keyable (cardKeyable: role button). With focus on no card of that screen, the first press
+// focuses the first card. The ends wrap round (after the last card comes the first, before the first the last), so every card is one key
+// away from either end. The focused card shows the existing focus ring (.card:focus-visible, a 3 px white outline). Space and Enter then
+// choose it through cardKeys above, exactly as a click does. A repeat keydown moves nothing (a key held into the screen does not run the
+// highlight round); up and down do nothing new; a press with Ctrl, Alt or Meta, or inside a text field, is left alone. Nothing happens while
+// How to play, a hint card or the credits dialog is open, or when neither screen is up. The game's first listener has already cancelled the
+// arrows' page scroll; A / D are cancelled here only when they move the highlight. Whether the press can move the player later is handled
+// by keyMute (input, above). Mouse and touch are unchanged (build_PT_2026-10-19)
+addEventListener('keydown', e => {
+  const k = e.key
+  const dir = k === 'ArrowRight' || k === 'd' || k === 'D' ? 1 : k === 'ArrowLeft' || k === 'a' || k === 'A' ? -1 : 0
+  if (!dir || e.ctrlKey || e.altKey || e.metaKey) return
+  if (hintOpen || !$('howto').hidden || !$('credits').hidden) return
+  const tg = e.target
+  if (tg && (tg.isContentEditable || /^(INPUT|SELECT|TEXTAREA)$/.test(tg.tagName || ''))) return
+  const box = !$('start').classList.contains('gone') ? $('startwrap') : $('cards').classList.contains('show') ? $('cardwrap') : null
+  if (!box) return
+  const cs = [...box.querySelectorAll('.card[role="button"]')]
+  if (!cs.length) return
+  e.preventDefault()
+  if (e.repeat) return
+  const i = cs.indexOf(document.activeElement)
+  cs[i < 0 ? 0 : (i + dir + cs.length) % cs.length].focus()
+})
 
 // ---- Learning: plain versions (S6) --------------------------------------------------------------
 // CORRECTED 2026-09-23: comment made true - the rows it said were held without an entry got entries in section C, except six kept as is (section C round 2, section_C_2026-09-22)
@@ -5251,19 +5361,19 @@ function runsRecord() {
 }
 
 
-let metaFold = null   // null = follow affordability; true/false = the player has decided
+let metaFold = null   // null = open (PT-P4); true/false = the player has folded or unfolded it by hand since the start screen last opened   // PT-P4 2026-10-19: was "// null = follow affordability; true/false = the player has decided" (build_PT_2026-10-19)
 let metaEarn = null   // the node just bought, kept so offerMeta can re-render what it means
 function offerMeta() {
   const st = metaStore()
   METALV = st.lv
-  // Affordability, not emptiness, is what decides the default: the layer is worth the
-  // space exactly when there is something to spend on. metaFold stays null until the player
-  // touches the head, and after that their choice holds for the session.
-  const canBuy = META.some(m => (st.lv[m.id] || 0) < m.max && st.funds >= m.cost(st.lv[m.id] || 0))
-  // Re-evaluated on EVERY render while metaFold is null, not decided once at load: a run
-  // that banks budget returns to this screen with something to spend, and a layer that
-  // stayed folded because it was empty a minute ago would hide the reward it just paid.
-  const folded = metaFold === null ? !canBuy : metaFold
+  // PT-P4 2026-10-19: PLAN_PT P4 - the section is open whenever the start screen opens, whether or not anything is affordable: with no hand
+  // choice (metaFold null) it is unfolded. The hand fold on the head stays (its arrow and words unchanged), and the two places that open the
+  // start screen again ("Somewhere else" and the door, at the end of the file) set metaFold back to null first, so a fold lasts only until the
+  // start screen next opens. Removed: the affordability default - the comment "Affordability, not emptiness, is what decides the default ...
+  // their choice holds for the session.", the line const canBuy = META.some(m => (st.lv[m.id] || 0) < m.max && st.funds >= m.cost(st.lv[m.id] || 0)),
+  // its comment "Re-evaluated on EVERY render while metaFold is null ... would hide the reward it just paid." and the line
+  // const folded = metaFold === null ? !canBuy : metaFold (build_PT_2026-10-19)
+  const folded = metaFold === null ? false : metaFold
   const head = $('metahead')
   head.classList.toggle('folded', folded)
   head.textContent = `${folded ? '▸' : '▾'} Institutional capacity — recovery budget: ${st.funds}`
@@ -8139,7 +8249,7 @@ function offerCards(fromLevelUp) {
   setPaused(true)
   const wrap = $('cardwrap'); wrap.innerHTML = ''
   $('cards').classList.remove('banish')
-  // P6-A1 2026-09-25: the screen opens with the Sources switch as the player last left it (off by default) (build_P6_2026-09-25)
+  // P6-A1 2026-09-25: the screen opens with the Sources switch as the player last left it (on by default) (build_P6_2026-09-25) (PT-P3 2026-10-19: PLAN_PT P3 - corrected; it read "(off by default)" (build_PT_2026-10-19))
   $('cards').classList.toggle('srcon', srcShown)
 
   if (picksLeft <= 0) { closeCards(); return }
@@ -8355,7 +8465,7 @@ function offerCards(fromLevelUp) {
   bb.setAttribute('aria-pressed', 'false')
   bb.onclick = () => { $('cards').classList.toggle('banish'); bb.setAttribute('aria-pressed', bb.classList.toggle('armed') ? 'true' : 'false') }
   bar.appendChild(bb)
-  // P6-A1 2026-09-25: the Sources switch (T1-1 (a); text S-A1 as ruled in R-S7: "▸ Sources" off, "▾ Sources" on, accessible name "Sources", no tooltip). The glyph sits in its own aria-hidden span, so the name is the word. It sets one class on #cards, re-lists each card's description (cardDescribe, since FX2-1) and never redraws the cards: off, the default, the source line of the measure and trade-off cards is hidden; on, it shows as before (build_P6_2026-09-25)
+  // P6-A1 2026-09-25: the Sources switch (T1-1 (a); text S-A1 as ruled in R-S7: "▸ Sources" off, "▾ Sources" on, accessible name "Sources", no tooltip). The glyph sits in its own aria-hidden span, so the name is the word. It sets one class on #cards, re-lists each card's description (cardDescribe, since FX2-1) and never redraws the cards: off, the source line of the measure and trade-off cards is hidden; on, the default, it shows as before (build_P6_2026-09-25) (PT-P3 2026-10-19: PLAN_PT P3 - corrected; it read "off, the default, the source line ... is hidden; on, it shows as before" (build_PT_2026-10-19))
   const sb = document.createElement('button')
   const sbSet = () => {
     sb.innerHTML = `<span aria-hidden="true">${srcShown ? '▾' : '▸'}</span> Sources`
@@ -8401,6 +8511,8 @@ function offerCards(fromLevelUp) {
 }
 
 const closeCards = () => {
+  // PT-P6 2026-10-19: PLAN_PT P6 - when the level-up screen that was shown closes, every key still held from before it opened is muted until its keyup (keyMute, input) and `keys` is emptied, so no movement key carries over into play; keys first pressed on the screen were muted at their keydown (build_PT_2026-10-19)
+  if ($('cards').classList.contains('show')) { for (const k in keys) if (keys[k]) keyMute[k] = true; keys = {} }
   // setPaused, not `paused = false`: under an open hint card the unpause is deferred to its dismissal.
   $('cards').classList.remove('show'); $('cards').classList.remove('banish'); setPaused(false)
   // BF9 2026-09-23: a "ruled out" confirmation ends with the card screen it confirms, before the mechanism line is raised (review_B F6) (build_B_2026-09-22)
@@ -11796,7 +11908,7 @@ function offerPlain() {
   // DL-FIX 2026-10-15: FX4 (check_DIAL.md F5) - the note names messages too: PLAIN's 104 entries are 58 card texts and 46 pop-up messages and report lines; GLOSS's 15 lines are the explanations; two sentences for grade 7 or below (fx_score.py) (build_DIAL_2026-10-14 fix round)
   $('plainnote').textContent = 'Many cards and messages in plainer English. Some key words get short explanations.'
 }
-// PL-S3 2026-10-15: P6 (PLAN_POLISH; the user, 2026-10-15) - the Sources switch on the start screen, under the plain-language switch and on offerPlain()'s pattern: the button is made once and then updated in place, so keyboard focus stays on it after a press; aria-pressed; its state word in an aria-hidden span, so the accessible name is "Sources", as on the card bar. It reads and writes the card bar's own state - srcShown, saved by srcSave() under SRC_KEY - so a press here shows on the next card screen (offerCards() sets #cards.srcon from srcShown at every opening) and a press on the card bar shows here when the start screen is drawn again (the three render calls below). Nothing stored, or storage that throws: off (srcStore()). Space presses it through PL-M3's #start listener. The card bar's own button is unchanged. Its note does not change with the state (build_POLISH_2026-10-15)
+// PL-S3 2026-10-15: P6 (PLAN_POLISH; the user, 2026-10-15) - the Sources switch on the start screen, under the plain-language switch and on offerPlain()'s pattern: the button is made once and then updated in place, so keyboard focus stays on it after a press; aria-pressed; its state word in an aria-hidden span, so the accessible name is "Sources", as on the card bar. It reads and writes the card bar's own state - srcShown, saved by srcSave() under SRC_KEY - so a press here shows on the next card screen (offerCards() sets #cards.srcon from srcShown at every opening) and a press on the card bar shows here when the start screen is drawn again (the three render calls below). Nothing stored, or storage that throws: on (srcStore()) (PT-P3 2026-10-19: PLAN_PT P3 - corrected; it read "Nothing stored, or storage that throws: off (srcStore())." (build_PT_2026-10-19)). Space presses it through PL-M3's #start listener. The card bar's own button is unchanged. Its note does not change with the state (build_POLISH_2026-10-15)
 function offerSrc() {
   const wrap = $('srcwrap')
   let b = wrap.querySelector('button')
@@ -11846,6 +11958,25 @@ function offerZoom() {
   }
   zoomPaint(b)
   $('zoomnote').textContent = 'Each press moves the view closer, then back to ×1. Closer shows less of the field around you.'
+}
+// PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch on the start screen, under Zoom and on offerPlain()'s pattern: the button is made once and
+// then updated in place, so keyboard focus stays on it after a press (Tab reaches it as a <button>; Enter is the browser's click, Space the
+// #start listener's single press, as for its neighbours); aria-pressed true while effects are on; the state word in an aria-hidden span, so
+// the accessible name is "Effects". A press turns the state now shown over and stores that choice (fxSave), which overrides the OS setting
+// from then on (fxPick, reduceMotion and rmClass, beside RM_Q). The note says what the code does: off = reduceMotion, the still versions of
+// the moving effects; with no stored choice the state is the device's reduced-motion setting (build_PT_2026-10-19)
+function offerFx() {
+  const wrap = $('fxwrap')
+  let b = wrap.querySelector('button')
+  if (!b) {
+    b = document.createElement('button')
+    b.onclick = () => { fxPick = reduceMotion; reduceMotion = !fxPick; fxSave(fxPick); rmClass(); offerFx() }
+    wrap.appendChild(b)
+  }
+  b.className = 'dbtn' + (reduceMotion ? '' : ' on')
+  b.innerHTML = `Effects<span aria-hidden="true">: ${reduceMotion ? 'off' : 'on'}</span>`
+  b.setAttribute('aria-pressed', reduceMotion ? 'false' : 'true')
+  $('fxnote').textContent = 'Off shows fewer moving effects. Until you press it, it follows your device\'s setting.'
 }
 
 // The difficulty row sits above the places, because it changes what choosing a place means.
@@ -12008,6 +12139,8 @@ function initDev() {
         b.textContent = '×' + v + (v === ZOOM_DEFAULT ? ' original' : '') + (v === ZOOM_FILE[c] ? (v === ZOOM_DEFAULT ? ' ·' : '') + ' file' : '')   // ZOOMDEV-Y 2026-10-18: Y2 - labelled by value: the stop equal to ZOOM_DEFAULT original, the stop equal to the file's value file, both on one stop when they coincide; was b.textContent = '×' + v + (i === 0 ? ' original' : i === a.length - 1 ? ' file' : '') (build_ZOOMDEV_2026-10-17)
         b.onclick = () => { ZOOM[c] = v
           if (v === ZOOM_FILE[c]) delete zSaved[c]; else zSaved[c] = v   // ZOOMDEV-Y 2026-10-18: Y2 - the file's stop removes the saved value, any other stop saves it; was if (i === a.length - 1) delete zSaved[c]; else zSaved[c] = v (build_ZOOMDEV_2026-10-17)
+          // PT-P2 2026-10-19: PLAN_PT P2 - a press of a dial stop also clears the player's stored Zoom choice (zoomPick null, compoundZoomV1 removed by zoomPickSave(null)), so zoomNow() gives the dial's value at once and the last control pressed wins; a later press of the players' Zoom switch stores a choice again and the override line below says so, as before. The dial exists in dev mode only (initDev) (build_PT_2026-10-19)
+          zoomPick = null; zoomPickSave(null)
           zSave(); zSync() }
         zRow.appendChild(b); zBtns.push([v, b])
       })
@@ -12118,8 +12251,10 @@ $('again').onclick = () => { AU.start(PLACE.id); $('over').classList.remove('sho
 $('elsewhere').onclick = () => {
   $('over').classList.remove('show'); $('start').classList.remove('gone')
   // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
+  metaFold = null   // PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)
   offerPlaces(); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
+  offerFx()   // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch drawn with the others, after offerZoom() (build_PT_2026-10-19)
   reset(); paused = true
 }
 // P01 2026-09-23: the door - the shop before the next run: "Somewhere else"'s body, plus the AU.start that "Same place again" makes; offerPlaces(PLACE.id) still passes this place, which is on screen anyway, since all six places are (PLAN_SIX D1, D2), so the next run can start here (build_F_2026-09-23)
@@ -12128,8 +12263,10 @@ $('spendfirst').onclick = () => {
   AU.start(PLACE.id)
   $('over').classList.remove('show'); $('start').classList.remove('gone')
   // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
+  metaFold = null   // PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)
   offerPlaces(PLACE.id); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
+  offerFx()   // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch drawn with the others, after offerZoom() (build_PT_2026-10-19)
   reset(); paused = true
 }
 // P01 2026-09-23: set from the shop's own test (offerMeta's canBuy, verbatim), so the door opens only when something can be bought - the fast path then says what is unspent and the third button shows; otherwise the end screen is exactly as before. `banked` is false while the debrief still holds this run's budget (build_F_2026-09-23)
@@ -12154,6 +12291,7 @@ if (COARSE) {
 // PL-S3 2026-10-15: offerSrc() added after offerPlain(): the start screen's Sources switch, drawn at boot from the stored state (build_POLISH_2026-10-15)
 offerPlaces(); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
 offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
+offerFx()   // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch drawn with the others, after offerZoom() (build_PT_2026-10-19)
 reset(PLACE_IDS[0])
 paused = true          // the sim idles behind the place-select rather than running a ghost run
 requestAnimationFrame(frame)
