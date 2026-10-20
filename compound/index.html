@@ -10493,7 +10493,7 @@ function artbAlt(id, mode) {
   if (ARTB.alt[key]) return ARTB.alt[key]
   const im = ARTB.img[id], c = document.createElement('canvas')
   c.width = im.width; c.height = im.height
-  const g = c.getContext('2d')
+  const g = c.getContext('2d', { willReadFrequently: true })   // PT4-F1 2026-10-20: the copy kept on the CPU side, so drawing it makes no GPU readback; was const g = c.getContext('2d') (build_PT4_2026-10-20)
   g.drawImage(im, 0, 0)
   const d = g.getImageData(0, 0, c.width, c.height), p = d.data
   for (let i = 0; i < p.length; i += 4) {
@@ -10639,7 +10639,7 @@ const ARTC_OUTLINE = { pk_relief: 1, pk_assess: 1, pk_evac: 1 }, ARTC_OL = {}, A
 function artcOutline(id) {
   const im = ARTC.img[id], M = ARTC_META[id], w = 2 * M.cw + 2, h = 2 * M.ch + 2, c = document.createElement('canvas')
   c.width = w; c.height = h
-  const g = c.getContext('2d')
+  const g = c.getContext('2d', { willReadFrequently: true })   // PT4-F1 2026-10-20: the copy kept on the CPU side, so drawing it makes no GPU readback; was const g = c.getContext('2d') (build_PT4_2026-10-20)
   g.imageSmoothingEnabled = false
   g.drawImage(im, 0, 0, M.cw, M.ch, 1, 1, 2 * M.cw, 2 * M.ch)
   const d = g.getImageData(0, 0, w, h), p = d.data, vis = new Uint8Array(w * h)
@@ -10672,7 +10672,7 @@ function artcTint(id, col) {
   const im = ARTC.img[id]
   c = document.createElement('canvas')
   c.width = im.width; c.height = im.height
-  const g = c.getContext('2d')
+  const g = c.getContext('2d', { willReadFrequently: true })   // PT4-F1 2026-10-20: the copy kept on the CPU side, so drawing it makes no GPU readback; was const g = c.getContext('2d') (build_PT4_2026-10-20)
   g.drawImage(im, 0, 0)
   const d = g.getImageData(0, 0, c.width, c.height), p = d.data, C = rgbOf(col).split(',').map(Number)
   let mx = 1
