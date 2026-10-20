@@ -2267,7 +2267,10 @@ const SMALL = COARSE && Math.min(innerWidth, innerHeight) < 820
 // between the two mobile cases.
 const ZOOM_DEFAULT = 1
 const ZOOM = { desktop: 1, mobileLandscape: 1.25, mobilePortrait: 1.25 }   // ZOOMDEV-Y 2026-10-18: Y1 - desktop 2 -> 1, the two phone cases 1.25 and ZOOM_DEFAULT 1 kept (the user's choice of 2026-10-18, PLAN_ZOOMDEV.md "The values chosen"); was const ZOOM = { desktop: 2, mobileLandscape: 1.25, mobilePortrait: 1.25 }   // ART-H 2026-10-17: H1 - the two phone cases 1.5 -> 1.25, desktop 2 and ZOOM_DEFAULT 1 kept (the user's answers of 2026-10-17, PLAN_ART.md "The zoom tuned"); was const ZOOM = { desktop: 2, mobileLandscape: 1.5, mobilePortrait: 1.5 } (build_ART_2026-10-17) (build_ZOOMDEV_2026-10-17)
-const zoomCase = () => !SMALL ? 'desktop' : innerWidth >= innerHeight ? 'mobileLandscape' : 'mobilePortrait'
+// PT5-F3 2026-10-20: PLAN_PT5 addendum F3 - zoomCase() no longer reads innerWidth / innerHeight on each call (draw() calls it every frame through zoomNow()). zoomW / zoomH hold the window's size: read here once at load, and again on every resize by the listener on the next line, which is registered here, before resize() (below) and zSync (initDev) register theirs, so any resize handler that calls zoomCase() already sees the new size. The answers are the same as before. Was const zoomCase = () => !SMALL ? 'desktop' : innerWidth >= innerHeight ? 'mobileLandscape' : 'mobilePortrait' (build_PT5_2026-10-20)
+let zoomW = innerWidth, zoomH = innerHeight   // PT5-F3 2026-10-20 (build_PT5_2026-10-20)
+addEventListener('resize', () => { zoomW = innerWidth; zoomH = innerHeight })   // PT5-F3 2026-10-20: first of the window's resize listeners (build_PT5_2026-10-20)
+const zoomCase = () => !SMALL ? 'desktop' : zoomW >= zoomH ? 'mobileLandscape' : 'mobilePortrait'   // PT5-F3 2026-10-20 (build_PT5_2026-10-20)
 // ZOOMTOG 2026-10-18: T1 / T2 / T4 / T5 - the players' Zoom switch (PLAN_ZOOMTOG.md). ZOOM_STEPS are its four values in press order. zoomPick is the
 // player's choice, one value for every screen case, or null when none is stored: then the zoom is the table's value for the case, as before (T1).
 // It is remembered per browser under its own key on the SRC_KEY pattern (one JSON object, try/catch on every read and write); a stored value
@@ -2555,6 +2558,7 @@ const T = {
   defendMul: 1.35,                 // damage AND rate, at the point of use, while you hold a hurt one
   defendPulseCd: 0.85,             // the site's own crews hit back on this beat
   defendPulseDmg: 16,              // ...and only what is sitting on it, so it is not a farming aura
+  defendAutoCd: 3.0,               // PT5-P13b 2026-10-20: PLAN_PT5 Addendum 3 (P13b) - the crews' slow beat: with a heat zone or flood front sitting on it and you not within the repair reach, the same strike as the pulse every this many seconds; the Lead's starting value, to be judged by the re-measurement (build_PT5_2026-10-20)
   serviceDipAt: 65,                // below this it was really in danger, and saving it counts
   serviceDur: 8,                   // how long a restored service runs at full stretch
   serviceCd: 20,                   // per lifeline, so one parked hazard cannot be farmed
@@ -2596,6 +2600,18 @@ const T = {
   smearE: 0.45, smearCap: 7, smearW: 0.6,
   haloA0: 0.09, haloPerLv: 0.08, haloMax: 0.5,
   wakeLen0: 8, wakePerLv: 3,
+}
+// PT5-R1a..R1f 2026-10-20: PLAN_PT5 R1 (the user's go-ahead relayed in record 3fc807d8; the approval of this round in PLAN_PT5.md) - the long-run numbers, one new table beside T (T itself is unchanged). Every number is from ../design_2026-10-20/curves_proposal.js (its P table and xpTable(80, 15, 72)) and DESIGN_long_runs.md; read by rampTimeAt, hpRampNow, hitRampNow (helpers), eliteShare, the spawn rate (step), the two P.need lines and rebuildLifeline (build_PT5_2026-10-20)
+const LONGRUN = {
+  split: 240,                      // PT5-R1c: s of run clock; health and hits follow today's formulas up to here (PLAN_PT5 R1-c; DESIGN 6.1; curves_proposal.js P.split)
+  hpRamp2: 88,                     // PT5-R1c: after split, health +1 per 88 ramp-seconds (PLAN_PT5 R1-c; DESIGN 6.1, the SOFT set; P.hpRamp2)
+  dmgRamp2: 196,                   // PT5-R1c: after split, hits +1 per 196 ramp-seconds (PLAN_PT5 R1-c; DESIGN 6.1; P.dmgRamp2)
+  steps: [480, 900, 1200, 1500],   // PT5-R1c: the step-ups, s of run clock - 8, 15, 20 and 25 minutes (PLAN_PT5 R1-c; DESIGN 6.1; P.steps)
+  stepMul: 1.12,                   // PT5-R1c: each step-up passed multiplies health and hits by this (PLAN_PT5 R1-c; DESIGN 6.1; P.stepMul)
+  spawnCapAt: 300,                 // PT5-R1d: the spawn rate stops rising here, s of run clock (PLAN_PT5 R1-d; DESIGN 6.2; P.spawnCapAt)
+  elite: [[90, 0.04], [240, 0.14], [480, 0.14], [600, 0.20], [900, 0.26], [1500, 0.32]],   // PT5-R1e: (s of run clock, elite share), a straight line between points, held after the last; the first two are T.eliteFrom / eliteShare0 and T.eliteShareAt / eliteShare1, so up to 240 s the share is as before (PLAN_PT5 R1-e; DESIGN 6.2; P.elite)
+  xpLinFrom: 15, xpLinStep: 72,    // PT5-R1a: from level 15 on each level needs 72 XP more than the last, instead of x T.xpCurve + T.xpAdd (PLAN_PT5 R1-a; DESIGN 4.1; xpTable)
+  rebuildCost: 0.15,               // PT5-R1f: a rebuild takes this share of the capacity you have at that moment; maximum capacity is not changed (PLAN_PT5 R1-f; DESIGN 4.4 and Q3 in 10)
 }
 
 // ---------------------------------------------------------------- sound
@@ -2837,8 +2853,21 @@ if (SMALL) { T.enemyCap = 165; T.ebulletCap = 130; T.fxCap = 300; T.bulletMerge 
 // per-ramp fudge could not have given. Everything keyed to real seconds — works sites, pickups,
 // seasons, events, the boss clock — deliberately does NOT stretch, so a longer run has
 // proportionally more to do in it rather than the same run played slowly.
+// PT5-R1b 2026-10-20: PLAN_PT5 R1-b (DESIGN_long_runs.md 6.1) - the knee removed, on every step: past T.hardAt * DIFF.len the clock no longer runs DIFF.hard (or T.hardMul) times faster. Was `return (tt + Math.max(0, tt - T.hardAt * (DIFF.len || 1)) * (DIFF.hard || T.hardMul)) * DIFF.ramp }`. T.hardAt, T.hardMul and each step's len and hard stay in their tables; nothing reads them now. Before a step's old knee every value is the same number as before; the comment block above describes the clock as it was (build_PT5_2026-10-20)
 const rampTime = () => { const tt = t / T.pace
-  return (tt + Math.max(0, tt - T.hardAt * (DIFF.len || 1)) * (DIFF.hard || T.hardMul)) * DIFF.ramp }
+  return tt * DIFF.ramp }
+// PT5-R1c 2026-10-20: PLAN_PT5 R1-c, R1-d - rampTimeAt(s) is the same clock read at s seconds of run clock (s / T.pace * DIFF.ramp; rampTimeAt(t) is rampTime(), the same number), for the split below and the spawn plateau (build_PT5_2026-10-20)
+const rampTimeAt = s => s / T.pace * DIFF.ramp
+// PT5-R1c 2026-10-20: PLAN_PT5 R1-c (DESIGN_long_runs.md 6.1; curves_proposal.js prop) - the health and hit multipliers in one place for every carrier: hpRampNow() for a body's health (makeHazard), hitRampNow() for every hit that read (1 + rampTime() / T.dmgRamp) - a body's touch, its thrown shots, marked events, both bosses' touch and thrown shots, the true boss's ring and lane. Up to LONGRUN.split (240 s of run clock) they are today's (1 + rampTime() / T.hpRamp) and (1 + rampTime() / T.dmgRamp), the same numbers. After it health rises by 1 per LONGRUN.hpRamp2 ramp-seconds and hits by 1 per LONGRUN.dmgRamp2 from their values at the split, and both are multiplied by LONGRUN.stepMul once per step-up passed (LONGRUN.steps). Every step has this shape on its own clock (rampTime and rampTimeAt carry its DIFF.ramp, so its ramp-seconds and its value at the split are its own); each carrier keeps its DIFF.dmg and place factors as before. A boss's health keeps its own T.bossHpRamp curve on rampTime (build_PT5_2026-10-20)
+const lrSteps = () => { let n = 0; for (const s of LONGRUN.steps) if (t >= s) n++; return n }
+const hpRampNow = () => { const rt = rampTime()
+  if (t <= LONGRUN.split) return 1 + rt / T.hpRamp
+  const rs = rampTimeAt(LONGRUN.split)
+  return (1 + rs / T.hpRamp + (rt - rs) / LONGRUN.hpRamp2) * Math.pow(LONGRUN.stepMul, lrSteps()) }
+const hitRampNow = () => { const rt = rampTime()
+  if (t <= LONGRUN.split) return 1 + rt / T.dmgRamp
+  const rs = rampTimeAt(LONGRUN.split)
+  return (1 + rs / T.dmgRamp + (rt - rs) / LONGRUN.dmgRamp2) * Math.pow(LONGRUN.stepMul, lrSteps()) }
 const TAU = Math.PI * 2
 const rand = (a, b) => a + Math.random() * (b - a)
 const pick = a => a[(Math.random() * a.length) | 0]
@@ -5801,6 +5830,7 @@ function vbGround(z) {
   const vx0 = P.x - W / 2 / z - 96, vy0 = P.y - H / 2 / z - 96, vx1 = vx0 + W / z + 192, vy1 = vy0 + H / z + 192
   const fx0 = Math.max(vx0, VB.x0), fx1 = Math.min(vx1, VB.x1), fy0 = Math.max(vy0, VB.y0), fy1 = Math.min(vy1, VB.y1)
   const inX = fx1 > fx0, inY = fy1 > fy0
+  if (groundArt && groundPat && inX && inY) { ctx.save(); ctx.beginPath(); ctx.rect(fx0, fy0, fx1 - fx0, fy1 - fy0); ctx.clip(); groundTiles(z); ctx.restore() } else   // PT5-F4 2026-10-20: the loaded art floor drawn per tile by PT5-F2's groundTiles, clipped to the floor box, not filled from its <img> pattern; the painted tile still takes the line below. So the valley floor is no longer "as before", as the PT5-F2 note above groundTiles says (build_PT5_2026-10-20)
   if (groundPat && inX && inY) { ctx.fillStyle = groundPat; ctx.fillRect(fx0, fy0, fx1 - fx0, fy1 - fy0) }
   const sm = ctx.imageSmoothingEnabled; ctx.imageSmoothingEnabled = false
   ctx.fillStyle = VB_ART.pat.wall || VB_ROCK
@@ -6104,7 +6134,7 @@ function spawnBoss(reason, K0) {
     // eight seconds, and at the old 5.5s opener the wind-up-and-dash — the one move that
     // asks the player to do something other than hold a direction — was never seen at all.
     cdShoot: 1.6, cdCharge: 2.6, chargeVx: 0, chargeVy: 0, phase: 0,
-    dmg: T.bossTouch * (1 + rampTime() / T.dmgRamp) * DIFF.dmg * T.bossMidMul,   // BS-M1 2026-09-30: x T.bossMidMul (build_BS_2026-09-30)
+    dmg: T.bossTouch * hitRampNow() * DIFF.dmg * T.bossMidMul,   // BS-M1 2026-09-30: x T.bossMidMul (build_BS_2026-09-30)   // PT5-R1c 2026-10-20: PLAN_PT5 R1-c - was (1 + rampTime() / T.dmgRamp) (build_PT5_2026-10-20)
     // BS-M1 / BS-M3 2026-09-30: isBoss marks a compound-event body for the code that can strike either one (bossesUp); dmgK multiplies its thrown shots and strikes - T.bossMidMul here, T.tbossDmg on the true boss (build_BS_2026-09-30)
     isBoss: true, dmgK: T.bossMidMul,
   }
@@ -6206,7 +6236,7 @@ function bossTick(B, dt) {
       if (ebullets.length >= T.ebulletCap) return
       ebullets.push({ x: B.x + Math.cos(a) * B.r, y: B.y + Math.sin(a) * B.r,
                       vx: Math.cos(a) * spd, vy: Math.sin(a) * spd, r: r || 7,
-                      dmg: T.bossShot * (1 + rampTime() / T.dmgRamp) * DIFF.dmg * B.dmgK,   // BS-M1 2026-09-30: x B.dmgK (build_BS_2026-09-30)
+                      dmg: T.bossShot * hitRampNow() * DIFF.dmg * B.dmgK,   // BS-M1 2026-09-30: x B.dmgK (build_BS_2026-09-30)   // PT5-R1c 2026-10-20: PLAN_PT5 R1-c - was (1 + rampTime() / T.dmgRamp) (build_PT5_2026-10-20)
                       life: 3.2, col: B.col, kind: 'boss', ember: 0, ang: 0 })
     }
     const hold = B.how === 'siege' ? 400 : B.how === 'spiral' ? 240 : B.how === 'swarm' ? 60 : 210
@@ -6340,7 +6370,7 @@ function spawnTrueBoss() {
     r: 34 * T.tbossSize, hp, max: hp, flash: 0, kx: 0, ky: 0,
     state: 'arrive', tState: T.bossWarn, life: T.tbossLife,
     cdShoot: 1.6, cdCharge: 2.6, chargeVx: 0, chargeVy: 0, phase: 0,
-    dmg: T.bossTouch * (1 + rampTime() / T.dmgRamp) * DIFF.dmg * T.tbossDmg,
+    dmg: T.bossTouch * hitRampNow() * DIFF.dmg * T.tbossDmg,   // PT5-R1c 2026-10-20: PLAN_PT5 R1-c - was (1 + rampTime() / T.dmgRamp) (build_PT5_2026-10-20)
     isBoss: true, dmgK: T.tbossDmg, tb: true,
     // tphase: 0, then 1 below T.tbossPhase1 of its health (the ring of shots), 2 below T.tbossPhase2 (the lane, too) - ruling RB3's order
     tphase: 0, ringCd: 0, laneCd: 0, lane: null, laneDir: 1,
@@ -6370,7 +6400,7 @@ function tbossPhases(B) {
 
 // Its two added attacks, from bossTick - so only once it has arrived, and never while a hold runs (bossTick returns before this when held: their clocks wait, nothing fires or sweeps, C5). The ring's shots are thrown things (ebullets): the green belt, the veil, a hold and your grace (P.inv) meet them as they meet every thrown thing (C8). The lane is a band from its centre, tbLaneW wide and tbLaneLen long: first shown where it will start for tbLaneWarn s, then swept through tbLaneArc radians in tbLaneSweep s - a band that moves across the ground (ruling RB3); it hits you only outside your grace, and gives you grace as a hit does (C8), through P.exposure (C9). Returns true when a hit ended the run.
 function tbossAttacks(B, dt) {
-  const mul = (1 + rampTime() / T.dmgRamp) * DIFF.dmg * B.dmgK
+  const mul = hitRampNow() * DIFF.dmg * B.dmgK   // PT5-R1c 2026-10-20: PLAN_PT5 R1-c - was (1 + rampTime() / T.dmgRamp) (build_PT5_2026-10-20)
   if (B.tphase >= 1 && (B.ringCd -= dt) <= 0) {
     B.ringCd = T.tbRingEvery
     const a0 = Math.random() * TAU
@@ -6665,7 +6695,7 @@ function updateEvents(dt) {
       // B4 2026-09-22: this event's own test - the global one billed the player again for every other live event (build_B_2026-09-22)
       const hit = eventHits(ev, P.x, P.y, P.r)
       if (hit) {
-        const mul = (1 + rampTime() / T.dmgRamp) * DIFF.dmg
+        const mul = hitRampNow() * DIFF.dmg   // PT5-R1c 2026-10-20: PLAN_PT5 R1-c - was (1 + rampTime() / T.dmgRamp) (build_PT5_2026-10-20)
         // A fissure is ground you are standing on, so it bills per second and does not
         // grant the grace a single impact does.
         // Counted once per EVENT, never per contact. Ground damage bills every frame and a
@@ -7152,7 +7182,8 @@ function rebuildLifeline(kind) {
   for (const e of enemies) if (e.tgt === L) e.tgt = null
   LL_UNLOST[kind](P)
   K.on(P)
-  P.max *= T.lifelineRebuildMax
+  // PT5-R1f 2026-10-20: PLAN_PT5 R1-f (DESIGN_long_runs.md 4.4; Q3) - the price is LONGRUN.rebuildCost (15%) of the capacity you have at this moment (P.hp); maximum capacity is not changed, so heals can win it back. Was `P.max *= T.lifelineRebuildMax` (x0.75 of maximum, for the rest of the run); T.lifelineRebuildMax stays in T, read by nothing now. The clamp below is kept and changes nothing (build_PT5_2026-10-20)
+  P.hp *= 1 - LONGRUN.rebuildCost
   P.hp = Math.min(P.hp, P.max)
   llRebuilds++
   flash(`${K.name} rebuilt`, kind === 'hospital' ? 'It stands somewhere new, with 50% health.' : say('LL.' + kind + '.gain', K.gain), K.col)
@@ -7240,6 +7271,23 @@ function updateLifelines(dt) {
         AU.play('block')
       }
     }
+    // PT5-P13b 2026-10-20: PLAN_PT5 Addendum 3 (P13b) - while a heat zone or flood front sits on it (`under`, the wear's own test) and you are not within the repair reach (`here` false), the crews strike on a slow beat, every T.defendAutoCd: the pulse's own strike above (T.defendPulseDmg to each zone or front within T.lifelineR + e.r, the same push, the same square ring), with no sound and no onSite (the pulse above keeps both). Hand-over: L.autoCd is held full whenever the beat is not running (you within the reach, or nothing on it), so the first slow strike comes T.defendAutoCd after you leave or after something settles; each slow strike sets L.pulseCd to T.defendPulseCd, so the pulse after you walk in waits at least that long - never two strikes inside one T.defendPulseCd. The pulse block above is unchanged (build_PT5_2026-10-20)
+    if (here || !under) L.autoCd = T.defendAutoCd
+    else if ((L.autoCd = (L.autoCd == null ? T.defendAutoCd : L.autoCd) - dt) <= 0) {
+      L.autoCd = T.defendAutoCd
+      L.pulseCd = T.defendPulseCd
+      const K = LIFELINES[L.kind]
+      for (const e of enemies.slice()) {   // a copy, as above: hurtEnemy splices the dead out
+        if (e.gone) continue
+        if (e.behaviour !== 'zone' && e.behaviour !== 'front') continue
+        const rr = T.lifelineR + e.r
+        if (dist2(e, L) >= rr * rr) continue
+        const a = Math.atan2(e.y - L.y, e.x - L.x)
+        hurtEnemy(e, T.defendPulseDmg, Math.cos(a) * 90, Math.sin(a) * 90)
+      }
+      fxPush({ ring: true, noHit: true, x: L.x, y: L.y, r: 8, max: T.lifelineR,
+                life: 0.3, col: K.col, style: 'square', hit: new Set() })
+    }
     // Whether it was ever really in danger. A service that dipped this far and came back is a
     // save; one you topped up from 98 is not, and must not pay like one.
     if (L.hp <= T.serviceDipAt) L.dipped = true
@@ -7294,12 +7342,13 @@ function makeHazard(id, x, y, extra) {
   // itself in its own words (guidance-then-struggle — novices get told, then asked).
   if (!introSeen[id]) { introSeen[id] = true; flash(k.name + ' arrives', say('HAZ.' + id + '.src', k.src), k.col) }
   const rt = rampTime()
-  const hpS = (1 + rt / T.hpRamp) * (PLACE.bite.hpMul || 1)
+  // PT5-R1c 2026-10-20: PLAN_PT5 R1-c - health through hpRampNow() (was `(1 + rt / T.hpRamp)`); rt above still sets the speed (build_PT5_2026-10-20)
+  const hpS = hpRampNow() * (PLACE.bite.hpMul || 1)
   const e = Object.assign({   // SP-M2 2026-10-19: was `return Object.assign({` - the body is kept as e for the split below, then returned (build_SPLIT_2026-10-18)
     kind: id, x, y, r: k.r, col: k.col, behaviour: k.behaviour,
     hp: k.hp * hpS, max: k.hp * hpS,
     spd: k.spd * (1 + rt / T.spdRamp) * (P.hazSlow || 1),
-    dmg: k.dmg * (1 + rt / T.dmgRamp) * (PLACE.bite.dmgMul || 1) * DIFF.dmg * (P.hazSlow || 1),
+    dmg: k.dmg * hitRampNow() * (PLACE.bite.dmgMul || 1) * DIFF.dmg * (P.hazSlow || 1),   // PT5-R1c 2026-10-20: PLAN_PT5 R1-c - was `(1 + rt / T.dmgRamp)` (build_PT5_2026-10-20)
     xp: k.xp, flash: 0, kx: 0, ky: 0,
     // B10 2026-09-22: a per-body clock - seconds alive, advanced in the step loop beside the other per-body timers; nothing reads it yet (PR3) (build_B_2026-09-22)
     age: 0,
@@ -7327,7 +7376,11 @@ function makeHazard(id, x, y, extra) {
 }
 
 // BS-M2 2026-09-30: elite variants (PLAN_BS B2). The chance that a spawn() draw is elite at run clock t: 0 before T.eliteFrom, then T.eliteShare0 rising in a straight line to T.eliteShare1 at T.eliteShareAt, and held there (build_BS_2026-09-30)
-const eliteShare = () => t < T.eliteFrom ? 0 : T.eliteShare0 + (T.eliteShare1 - T.eliteShare0) * clamp((t - T.eliteFrom) / (T.eliteShareAt - T.eliteFrom), 0, 1)
+// PT5-R1e 2026-10-20: PLAN_PT5 R1-e (DESIGN_long_runs.md 6.2; curves_proposal.js eliteProp) - the share follows LONGRUN.elite: 0 before its first point, a straight line between points, the last share held after the last point. Was `t < T.eliteFrom ? 0 : T.eliteShare0 + (T.eliteShare1 - T.eliteShare0) * clamp((t - T.eliteFrom) / (T.eliteShareAt - T.eliteFrom), 0, 1)`; its first two points are those four numbers and the line is computed in the same order, so up to 240 s the share is the same number as before. spawn() still rolls only from T.eliteFrom on (build_PT5_2026-10-20)
+const eliteShare = () => { const e = LONGRUN.elite
+  if (t < e[0][0]) return 0
+  for (let i = 0; i < e.length - 1; i++) if (t <= e[i + 1][0]) { const a = e[i][0], va = e[i][1], b = e[i + 1][0], vb = e[i + 1][1]; return va + (vb - va) * ((t - a) / (b - a)) }
+  return e[e.length - 1][1] }
 // BS-M2 2026-09-30: the crown's and the outline's colour - with the crown's shape, not colour alone, as the marker (B2) (build_BS_2026-09-30)
 const ELITE_COL = '#ffd96a'
 // BS-M2 2026-09-30: a body made by makeHazard becomes elite: T.eliteSize x its size (r0 keeps it, for a heat zone's pulse), T.eliteHp x its health, T.eliteDmg x its damage (touch, and a zone's heat), T.eliteXp x its XP (the mote it drops). The first elite of a run raises the first-elite line (strings_BS.md S-B3 (b) verbatim), queued like a hazard's arrival line (build_BS_2026-09-30)
@@ -7643,6 +7696,7 @@ function explode (x, y, radius, dmg, col, opts = {}) {
   const asOuter = grAsBurst; grAsBurst = dmg
   for (const e of enemies.slice()) {          // a copy: hurtEnemy splices the dead out from under it
     if (e.gone) continue
+    if (e.behaviour === 'zone') continue   // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is not struck by a blast (Fragmenting, Residual, the aftershock's burst) (build_PT5_2026-10-20)
     if (e === opts.skip || dist2(e, at) >= (e.r + radius) ** 2) continue
     const a = Math.atan2(e.y - y, e.x - x)
     const kn = (opts.pull ? -opts.pull * 229 : 120) * kN
@@ -7778,7 +7832,8 @@ function fireWeapons(dt) {
 function firePulse (sh) {
   const ST = streakTier()
   let near = null, bd = 1e9
-  for (const e of enemies) { const d = dist2(e, P); if (d < bd) { bd = d; near = e } }
+  // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is never the aimed shots' target (build_PT5_2026-10-20)
+  for (const e of enemies) { if (e.behaviour === 'zone') continue; const d = dist2(e, P); if (d < bd) { bd = d; near = e } }
   for (const B of bossesUp()) if (B.state === 'active') { const d = dist2(B, P); if (d < bd) { bd = d; near = B } }   // BS-M3 2026-09-30: each body on the field (build_BS_2026-09-30)
   if (!near) return
   const base = Math.atan2(near.y - P.y, near.x - P.x)
@@ -7861,7 +7916,8 @@ function fireVolley (sh, ST, base, fan) {
 function fireBeam (dt, sh) {
   beamOn = null
   const reach = sh.beamRange
-  const near = enemies.filter(e => dist2(e, P) < reach * reach)
+  // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is never one of the held beam's targets (build_PT5_2026-10-20)
+  const near = enemies.filter(e => e.behaviour !== 'zone' && dist2(e, P) < reach * reach)
   near.sort((p, q) => dist2(p, P) - dist2(q, P))
   const tgts = near.slice(0, sh.beamTgts)
   for (const B of bossesUp()) if (B.state === 'active' && tgts.length < sh.beamTgts && dist2(B, P) < reach * reach) tgts.push(B)   // BS-M3 2026-09-30: each body on the field (build_BS_2026-09-30)
@@ -7881,6 +7937,7 @@ function fireBeam (dt, sh) {
     // BF3 2026-09-23: skips a body already gone - over a copy, a body a Residual burst killed earlier in this loop was billed again (measured: 5 kills from 3 bodies) (build_B_2026-09-22)
     for (const e of enemies.slice()) {
       if (e.gone) continue
+      if (e.behaviour === 'zone') continue   // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is not burned by the held beam (build_PT5_2026-10-20)
       if ((e.beamCd || 0) > 0) continue
       const d = Math.hypot(e.x - P.x, e.y - P.y)
       if (d > reach || d < 16) continue
@@ -7931,6 +7988,7 @@ function updateRing(dt) {
     // B2 2026-09-22: over a copy, as the beam and the blast helper already iterate - hurtEnemy splices the dead out, which skipped the body after each kill; `gone` stops a body killed mid-loop (a Residual burst) being billed again (build_B_2026-09-22)
     for (const e of enemies.slice()) {
       if (e.gone) continue
+      if (e.behaviour === 'zone') continue   // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is not struck by the green belt (build_PT5_2026-10-20)
       const dx = e.x - s.x, dy = e.y - s.y
       if (dx * dx + dy * dy < (e.r + 9) ** 2 && (e.ringCd || 0) <= 0) {
         e.ringCd = 0.22
@@ -7986,7 +8044,8 @@ function updateFusions(dt) {
     const trk = SHOT().homeRate
     if (trk > 0 && enemies.length) {
       let sx = 0, sy = 0
-      for (const e of enemies) { const d = Math.hypot(e.x - P.x, e.y - P.y) || 1
+      // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is not counted in the corridor's lean toward the crowd (build_PT5_2026-10-20)
+      for (const e of enemies) { if (e.behaviour === 'zone') continue; const d = Math.hypot(e.x - P.x, e.y - P.y) || 1
                                  if (d < 620) { sx += (e.x - P.x) / d; sy += (e.y - P.y) / d } }
       if (sx || sy) {
         let da = Math.atan2(sy, sx) - laneAng
@@ -8003,6 +8062,7 @@ function updateFusions(dt) {
       // BF3 2026-09-23: skips a body already gone - over a copy, a body a Residual burst killed earlier in this loop was billed again (a second kill and a second mote) (build_B_2026-09-22)
       for (const e of enemies.slice()) {
         if (e.gone) continue
+        if (e.behaviour === 'zone') continue   // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is not struck by the corridor (build_PT5_2026-10-20)
         const dx = e.x - P.x, dy = e.y - P.y
         const along = dx * ca + dy * sa            // distance down the lane, either way
         const across = Math.abs(-dx * sa + dy * ca) // and how far off its centre line
@@ -8018,6 +8078,7 @@ function updateFusions(dt) {
     for (const e of enemies.slice()) {
       if (e.gone) continue
       // B7 2026-09-22: the sweep's own per-enemy cooldown - it shared `beamCd` with the held beam, so whichever ticked first locked the other out of that enemy (build_B_2026-09-22)
+      if (e.behaviour === 'zone') continue   // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is not struck by the monitoring sweep (build_PT5_2026-10-20)
       if ((e.sweepCd || 0) > 0) continue
       const d = Math.hypot(e.x - P.x, e.y - P.y)
       if (d > R || d < 30) continue
@@ -8055,7 +8116,7 @@ function enemyFire(dt) {
       AU.play('eshot')
       ebullets.push({ x: e.x + Math.cos(base) * e.r, y: e.y + Math.sin(base) * e.r,
                       vx: Math.cos(a) * sh.spd, vy: Math.sin(a) * sh.spd,
-                      r: sh.r, dmg: sh.dmg * (1 + rampTime() / T.dmgRamp) * (PLACE.bite.dmgMul || 1) * DIFF.dmg * (P.hazSlow || 1) * (e.elite ? T.eliteDmg : 1),   // BS-M2 2026-09-30: an elite's shots x T.eliteDmg (build_BS_2026-09-30)
+                      r: sh.r, dmg: sh.dmg * hitRampNow() * (PLACE.bite.dmgMul || 1) * DIFF.dmg * (P.hazSlow || 1) * (e.elite ? T.eliteDmg : 1),   // BS-M2 2026-09-30: an elite's shots x T.eliteDmg (build_BS_2026-09-30)   // PT5-R1c 2026-10-20: PLAN_PT5 R1-c - was (1 + rampTime() / T.dmgRamp) (build_PT5_2026-10-20)
                       life: sh.life, col: e.col, kind: e.kind, ember: sh.ember || 0, ang: 0 })
     }
   }
@@ -8137,7 +8198,7 @@ function grChain(b, from) {
   const near = (x, y, struck) => {
     let tgt = null, bd = T.grChainR * T.grChainR
     for (const o of enemies) {
-      if (o.gone || struck.has(o)) continue
+      if (o.gone || struck.has(o) || o.behaviour === 'zone') continue   // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is never a chain lightning jump (build_PT5_2026-10-20)
       const d = (o.x - x) ** 2 + (o.y - y) ** 2
       if (d <= bd) { bd = d; tgt = o }
     }
@@ -8185,7 +8246,7 @@ function grAftershock(e, dmg) {
   if (grAsLine >= T.grAsDepth) return
   let tgt = null, bd = T.grAsR * T.grAsR
   for (const o of enemies) {
-    if (o.gone || o === e) continue
+    if (o.gone || o === e || o.behaviour === 'zone') continue   // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is never the aftershock's target (build_PT5_2026-10-20)
     const d = (o.x - e.x) ** 2 + (o.y - e.y) ** 2
     if (d <= bd) { bd = d; tgt = o }
   }
@@ -9475,7 +9536,8 @@ function step(dt) {
   // enemy cap at 1:48 and the run went static — kills flatlined and health stopped moving
   // because the player was walled in. The cause was not the ramp alone: player damage never
   // scaled against enemy health, so weapon damage and the XP curve moved with this.
-  const rate = (T.spawnBase + rampTime() / T.spawnRamp) * SEASON.rate * (PLACE.bite.rateMul || 1) * DIFF.spawn
+  // PT5-R1d 2026-10-20: PLAN_PT5 R1-d (DESIGN_long_runs.md 6.2) - the spawn rate stops rising at LONGRUN.spawnCapAt (300 s of run clock) and holds its value there, on every step: the clock is read at min(t, 300) (rampTimeAt). Was `(T.spawnBase + rampTime() / T.spawnRamp)`; before 300 s the same number (build_PT5_2026-10-20)
+  const rate = (T.spawnBase + rampTimeAt(Math.min(t, LONGRUN.spawnCapAt)) / T.spawnRamp) * SEASON.rate * (PLACE.bite.rateMul || 1) * DIFF.spawn
     // DL-M2 2026-10-14: growth pressure's spawn term (* PRESS_MUL[PRESSURE].spawn, 1 at Planned) removed from the end of the product above; the factors before it and their order are unchanged (PLAN_DIAL D2) (build_DIAL_2026-10-14)
   spawnAcc += dt * rate
   while (spawnAcc >= 1 && enemies.length < T.enemyCap) { spawnAcc--; spawn() }
@@ -9596,6 +9658,7 @@ function step(dt) {
         const near = [], nearD = []
         for (const e of enemies) {
           if (b.hits.has(e)) continue
+          if (e.behaviour === 'zone') continue   // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is never a homing shot's target (build_PT5_2026-10-20)
           const d = dist2(e, b)
           if (near.length === want && d >= nearD[want - 1]) continue
           let j = near.length < want ? near.length : want - 1
@@ -9651,6 +9714,7 @@ function step(dt) {
     }
     if (!gone) for (const e of enemies) {
       if (b.hits.has(e)) continue
+      if (e.behaviour === 'zone') continue   // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is passed through by every shot (no hit, no pierce spent, no burst, relay, split or chain from it) (build_PT5_2026-10-20)
       if (dist2(e, b) < (e.r + b.r) ** 2) {
         const a = Math.atan2(b.vy, b.vx)
         b.hits.add(e)
@@ -9684,7 +9748,7 @@ function step(dt) {
           for (let k = 0; k < b.relay; k++) {
             let tgt = null, bd = 430 ** 2
             for (const o of enemies) {
-              if (taken.has(o) || b.hits.has(o)) continue
+              if (taken.has(o) || b.hits.has(o) || o.behaviour === 'zone') continue   // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is never a relay shot's target (build_PT5_2026-10-20)
               const d = (o.x - bx) ** 2 + (o.y - by) ** 2
               if (d < bd) { bd = d; tgt = o }
             }
@@ -9750,6 +9814,7 @@ function step(dt) {
     // BF3 2026-09-23: skips a body already gone - over a copy, a body a Residual burst (or this ring's own Fragmenting burst) killed earlier in this loop was billed again (a second kill and a second mote) (build_B_2026-09-22)
     for (const e of enemies.slice()) {   // a copy: hurtEnemy and explode both splice the dead out
       if (e.gone) continue
+      if (e.behaviour === 'zone') continue   // PT5-P13 2026-10-20: PLAN_PT5 P13 (Playtest_2026-10-19.md P13, the user's choice (a)) - a heat zone (behaviour 'zone') is not struck by the drills' rings (build_PT5_2026-10-20)
       if (f.hit.has(e)) continue
       const d = Math.hypot(e.x - f.x, e.y - f.y)
       if (Math.abs(d - f.r) < e.r + 14) {
@@ -9784,7 +9849,8 @@ function step(dt) {
       while (P.xp >= P.need) {
         P.xp -= P.need; P.level++
         volleySmall = 0                       // G-M1 2026-10-13: every Volley shot taken before this level-up is full from now on (RG5) (build_G_2026-10-01)
-        P.need = Math.round(P.need * T.xpCurve + T.xpAdd)
+        // PT5-R1a 2026-10-20: PLAN_PT5 R1-a (DESIGN_long_runs.md 4.1) - from level 15 on (P.level is already the new level here) each level needs LONGRUN.xpLinStep (72) more than the last; levels 1-14 as before (build_PT5_2026-10-20)
+        P.need = P.level >= LONGRUN.xpLinFrom ? P.need + LONGRUN.xpLinStep : Math.round(P.need * T.xpCurve + T.xpAdd)
         if (P.relief) heal(P.max * P.relief)
         heal(P.max * DIFF.levelHeal)          // BS-M4 2026-09-30: a small repair per level, before any choice, by difficulty (PLAN_BS H1; was T.levelHeal 0.20, "the certain reward" - ruling RH6) (build_BS_2026-09-30)
         picksLeft += T.picksPerLevel          // crossing several levels at once banks them all
@@ -10406,10 +10472,14 @@ const VB_SRC = {
   wall: 'data:image/png;base64,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',
   head: 'data:image/png;base64,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',
 }
+// PT5-F4 2026-10-20: PLAN_PT5 addendum 2 F4 - in Edge 155 a game-canvas fill with a pattern made from an <img>, an ImageBitmap or a canvas
+// made with willReadFrequently was seen to move the whole game canvas off the GPU (the PT5F record); a pattern made from a plain canvas was not.
+// plainCopy(src): a plain canvas the size of src with src drawn on it 1:1, the source for the valley textures' and the tsunami water's patterns (build_PT5_2026-10-20)
+function plainCopy(src) { const c = document.createElement('canvas'); c.width = src.width; c.height = src.height; c.getContext('2d').drawImage(src, 0, 0); return c }   // PT5-F4 2026-10-20 (build_PT5_2026-10-20)
 const VB_ART = { img: {}, pat: {} }
 for (const id of Object.keys(VB_SRC)) {
   const im = new Image()
-  im.onload = () => { VB_ART.pat[id] = ctx.createPattern(im, 'repeat') }
+  im.onload = () => { VB_ART.pat[id] = ctx.createPattern(plainCopy(im), 'repeat') }   // PT5-F4 2026-10-20: from a plain-canvas copy (plainCopy); was im.onload = () => { VB_ART.pat[id] = ctx.createPattern(im, 'repeat') } (build_PT5_2026-10-20)
   im.src = VB_SRC[id]
   VB_ART.img[id] = im
 }
@@ -10758,7 +10828,7 @@ function artcWall(ev, h, th) {
   const water = ev.kind === 'tsunami', id = water ? 'fx_splash' : ev.kind === 'debris' ? 'fx_rock' : 'fx_dust'
   if (!ARTC.ok[id]) return
   if (water && ARTC.ok.ev_water) {
-    if (!ARTC.pat) ARTC.pat = ctx.createPattern(artcTint('ev_water', PAL.theirs.event.tsunami), 'repeat')
+    if (!ARTC.pat) ARTC.pat = ctx.createPattern(plainCopy(artcTint('ev_water', PAL.theirs.event.tsunami)), 'repeat')   // PT5-F4 2026-10-20: from a plain-canvas copy of the tinted tile (plainCopy); was if (!ARTC.pat) ARTC.pat = ctx.createPattern(artcTint('ev_water', PAL.theirs.event.tsunami), 'repeat') (build_PT5_2026-10-20)
     ctx.save()
     ctx.globalAlpha *= .45; ctx.imageSmoothingEnabled = false; ctx.fillStyle = ARTC.pat
     ctx.fillRect(th * .6 - 46, -h, 42, 2 * h)
@@ -10906,6 +10976,17 @@ function makeGroundTile(placeId) {
   return off
 }
 
+// PT5-F2 2026-10-20: PLAN_PT5 addendum F2 - a cheaper ground fill. The cost was not the fill itself: in Edge 155 (Chromium) on the office
+// computer, a canvas was seen to leave the GPU (one readback of the canvas, then every frame drawn by the CPU on the page's main thread, with
+// no return within the 20 s measured) the first time it filled a pattern whose picture is not held on the GPU - an <img> such as the loaded
+// art tile, an ImageBitmap made from it, or a canvas made with willReadFrequently. A plain canvas is held on the GPU, so the painted tile
+// (makeGroundTile) never did this; the art tile did (the PT5F build record: the probe and the traces). Other browsers were not tested (build_PT5_2026-10-20)
+// PT5-F2 (d): groundTiles draws the loaded art tile with drawImage at every multiple of TILE that meets draw()'s ground rectangle, so
+// every pixel shows the same texel as the pattern did. Mountain valley's floor (vbGround) is as before (build_PT5_2026-10-20)
+function groundTiles(z) {   // PT5-F2 2026-10-20 (build_PT5_2026-10-20)
+  const im = ART.img[PLACE.id], x0 = P.x - W / 2 / z - 96, y0 = P.y - H / 2 / z - 96, x1 = x0 + W / z + 192, y1 = y0 + H / z + 192   // PT5-F2 2026-10-20 (build_PT5_2026-10-20)
+  for (let ty = Math.floor(y0 / TILE) * TILE; ty < y1; ty += TILE) for (let tx = Math.floor(x0 / TILE) * TILE; tx < x1; tx += TILE) ctx.drawImage(im, tx, ty)   // PT5-F2 2026-10-20 (build_PT5_2026-10-20)
+}   // PT5-F2 2026-10-20 (build_PT5_2026-10-20)
 function buildGround() { groundPat = ctx.createPattern(makeGroundTile(PLACE.id), 'repeat')
   // ART-A 2026-10-17: A1, A4, A5 - the line above is kept and still runs, so the old painter draws every Math.random it drew, in the same order and count, art or not; once this place's art tile has loaded it replaces the pattern (build_ART_2026-10-17)
   groundArt = !!ART.ok[PLACE.id]; if (groundArt) groundPat = ctx.createPattern(ART.img[PLACE.id], 'repeat') }
@@ -11429,8 +11510,11 @@ function draw() {
   const artSm = ctx.imageSmoothingEnabled; if (groundArt) ctx.imageSmoothingEnabled = false   // ART-A 2026-10-17: A1 - the pixel-art ground stays crisp when scaled (build_ART_2026-10-17)
   if (vbOn()) vbGround(z)   // VB-M8 2026-10-18: V9 re-based - Mountain valley's floor, walls, ends and red zone (vbGround) (build_VALLEY_2026-10-17)
   else if (groundPat) {   // VB-M8 2026-10-18: "else" added; was `if (groundPat) {` (build_VALLEY_2026-10-17)
+    if (groundArt) groundTiles(z)   // PT5-F2 2026-10-20: the art tile without a pattern (see above buildGround) (build_PT5_2026-10-20)
+    else {   // PT5-F2 2026-10-20: the painted tile (a plain canvas, held on the GPU) is filled as before by the two lines below (build_PT5_2026-10-20)
     ctx.fillStyle = groundPat
     ctx.fillRect(P.x - W / 2 / z - 96, P.y - H / 2 / z - 96, W / z + 192, H / z + 192)   // ART-G 2026-10-17: G1 - the zoomed view is W / z by H / z game units; was ctx.fillRect(P.x - W / 2 - 96, P.y - H / 2 - 96, W + 192, H + 192) (build_ART_2026-10-17)
+    }   // PT5-F2 2026-10-20 (build_PT5_2026-10-20)
   }
   ctx.imageSmoothingEnabled = artSm   // ART-A 2026-10-17: A1 - restored for everything drawn after the ground (build_ART_2026-10-17)
   artcMarks()   // ART-C 2026-10-17: C7 - the few ground marks, right after the ground, under everything else (build_ART_2026-10-17)
@@ -12280,7 +12364,8 @@ function initDev() {
     if (over) return
     P.xp = 0; P.level++
     volleySmall = 0   // G-M1 2026-10-13: a level-up here too, as in the level-up loop (RG5) (build_G_2026-10-01)
-    P.need = Math.round(P.need * T.xpCurve + T.xpAdd)
+    // PT5-R1a 2026-10-20: PLAN_PT5 R1-a - the dev panel's level-up, the same rule as the level-up loop (build_PT5_2026-10-20)
+    P.need = P.level >= LONGRUN.xpLinFrom ? P.need + LONGRUN.xpLinStep : Math.round(P.need * T.xpCurve + T.xpAdd)
     heal(P.max * DIFF.levelHeal)   // BS-M4 2026-09-30: the per-difficulty key, as the level-up loop (ruling RH6) (build_BS_2026-09-30)
     picksLeft += T.picksPerLevel
     AU.play('level'); offerCards(true); syncHud()
