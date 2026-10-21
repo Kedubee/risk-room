@@ -741,14 +741,14 @@
   .wpn.fresh{margin:-2px -6px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);
     box-shadow:0 0 0 1px var(--mc);animation:cb-merge 1.6s ease-out both}
   @keyframes cb-merge{0%,35%{opacity:0;box-shadow:0 0 0 0 transparent}55%{opacity:1;box-shadow:0 0 14px 4px var(--mc)}100%{opacity:1;box-shadow:0 0 0 1px var(--mc)}}
-  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: the OS setting while no choice is stored, else the player's choice). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .wpn.fresh{animation:none}
+  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: effects on while no choice is stored, else the player's choice; PT6-C 2026-10-21: PLAN_PT6 C - was "the OS setting while no choice is stored", untrue since PT2-P8 (build_PT6_2026-10-21)). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .wpn.fresh{animation:none}
   /* G-M2 2026-10-13: a held synergy's row, outside its merge mark: the same 1 px edge as .fresh, in its colour at an alpha that follows its ripening f (--rp, set by syncHud) (build_G_2026-10-01) */
   .wpn.sy.rp{margin:-2px -6px;padding:2px 6px;border-radius:6px;box-shadow:0 0 0 1px var(--rp)}
   /* G-M5 2026-10-13: (c) the pair-ready dot after a measure row - a filled round dot (shape, not colour alone; named by role img); (d) the one pulse of a ready pair's two rows, 1.0 s, a still highlight under reduced motion. The negative margin keeps the list from moving, as .fresh does (build_G_2026-10-01) */
   .wpn i.pr{width:7px;height:7px;border-radius:50%;background:#ffe08a;flex:none}
   .wpn.pp{margin:-2px -6px;padding:2px 6px;border-radius:6px;background:rgba(255,224,138,.16);animation:g-pp 1s ease-out both}
   @keyframes g-pp{0%{box-shadow:0 0 0 0 rgba(255,224,138,0)}40%{box-shadow:0 0 12px 3px rgba(255,224,138,.7)}100%{box-shadow:0 0 0 1px rgba(255,224,138,.5)}}
-  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: the OS setting while no choice is stored, else the player's choice). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .wpn.pp{animation:none;box-shadow:0 0 0 1px rgba(255,224,138,.6)}
+  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: effects on while no choice is stored, else the player's choice; PT6-C 2026-10-21: PLAN_PT6 C - was "the OS setting while no choice is stored", untrue since PT2-P8 (build_PT6_2026-10-21)). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .wpn.pp{animation:none;box-shadow:0 0 0 1px rgba(255,224,138,.6)}
 
   #cards{position:fixed;inset:0;z-index:20;display:none;align-items:flex-start;
     justify-content:center;overflow-y:auto;overscroll-behavior:contain;
@@ -832,6 +832,8 @@
   /* CB-M5 2026-09-30: the same band and place for the label on a phone held sideways, where the label, at 26% from the top, covered the scrolled cards (PLAN_CB C5; ADJUDICATION_SY G5). Layout only (build_CB_2026-09-30). GR2-FIX 2026-09-30: this note corrected (ADJUDICATION_GR2 F10) - CB-M5's rule, @media (max-width:900px) and (max-height:500px), is no longer in the file: GR2-M5 removed it and the rule below replaced it; the note had described it as if it stood here (build_GR2_2026-09-30 fix round) */
   /* GR2-M5 2026-09-30: supersedes the CB-M5 bound above - the band and the label's place now apply whenever the window is 700 px tall or less, at any width: a phone held sideways (500 px tall or less) of any width (ADJUDICATION_CB H1), and a short desktop window, where at 800 x 600 the label covered the top card (L-CB1). One rule serves both; layout only (build_GR2_2026-09-30) */
   @media (max-height:700px){#cards{border-top:32px solid transparent}#lvlup{top:8px}}
+  /* PT6-C 2026-10-21: PLAN_PT6 C (O3b) - the label's band at every window size: at 26% from the top the label sat on the first row of cards wherever the cards reached above it (measured before this rule: 1280 x 720 the middle card's text under its title, 1366 x 768 its title, 1920 x 940 its level line). The two rules above (a phone; a window 700 px tall or less) already put it in a 32 px transparent band at the top of the card screen, outside its scroll area; this rule does the same at every size, so no card passes under it. Layout only (build_PT6_2026-10-21) */
+  #cards{border-top:32px solid transparent}#lvlup{top:8px}
 
   #over{position:fixed;inset:0;z-index:22;display:none;align-items:flex-start;
     justify-content:center;overflow-y:auto;overscroll-behavior:contain;padding:20px;
@@ -946,7 +948,7 @@
   .card.grand .tier,.card.grand .gate{color:#c4b5ff}
   @keyframes gr-glow{0%,100%{box-shadow:0 0 8px 1px rgba(143,227,255,.30)}50%{box-shadow:0 0 22px 5px rgba(143,227,255,.62)}}
   @keyframes gr-glow-g{0%,100%{box-shadow:0 0 12px 2px rgba(196,181,255,.40)}50%{box-shadow:0 0 30px 8px rgba(196,181,255,.75)}}
-  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: the OS setting while no choice is stored, else the player's choice). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .card.fuse{animation:none} :where(body.rm) .card.grand{box-shadow:0 0 22px 5px rgba(196,181,255,.58)}
+  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: effects on while no choice is stored, else the player's choice; PT6-C 2026-10-21: PLAN_PT6 C - was "the OS setting while no choice is stored", untrue since PT2-P8 (build_PT6_2026-10-21)). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .card.fuse{animation:none} :where(body.rm) .card.grand{box-shadow:0 0 22px 5px rgba(196,181,255,.58)}
 
   /* card-screen economy: reroll + banish */
   #cardbar{width:100%;display:flex;gap:8px;justify-content:center;margin-top:2px;pointer-events:auto}
@@ -1087,6 +1089,7 @@
     font:inherit;font-size:11px;font-weight:800;letter-spacing:.08em;opacity:.4;
     cursor:pointer;transition:opacity .12s,border-color .12s,background .12s}
   #dodge.ready{opacity:1;border-color:#8fe3ff;color:#8fe3ff;background:rgba(143,227,255,.12)}
+  /* PT6-C 2026-10-21: PLAN_PT6 C (O3a) - while the start screen is up (#start without .gone: opaque, z-index 23, over EVAC's 9) EVAC is hidden from view and so from Tab, so the first Tab lands on the start screen's first control; visibility, not display, so its box and place are kept for anything that measures it; it is back the moment a place is chosen. A browser without :has() ignores the rule and behaves as before (build_PT6_2026-10-21) */ body:has(#start:not(.gone)) #dodge{visibility:hidden}
   #svc{position:fixed;right:14px;bottom:118px;z-index:7;font-size:10px;font-weight:800;
     letter-spacing:.09em;padding:4px 10px;border-radius:99px;pointer-events:none;
     background:rgba(255,77,94,.14);border:1px solid rgba(255,77,94,.35);color:#ff9d9d}
@@ -1234,8 +1237,8 @@
     border-radius:99px;background:transparent;color:var(--paper);
     border:1px solid rgba(255,255,255,.25);cursor:pointer;opacity:.7}
   .rskip:hover{opacity:1}
-  /* P6-B1 2026-09-25: T2-0 - reduced motion, the OS setting (the Lead's decision: no in-game toggle yet). The one CSS motion this build adds is the streak picture's single pass (P6-B6, .redo-art); under this rule it shows its still, final frame at once. The payout count is driven by script, so the script reads the same setting (reduceMotion) (build_P6_2026-09-25) */
-  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: the OS setting while no choice is stored, else the player's choice). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .redo-art *{animation:none!important}
+  /* P6-B1 2026-09-25: T2-0 - reduced motion (PT6-C 2026-10-21: PLAN_PT6 C, F4 - was "the OS setting (the Lead's decision: no in-game toggle yet)"; since PT-P1 and PT2-P8 it is the start screen's Effects switch, off only after a press, through body.rm (build_PT6_2026-10-21)). The one CSS motion this build adds is the streak picture's single pass (P6-B6, .redo-art); under this rule it shows its still, final frame at once. The payout count is driven by script, so the script reads the same setting (reduceMotion) (build_P6_2026-09-25) */
+  /* PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch: this rule hung on @media (prefers-reduced-motion: reduce); it now hangs on body.rm (rmClass in the script: effects on while no choice is stored, else the player's choice; PT6-C 2026-10-21: PLAN_PT6 C - was "the OS setting while no choice is stored", untrue since PT2-P8 (build_PT6_2026-10-21)). :where() adds no specificity, so the rule weighs exactly what it weighed inside the media query (build_PT_2026-10-19) */ :where(body.rm) .redo-art *{animation:none!important}
   /* P6-B3 2026-09-25: F2 - a mark besides colour on the marked options: the tick or cross and S-B1's label on a line of their own inside the button, and a second pixel of border drawn inside it (an inset ring, so nothing moves), as the how-to picture's marked options have 2 px (build_P6_2026-09-25) */
   .opt.right{box-shadow:inset 0 0 0 1px #3fb950} .opt.wrong{box-shadow:inset 0 0 0 1px #f85149}
   .redo-lbl{display:block;margin-top:6px;font-size:11.5px;font-weight:800;letter-spacing:.02em}
@@ -2288,15 +2291,16 @@ function zoomPickSave(z) { try { if (z === null) localStorage.removeItem(ZOOMPIC
 let zoomPick = zoomPickStore()
 let zoomDevSync = null
 const zoomNow = () => zoomPick || ZOOM[zoomCase()] || ZOOM_DEFAULT   // ZOOMTOG 2026-10-18: T5 - "zoomPick ||" added in front; was const zoomNow = () => ZOOM[zoomCase()] || ZOOM_DEFAULT (build_ZOOMTOG_2026-10-18)
-// P6-B1 2026-09-25: T2-0 - the reduced-motion flag: the OS setting, read at load and again on every change (the Lead's decision: no in-game toggle yet). Every motion this build adds reads it: set, each beat shows at its final state at once, and the sounds keep their order. The CSS rule of the same name covers what CSS animates, which this flag alone could not stop (build_P6_2026-09-25)
+// P6-B1 2026-09-25: T2-0 - the reduced-motion flag (PT6-C 2026-10-21: PLAN_PT6 C, F4 - was "the OS setting, read at load and again on every change (the Lead's decision: no in-game toggle yet)"; since PT-P1 and PT2-P8 it is set by the start screen's Effects switch, false while no choice is stored, and the OS setting is not read (build_PT6_2026-10-21)). Every motion this build adds reads it: set, each beat shows at its final state at once, and the sounds keep their order. The CSS rule of the same name covers what CSS animates, which this flag alone could not stop (build_P6_2026-09-25)
 // PT2-P8 2026-10-19: PLAN_PT2 P8 - the line below and the listener on it are gone: the device's reduced-motion setting no longer sets or moves the Effects state; with no stored choice effects are on. Was: const RM_Q = matchMedia('(prefers-reduced-motion: reduce)') (build_PT2_2026-10-19)
 // PT-P1 2026-10-19: PLAN_PT P1 - the start screen's Effects switch (offerFx). fxPick is the player's choice: true = effects on (full motion),
-// false = off (reduced motion), null = no choice stored. With no choice, reduceMotion follows the OS setting (RM_Q) at load and on every
-// change event, as before; a press stores a choice per browser under FX_KEY, on the SRC_KEY pattern (one JSON object, try/catch on every
+// false = off (reduced motion), null = no choice stored. With no choice, reduceMotion is false (PT6-C: was "follows the OS setting (RM_Q) at load and on every
+// change event, as before", untrue since PT2-P8); a press stores a choice per browser under FX_KEY, on the SRC_KEY pattern (one JSON object, try/catch on every
 // read and write; a value that does not parse, a field that is not true or false, or a store that throws reads as no choice), and from
-// then on the choice overrides the OS until it is pressed again. Every reader of reduceMotion reads the variable when it runs, so it
+// then on the choice holds until it is pressed again (PT6-C: was "overrides the OS"). Every reader of reduceMotion reads the variable when it runs, so it
 // follows at once; the four CSS rules that were under @media (prefers-reduced-motion: reduce) now hang on the class rm on <body>, which
 // rmClass() keeps equal to reduceMotion (build_PT_2026-10-19)
+// PT6-C 2026-10-21: PLAN_PT6 C (the stale P8 comments; build_record_PT2.md L75) - the clauses marked PT6-C in this block corrected; comments only (build_PT6_2026-10-21)
 const FX_KEY = 'compoundEffectsV1'
 function fxStore() { try { const v = JSON.parse(localStorage.getItem(FX_KEY) || '{}').on; return typeof v === 'boolean' ? v : null } catch (e) { return null } }
 function fxSave(on) { try { localStorage.setItem(FX_KEY, JSON.stringify({ on })) } catch (e) {} }
@@ -2304,7 +2308,7 @@ let fxPick = fxStore()
 let reduceMotion = fxPick === null ? false : !fxPick   // PT2-P8 2026-10-19: with no stored choice effects are on (reduceMotion false), whatever the device setting; was let reduceMotion = fxPick === null ? RM_Q.matches : !fxPick (build_PT2_2026-10-19)   // PT-P1 2026-10-19: was let reduceMotion = RM_Q.matches (build_PT_2026-10-19)
 const rmClass = () => { document.body.classList.toggle('rm', reduceMotion) }   // PT-P1 2026-10-19 (build_PT_2026-10-19)
 rmClass()   // PT-P1 2026-10-19 (build_PT_2026-10-19)
-// PT2-P8 2026-10-19: PLAN_PT2 P8 - the device setting's change listener is gone, so a change of that setting no longer moves the state; the state changes only by a press (offerFx). The comments above (PT-P1, P6-B1) and the PT-P1 notes on the four body.rm CSS rules that say the state follows the OS setting while no choice is stored describe the build before this item; they are left as they were. Was:
+// PT2-P8 2026-10-19: PLAN_PT2 P8 - the device setting's change listener is gone, so a change of that setting no longer moves the state; the state changes only by a press (offerFx). The comments above (PT-P1, P6-B1) and the PT-P1 notes on the four body.rm CSS rules that say the state follows the OS setting while no choice is stored describe the build before this item; they were left as they were then (PT6-C 2026-10-21: PLAN_PT6 C - now corrected, comments only (build_PT6_2026-10-21)). Was:
 // const rmSync = e => { if (fxPick === null) reduceMotion = e.matches; rmClass(); if ($('fxwrap') && $('fxwrap').firstChild) offerFx() }   // PT-P1 2026-10-19: the OS change moves the state only while no choice is stored, and the switch is redrawn; was const rmSync = e => { reduceMotion = e.matches } (build_PT_2026-10-19)
 // if (RM_Q.addEventListener) RM_Q.addEventListener('change', rmSync)
 // else if (RM_Q.addListener) RM_Q.addListener(rmSync)        // older Safari has only the old name
@@ -2411,7 +2415,7 @@ const T = {
   // 15-25s and the first human mobile playtest called the flow unplayable. Slower and
   // chunkier instead (user direction 2026-08-30): roughly twice the spacing, two picks
   // per level, and a guaranteed heal - fewer stops, each one worth stopping for.
-  xpCurve: 1.21, xpAdd: 3,         // each level needs this much more than the last
+  xpCurve: 1.188, xpAdd: 3,        // each level needs this much more than the last   // PT6-P18 2026-10-21: PLAN_PT6 P18 (D14; measure_P18D.md M1) - was xpCurve: 1.21; with the first need 14 (reset's player object) the needs run 14, 20, 27, 35 ... and the level-14 need stays 270, so from level 15 (LONGRUN +72) every need is as before (build_PT6_2026-10-21)
   picksPerLevel: 1,                // choices banked per level, spent in one card screen
                                    // (2026-09-02, user direction: two picks a level made the
                                    // screen a shopping list rather than a decision)
@@ -2975,7 +2979,7 @@ const UPGRADES = {
             src: 'UNDRR: “Earthquakes do not kill people; collapsing structures do.”' },
   // G-M1 2026-10-13: the level cards branch on what the level does, read from the small-shot resolver (pulseSmall; RG4): a level that adds a small shot, a level that makes it full, any other level as before; strings_G.md S-G1a verbatim (build_G_2026-10-01)
   pulse:  { name: 'Early warning',    short: 'Warning',  max: 6, kind: 'measure', col: '#ffd166',
-            desc: l => l === 0 ? 'Detects what is closest and answers it before it arrives.'
+            desc: l => l === 0 ? 'Detects what is closest and answers it before it arrives. Your shots leave Heatwaves alone.'   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ15, the text from ADJUDICATION_strings_PT6.md R1 (build_PT6_2026-10-21)
                                : pulseSmall(l + 1) > pulseSmall(l) ? `Faster, and reaches past the first thing it meets. It adds one more shot, small until your next Early warning level (Lv ${l + 1}).`
                                : pulseSmall(l + 1) < pulseSmall(l) ? `Faster, and reaches past the first thing it meets. Your small shot grows to full size (Lv ${l + 1}).`
                                : `Faster, and reaches past the first thing it meets (Lv ${l + 1}).`,
@@ -2987,7 +2991,7 @@ const UPGRADES = {
             src: 'UNDRR asks for micro-drills at least twice a year, including 29 April.' },
   ring:   { name: 'Green defences',   short: 'Nature',   max: 5, kind: 'measure', col: '#8ef6c6',
             // CORRECTED 2026-09-15: unverifiable "costs nothing" claim replaced by what the belt does in-game (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-            desc: l => l === 0 ? 'Mangroves, dunes, wetlands. A standing perimeter that works every second: it wears down what it touches and blocks thrown things that touch it.'
+            desc: l => l === 0 ? 'Mangroves, dunes, wetlands. A standing perimeter that works every second: it wears down what it touches and blocks thrown things that touch it. It leaves Heatwaves alone.'   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ1, the text from strings_PT6_final.md (build_PT6_2026-10-21)
                                : `A wider belt (Lv ${l + 1}).`,
             src: 'UNDRR: mangrove forests avoid more than US$80 billion of coastal flood losses a year.' },
   armour: { name: 'Retrofitting',     short: 'Retrofit', max: 4, kind: 'measure', col: '#c9d1d9',
@@ -3085,7 +3089,7 @@ const SYNERGIES = [
 
   { id: 'who', a: 'wave', b: 'magnet', name: 'Drills that reach everyone', col: '#b9d8ff',
     // G-M2 2026-10-13: strings_G.md S-G2a verbatim; the multipliers ripen (synRipen), the sent-on shot (SHOT().relay) arrives whole (RG1). Was: "Drills reach 25% further, you collect from 25% wider, and a shot that lands sends one on to the next thing." / P.synWave x 1.25; P.pickup x 1.25 (build_G_2026-10-01)
-    gain: 'Drills reach up to 25% further, you collect from up to 25% wider, and a shot that lands sends one on to the next thing. Both 25% figures can start smaller and grow as you level Drills and Data.',
+    gain: 'Drills reach up to 25% further, you collect from up to 25% wider, and a shot that lands sends one on to the next thing. Your shots leave Heatwaves alone. Both 25% figures can start smaller and grow as you level Drills and Data.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - SY1, the text from ADJUDICATION_strings_PT6.md R3 (build_PT6_2026-10-21)
     apply: P => synRipen(P, 'who'),
     q: 'A city runs drills every year and the same people are still the ones who die. What does the risk data add?',
     opts: ['It proves the drills happened',
@@ -3108,7 +3112,7 @@ const SYNERGIES = [
     why: 'Codes govern construction; land-use planning governs location. UNDRR names them together — a well-built house in a floodplain is still in the floodplain.' },
 
   { id: 'lane', a: 'speed', b: 'rate', name: 'A corridor kept open', col: '#9ff0d8',
-    gain: 'A cleared corridor runs through you the way you are moving, wearing down everything standing in it.',
+    gain: 'A cleared corridor runs through you the way you are moving, wearing down everything standing in it. It leaves Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ13, the text from strings_PT6_final.md (build_PT6_2026-10-21)
     apply: P => { P.synLane = true },
     q: 'A city zones a drainage corridor through the district and builds nothing in it. Ten years later the district floods anyway. What was missing?',
     opts: ['The corridor was zoned too narrow',
@@ -3707,7 +3711,7 @@ const FUSIONS = [
   { id: 'see', name: 'Monitored horizon', col: '#57c7ff',
     needs: { magnet: 2, pulse: 3 }, need () { return fuseReady(this) },
     desc: 'Data feeding warning, continuously: a sweep that watches the whole horizon and answers what it finds.',
-    gain: 'A monitoring beam circles you, wearing down everything it crosses at long range.' },
+    gain: 'A monitoring beam circles you, wearing down everything it crosses at long range. It leaves Heatwaves alone.' },   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ3, the text from strings_PT6_final.md (build_PT6_2026-10-21)
   { id: 'buffer', name: 'Living shoreline', col: '#8ef6c6',
     needs: { ring: 3, speed: 2 }, need () { return fuseReady(this) },
     desc: 'A planned, planted, defended buffer: wider, denser, and it pushes back what touches it.',
@@ -3720,7 +3724,7 @@ const GRANDS = [
   { id: 'chain', name: 'Warning chain', col: '#c4b5ff', arc: '#e4deff', needs: ['who', 'see'],
     // G-M3 2026-10-13: desc and gain say the jumps and the first jump's share can start smaller and grow, strings_G.md S-G3a verbatim. Were: desc "...to others close by, up to 4 times."; gain "...The first jump deals 60% of the shot\'s damage; each later jump deals 20% less than the one before." (build_G_2026-10-01)
     desc: 'Your aimed shots and the wide sweep can set off chain lightning. It jumps from the hazard they hit to others close by, up to 4 times. It can start with fewer jumps and grow as you level Drills, Data and Warning.',
-    gain: 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not struck, up to 4 times. The first jump deals up to 60% of the shot\'s damage; each later jump deals 20% less than the one before. The number of jumps and the 60% can start smaller and grow as you level Drills, Data and Warning.',
+    gain: 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not struck, up to 4 times. It leaves Heatwaves alone. The first jump deals up to 60% of the shot\'s damage; each later jump deals 20% less than the one before. The number of jumps and the 60% can start smaller and grow as you level Drills, Data and Warning.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ9, the text from strings_PT6_final.md (build_PT6_2026-10-21)
     take: 'Lightning now jumps from hazard to hazard.' },
   { id: 'laser', name: 'Line of sight', col: '#7fe0ff', needs: ['see', 'act'],
     // G-M3 2026-10-13: "up to 50%" and the grow sentence, strings_G.md S-G3a verbatim. Were: desc "...It hits 50% harder and aims at one more target."; gain "Your held beam becomes a laser: it hits 50% harder and aims at one more target. You get the beam if you lack it. Your aimed shots are unchanged." (build_G_2026-10-01)
@@ -3741,15 +3745,15 @@ const GRANDS = [
   { id: 'aftershock', name: 'Built to last', col: '#5c9dff', arc: '#dde9ff', needs: ['keep', 'stock'],
     // G-M3 2026-10-13: "up to 35%" and the grow sentence, strings_G.md S-G3a verbatim. Were: desc "...This can happen twice in a row, but not more."; gain "...It does 35% of the burst\'s damage. ...but not a third time." (build_G_2026-10-01)
     desc: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it to another close by. This can happen twice in a row, but not more. The lightning can start weaker and grow as you level Invest, Upkeep, Codes and Retrofit.',
-    gain: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it to the nearest hazard close by. It does up to 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, the burst that follows can send lightning once more, but not a third time. The 35% can start smaller and grow as you level Invest, Upkeep, Codes and Retrofit.',   // GR2-FIX 2026-09-30: first sentence split (ADJUDICATION_GR2 F8): was "... to the nearest hazard close by, for 35% of the burst\'s damage."; the new second sentence is the Learning gain's own (build_GR2_2026-09-30 fix round)
+    gain: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it to the nearest hazard close by. The lightning leaves Heatwaves alone. It does up to 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, the burst that follows can send lightning once more, but not a third time. The 35% can start smaller and grow as you level Invest, Upkeep, Codes and Retrofit.',   // GR2-FIX 2026-09-30: first sentence split (ADJUDICATION_GR2 F8): was "... to the nearest hazard close by, for 35% of the burst\'s damage."; the new second sentence is the Learning gain's own (build_GR2_2026-09-30 fix round) (PT6-T1 2026-10-21: R5 - since HZ11 it is the third, after "The lightning leaves Heatwaves alone.", and in the Learning gain it follows "It leaves Heatwaves alone." (build_PT6_2026-10-21))   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ11, the text from strings_PT6_final.md (build_PT6_2026-10-21)
     take: 'A burst that kills can now set off lightning.' },
   { id: 'orbit', name: 'Ground kept clear', col: '#62e89a', needs: ['plan', 'lane'],
-    // GR2-FIX 2026-09-30: the orbit's desc, gain and take reworded (ADJUDICATION_GR2 F2, F4, F5, with F3's code): every surface says heat is left alone, in one form, "They leave heat alone." (grOrbit skips heat zones: no hit, no push); the damage is stated per hit - 9 (T.grOrbitDps x T.grOrbitCd x P.dmgMul), at most once every 0.3s on the same hazard (T.grOrbitCd, the hazard's own clock orbT) - not as a rate a second. Were: desc "Three pieces circle close around you. A hazard they touch is hurt and pushed away, but not heat. They do not block thrown things."; gain "Three pieces circle close around you, once every 2.4s. A hazard they touch takes 30 damage a second, more with Resilient investment, and is pushed away from you. They do not block thrown things."; take "Three pieces now circle you and push hazards away." (build_GR2_2026-09-30 fix round)
+    // GR2-FIX 2026-09-30: the orbit's desc, gain and take reworded (ADJUDICATION_GR2 F2, F4, F5, with F3's code): every surface says heat is left alone, in one form, "They leave heat alone." (PT6-T1 2026-10-21: R5 - now "They leave Heatwaves alone." on all five surfaces, strings_PT6_final.md OR1-OR5 (build_PT6_2026-10-21)) (grOrbit skips heat zones: no hit, no push); the damage is stated per hit - 9 (T.grOrbitDps x T.grOrbitCd x P.dmgMul), at most once every 0.3s on the same hazard (T.grOrbitCd, the hazard's own clock orbT) - not as a rate a second. Were: desc "Three pieces circle close around you. A hazard they touch is hurt and pushed away, but not heat. They do not block thrown things."; gain "Three pieces circle close around you, once every 2.4s. A hazard they touch takes 30 damage a second, more with Resilient investment, and is pushed away from you. They do not block thrown things."; take "Three pieces now circle you and push hazards away." (build_GR2_2026-09-30 fix round)
     // G-M3 2026-10-13: "Up to three pieces", fewer at first, and the take without the count, strings_G.md S-G3a verbatim. Were: desc "Three pieces circle close around you. ..."; gain "Three pieces circle close around you, once every 2.4s. ..."; take "Three pieces now circle you. They push hazards away but leave heat alone." (build_G_2026-10-01)
     // G-FIX 2026-10-13: F8 - the closing sentence of desc and gain was "More come as you level Codes, Land use and Upkeep." (gain: "; more come as you level ..."), plural, while at most one more piece comes (grOrbitN0 -> grOrbitN, at g >= T.grOrbitStep); now "The number grows as you level ...", true whether one or more are still to come, in the register of the other ripening sentences ("It grows as you level ...") (ADJUDICATION_G F8) (build_G_2026-10-01 fix round)
-    desc: 'Up to three pieces circle close around you. A hazard they touch is hurt and pushed away. They leave heat alone. They do not block thrown things. There can be fewer at first. The number grows as you level Codes, Land use and Upkeep.',
-    gain: 'Up to three pieces circle close around you, once every 2.4s. A hazard they touch takes 9 damage, more with Resilient investment, and is pushed away from you. The pieces hit the same hazard at most once every 0.3s. They leave heat alone. They do not block thrown things. There can be fewer pieces at first; the number grows as you level Codes, Land use and Upkeep.',
-    take: 'Pieces now circle you. They push hazards away but leave heat alone.' },
+    desc: 'Up to three pieces circle close around you. A hazard they touch is hurt and pushed away. They leave Heatwaves alone. They do not block thrown things. There can be fewer at first. The number grows as you level Codes, Land use and Upkeep.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - OR1, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+    gain: 'Up to three pieces circle close around you, once every 2.4s. A hazard they touch takes 9 damage, more with Resilient investment, and is pushed away from you. The pieces hit the same hazard at most once every 0.3s. They leave Heatwaves alone. They do not block thrown things. There can be fewer pieces at first; the number grows as you level Codes, Land use and Upkeep.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - OR2, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+    take: 'Pieces now circle you. They push hazards away but leave Heatwaves alone.' },   // PT6-T1 2026-10-21: PLAN_PT6 T1 - OR3, the text from strings_PT6_final.md (build_PT6_2026-10-21)
 ]
 const grand = {}      // GR-M1 2026-09-29: grand programme id -> taken, this run only (reset) (build_GR_2026-09-29)
 const grandTaken = () => GRANDS.filter(g => grand[g.id]).length
@@ -3803,10 +3807,10 @@ const MODS = {
   frag:    { name: 'Fragmenting', max: 3, col: PAL.yours.ring.frag,
              // CORRECTED 2026-09-23: was "What you fire bursts where it lands, reaching what stood next to it." - since F3a a shot bursts once, where it stops - on the hit that spends its last pierce (a body or the boss), or in mid-air when its life runs out - so "lands" was untrue of a shot that missed (section F text, build_F_2026-09-23); CORRECTED again 2026-09-23: was "What you fire bursts where it stops, reaching what stood next to it." - since FX1 a shot bursts once, when it stops, on the last body it struck (a body or the boss), at that body's position at that moment (its last position if it has gone), and not at all if it struck nothing - so "where it stops" was untrue of a shot that struck a body and flew on, and "What you fire bursts" was untrue of a shot that struck nothing (section F text 2, build_F_2026-09-23)
              // CORRECTED 2026-09-23: was "What you fire bursts on the last thing it hit, ..." - relay shots (burst: 0) and split shards (no burst field) never burst, and the Drills ring bursts at each thing it strikes (fireWave hands it sh.burstR; the ring loop calls explode at every strike), a smaller burst (f.burst * 0.7); now the aimed shots and the wide sweep on the last thing they hit, Drills on everything they hit; "reaching what stood next to it" and "A shot that hits nothing does not burst" kept (pre-deploy text, predeploy_2026-09-23)
-             desc: l => l === 0 ? 'Your aimed shots and the wide sweep burst on the last thing they hit, reaching what stood next to it. A shot that hits nothing does not burst. Drills burst on everything they hit.'
+             desc: l => l === 0 ? 'Your aimed shots and the wide sweep burst on the last thing they hit, reaching what stood next to it. A shot that hits nothing does not burst. Drills burst on everything they hit. The bursts leave Heatwaves alone.'   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ17, the text from strings_PT6_final.md (build_PT6_2026-10-21)
                                 : `A wider burst, and harder (Lv ${l + 1}).` },
   relay:   { name: 'Relay',       max: 3, col: PAL.yours.ring.relay,
-             desc: l => l === 0 ? 'A shot that lands sends one on to the next thing near it.'
+             desc: l => l === 0 ? 'A shot that lands sends one on to the next thing near it. It leaves Heatwaves alone.'   // PT6-T1 2026-10-21: PLAN_PT6 T1 - RL1, the text from strings_PT6_final.md (build_PT6_2026-10-21)
                                 : `It sends one more on (Lv ${l + 1}).` },
   resid:   { name: 'Residual',    max: 3, col: PAL.yours.ring.resid,
              desc: l => l === 0 ? 'What you stop bursts where it falls — whatever stopped it.'
@@ -3829,7 +3833,7 @@ const MODS = {
   // --- what is laid ON TOP of the emitter. Both are additions, and a build may hold both
   // (user decision, 2026-09-10 playtest). Neither one takes the aimed shots away any more.
   beam:    { name: 'Continuous',  max: 1, col: '#57c7ff',
-             desc: () => 'A held beam burns what it crosses, out to where you can see, while your aimed shots keep firing under it. '
+             desc: () => 'A held beam burns what it crosses, out to where you can see, while your aimed shots keep firing under it. It leaves Heatwaves alone. '   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ7, the text from strings_PT6_final.md (build_PT6_2026-10-21)
                        + 'Through, Volley, Calibre, Relay and Gathering all reach the beam; Fragmenting, Spreading and Return do not, but they still have your shots to work on.' },
   fan:     { name: 'Broadside',   max: 1, col: '#ffd166',
              desc: () => 'A wide sweep on top of your aimed shots: many more, spread across the front, '
@@ -4594,7 +4598,7 @@ function reset(placeId) {
   // B11 2026-09-22: nor does a flash line, shown or waiting (build_B_2026-09-22)
   flashClear()
   if (placeId && PLACES[placeId]) PLACE = PLACES[placeId]
-  P = { x: 0, y: 0, r: 11, spd: T.playerSpeed, hp: T.baseHp, max: T.baseHp, inv: 0, xp: 0, need: 9, level: 1,
+  P = { x: 0, y: 0, r: 11, spd: T.playerSpeed, hp: T.baseHp, max: T.baseHp, inv: 0, xp: 0, need: 14, level: 1,   // PT6-P18 2026-10-21: PLAN_PT6 P18 (D14) - the first need, was need: 9 (T.xpCurve 1.188 goes with it) (build_PT6_2026-10-21)
         pickup: 90, hx: 0, hy: 0, dmgMul: 1, rateMul: 1, armour: 0, ringAng: 0, cd: {},
         // B9 2026-09-22: movement input, set each step (step() does not run while the game is paused, so it then holds its last value); hx/hy stay the last heading; nothing reads it yet (PR1) (build_B_2026-09-22)
         // D10 2026-09-22: the B9 line above said "held this frame" - P.moving is set each step and holds its last value while paused (section B review 2, N6); comment only (build_D_2026-09-22)
@@ -4761,7 +4765,7 @@ const HAZARDS = {
            // Spotting: embers thrown ahead of the front, which is how a fire crosses ground
            // that nothing was burning on. An ember that lands can start its own.
            shoot: { every: 3.7, n: 1, spread: 0, spd: 170, dmg: 6, range: 380, r: 5.5, life: 2.6, ember: 0.18 },
-           src: 'It multiplies. Every one you leave standing is the source of the next, and it throws embers ahead of itself onto ground that was not burning.' },
+           src: 'It multiplies. Some fires throw embers ahead of themselves onto ground that was not burning, and every one of those fires you leave standing is the source of the next.' },   // PT6-T1 2026-10-21: PLAN_PT6 T1 - FR1, the text from strings_PT6_final.md + R4 (build_PT6_2026-10-21)
 }
 const HAZARD_IDS = Object.keys(HAZARDS)
 // SP-M1 / SP-M3 / SP-M4 / SP-M5 2026-10-19: PLAN_SPLIT S1-S5 - every number the melee / ranged split adds, in one table beside HAZARDS (which stays as it was). kinds: the three that split (S1: Earthquake, Storm, Wildfire; flood fronts, heat zones, bosses and elites do not). melee / ranged: multipliers on today's body (health, touch damage, speed, size - size is the hit radius e.r, and the drawn sprite follows it). hold / holdBand / sideW / side: a ranged body comes to `hold` px from what it is after, at full speed when it is more than holdBand px off that distance, and sidesteps at that distance (sin(age x sideW + phase) x side of its speed). chip: the ranged Earthquake's rock chip, read by enemyFire as a storm's or a fire's shoot entry is (r and life are the Builder's: r = the storm shard's 4.5; life 2.5 s, so it flies about 1.19 x its range, as the storm's and the fire's do). ring: the ranged mark (S5), a thin pale steady dashed ring `gap` px out from the body, two-tone (a dark wider pass under it). Every value a first guess for the measurement (build_SPLIT_2026-10-18)
@@ -4770,6 +4774,7 @@ const SPLIT = {
   melee: { hp: 1.3, dmg: 1.5, spd: 1.1, r: 1.15 },   // PT-M1 2026-10-19: PLAN_PT M1 - touch damage x1.6 -> x1.5, so an elite's touch (x T.eliteDmg 1.6 on the plain body) is again above a melee body's and the elite line "hit harder" holds of every hit; melee stays above ranged on every multiplier; was `melee: { hp: 1.3, dmg: 1.6, spd: 1.1, r: 1.15 },   // SP-T3 2026-10-19: the Lead's tuning round (measure_SPLIT.md M4) - was `melee: { hp: 1.3, dmg: 1.3, spd: 1.1, r: 1.15 },`; touch damage x1.6, still above ranged on every multiplier (build_SPLIT_2026-10-18 tuning)` (build_PT_2026-10-19)
   ranged: { hp: 0.75, dmg: 0.7, spd: 0.9, r: 0.9 },
   hold: 260, holdBand: 40, sideW: 1.6, side: 0.8,
+  backK: 0.5,   // PT6-N7 2026-10-21: PLAN_PT6 N7 - a ranged body nearer than SPLIT.hold to you backs off at this share of the speed it backed off at before (the radial part of its move, while it points away); its approach, sidestep and throws unchanged (build_PT6_2026-10-21)
   chip: { every: 3.2, n: 1, spread: 0, spd: 190, dmg: 4, range: 400, r: 4.5, life: 2.5 },   // SP-T2 2026-10-19: the Lead's tuning round (measure_SPLIT.md M4) - was `chip: { every: 3.2, n: 1, spread: 0, spd: 190, dmg: 6, range: 400, r: 4.5, life: 2.5 },`; the rock chip's damage 6 -> 4 (build_SPLIT_2026-10-18 tuning)
   ring: { gap: 7, w: 1.2, dash: [3, 3], col: 'rgba(240,236,224,.82)', under: 'rgba(8,10,13,.5)', underW: 3 },
 }
@@ -4803,7 +4808,7 @@ const DIFFS = {
     // DL-M4 2026-10-14: the step note, strings_DIAL.md N-1 - the Learning blurb with its last sentence, "Many cards in plainer English.", moved to the plain-language switch (PLAN_DIAL D5; DL-M3); every other word unchanged (build_DIAL_2026-10-14)
     // DL-FIX 2026-10-15: FX2 (check_DIAL.md F2), for the same wording on all three steps that carry it - the warning sentence split in two, the exception kept: DIFF.warn is read only in fireEvent (its warn and warnBought lines); a compound event's arrival (T.bossWarn), its wind-up (T.bossWind), its siege strikes (warn: 1.05) and the true boss's lead (T.tbossLead) have no DIFF factor, so they are the same as on Growing; the game's phrase "several hazards arriving together" kept (build_DIAL_2026-10-14 fix round)
     // DL-FIX2 2026-10-15: FX8 (review_DIAL.md F1) - "But for several hazards arriving together, the warning ..." could be read as the idiom "but for" (= "except for"), which reverses it; now "But the warning for several hazards arriving together is the same as on Growing.", the same claim (DIFF.warn is read only in fireEvent's warn and warnBought lines; T.bossWarn, T.bossWind, the siege strike's warn: 1.05, T.tbossLead and T.tbLaneWarn carry no DIFF factor) and the game's phrase "several hazards arriving together" in the same form; the first three sentences unchanged (build_DIAL_2026-10-14 fix round 2)
-    blurb: 'At first, hazards build up more slowly and hits are softer. Later, it gets hard quickly. You get more warning. But the warning for several hazards arriving together is the same as on Growing.',
+    blurb: 'Hazards build up more slowly and hits are softer. You get more warning. But the warning for several hazards arriving together is the same as on Growing.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - PL, the text from strings_PT6_final.md (build_PT6_2026-10-21)
     // len went 2.0 -> 1.0 when T.pace landed (2026-09-04). pace multiplies the knee's real-time
     // position by itself, and Learning's knee was already the furthest out, so it compounded twice
     // and the gentlest mode measured 8:49 against its own blurb's "a short, readable run". At 1.0 it
@@ -5243,7 +5248,7 @@ addEventListener('keydown', e => {
 // entry takes the one argument the current template reads. Keyed by the copy's row ids.
 const PLAIN = {
   'UPG.field.desc0': 'Building standards, applied to everything standing around you. Nothing dramatic happens. Things simply do not fall.',
-  'UPG.pulse.desc0': 'It finds what is closest. It deals with it before it arrives.',
+  'UPG.pulse.desc0': 'It finds what is closest. It deals with it before it arrives. Your shots leave Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ16, the text from ADJUDICATION_strings_PT6.md R1 (build_PT6_2026-10-21)
   // G-M1 2026-10-13: the same three-way branch as UPGRADES.pulse.desc (pulseSmall; RG4), strings_G.md S-G1a Learning verbatim; the third branch is the old line (build_G_2026-10-01)
   'UPG.pulse.descN': l => pulseSmall(l + 1) > pulseSmall(l) ? `Faster. It also goes past the first thing it meets. One more shot goes out. It stays small until your next Early warning level (Lv ${l + 1}).`
                         : pulseSmall(l + 1) < pulseSmall(l) ? `Faster. It also goes past the first thing it meets. Your small shot grows to full size (Lv ${l + 1}).`
@@ -5260,8 +5265,8 @@ const PLAIN = {
   'SYN.act.gain': 'Warning fires up to 25% faster. Drills reach up to 30% further. And one more shot goes out each time. The 25% and 30% can start smaller. They grow as you level Warning and Drills.',
   'SYN.stock.gain': 'Codes cover up to 35% more ground. Retrofitting stops up to 10% more. What you stop bursts where it falls. The 35% and 10% can start smaller. They grow as you level Codes and Retrofit.',
   'SYN.concrete.gain': 'Up to +60 capacity. Retrofitting also stops up to 8% more. Both can start smaller. They grow as you level Finance and Retrofit.',
-  'SYN.who.gain': 'Drills reach up to 25% further. You collect from up to 25% further away. A shot that lands sends another on to the next thing. Both 25% figures can start smaller. They grow as you level Drills and Data.',
-  'SYN.lane.gain': 'A cleared corridor runs through you, in the direction you are moving. It wears down everything standing in it.',
+  'SYN.who.gain': 'Drills reach up to 25% further. You collect from up to 25% further away. A shot that lands sends another on to the next thing. Your shots leave Heatwaves alone. Both 25% figures can start smaller. They grow as you level Drills and Data.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - SY2, the text from ADJUDICATION_strings_PT6.md R3 (build_PT6_2026-10-21)
+  'SYN.lane.gain': 'A cleared corridor runs through you, in the direction you are moving. It wears down everything standing in it. It leaves Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ14, the text from strings_PT6_final.md (build_PT6_2026-10-21)
   // CORRECTED 2026-09-23: was "... What you fire bursts where it lands." - since F3a a shot bursts once, where it stops - on the hit that spends its last pierce (a body or the boss), or in mid-air when its life runs out - so "lands" was untrue of a shot that missed (section F text, build_F_2026-09-23); CORRECTED again 2026-09-23: was "... What you fire bursts where it stops." - since FX1 a shot bursts once, when it stops, on the last body it struck (a body or the boss), at that body's position at that moment (its last position if it has gone), and not at all if it struck nothing - so "where it stops" was untrue of a shot that struck a body and flew on, and "What you fire bursts" was untrue of a shot that struck nothing (section F text 2, build_F_2026-09-23)
   // CORRECTED 2026-09-23: was "... What you fire bursts on the last thing it hit." - relay shots (burst: 0) and split shards (no burst field) never burst, and the Drills ring bursts at each thing it strikes (fireWave hands it sh.burstR; the ring loop calls explode at every strike); now the aimed shots and the wide sweep on the last thing they hit, Drills on everything they hit (pre-deploy text, predeploy_2026-09-23)
   // CORRECTED 2026-09-23: "Everything you have hits 15% harder and fires 15% faster." became two sentences, as in the English - P.rateMul acts only in step(): the aimed shots and the wide sweep, Drills, Building codes; "hits 15% harder" kept (P.dmgMul is in every damage line of the build) (pre-deploy text, predeploy_2026-09-23)
@@ -5281,14 +5286,14 @@ const PLAIN = {
   'FUS.act.desc': 'Warning and drills run as one programme. Every few seconds, everything near you is moved out of the way before it lands.',
   'FUS.act.gain': 'An evacuation pulse fires by itself every 9s. It pushes hazards back, and you move faster right after it.',
   'FUS.see.desc': 'Data feeds warning all the time. A sweep watches the whole horizon and deals with what it finds.',
-  'FUS.see.gain': 'A monitoring beam circles you. It wears down everything it crosses, reaching a long way out.',
+  'FUS.see.gain': 'A monitoring beam circles you. It wears down everything it crosses, reaching a long way out. It leaves Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ4, the text from strings_PT6_final.md (build_PT6_2026-10-21)
   'FUS.buffer.desc': 'A buffer that is planned, planted and defended. It is wider and thicker, and it pushes back what touches it.',
   'FUS.buffer.gain': 'The green belt gets two more shards and reaches 25% further. It throws back what it hits.',
   // GR-M1 2026-09-29: the grand programmes' Learning desc and gain, strings_GR.md S-G1 verbatim (keys GRD.<id>.desc / .gain, the FUS pattern); names and the banner's `take` have none, so they fall through to the Steady text (build_GR_2026-09-29)
   // CB-M4 2026-09-30: GRD.chain.desc / .gain and GRD.shield.gain reworded, strings_CB.md S-C4 C4-3, C4-4, C4-6 verbatim (ADJUDICATION_GR F1, F2) (build_CB_2026-09-30)
   // G-M3 2026-10-13: the Learning desc and gain of chain, laser, veil, aftershock and orbit, strings_G.md S-G3a verbatim ("up to" on the number that ripens, and the grow sentences); the old texts are quoted in the GRANDS lines' G-M3 notes and differ by those additions (build_G_2026-10-01)
   'GRD.chain.desc': 'Your aimed shots and the wide sweep can set off lightning. It jumps from the hazard they hit to others close by. It can jump up to 4 times. It can start with fewer jumps. It grows as you level Drills, Data and Warning.',
-  'GRD.chain.gain': 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not hit yet. It can jump up to 4 times. The first jump does up to 60% of the shot\'s damage. Each jump after that does 20% less than the one before. The number of jumps and the 60% can start smaller. They grow as you level Drills, Data and Warning.',
+  'GRD.chain.gain': 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not hit yet. It leaves Heatwaves alone. It can jump up to 4 times. The first jump does up to 60% of the shot\'s damage. Each jump after that does 20% less than the one before. The number of jumps and the 60% can start smaller. They grow as you level Drills, Data and Warning.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ10, the text from strings_PT6_final.md (build_PT6_2026-10-21)
   'GRD.laser.desc': 'Your aimed shots keep firing. A laser fires too. If you do not have Continuous, you get its beam. The beam hits up to 50% harder and aims at one more target. The 50% can start smaller. It grows as you level Data, Warning and Drills.',
   'GRD.laser.gain': 'Your beam becomes a laser. It hits up to 50% harder and aims at one more target. If you have no beam, you get one. Your aimed shots stay the same. The 50% can start smaller. It grows as you level Data, Warning and Drills.',
   'GRD.shield.desc': 'Some thrown things that would hit you are stopped. They fly back as your own shots. The chance grows with each Green defences level. Only thrown things are stopped.',
@@ -5297,28 +5302,28 @@ const PLAIN = {
   'GRD.veil.desc': 'There is a ring around you. Inside it, thrown things fly 40% slower. Hazards inside it move 25% slower. Your own shots are not slowed. Marked events are not slowed. The ring can start smaller. It grows as you level Warning, Drills, Nature and Land use.',   // GR2-FIX 2026-09-30: "Hazards move 25% slower." -> "Hazards inside it move 25% slower." - the scope kept (ADJUDICATION_GR2 F6) (build_GR2_2026-09-30 fix round)
   'GRD.veil.gain': 'There is a ring around you. Inside it, thrown things fly 40% slower. Hazards move 25% slower. So does the event that arrives with the words \u201cSeveral hazards, arriving together.\u201d Nothing outside the ring is slowed. Your own shots are not slowed. Events marked on the ground are not slowed. The ring can start smaller. It grows as you level Warning, Drills, Nature and Land use.',
   'GRD.aftershock.desc': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it. It jumps to another hazard close by. This can happen twice in a row, but not more. The lightning can start weaker. It grows as you level Invest, Upkeep, Codes and Retrofit.',
-  'GRD.aftershock.gain': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it. It goes to the nearest hazard close by. It does up to 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, there can be another burst. That burst can send lightning once more. It does not go on after that. The 35% can start smaller. It grows as you level Invest, Upkeep, Codes and Retrofit.',
-  // GR2-FIX 2026-09-30: the orbit's Learning desc and gain reworded as the Steady ones (ADJUDICATION_GR2 F2, F5): "They leave heat alone."; 9 damage a hit, at most once every 0.3s on the same hazard. Were: desc "Three pieces go round close to you. They hurt any hazard they touch and push it away. They do not stop thrown things."; gain "Three pieces circle close around you. They go round once every 2.4s. A hazard they touch takes 30 damage a second. Resilient investment makes it more. The pieces push the hazard away from you. They do not stop thrown things." (build_GR2_2026-09-30 fix round)
+  'GRD.aftershock.gain': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it. It goes to the nearest hazard close by. It leaves Heatwaves alone. It does up to 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, there can be another burst. That burst can send lightning once more. It does not go on after that. The 35% can start smaller. It grows as you level Invest, Upkeep, Codes and Retrofit.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ12, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+  // GR2-FIX 2026-09-30: the orbit's Learning desc and gain reworded as the Steady ones (ADJUDICATION_GR2 F2, F5): "They leave heat alone." (PT6-T1 2026-10-21: R5 - now "They leave Heatwaves alone.", strings_PT6_final.md OR4, OR5 (build_PT6_2026-10-21)); 9 damage a hit, at most once every 0.3s on the same hazard. Were: desc "Three pieces go round close to you. They hurt any hazard they touch and push it away. They do not stop thrown things."; gain "Three pieces circle close around you. They go round once every 2.4s. A hazard they touch takes 30 damage a second. Resilient investment makes it more. The pieces push the hazard away from you. They do not stop thrown things." (build_GR2_2026-09-30 fix round)
   // G-FIX 2026-10-13: F8 - orbit's Learning desc and gain: "More come as you level Codes, Land use and Upkeep." became "The number grows as you level Codes, Land use and Upkeep.", as the Steady texts (ADJUDICATION_G F8) (build_G_2026-10-01 fix round)
-  'GRD.orbit.desc': 'Up to three pieces go round close to you. They hurt hazards they touch and push them away. They leave heat alone. They do not stop thrown things. There can be fewer at first. The number grows as you level Codes, Land use and Upkeep.',
-  'GRD.orbit.gain': 'Up to three pieces circle close around you. They go round once every 2.4s. A hazard they touch takes 9 damage. Resilient investment makes it more. The pieces push the hazard away from you. They hit the same hazard at most once every 0.3s. They leave heat alone. They do not stop thrown things. There can be fewer pieces at first. The number grows as you level Codes, Land use and Upkeep.',
+  'GRD.orbit.desc': 'Up to three pieces go round close to you. They hurt hazards they touch and push them away. They leave Heatwaves alone. They do not stop thrown things. There can be fewer at first. The number grows as you level Codes, Land use and Upkeep.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - OR4, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+  'GRD.orbit.gain': 'Up to three pieces circle close around you. They go round once every 2.4s. A hazard they touch takes 9 damage. Resilient investment makes it more. The pieces push the hazard away from you. They hit the same hazard at most once every 0.3s. They leave Heatwaves alone. They do not stop thrown things. There can be fewer pieces at first. The number grows as you level Codes, Land use and Upkeep.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - OR5, the text from strings_PT6_final.md (build_PT6_2026-10-21)
   'MOD.track.descN': l => `It turns more sharply, and gives up later (Lv ${l + 1}).`,
   'MOD.volley.desc0': 'One more shot goes out every time it fires. The new shot is small until you level up again.',   // G-M1 2026-10-13: strings_G.md S-G1b Learning verbatim; was "One more shot goes out every time it fires." (build_G_2026-10-01)
   // CORRECTED 2026-09-23: was "What you fire bursts where it lands. The burst reaches what stood next to it." - since F3a a shot bursts once, where it stops - on the hit that spends its last pierce (a body or the boss), or in mid-air when its life runs out - so "lands" was untrue of a shot that missed (section F text, build_F_2026-09-23); CORRECTED again 2026-09-23: was "What you fire bursts where it stops. The burst reaches what stood next to it." - since FX1 a shot bursts once, when it stops, on the last body it struck (a body or the boss), at that body's position at that moment (its last position if it has gone), and not at all if it struck nothing - so "where it stops" was untrue of a shot that struck a body and flew on, and "What you fire bursts" was untrue of a shot that struck nothing (section F text 2, build_F_2026-09-23)
   // CORRECTED 2026-09-23: was "What you fire bursts on the last thing it hit. ..." - relay shots (burst: 0) and split shards (no burst field) never burst, and the Drills ring bursts at each thing it strikes (fireWave hands it sh.burstR; the ring loop calls explode at every strike); now the aimed shots and the wide sweep on the last thing they hit, Drills on everything they hit (pre-deploy text, predeploy_2026-09-23)
-  'MOD.frag.desc0': 'Your aimed shots and the wide sweep burst on the last thing they hit. The burst reaches what stood next to it. A shot that hits nothing does not burst. Drills burst on everything they hit.',
-  'MOD.relay.desc0': 'A shot that lands sends another on to the next thing near it.',
+  'MOD.frag.desc0': 'Your aimed shots and the wide sweep burst on the last thing they hit. The burst reaches what stood next to it. A shot that hits nothing does not burst. Drills burst on everything they hit. The bursts leave Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ18, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+  'MOD.relay.desc0': 'A shot that lands sends another on to the next thing near it. It leaves Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - RL2, the text from strings_PT6_final.md (build_PT6_2026-10-21)
   'MOD.resid.desc0': 'What you stop bursts where it falls. It does not matter what stopped it.',
   'MOD.calibre.desc0': 'What you fire is bigger and hits harder, but it is slower.',
   'MOD.grow.desc0': 'It gets wider as it travels. It is thin near you and broad where it lands.',
   'MOD.grow.descN': l => `It gets wider faster (Lv ${l + 1}).`,
   'MOD.gather.desc0': 'What you hit is pulled toward where it was hit. It is not thrown away from it.',
-  'MOD.beam.desc0': 'A beam that stays on burns what it crosses, out to where you can see. Your aimed shots keep firing under it. Through, Volley, Calibre, Relay and Gathering all work on the beam. Fragmenting, Spreading and Return do not, but they still work on your shots.',
+  'MOD.beam.desc0': 'A beam that stays on burns what it crosses, out to where you can see. It leaves Heatwaves alone. Your aimed shots keep firing under it. Through, Volley, Calibre, Relay and Gathering all work on the beam. Fragmenting, Spreading and Return do not, but they still work on your shots.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ8, the text from strings_PT6_final.md (build_PT6_2026-10-21)
   'MOD.fan.desc0': 'A wide sweep, added on top of your aimed shots. Many more shots spread across the front. Each one is lighter, and none of them goes as far.',
   'HAZ.quake.src': 'It is sudden, with little warning, and over in seconds. That is why the only thing that works is what was already in place.',
   'HAZ.flood.src': 'A front, not an event. It comes from one direction and keeps coming.',
   'HAZ.heat.src': 'It does not come to you. It settles over a place and stays. That is why it kills more people than it looks like it should.',
-  'HAZ.fire.src': 'It multiplies. Every one you leave standing starts the next. It throws embers ahead of itself, onto ground that was not burning.',
+  'HAZ.fire.src': 'It multiplies. Some fires throw embers ahead of themselves, onto ground that was not burning. Every one of those fires you leave standing starts the next.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - FR2, the text from strings_PT6_final.md + R4 (build_PT6_2026-10-21)
   'EVT.inbound.warned': warn => `Your warning system gives you ${(warn).toFixed(1)}s.`,
   'LL.lost.more': left => ` If you lose ${left} more, the run ends here.`,
   'LL.hospital.gain': 'Your capacity comes back slowly while it stands.',
@@ -5355,7 +5360,7 @@ const PLAIN = {
   // CORRECTED 2026-09-23: the two verbless fragments became two plain sentences with a verb ("looks at"); "It also" keeps UNDRR as the originator of the second half; the English (UPG.rate.src) has no figure or hedge to keep; "resilience", the gloss label, kept; one-sentence versions read above the plain-entry maximum (section C round 3, section_C_2026-09-22)
   // CORRECTED 2026-09-23: "looks at" (twice) became "asks for" - the source is an instruction ("Ensure ... integrate lifecycle resilience, maintenance, and retrofit pathways for existing assets.", UNDRR Earthquake Day, Key Messages, capture P01 L371), and two other game lines already say "UNDRR asks for lifecycle resilience and maintenance pathways"; UNDRR and "resilience" (the gloss label) kept; the English UPG.rate.src unchanged (pre-deploy text, predeploy_2026-09-23)
   'UPG.rate.src': 'UNDRR asks for resilience over an asset’s whole life. It also asks for ways to maintain and retrofit existing assets.',
-  'UPG.ring.desc0': 'Mangroves, dunes, wetlands. A belt that stays around you and works every second. It wears down what it touches. It also blocks thrown things that touch it.',
+  'UPG.ring.desc0': 'Mangroves, dunes, wetlands. A belt that stays around you and works every second. It wears down what it touches. It also blocks thrown things that touch it. It leaves Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ2, the text from strings_PT6_final.md (build_PT6_2026-10-21)
   'TRD.relief.desc': 'Help arrives each time you level up. You get 30% of your capacity back.',
   'TRD.relief.src': 'Money spent rebuilding is money not spent making the thing stronger first. That is the opposite of the measure UNDRR values at US$4 in benefit for every US$1 in low- and middle-income countries.',
   // CORRECTED 2026-09-23: the projection sentence split in two to read at or below the other plain entries (reading level); "project", the condition, the Dominican Republic scope and the quotation unchanged, the quotation now introduced by "The rise they project is" (section C round 2, section_C_2026-09-22)
@@ -5378,7 +5383,7 @@ const PLAIN = {
   // BS-M4 2026-09-30: the secured line with a real save's repair, strings_BS_hp.md S-H2 (a) verbatim (ruling RH2) (build_BS_2026-09-30)
   'LL.secured': 'You get 30% of your capacity back. It leaves the map for 15s and comes back somewhere new. Its bonus stays.',
   // LL-M2 2026-09-25: the rebuild card's cost, S-L2's Learning text verbatim (strings_LL.md); TRD.rebuild.desc is absent on purpose - the desc falls through to the Steady line (build_LL_2026-09-25)
-  'TRD.rebuild.cost': 'The most capacity you can have drops by 25%. This lasts until the run ends.',
+  'TRD.rebuild.cost': 'You lose 15% of the capacity you have now. The most capacity you can have does not change.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - RB2, the text from strings_PT6_final.md (build_PT6_2026-10-21)
 }
 // DL-M3 2026-10-14: say() and glossHtml() gate on the plain-language switch (plainOn) instead of DIFF.id === 'learn' (PLAN_DIAL D4); the comments above that say "Learning" describe the gate before this build; PLAIN and GLOSS are unchanged (build_DIAL_2026-10-14)
 function say(id, cur, arg) {
@@ -5486,7 +5491,7 @@ const META = [
     of: 'wave' },
   { id: 'dissem', name: 'Warning dissemination', max: 3, cost: l => 6 + l * 5,
     fx: 'What Warning fires travels 8% faster per level.',
-    src: 'It detects what is closest and answers it before it arrives — dissemination is the speed of the answer.',
+    src: 'It detects what is closest and answers it before it arrives. Your shots leave Heatwaves alone. Dissemination is the speed of the answer.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - DS, the text from ADJUDICATION_strings_PT6.md R1 (build_PT6_2026-10-21)
     now: l => `What Warning fires travels ${8 * l}% faster.`,
     of: 'pulse' },
   { id: 'enforce', name: 'Enforcement capacity', max: 3, cost: l => 6 + l * 5,
@@ -6925,7 +6930,7 @@ const TRADEOFFS = [
 // LL-M2 2026-09-25: the rebuild trade-off card's two fixed lines, S-L2 verbatim (strings_LL.md). Not a TRADEOFFS row: it is offered at every level-up while a lifeline is lost, can be taken again, and names the most recently lost lifeline (offerCards); it carries no source line - it is game-only (PLAN_LL D2). On Learning, TRD.rebuild.cost has a plain entry and the desc falls through (build_LL_2026-09-25)
 const REBUILD = {
   desc: 'It comes back somewhere new, with 50% health. It no longer counts as lost.',
-  cost: 'Your maximum capacity drops by 25% for the rest of the run.',
+  cost: 'You lose 15% of the capacity you have now. Your maximum capacity does not change.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - RB1, the text from strings_PT6_final.md (build_PT6_2026-10-21)
 }
 
 // ---- run-level state that the place and season own -------------------------------------
@@ -7144,7 +7149,7 @@ function hitLifeline(L, amount) {
     // D10 2026-09-22: the BF8 line above said the warn sound is spent only with the line; since BF11 it is not (section B review 2, N4); comment only (build_D_2026-09-22)
     // BF11 2026-09-23: the warn sound no longer waits for the line - under BF8 a full flash row delayed it; the sound and its own 9 s throttle (L.warnCd) are spent at the first hit whatever the row holds, as before BF8, and only the line retries: it keeps BF8's retry under a 9 s throttle of its own (L.warnLineCd, spent only when the line is shown or queued), and a retry does not replay the sound; the hint call is unchanged (Lead's ruling on BF8's sound) (build_B_2026-09-22)
     if ((L.warnCd || 0) <= 0) { L.warnCd = 9; AU.play('warn') }
-    if ((L.warnLineCd || 0) <= 0 && flash(LIFELINES[L.kind].name + ' under attack', 'No measure defends it. Being there does.', '#ff9d9d') !== 'dropped') L.warnLineCd = 9
+    if ((L.warnLineCd || 0) <= 0 && flash(LIFELINES[L.kind].name + ' under attack', 'No measure defends it. Being there does the most.', '#ff9d9d') !== 'dropped') L.warnLineCd = 9   // PT6-T1 2026-10-21: PLAN_PT6 T1 - AL, the text from strings_PT6_final.md (build_PT6_2026-10-21)
     hint('lifeline')   // first lifeline under attack (S4.3); the flash waits behind the card, its timer frozen
   }
   L.hp -= amount
@@ -7508,7 +7513,9 @@ function moveHazard(e, dt) {
     const dx = G.x - e.x, dy = G.y - e.y, d = Math.hypot(dx, dy) || 1, ux = dx / d, uy = dy / d
     const rad = clamp((d - SPLIT.hold) / SPLIT.holdBand, -1, 1)
     const side = Math.sin(e.age * SPLIT.sideW + e.phase) * SPLIT.side * (1 - Math.abs(rad))
-    let vx = ux * rad - uy * side, vy = uy * rad + ux * side
+    // PT6-N7 2026-10-21: PLAN_PT6 N7 - backing off at half speed; was `let vx = ux * rad - uy * side, vy = uy * rad + ux * side`. Only the radial part is scaled, and only while it points away from G (rad < 0: nearer than SPLIT.hold): rb = rad x SPLIT.backK (0.5), so nearer than SPLIT.hold - SPLIT.holdBand it backs off at 0.5 x e.spd (was 1 x) and inside the band at half its old radial speed; side is still computed from the unscaled rad above, so the sidestep is unchanged; at or beyond SPLIT.hold (rad >= 0) nothing changes. The cap below (m > 1) did not act on the old vector (rad^2 + side^2 <= 1) and does not act on the new, smaller one (build_PT6_2026-10-21)
+    const rb = rad < 0 ? rad * SPLIT.backK : rad
+    let vx = ux * rb - uy * side, vy = uy * rb + ux * side
     const m = Math.hypot(vx, vy); if (m > 1) { vx /= m; vy /= m }
     e.x += vx * e.spd * dt + e.kx * dt
     e.y += vy * e.spd * dt + e.ky * dt
@@ -12250,9 +12257,10 @@ function offerZoom() {
 // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch on the start screen, under Zoom and on offerPlain()'s pattern: the button is made once and
 // then updated in place, so keyboard focus stays on it after a press (Tab reaches it as a <button>; Enter is the browser's click, Space the
 // #start listener's single press, as for its neighbours); aria-pressed true while effects are on; the state word in an aria-hidden span, so
-// the accessible name is "Effects". A press turns the state now shown over and stores that choice (fxSave), which overrides the OS setting
-// from then on (fxPick, reduceMotion and rmClass, beside RM_Q). The note says what the code does: off = reduceMotion, the still versions of
-// the moving effects; with no stored choice the state is the device's reduced-motion setting (build_PT_2026-10-19)
+// the accessible name is "Effects". A press turns the state now shown over and stores that choice (fxSave), which holds
+// from then on (fxPick, reduceMotion and rmClass). The note says what the code does: off = reduceMotion, the still versions of
+// the moving effects; with no stored choice effects are on (reduceMotion false) (build_PT_2026-10-19)
+// PT6-C 2026-10-21: PLAN_PT6 C (the stale P8 comments) - three clauses above corrected, comments only: was "which overrides the OS setting", "beside RM_Q" (RM_Q is gone since PT2-P8) and "the state is the device's reduced-motion setting" (build_PT6_2026-10-21)
 function offerFx() {
   const wrap = $('fxwrap')
   let b = wrap.querySelector('button')
@@ -12559,7 +12567,7 @@ $('spendfirst').onclick = () => {
   offerFx()   // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch drawn with the others, after offerZoom() (build_PT_2026-10-19)
   reset(); paused = true
 }
-// P01 2026-09-23: set from the shop's own test (offerMeta's canBuy, verbatim), so the door opens only when something can be bought - the fast path then says what is unspent and the third button shows; otherwise the end screen is exactly as before. `banked` is false while the debrief still holds this run's budget (build_F_2026-09-23)
+// P01 2026-09-23: set from the shop's own test (offerMeta's canBuy, verbatim; PT6-C 2026-10-21: PLAN_PT6 C, F4 - PT-P4 removed that line from offerMeta, so the line below is now the only copy of the test (build_PT6_2026-10-21)), so the door opens only when something can be bought - the fast path then says what is unspent and the third button shows; otherwise the end screen is exactly as before. `banked` is false while the debrief still holds this run's budget (build_F_2026-09-23)
 function syncDoor(banked) {
   const st = metaStore()
   const canBuy = META.some(m => (st.lv[m.id] || 0) < m.max && st.funds >= m.cost(st.lv[m.id] || 0))
