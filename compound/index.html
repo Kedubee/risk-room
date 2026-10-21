@@ -74,6 +74,7 @@
     Storms throw what they lift, in a spread of three, while orbiting out of reach. Wildfire
     throws embers ahead of itself, and an ember that lands starts its own fire on ground
     nothing was burning on. Neither throws at you while it is on its way to a lifeline.
+    // PT7-S2 2026-10-21: PLAN_PT7 S2 - "Wildfire throws embers ahead of itself" held until the melee / ranged split (SP-M2 / SP-M4 2026-10-19, build_SPLIT_2026-10-18): makeHazard makes each Wildfire body melee or ranged by turns (splitN), and enemyFire gives a melee body no shot, so only a ranged Wildfire body, or an elite one (makeElite takes the variant back), throws embers (HAZARDS.fire.shoot); comment only (build_PT7_2026-10-21)
 
     The green belt eats what is thrown at it. That is the defensive identity a standing
     perimeter should always have had, and it is now the counter to both shooters — it blocks
@@ -1090,6 +1091,7 @@
     cursor:pointer;transition:opacity .12s,border-color .12s,background .12s}
   #dodge.ready{opacity:1;border-color:#8fe3ff;color:#8fe3ff;background:rgba(143,227,255,.12)}
   /* PT6-C 2026-10-21: PLAN_PT6 C (O3a) - while the start screen is up (#start without .gone: opaque, z-index 23, over EVAC's 9) EVAC is hidden from view and so from Tab, so the first Tab lands on the start screen's first control; visibility, not display, so its box and place are kept for anything that measures it; it is back the moment a place is chosen. A browser without :has() ignores the rule and behaves as before (build_PT6_2026-10-21) */ body:has(#start:not(.gone)) #dodge{visibility:hidden}
+  /* PT7-S1 2026-10-21: PLAN_PT7 S1 - on touch screens (body.touch #mute{display:flex}) the sound button, as EVAC in PT6-C O3a above, is hidden from view and so from Tab while the start screen is up (#start without .gone: opaque, z-index 23, over the button's 9), so the first Tab lands on the start screen's first control; visibility, not display, so its box is kept for ptrFrame, which measures it; it is back the moment a place is chosen. A browser without :has() ignores the rule and behaves as before (build_PT7_2026-10-21) */ body:has(#start:not(.gone)) #mute{visibility:hidden}
   #svc{position:fixed;right:14px;bottom:118px;z-index:7;font-size:10px;font-weight:800;
     letter-spacing:.09em;padding:4px 10px;border-radius:99px;pointer-events:none;
     background:rgba(255,77,94,.14);border:1px solid rgba(255,77,94,.35);color:#ff9d9d}
@@ -2567,6 +2569,7 @@ const T = {
   serviceDur: 8,                   // how long a restored service runs at full stretch
   serviceCd: 20,                   // per lifeline, so one parked hazard cannot be farmed
   // LL-M2 2026-09-25: the rebuild card (PLAN_LL D2; the user's decision 2026-09-25: maximum capacity -25%). The card states "50% health" and "drops by 25%", so a change here changes that text too (build_LL_2026-09-25)
+  // PT7-S2 2026-10-21: PLAN_PT7 S2 - the card no longer states "drops by 25%": since PT5-R1f (build_PT5_2026-10-20) a rebuild takes LONGRUN.rebuildCost (15%) of the capacity you have at that moment and leaves maximum capacity as it is (rebuildLifeline), so lifelineRebuildMax below is read by nothing; the cost line now reads "You lose 15% of the capacity you have now." (REBUILD.cost and PLAIN 'TRD.rebuild.cost', PT6-T1 RB1 and RB2), so a change to LONGRUN.rebuildCost changes that text; "50% health" (REBUILD.desc, from lifelineRebuildHp below) still holds; comment only (build_PT7_2026-10-21)
   lifelineRebuildHp: 50,           // a rebuilt lifeline stands again at this much of 100
   lifelineRebuildMax: 0.75,        // ...and maximum capacity is multiplied by this, for the rest of the run, per rebuild
   lifelineMoveMin: 300,            // a new site (a rebuild, or a return after a save) is at least this far from the old one
@@ -4802,7 +4805,7 @@ const DIFFS = {
     // CORRECTED 2026-09-23: "you get more warning" now names its exception - DIFF.warn scales only fireEvent's warnings; a compound event's arrival (T.bossWarn), its charge wind-up (T.bossWind) and its siege strikes (warn: 1.05) keep their times on every difficulty (section C round 2, section_C_2026-09-22)
     // CORRECTED 2026-09-23: "compound events" became the game's own words for them - in play a compound event is announced as "Several hazards, arriving together." (spawnBoss), and the term is defined only in the run report ("The word for several of them arriving together is a compound event"), while this blurb is on the start screen before any run (section C round 3, section_C_2026-09-22)
     // CORRECTED 2026-09-23: was "Very little arrives, and slowly." - true only of the ordinary trickle: surges (hazardSurge(T.surgeSize + waveIx * 3) on T.surgeEvery), events (T.eventFirst, T.eventEvery) and compound events (T.bossFirst, T.bossEvery) come at the same times on every difficulty, and the surge size has no difficulty factor; DIFF.spawn scales the trickle rate, and DIFF.ramp enters rampTime() (the Exposed note below); now "Hazards build up more slowly.", the counterpart of Exposed's "Hazards build up faster"; the rest of the blurb unchanged (section C round 4, section_C_2026-09-22)
-    // CORRECTED 2026-09-23: "Hazards build up more slowly." and "Hits are softer" held only for the first part of a run - Learning's rampTime() knee is at 210 s (3:30; T.hardAt * DIFF.len * T.pace), after which DIFF.hard 11 makes its clock grow faster than any other setting's (it passes Steady's at 3:43.5 and Exposed's at 4:26.5), and its hit multiplier (1 + rampTime() / T.dmgRamp) * DIFF.dmg passes Steady's at 4:38.4 (never Pressed's or Exposed's); both now sit under "At first,", "Later, it gets hard quickly." says what follows, and the warning clause (now its own sentence) and "Many cards in plainer English." are unchanged (section C round 5, section_C_2026-09-22)
+    // CORRECTED 2026-09-23: "Hazards build up more slowly." and "Hits are softer" held only for the first part of a run - Learning's rampTime() knee is at 210 s (3:30; T.hardAt * DIFF.len * T.pace), after which DIFF.hard 11 makes its clock grow faster than any other setting's (it passes Steady's at 3:43.5 and Exposed's at 4:26.5), and its hit multiplier (1 + rampTime() / T.dmgRamp) * DIFF.dmg passes Steady's at 4:38.4 (never Pressed's or Exposed's); both then sat under "At first,", and "Later, it gets hard quickly." said what followed (PT7-S2 2026-10-21: PLAN_PT7 S2 - was "both now sit under "At first,", "Later, it gets hard quickly." says what follows"; since PT6-T1 (PL) the blurb has neither phrase: it opens "Hazards build up more slowly and hits are softer."; the times above were not re-checked in this build; comment only, build_PT7_2026-10-21), and the warning clause (now its own sentence) and "Many cards in plainer English." are unchanged (section C round 5, section_C_2026-09-22)
     // DX9 2026-09-23: Steady's crossing in the line above corrected to 3:43.5 (223.548 s), the same figure as the D10 comment on DIFFS - a cascade of review F12; the line's other figures are not part of this round; comment only (build_D_2026-09-22 fix round)
     // GP 2026-09-29: Exposed's crossing in the line two above recomputed after GP-M2 changed Exposed's ramp and len - 4:14.3 -> 4:26.5 (266.538 s); "never Pressed's or Exposed's" rechecked and still holds at their GP-M2 dmg 1.5 and 2 (no crossing in 0-3600 s, and both grow faster than Learning's after that) (scratchpad gp_build/gp_ramp.js); the Steady figures are not part of GP; comment only (build_GP_2026-09-29)
     // DL-M4 2026-10-14: the step note, strings_DIAL.md N-1 - the Learning blurb with its last sentence, "Many cards in plainer English.", moved to the plain-language switch (PLAN_DIAL D5; DL-M3); every other word unchanged (build_DIAL_2026-10-14)
@@ -7200,7 +7203,7 @@ function llSecure(L) {
   L.away = T.lifelineAwayT
   L.under = 0; L.inbound = 0
   if (onSite === L) onSite = null
-  for (const e of enemies) if (e.tgt === L) e.tgt = pickTarget()
+  for (const e of enemies) if (e.tgt === L) e.tgt = pickTarget(e.behaviour)   // PT7-P19r 2026-10-21: PLAN_PT7 P19r - each re-aiming body's own behaviour; was `for (const e of enemies) if (e.tgt === L) e.tgt = pickTarget()` (build_PT7_2026-10-21)
   const K = LIFELINES[L.kind]
   // BS-M4 2026-09-30: a real save repairs T.saveHeal of capacity (PLAN_BS H2) - through heal(), so 9% after a Hospital loss; before the line below states it, and before startHold() (ruling RH5). Its line: strings_BS_hp.md S-H2 (a) verbatim - the new sentence first, the Learning line under PLAIN 'LL.secured', the Hospital-lost line HOSPITAL_LOST 'S5.7.32g', wrapped as the relief pickup's is (healLine over say(), ruling RH2) (build_BS_2026-09-30)
   heal(P.max * T.saveHeal)
@@ -7332,13 +7335,21 @@ function updateLifelines(dt) {
 }
 
 // A hazard that only ever homed on the player left the lifelines untouched and the whole
-// layer decorative. A share of chasers head for one instead - but only one near enough
-// that the player could actually answer it.
-function pickTarget() {
+// layer decorative. A share of the hazards drawn (T.llTargetP) head for one instead: one at
+// random among those near enough that the player could actually answer it (T.llReach). When
+// none is that near, a chaser (Earthquake, Wildfire) or a heat zone takes the nearest one still
+// up, and a flood front or a storm comes for the player.
+// PT7-P19r 2026-10-21: PLAN_PT7 P19r - the note above states what the code below now does; was "A share of chasers head for one instead - but only one near enough / that the player could actually answer it." (build_PT7_2026-10-21)
+function pickTarget(behaviour) {   // PT7-P19r 2026-10-21: behaviour is the caller's - spawn() passes the drawn kind's, llSecure each re-aiming body's own; was `function pickTarget() {` (build_PT7_2026-10-21)
   if (!lifelines.length || Math.random() >= T.llTargetP) return null
   // LL-M3 2026-09-25: a secured lifeline is not a target - not for a new hazard, a heat zone or a flood front (spawn), nor for one choosing again (llSecure) (build_LL_2026-09-25)
   const near = lifelines.filter(L => llUp(L) && dist2(L, P) < T.llReach ** 2)
-  return near.length ? pick(near) : null
+  // PT7-P19r 2026-10-21: PLAN_PT7 P19r - within reach, unchanged: one at random (pick). With none up within T.llReach, a 'chase' (Earthquake, Wildfire) or 'zone' (Heatwave) draw takes the llUp lifeline nearest you by dist2 (strict <, so on an exact tie the first in lifelines; null only when none is up), drawing no random number; a 'front' (Flood) or 'orbit' (Storm) draw gets null, as before; was `return near.length ? pick(near) : null` (build_PT7_2026-10-21)
+  if (near.length) return pick(near)
+  if (behaviour !== 'chase' && behaviour !== 'zone') return null
+  let best = null, bd = Infinity
+  for (const L of lifelines) if (llUp(L)) { const d = dist2(L, P); if (d < bd) { bd = d; best = L } }
+  return best
 }
 
 function makeHazard(id, x, y, extra) {
@@ -7412,7 +7423,7 @@ function spawn() {
   const el = t >= T.eliteFrom && Math.random() < eliteShare()
   const mk = (...a) => el ? makeElite(makeHazard(...a)) : makeHazard(...a)
   const d = Math.max(420, Math.max(W, H) * 0.62 + 40)
-  const L = pickTarget()
+  const L = pickTarget(k.behaviour)   // PT7-P19r 2026-10-21: PLAN_PT7 P19r - the drawn kind's behaviour (an elite body keeps its kind's); was `const L = pickTarget()` (build_PT7_2026-10-21)
   const cx = L ? L.x : P.x, cy = L ? L.y : P.y
 
   if (k.behaviour === 'zone') {
