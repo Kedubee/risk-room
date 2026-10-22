@@ -1106,6 +1106,20 @@
     align-items:center;justify-content:center}
   body.touch #mute{display:flex}
   body.touch #snd{display:none}
+  /* PT8-E1 2026-10-21: PLAN_PT8 E1 - the end-run button #endrun (markup in #topbar, right after the sound label #snd). On a computer it sits in the top bar's row beside the sound label, small, in a pill with EVAC's border and background; the top bar takes no pointer events (.hud) and the button takes them back. On a touch screen (body.touch, where #snd is not shown) it is fixed under the sound button #mute (52 px + 42 px + 8 px from the top), 42 px tall like #mute and as wide as its label. .armed is the state after a first press (PT8-E2) (build_PT8_2026-10-21) */
+  /* PT8-T 2026-10-22: PLAN_PT8 T (ADJUDICATION_strings_PT8.md, the ruling on the phase-1 build, 2) - on a computer the button keeps one width at rest and armed: a min-width, its width with the armed label, is set by script once at load, so the labels around it in the top bar do not move when it arms; on a touch screen it is still as wide as its label (build_PT8_2026-10-21) */
+  /* PT8-F1 2026-10-22: ADJUDICATION_strings_PT8.md, "Rulings on the phase-2 stop points", 1 - the one width applies only in a window wider than the 760 px breakpoint of the @media (max-width:760px) rules: the script stores the width with the armed label in the custom property --endrun-w (it no longer sets min-width itself), and the rule below applies it on a computer (body:not(.touch)) in a window that is not 760 px wide or less (the exact complement of that breakpoint). At 760 px and below the button is as wide as its label: D1's width at rest; the armed label widens it for the armed window (build_PT8_2026-10-21) */
+  @media not all and (max-width:760px){ body:not(.touch) #endrun{min-width:var(--endrun-w)} }
+  #endrun{pointer-events:auto;font:inherit;font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:99px;
+    border:1px solid rgba(255,255,255,.2);background:rgba(11,13,16,.6);color:var(--paper);opacity:.6;cursor:pointer;white-space:nowrap}
+  #endrun.armed{opacity:1;border-color:rgba(255,77,94,.6);background:rgba(255,77,94,.16);color:#ff9d9d}
+  body.touch #endrun{position:fixed;top:102px;right:12px;height:42px;min-width:42px;padding:0 12px;font-weight:800}
+  /* PT8-F2 2026-10-22: ADJUDICATION_strings_PT8.md, "Rulings on the phase-2 stop points", 2 - in a window 760 px wide or less the alarm strip (#alarm, z-index 7, over the top bar's 5) is centred and its rows can reach the right column, so there the touch button stays in the right column under #mute but starts below the strip's deepest reach. By the CSS: #alarm top 40 px and gap 3 px there; a row (.alm, and .alm.lostline) is its 1 px borders + 4 px paddings + one line of 10.5 px text at the body's line-height 1.4 (14.7 px; the arrow .dir is 14 px) = 24.7 px; the ruling's 5 rows (one lost line + one row per lifeline up; paintAlarm) end at 40 + 5 x 24.7 + 4 x 3 = 175.5 px; the button starts 8.5 px below, at 184 px, as it sat 8 px under #mute. Wider windows keep 102 px: there the rows are centred in a wider strip and the right column is clear of them (measured; build record). ptrFrame reads the button's box, so the edge pointers stay 22 px below its new bottom (build_PT8_2026-10-21) */
+  @media (max-width:760px){ body.touch #endrun{top:184px} }
+  /* PT8-E1 2026-10-21: PLAN_PT8 E1 - the button is hidden from view and so from Tab while the start screen is up (as PT6-C O3a and PT7-S1 hide EVAC and #mute), while the level-up card screen is shown and while the report (with its debrief) is shown; visibility, not display, as there. A browser without :has() ignores the rule: the button is then under those screens (their z-index 20 to 23 over the top bar's 5) and still reached by Tab, and a press there does nothing (endLive, script) (build_PT8_2026-10-21) */
+  body:has(#start:not(.gone)) #endrun, body:has(#cards.show) #endrun, body:has(#over.show) #endrun{visibility:hidden}
+  /* PT8-E1 2026-10-21: PLAN_PT8 E1 - #endsay, the polite live region that speaks after a first press (endArm; its sentence is PT8-T D8a / D8b), kept off the screen by the same rule as #zoomsay (build_PT8_2026-10-21) */
+  #endsay{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
 
   @media (max-width:760px){
     #topbar{padding:8px 10px;gap:9px}
@@ -1572,6 +1586,8 @@
   <div id="kills">0 killed</div>
   <div id="place"></div>
   <div id="snd">SOUND ON · M</div>
+  <!-- PT8-E1 2026-10-21: PLAN_PT8 E1 - the end-run button, right after the sound label; its label, and on a computer its aria-label, are set by script (endArm); on a touch screen the name a screen reader reads is the label itself (PT8-T 2026-10-22, D5c) (build_PT8_2026-10-21) -->
+  <button type="button" id="endrun"></button>
   <div id="lvl">Lv 1</div>
 </div>
 <div id="alarm" class="hud"></div>
@@ -1586,6 +1602,8 @@
 
 <!-- ZOOMTOG 2026-10-18: T5 - the polite live region the Zoom switch writes after each press (zoomStep), outside #start and #cards, so it is in the page on both screens; off the screen (CSS #zoomsay) (build_ZOOMTOG_2026-10-18) -->
 <div id="zoomsay" aria-live="polite" aria-atomic="true"></div>
+<!-- PT8-E1 2026-10-21: PLAN_PT8 E1 - the end-run button's polite live region: endArm writes a sentence here after a first press (PT8-T 2026-10-22, D8a / D8b) and empties it at rest; off the screen (CSS #endsay) (build_PT8_2026-10-21) -->
+<div id="endsay" aria-live="polite" aria-atomic="true"></div>
 <div id="cards"><div id="cardwrap"></div></div>
 <div id="lvlup">Level up</div>
 
@@ -2607,6 +2625,8 @@ const T = {
   smearE: 0.45, smearCap: 7, smearW: 0.6,
   haloA0: 0.09, haloPerLv: 0.08, haloMax: 0.5,
   wakeLen0: 8, wakePerLv: 3,
+  // PT8-E2 2026-10-21: PLAN_PT8 E2 - the end-run button: after a first press it stays armed this many seconds (real time, a setTimeout in endArm); a second press inside the window ends the run (build_PT8_2026-10-21)
+  endArmT: 3,
 }
 // PT5-R1a..R1f 2026-10-20: PLAN_PT5 R1 (the user's go-ahead relayed in record 3fc807d8; the approval of this round in PLAN_PT5.md) - the long-run numbers, one new table beside T (T itself is unchanged). Every number is from ../design_2026-10-20/curves_proposal.js (its P table and xpTable(80, 15, 72)) and DESIGN_long_runs.md; read by rampTimeAt, hpRampNow, hitRampNow (helpers), eliteShare, the spawn rate (step), the two P.need lines and rebuildLifeline (build_PT5_2026-10-20)
 const LONGRUN = {
@@ -4581,7 +4601,7 @@ let picksLeft = 0                                     // card choices banked by 
 let laneAcc = 0                                       // kept-corridor tick clock
 let runFunds = 0                                      // recovery budget earned by the run that just ended
 let runLog = null                                     // this run against your own runs in this place (runsRecord)
-let endReason = null                                  // 'services' when the failure cap ended it, else null
+let endReason = null                                  // 'services' when the failure cap ended it, 'ended' when the player ended it, else null   // PT8-E3 2026-10-21: PLAN_PT8 E3 - 'ended' is set by endPress (the end-run button); was "'services' when the failure cap ended it, else null" (build_PT8_2026-10-21)
 let learnFunds = 0                                    // ...and what its debrief added on top
 let METALV = {}                                       // institutional-capacity levels, cached from storage (hot paths read this)
 let introSeen = {}                        // hazard kinds already introduced this run
@@ -4661,6 +4681,7 @@ function reset(placeId) {
   // Earned by answering, not bought: the mastery tiers the debriefs have reached so far.
   applyMastery()
   runFunds = 0; learnFunds = 0; runLog = null; endReason = null
+  endArm(false)   // PT8-E2 2026-10-21: PLAN_PT8 E2 - a new run starts with the end-run button at rest (build_PT8_2026-10-21)
   alarmSig = ''
   // The place pays out before the first hazard: what is already standing here, and what
   // about here is going to cost you all run.
@@ -9928,6 +9949,7 @@ function die() {
   // Playtest god mode: every damage path ends here, so one guard covers all of them.
   if (dev.on && dev.god) { P.hp = P.max; return }
   over = true
+  endArm(false)   // PT8-E2 2026-10-21: PLAN_PT8 E2 - the end-run button goes back to rest when a run ends, however it ends (build_PT8_2026-10-21)
   uxMergeNew.length = 0; uxMergeQ.length = 0; uxMergeCur = null   // UXBS-FIX 2026-09-30: F6 - a merge moment playing, waiting or not yet started when the run ends is cleared, as reset() clears it; step no longer runs, so it would stay drawn, frozen, under the report (verify_UXBS F6) (build_BS_2026-09-30 fix round)
   AU.play('die')
   burst(P.x, P.y, '#ff4d5e', 40, 380)
@@ -9957,7 +9979,9 @@ function die() {
   // Read the previous best and bank this run, before anything renders.
   runLog = runsRecord()
 
-  $('over-t').textContent = (endReason === 'services' ? 'Services gone at ' : 'Down at ') + $('clock').textContent
+  // PT8-E3 2026-10-21: PLAN_PT8 E3 - a run the player ended with the end-run button (endReason 'ended', set by endPress) gets its own title; the other two titles are unchanged; was `$('over-t').textContent = (endReason === 'services' ? 'Services gone at ' : 'Down at ') + $('clock').textContent` (build_PT8_2026-10-21)
+  // PT8-T 2026-10-22: PLAN_PT8 T - the ended run's title prefix is D6 of ADJUDICATION_strings_PT8.md, verbatim, its trailing space kept (build_PT8_2026-10-21)
+  $('over-t').textContent = (endReason === 'ended' ? 'You ended the run at ' : endReason === 'services' ? 'Services gone at ' : 'Down at ') + $('clock').textContent
   // P6-B9 2026-09-25: F6 - S-B3 verbatim: the count is `kills` (hazards killed, raised only in hurtEnemy), the HUD's word for it, with the singular at 1; it read "${kills} events absorbed" (build_P6_2026-09-25)
   $('over-p').textContent = `${PLACE.name} · ${DIFF.name} · ${kills} hazard${kills === 1 ? '' : 's'} killed · level ${P.level}`
 
@@ -11507,7 +11531,8 @@ function ptrFrame() {
   const side = SMALL ? 40 : 70, pad = 22
   let ft = SMALL ? 80 : 96, fb = H - (SMALL ? 210 : 170)
   const box = id => { const e = $(id); if (!e || typeof e.getBoundingClientRect !== 'function') return null; const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null }
-  for (const id of ['topbar', 'alarm', 'mute']) { const r = box(id); if (r) ft = Math.max(ft, r.bottom + pad) }
+  // PT8-E1 2026-10-22: PLAN_PT8 E1 (ADJUDICATION_strings_PT8.md, the ruling on the phase-1 build, 1) - the end-run button (#endrun) is one more box the top edge keeps clear of, as the sound button is: on a touch screen it sits in the right column under #mute (PT8-F2 2026-10-22: in a window 760 px wide or less it starts below the alarm strip's reach), so the top edge is now 22 px below the button; on a computer it sits inside the top bar, whose bottom is lower, so the edge does not move there; was `for (const id of ['topbar', 'alarm', 'mute']) { const r = box(id); if (r) ft = Math.max(ft, r.bottom + pad) }` (build_PT8_2026-10-21)
+  for (const id of ['topbar', 'alarm', 'mute', 'endrun']) { const r = box(id); if (r) ft = Math.max(ft, r.bottom + pad) }
   for (const id of ['hpwrap', 'weapons', 'lifelines', 'svc', 'dodge']) { const r = box(id); if (r) fb = Math.min(fb, r.top - pad) }
   if (fb - ft < 60) { ft = H / 2 - 30; fb = H / 2 + 30 }
   return { l: side, r: W - side, t: ft, b: fb }
@@ -12590,6 +12615,57 @@ $('dodge').onclick = e => { e.preventDefault(); doDodge() }
 $('dodge').addEventListener('touchstart', e => { e.preventDefault(); doDodge() }, { passive: false })
 $('mute').onclick = () => { $('mute').innerHTML = AU.toggle() ? '&#9834;' : '&#9835;'
                             $('mute').style.opacity = AU.muted ? .45 : 1 }
+// PT8-E1 / PT8-E2 / PT8-E3 2026-10-21: PLAN_PT8 E1-E3 - the end-run button (#endrun) and Esc (build_PT8_2026-10-21).
+// endLive() is true while a run is in play: the start screen is gone and no level-up card screen, report, How to play, credits dialog or hint
+// card is up. A press - a click or tap, Enter on the focused button, or Esc - does nothing unless endLive(). The first press arms the button
+// (endArm(true)): its label becomes the armed label, the live region #endsay says a sentence, and T.endArmT seconds later the button goes back
+// to rest by itself and the region is emptied. A press while armed ends the run: endReason 'ended', then die() with god mode lifted for the call, as the developer panel's "End run"
+// does; die() then does what it does for any run (the debrief, the report, runFunds, runsRecord). Nothing here pauses the game. Enter on the
+// button is taken by its own listener (the browser makes no click of its own) and a repeat keydown presses nothing. Esc is taken by the
+// window listener below only when no earlier listener took it (e.defaultPrevented: the credits dialog, How to play, a hint card and the Combos
+// panel keep their Esc), and never on a repeat. Space is not read here: it stays EVAC, and the game's first keydown listener cancels it
+// page-wide, so the browser never clicks the button on Space. reset() and die() put the button back to rest (build_PT8_2026-10-21)
+// PT8-T 2026-10-22: PLAN_PT8 T - the texts, verbatim from ADJUDICATION_strings_PT8.md, "The final list": the visible label (endLabel) is D1 at
+// rest and D3 armed on a computer, D2 and D4 on a touch screen (COARSE); on a computer the button also has an aria-label, D5a at rest and D5b
+// armed, and on a touch screen none (D5c: its name is the visible label); on arming the live region says D8a on a computer, D8b on a touch
+// screen. On a computer the button keeps one width at rest and armed (the ruling on the phase-1 build, 2): once at load, just before the first
+// endArm(false) below, its width with the armed label is stored in the custom property --endrun-w, which the CSS applies as its min-width only
+// in a window wider than 760 px (PT8-F1 2026-10-22: ADJUDICATION_strings_PT8.md, "Rulings on the phase-2 stop points", 1) (build_PT8_2026-10-21)
+let endArmed = false, endArmTimer = null
+const endLabel = on => on ? (COARSE ? 'TAP AGAIN TO END' : 'PRESS AGAIN TO END · ESC') : (COARSE ? 'END RUN' : 'END RUN · ESC')
+function endLive() {
+  return $('start').classList.contains('gone') && !$('cards').classList.contains('show') && !over
+    && !hintOpen && $('howto').hidden && $('credits').hidden
+}
+function endArm(on) {
+  clearTimeout(endArmTimer); endArmTimer = null
+  endArmed = on
+  const b = $('endrun')
+  b.classList.toggle('armed', on)
+  b.textContent = endLabel(on)
+  if (COARSE) b.removeAttribute('aria-label')
+  else b.setAttribute('aria-label', on ? 'Press again to end, Esc key' : 'End run, Esc key')
+  $('endsay').textContent = on ? (COARSE ? 'Tap again to end the run.' : 'Press again to end the run.') : ''
+  if (on) endArmTimer = setTimeout(() => endArm(false), T.endArmT * 1000)
+}
+function endPress() {
+  if (!endLive()) return
+  if (!endArmed) { endArm(true); return }
+  endReason = 'ended'
+  const g = dev.god; dev.god = false; die(); dev.god = g
+}
+$('endrun').onclick = () => endPress()
+$('endrun').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return
+  e.preventDefault()
+  if (!e.repeat) endPress()
+})
+addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !e.repeat && !e.defaultPrevented && endLive()) endPress()
+})
+// PT8-F1 2026-10-22: the width is stored, not applied here (the CSS rule applies it above 760 px); was `if (!COARSE) { const b = $('endrun'); b.textContent = endLabel(true); b.style.minWidth = Math.ceil(b.getBoundingClientRect().width) + 'px' }` (build_PT8_2026-10-21)
+if (!COARSE) { const b = $('endrun'); b.textContent = endLabel(true); b.style.setProperty('--endrun-w', Math.ceil(b.getBoundingClientRect().width) + 'px') }   // PT8-T 2026-10-22: one width at rest and armed on a computer (see above) (build_PT8_2026-10-21)
+endArm(false)
 if (COARSE) {
   // Say it in the words of the device being held, not in the words of a keyboard.
   $('ctrlkeys').style.display = 'none'
