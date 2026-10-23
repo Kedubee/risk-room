@@ -2640,6 +2640,9 @@ const T = {
   // G-M2 2026-10-13: a synergy ripens (PLAN_G G2): its multipliers - and `concrete`'s +60s - act at f = clamp((lv.A + lv.B - 2) / min(synRipenK, max.A + max.B - 2), synRipen0, 1) of their full size (a multiplier m acts as 1 + (m - 1) x f; RG1: only these parts ripen), re-read when either measure levels (synRipen); at f = 1 every number is today's. The synergy's trail is 8 r + synTrailF x f r long (was 8 r). The texts say "up to" the full numbers and state none of these constants (build_G_2026-10-01)
   // G-FIX 2026-10-13: F1 - the divisor in the line above was synRipenK alone, so a synergy with a Lv-4 measure (Retrofitting, Risk data: stock, concrete, who, 5 + 4 - 2 = 7) stopped at f = 7 / 8 with both measures at max; it is now min(synRipenK, max.A + max.B - 2), max read from UPGRADES (synF), so every synergy reaches f = 1 at both maxima; synRipenK stays 8 for the rest (ADJUDICATION_G F1) (build_G_2026-10-01 fix round)
   synRipenK: 8, synRipen0: 0.5, synTrailF: 4,
+  // SYN-B1 2026-10-23: PLAN_SYN option B - a synergy card is offered only when both measures of its pair are at synLv or more (pairReady); the "Completes" line on a measure card follows it (completesHtml) (build_SYN_2026-10-22)
+  // SYN-B1 2026-10-23: R5 (ADJUDICATION_SYN) - three player lines state this value as the literal "Lv 2", so a change to synLv changes them too: the Combos intro (combosHtml, R1), the hint face FC-S5-13 (CARD_FACES, R2) and the hint S4.2 body (ONBOARD_COPY, R3) (build_SYN_2026-10-22)
+  synLv: 2,
   // G-M3 2026-10-13: a grand programme ripens (PLAN_G G3): g = clamp((sum of its partner measures' levels - their count) / grRipenK, grRipen0, 1) - four measures, or three where its two synergies share one; each ripening number goes in a straight line from its start value at g = grRipen0 to today's full value at g = 1 (grLerp): chain jumps grChainJumps0 -> grChainJumps (rounded down) and the first jump grChainFirst0 -> grChainFirst; the laser grLaserDmg0 -> grLaserDmg (its +1 target whole); the veil's radius grVeilR0 -> grVeilR; the aftershock's share grAsShare0 -> grAsShare; the orbit grOrbitN0 pieces, grOrbitN from g >= grOrbitStep. The shield keeps its own Green-defences rule. The texts say "up to" the full numbers (4, 60%, 50%, 35%, three) and state none of these (build_G_2026-10-01)
   grRipenK: 10, grRipen0: 0.5,
   grChainJumps0: 2, grChainFirst0: 0.45, grLaserDmg0: 1.2, grVeilR0: 160, grAsShare0: 0.20, grOrbitN0: 2, grOrbitStep: 0.75,
@@ -4976,7 +4979,8 @@ const ONBOARD_COPY = {
   // P16a-T 2026-10-22: S5-11 (strings_P16a.md; ADJUDICATION_P16a.md n6) (build_P16a_2026-10-22)
   'S4.1': { title: 'Level up: pick one card', body: 'Play is paused. Click or tap a card to take it. Reroll draws new cards. Banish rules a measure out for this run. Both are limited for the run.', ok: 'Got it' },
   // P16a-T 2026-10-22: S5-13 (strings_P16a.md) (build_P16a_2026-10-22)
-  'S4.2': { title: 'Measures that go together', body: 'You own both measures of this pair. Take it for an extra effect and some capacity back.', ok: 'Got it' },
+   // SYN-T 2026-10-23: R3 (ADJUDICATION_SYN; review_SYN.md F1 body) - the hint S4.2 body under T.synLv, its title unchanged; was `'S4.2': { title: 'Measures that go together', body: 'You own both measures of this pair. Take it for an extra effect and some capacity back.', ok: 'Got it' },` (build_SYN_2026-10-22)
+  'S4.2': { title: 'Measures that go together', body: 'You got both measures of this pair to Lv 2. Take it for an extra effect and some capacity back.', ok: 'Got it' },
   // P16a-T 2026-10-22: S5-15 (strings_P16a.md) (build_P16a_2026-10-22)
   'S4.3': { title: 'A lifeline is under attack', body: 'Go to it and stand inside its ring. You hit harder there, and it repairs fastest once nothing sits on it. Losing it costs you.', ok: 'Got it' },
   // P16a-T 2026-10-22: S5-17 (strings_P16a.md) (build_P16a_2026-10-22)
@@ -5413,7 +5417,8 @@ const CARD_FACES = {
   'FC-S5-06': "Repair lifelines, dodge marks, build in dashed rings.",
   'FC-S5-08': "Right answers keep budget and grow your streak.",
   'FC-S5-11': "Click or tap a card to take it.",
-  'FC-S5-13': "An extra effect from two measures you own.",
+  // SYN-T 2026-10-23: R2 (ADJUDICATION_SYN; review_SYN.md F1 face) - the hint S4.2 face under T.synLv; was `'FC-S5-13': "An extra effect from two measures you own.",` (build_SYN_2026-10-22)
+  'FC-S5-13': "An extra effect from two measures at Lv 2.",
   'FC-S5-15': "Stand in its ring to repair it.",
   'FC-S5-17': "This event cannot be shot: move away or dash.",
   'FC-S5-19': "Stand in the dashed ring to build it.",
@@ -8647,8 +8652,10 @@ function grOrbit(dt) {
 // the spot and says the mechanism out loud on the field once the cards close; the question
 // about WHY the pair compounds is asked in the debrief when the run ends (2026-09-01 — the
 // card was a question gate before that, and every second level a mandatory one).
+// SYN-B1 2026-10-23: R5 (ADJUDICATION_SYN) - under T.synLv a pair turns into a synergy card only once both its measures are at T.synLv or more, not as soon as both are owned (pairReady below) (build_SYN_2026-10-22)
 // G-M5 2026-10-13: the test, by name, so the HUD's pair dot (syncHud) uses exactly the same one (P3); availableSynergy's result is unchanged (build_G_2026-10-01)
-const pairReady = sy => !syn[sy.id] && lv[sy.a] > 0 && lv[sy.b] > 0
+// SYN-B1 2026-10-23: a pair is ready when both its measures are at T.synLv or more (PLAN_SYN option B); the rest of the test is unchanged; was `const pairReady = sy => !syn[sy.id] && lv[sy.a] > 0 && lv[sy.b] > 0` (build_SYN_2026-10-22)
+const pairReady = sy => !syn[sy.id] && lv[sy.a] >= T.synLv && lv[sy.b] >= T.synLv
                         && !banished[sy.a] && !banished[sy.b]
 function availableSynergy() {
   // A banished measure stays banished: a pair containing one is not offered.
@@ -8683,7 +8690,8 @@ function combosHtml() {
   const canLevel = k => lv[k] < UPGRADES[k].max && (!banished[k] || (k === 'ring' && !worksDone.includes('planting')))
   const ripe = (grows, title, ks) => grows ? (ks.some(canLevel) ? `<span class="cb-rp" title="${title}">growing</span>` : '') : '<span class="cb-rp">full strength</span>'
   const names = ks => ks.length > 1 ? ks.slice(0, -1).join(', ') + ' and ' + ks[ks.length - 1] : ks.join('')
-  let h = '<h3 id="combos-t">Combos</h3><p class="cb-intro">Own both measures of a pair. Then its synergy card can appear when you level up.</p>'
+  // SYN-T 2026-10-23: R1 (ADJUDICATION_SYN; strings_SYN.md D1) - the Combos intro under T.synLv; was `let h = '<h3 id="combos-t">Combos</h3><p class="cb-intro">Own both measures of a pair. Then its synergy card can appear when you level up.</p>'` (build_SYN_2026-10-22)
+  let h = '<h3 id="combos-t">Combos</h3><p class="cb-intro">Get both measures of a pair to Lv 2. Then its synergy card can appear when you level up.</p>'
   h += '<h4>Synergies</h4>'
   for (const sy of SYNERGIES) {
     const op = pairOpens(sy.id).trim()
@@ -8960,6 +8968,7 @@ function offerCards(fromLevelUp) {
   const want = ((sy || tr || fu || gr || md) ? 2 : 3) - (rbKind ? 1 : 0)   // GR-M1 2026-09-29: `gr` takes one of the three, as `fu` does (build_GR_2026-09-29)
   const chosen = []
   // G-M5 2026-10-13: (a) the run's first card screen (the first opening that draws measures; g5Opened) draws its first measure slot from the partners of the measures held - a measure not yet held, not ruled out, that would complete a pair whose other measure is held and not ruled out and whose synergy is not taken (completesHtml's condition) - whenever one exists; the other slots, and every later opening (a pick, a reroll, a banish, a level-up), draw as before. The partner card is the first measure card on the screen (PLAN_G G5) (build_G_2026-10-01)
+  // SYN-B2 2026-10-23: R5 (ADJUDICATION_SYN) - under T.synLv this draw keeps its own lv[k] === 0 test (left as is, PLAN_SYN), so it is no longer completesHtml's condition: unless T.synLv is 1, the card it draws does not bring a pair to T.synLv and shows no "Completes" line (build_SYN_2026-10-22)
   if (!g5Opened) {
     g5Opened = true
     const part = pool.filter(k => lv[k] === 0 && pairsWith(k).some(({ other, sy }) => lv[other] > 0 && !banished[other] && !syn[sy.id]))
@@ -9151,10 +9160,11 @@ function pairsWith(id) {
   return SYNERGIES.filter(sy => sy.a === id || sy.b === id)
     .map(sy => ({ other: sy.a === id ? sy.b : sy.a, sy }))
 }
-// CB-M1 2026-09-30: the preview line(s) on a measure card that completes a pair (PLAN_CB C1; strings_CB.md S-C1 C1-a, C1-b, C1-c verbatim; ruling RC1). Shown only on a "New measure" card (lv[id] === 0) and only for a pair whose other measure is held (lv > 0) and not banished and whose synergy is not yet taken - then taking this card gives the player both measures, which is what availableSynergy tests. One line per such pair, in SYNERGIES order (pairsWith), at most two; a third or more is counted in one line, "and 1 more pair". Each line is drawn in the synergy's colour with its swatch (the square the build list uses for it) and carries the sentence C1-c as its accessible name (role img) and hover title; the "can then appear" hedge lives there (RC3). '' when nothing is completed (build_CB_2026-09-30)
+// CB-M1 2026-09-30: the preview line(s) on a measure card that completes a pair (PLAN_CB C1; strings_CB.md S-C1 C1-a, C1-b, C1-c verbatim; ruling RC1). Shown only on the card that brings a pair to T.synLv on both measures (SYN-B2 2026-10-23 (build_SYN_2026-10-22): lv[id] === T.synLv - 1, so a "New measure" card when T.synLv is 1 and a "Level 2" card when it is 2) and only for a pair whose other measure is at T.synLv or more and not banished and whose synergy is not yet taken - then taking this card brings both measures to T.synLv, which is what availableSynergy tests (pairReady); was `Shown only on a "New measure" card (lv[id] === 0) and only for a pair whose other measure is held (lv > 0) and not banished and whose synergy is not yet taken - then taking this card gives the player both measures, which is what availableSynergy tests.` One line per such pair, in SYNERGIES order (pairsWith), at most two; a third or more is counted in one line, "and 1 more pair". Each line is drawn in the synergy's colour with its swatch (the square the build list uses for it) and carries the sentence C1-c as its accessible name (role img) and hover title; the "can then appear" hedge lives there (RC3). '' when nothing is completed (build_CB_2026-09-30)
 function completesHtml(id) {
-  if (lv[id] !== 0) return ''
-  const done = pairsWith(id).filter(({ other, sy }) => lv[other] > 0 && !banished[other] && !syn[sy.id])
+  // SYN-B2 2026-10-23: shown on the measure card whose taking brings the pair to T.synLv on both - this measure goes from T.synLv - 1 to T.synLv while the partner is already at T.synLv or more, not banished, and the synergy is not held (PLAN_SYN option B); the visible and spoken text are unchanged; was `if (lv[id] !== 0) return ''` / `const done = pairsWith(id).filter(({ other, sy }) => lv[other] > 0 && !banished[other] && !syn[sy.id])` (build_SYN_2026-10-22)
+  if (lv[id] !== T.synLv - 1) return ''
+  const done = pairsWith(id).filter(({ other, sy }) => lv[other] >= T.synLv && !banished[other] && !syn[sy.id])
   if (!done.length) return ''
   const line = ({ sy }) => {
     const A = UPGRADES[sy.a].short, B = UPGRADES[sy.b].short
@@ -10589,7 +10599,8 @@ function renderReport() {
   html += sec(`Understanding — ${LS.right} right across your runs`,
     (quizRight + quizWrong > 0
       ? row('#8ab4c8', `This debrief — ${quizRight} of ${quizRight + quizWrong}`,
-            'One question about a pair you compounded, one about an event you met, and the place’s own field pool for the rest. Missing one resets your streak and keeps back that question’s share of the recovery budget; a missed field question returns in a later run until it sticks.')
+            // SYN-T 2026-10-23: R4 (ADJUDICATION_SYN; review_SYN.md F2) - the first sentence replaced, the second kept byte for byte; was `'One question about a pair you compounded, one about an event you met, and the place’s own field pool for the rest. Missing one resets your streak and keeps back that question’s share of the recovery budget; a missed field question returns in a later run until it sticks.')` (build_SYN_2026-10-22)
+            'If you compounded a pair, one question is about it. If you met an event, one is about that. The place’s own field pool gives the rest. Missing one resets your streak and keeps back that question’s share of the recovery budget; a missed field question returns in a later run until it sticks.')
       : row('#3a3f47', 'No debrief this run', 'Nothing compounded, no event met, and the place’s pool already asked — a longer run has more to ask about.')) +
     // D2 2026-09-22: the (unreachable) fallback is the palette's tier 0, like STREAKS[0] (build_D_2026-09-22)
     row(tierFor(LS.streak).col || PAL.yours.tier[0], LS.streak >= 2 ? `Streak of ${LS.streak} — ${tierFor(LS.streak).name}` : 'No streak carried',
