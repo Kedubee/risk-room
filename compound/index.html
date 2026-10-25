@@ -1010,6 +1010,9 @@
   /* PT-P1 2026-10-19: PLAN_PT P1 - the start screen's Effects switch and its note, under the Zoom switch, with that switch's two rules copied, so the rows look alike (build_PT_2026-10-19) */
   #fxwrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
   #fxnote{font-size:11.5px;opacity:.55;margin:6px 0 14px;line-height:1.5}
+  /* R4-DT 2026-10-25: the start screen's Details switch and its note, with the Effects switch's two rules copied, so the rows look alike (build_R4_2026-10-25) */
+  #dtwrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px}
+  #dtnote{font-size:11.5px;opacity:.55;margin:6px 0 14px;line-height:1.5}
   #zoomsay{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
 
   /* institutional capacity: the bounded meta layer, bought with recovery budget */
@@ -1077,6 +1080,8 @@
   #flash span{font-size:12px;opacity:.7;text-shadow:0 2px 10px rgba(0,0,0,.9)}
   /* GR-M6 2026-09-29: a take moment's line (flash(..., { big: true }) from closeCards) - the title larger, 17 -> 26 px (22 px on a phone, below) (PLAN_GR X6) (build_GR_2026-09-29) */
   #flash.big b{font-size:26px;letter-spacing:-.01em}
+  /* R4-T 2026-10-25: a flash raised with { two: true } (a new elite's first-seen line with its source line) breaks its line at the newline it carries (build_R4_2026-10-25) */
+  #flash.two span{white-space:pre-line}
 
   #snd{font-size:11px;opacity:.35;font-weight:700;letter-spacing:.06em}
 
@@ -1478,6 +1483,12 @@
   #start div.sblk.sbdial{border-left-color:#8fe3ff}
   #start div.sblk.sbswitch{border-left-color:#7ee787;display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
   #start div.sbsw{margin:0 0 10px}
+  /* R4-DT 2026-10-25: the fifth switch (Details) spans both columns of the switches' block, on a phone and a computer; at the two-column break its button and note take the sizes the other four switches take there (build_R4_2026-10-25) */
+  #start div.sbsw.sbdt{grid-column:1 / -1}
+  @media (min-width:1200px){
+    body:not(.small) #start div#dtwrap button{font-size:14px;padding:9px 18px}
+    body:not(.small) #start div#dtnote{font-size:12.5px;line-height:1.55;margin:7px auto 16px}
+  }
   #start div.sblk.sbplaces{border-left-color:#c4b5ff;max-width:932px}
   #start div.sblk.sbcap{border-left-color:#ffd166;padding:10px 14px;max-width:748px}
   #start div.sblk.sbintro > p{grid-column:1 / -1}
@@ -1676,6 +1687,9 @@
   <!-- PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch and its note, filled by offerFx(), under the Zoom switch (build_PT_2026-10-19) -->
   <div id="fxwrap"></div>
   <div id="fxnote"></div>
+  </div><div class="sbsw sbdt"><!-- R4-DT 2026-10-25: the fifth switch, Details, and its note, filled by offerDt(); the same state as the level-up row's Details button; the switch spans both columns of the block (CSS) (build_R4_2026-10-25) -->
+  <div id="dtwrap"></div>
+  <div id="dtnote"></div>
   </div></div><!-- PT2-P9 2026-10-19: end of the last switch and of the switches' block (build_PT2_2026-10-19) -->
   </div><!-- PT-P5 2026-10-19: end of #startside (build_PT_2026-10-19) -->
   <div id="startmain"><!-- PT-P5 2026-10-19 (build_PT_2026-10-19) -->
@@ -2652,6 +2666,18 @@ const T = {
   wakeLen0: 8, wakePerLv: 3,
   // PT8-E2 2026-10-21: PLAN_PT8 E2 - the end-run button: after a first press it stays armed this many seconds (real time, a setTimeout in endArm); a second press inside the window ends the run (build_PT8_2026-10-21)
   endArmT: 3,
+  // R4-W1..R4-E9 2026-10-25: PLAN_R4 (build_R4_2026-10-25/PLAN_R4.md; design_2026-10-24/ADJUDICATION_d24.md) - the numbers of the warning rules for new patterns and of the four new elites; every value is the R4 Builder's starting value, named in build_record_R4.md (build_R4_2026-10-25)
+  r4WarnBase: 2.4, r4WarnMin: 1.2,      // R4-W1: a new warning's base and floor, in s (r4Warn). Phase 2a: base 2.4, the user's choice at the preview (PLAN_R4.md); was `r4WarnBase: 1.2` in phase 1
+  r4A0: 0.10, r4A1: 0.42,               // R4-W2: a warning's fill alpha at its start and at the strike, a straight line between
+  r4TrackA: 0.16,                       // R4-W2: a lane's or band's fill alpha after the strike, while its bodies cross (fades out over 0.5 s at the end)
+  r4FlashN: 3, r4FlashArea: 21824, r4BlockW: 341, r4BlockH: 256,   // R4-W3: the screen-wide strike budget - flashes in any 1 s; bright area (screen px) in a block of this size
+  r4FlashT: 0.3, r4FlashA: 0.8, r4DimA: 0.3,   // R4-W3: a strike flash's length (s), and its fill alpha at the start when bright and when dimmed
+  r4BurnA: 0.34,                        // R4-W4: burning ground's steady fill alpha (fades out over its last 0.5 s)
+  e2From: 240, e2Share: 0.5,            // R4-E: from this run clock (s) an elite draw of the place's main hazard takes the place's new type with this chance
+  e1R: 36, e1Dist: 70, e1DmgK: 1, e1LL: 20,   // R4-E1: circle radius, centre distance from where it fell, strike damage (x the body's damage), damage to a lifeline inside a circle
+  e3Gap: 64, e3Spd: 300,                // R4-E3: the wall's open gap (px across) and its speed (px/s)
+  e5Half: 1, e5Gap: 46, e5SpdMul: 8,    // R4-E5: bodies each side of the centre, their spacing (px), and the speed multiple of an ordinary front
+  e9Every: 5, e9Len: 520, e9Spd: 600, e9BurnT: 3, e9BurnK: 0.8,   // R4-E9: s between lanes, lane length (px), run speed (px/s), burning ground life (s), its damage per s (x the body's damage)
 }
 // PT5-R1a..R1f 2026-10-20: PLAN_PT5 R1 (the user's go-ahead relayed in record 3fc807d8; the approval of this round in PLAN_PT5.md) - the long-run numbers, one new table beside T (T itself is unchanged). Every number is from ../design_2026-10-20/curves_proposal.js (its P table and xpTable(80, 15, 72)) and DESIGN_long_runs.md; read by rampTimeAt, hpRampNow, hitRampNow (helpers), eliteShare, the spawn rate (step), the two P.need lines and rebuildLifeline (build_PT5_2026-10-20)
 const LONGRUN = {
@@ -2813,6 +2839,10 @@ const AU = (() => {
                     hiss({ f: 400, f2: 90, d: 0.9, g: 0.12, type: 'lowpass' }) },
     die:    () => { tone({ type: 'sawtooth', f: 240, f2: 34, d: 1.6, g: 0.2 })
                     hiss({ f: 900, f2: 60, d: 1.5, g: 0.14, type: 'lowpass' }) },
+    // R4-W5 2026-10-25: PLAN_R4 - one sound per new warning shape (circle, lane, band), the same on every place, played once when the warning starts; one tone() each (no noise buffer, so no random draw) (build_R4_2026-10-25)
+    r4circle: () => tone({ type: 'sine', f: 620, f2: 420, d: 0.28, g: 0.07 }),
+    r4lane: () => tone({ type: 'triangle', f: 330, f2: 660, d: 0.3, g: 0.07 }),
+    r4band: () => tone({ type: 'square', f: 165, f2: 196, d: 0.4, g: 0.05 }),
   }
 
   // A bed per place. Filtered noise plus a root, with a slow sweep on the filter so it is
@@ -4665,6 +4695,13 @@ const SRC_KEY = 'compoundSourcesV1'
 // PT-P3 2026-10-19: PLAN_PT P3 - Sources on by default: no key, a value that does not parse, a `shown` that is not true or false, or a store that throws gives true; a stored true or false is kept. Every reader follows srcShown as before: the start screen switch (offerSrc), the card bar's button and #cards.srcon (offerCards); was function srcStore() { try { const v = JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown; return typeof v === 'boolean' ? v : false } catch (e) { return false } } (build_PT_2026-10-19)
 function srcStore() { try { const v = JSON.parse(localStorage.getItem(SRC_KEY) || '{}').shown; return typeof v === 'boolean' ? v : true } catch (e) { return true } }
 function srcSave(on) { try { localStorage.setItem(SRC_KEY, JSON.stringify({ shown: on })) } catch (e) {} }
+// R4-DT 2026-10-25: PLAN_R4 "Added to R4" (the user's request, 2026-10-25) - the level-up card screen's Details folds open unless the player's switch says closed. Stored per browser under DT_KEY on the SRC_KEY pattern: no key, a value that does not parse, an `open` that is not true or false, or a store that throws gives true (open); a stored true or false is kept. DT_TEXT holds the switch's three texts (placeholders until the ruled lines): label (the start screen's button), note (under it), button (the level-up row's button) (build_R4_2026-10-25)
+const DT_KEY = 'compoundDetailsV1'
+// R4-F2 2026-10-25: ADJUDICATION_R4 final list, R4-DT (strings_R4_D7.md D7a-1, D7a-2, D7b) - the switch's three texts in place of the phase-1 placeholders; was `const DT_TEXT = { label: '<P> DT label', note: '<P> DT note', button: '<P> DT button' }`, where <P> is the six-letter placeholder tag, left out of this quote so the file holds none (build_R4_2026-10-25)
+const DT_TEXT = { label: 'Card details', note: 'Level-up cards show their details from the start. Off, you open each one yourself.', button: 'Card details' }
+function dtStore() { try { const v = JSON.parse(localStorage.getItem(DT_KEY) || '{}').open; return typeof v === 'boolean' ? v : true } catch (e) { return true } }
+function dtSave(on) { try { localStorage.setItem(DT_KEY, JSON.stringify({ open: on })) } catch (e) {} }
+let dtOpen = dtStore()
 let srcShown = srcStore()                 // Sources switch on the card bar: true shows every card's source line
 const banished = {}                       // measure id -> ruled out for this run
 let rerollsUsed = 0, banishLeft = 0
@@ -4692,6 +4729,7 @@ function reset(placeId) {
   onSite = null; SF = { kind: null, t: 0 }   // a service left running must not cross into the next run
   picked = []; worksDone = []; worksMissed = []
   events = []; eventAcc = 0; eventsSeen = []; eventsHit = 0; warnBought = 0
+  r4fx = []; r4Fl = []; r4T = 0; r4Seen = {}   // R4 2026-10-25: the new patterns, the strike budget and the first-seen lines do not cross into the next run (build_R4_2026-10-25)
   vbRzAcc = 0   // VB-M4 2026-10-18: V5 - the red-zone rockfall's clock does not cross into the next run (build_VALLEY_2026-10-17)
   boss = null; bossAcc = 0; bossesKilled = 0; bossesSurvived = 0; bossSeen = []
   tboss = null; tbossState = null; tbossWarned = false; tbossBonus = 0   // BS-M3 2026-09-30: the true boss does not cross into the next run (build_BS_2026-09-30)
@@ -5468,7 +5506,12 @@ function cardFold(el) {
   el.insertBefore(take, kids[0])
   for (let i = 0; i <= upto; i++) take.appendChild(kids[i])
   const takeIt = el.onclick
-  if (takeIt) el.onclick = e => { const x = e && e.target; if (x && x.closest && x.closest('.fold')) return; takeIt.call(el, e) }
+  // R4-F4 2026-10-25: ADJUDICATION_R4 F-08 (code) - a click or tap inside an open fold takes the card, except on the Details toggle (.fold-t) and on any control inside the fold (a button, a link, or anything with role button); inside a fold whose toggle is not open nothing takes it, as before; the P16a-F comment above ("except on the Details toggle or inside the fold") describes the code before this change; was `if (takeIt) el.onclick = e => { const x = e && e.target; if (x && x.closest && x.closest('.fold')) return; takeIt.call(el, e) }` (build_R4_2026-10-25)
+  if (takeIt) el.onclick = e => {
+    const x = e && e.target, f = x && x.closest ? x.closest('.fold') : null
+    if (f) { const c = x.closest('.fold-t, button, a, [role="button"]'), ft = f.querySelector('.fold-t'); if ((c && f.contains(c)) || !ft || ft.getAttribute('aria-expanded') !== 'true') return }
+    takeIt.call(el, e)
+  }
   const parts = [...el.children].filter(c => c.matches('.ctext, .cost, .src, .gloss'))
   if (!parts.length) return
   const n = ++foldN, w = document.createElement('div'), b = document.createElement('button'), body = document.createElement('div')
@@ -5487,6 +5530,7 @@ function cardFold(el) {
   w.appendChild(b)
   w.appendChild(body)
   el.insertBefore(w, take.nextSibling)
+  if (dtOpen) foldToggle(b)   // R4-DT 2026-10-25: with the Details switch on (the default) the fold starts open; its own Details button still opens or closes it (build_R4_2026-10-25)
 }
 // P16a-F 2026-10-22: a Details toggle opens or closes its fold (aria-expanded, the arrow); on a level-up card the card's description follows (build_P16a_2026-10-22)
 function foldToggle(b) {
@@ -5629,6 +5673,12 @@ const PLAIN = {
   'HAZ.flood.src': 'A front, not an event. It comes from one direction and keeps coming.',
   'HAZ.heat.src': 'It does not come to you. It settles over a place and stays. That is why it kills more people than it looks like it should.',
   'HAZ.fire.src': 'It multiplies. Some fires throw embers ahead of themselves, onto ground that was not burning. Every one of those fires you leave standing starts the next.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - FR2, the text from strings_PT6_final.md + R4 (build_PT6_2026-10-21)
+  // R4-F1 2026-10-25: ADJUDICATION_R4 final list - the Learning twins of the new elites' lines, which r4First reads through say() as ELT.<id>.first and ELT.<id>.src; the list gives none for E3 (first and src) or for E9's src, so those show their Steady text in both modes (build_R4_2026-10-25)
+  'ELT.E1.first': 'When you destroy it, circles fill, then hit. Do it far from you and your lifelines.',
+  'ELT.E1.src': 'USGS (US): most big earthquakes have aftershocks. These can still do damage or kill.',
+  'ELT.E5.first': 'A thin lane shows where a fast flood will run. Get out of the lane.',
+  'ELT.E5.src': 'NSSL (US): flash floods can happen within minutes of the rain. That leaves less time to warn people.',
+  'ELT.E9.first': 'It shows a lane, then runs down it fast, leaving fire. Get off the lane.',
   'EVT.inbound.warned': warn => `Your warning system gives you ${(warn).toFixed(1)}s.`,
   'LL.lost.more': left => ` If you lose ${left} more, the run ends here.`,
   'LL.hospital.gain': 'Your capacity comes back slowly while it stands.',
@@ -6032,7 +6082,8 @@ const PLACES = {
   fault: {
     name: 'Seismic city', col: '#c2703f',
     // P16a-T 2026-10-22: S1-16 (strings_P16a.md) (build_P16a_2026-10-22)
-    blurb: 'The hazard here gives no warning at all.' +
+    // R4-F3 2026-10-25: ADJUDICATION_R4 final list, D8-a (strings_R4_D8.md; confirmed in verify_R4_D8.md) - the Seismic city blurb; was `blurb: 'The hazard here gives no warning at all.' +` (build_R4_2026-10-25)
+    blurb: 'Quakes here arrive with no warning at all.' +
            '',
     roster: { quake: { at: 0, w: 4 }, fire: { at: 38, w: 2 }, storm: { at: 56, w: 1 }, heat: { at: 72, w: 1 } },
     seasons: ['shock', 'quiet', 'shock', 'dry'],
@@ -6211,7 +6262,8 @@ const SEASONS = {
            col: PAL.place.season, rate: 1.00, bias: { flood: 3.4, storm: 1.3 } },
   dry:   { name: 'Dry season', note: 'Nothing is coming toward you. It is already here.',
            col: PAL.place.season, rate: 1.00, bias: { heat: 3.0, fire: 2.6 } },
-  shock: { name: 'Seismic sequence', note: 'No warning, and then no warning again.',
+  // R4-F3 2026-10-25: ADJUDICATION_R4 final list, D8-b (strings_R4_D8.md; confirmed in verify_R4_D8.md) - the Seismic sequence season note; was `shock: { name: 'Seismic sequence', note: 'No warning, and then no warning again.',` (build_R4_2026-10-25)
+  shock: { name: 'Seismic sequence', note: 'Quakes arrive with no warning, and keep arriving.',
            col: PAL.place.season, rate: 1.15, bias: { quake: 3.4, fire: 1.4 } },
   swarm: { name: 'Everything at once', note: 'Compound. All of it, none of it waiting.',
            col: PAL.place.season, rate: 1.22, bias: {} },
@@ -7026,8 +7078,9 @@ function updateEvents(dt) {
     ev.td -= dt
     if (ev.nx != null) ev.dist += ev.spd * dt
     // B3 2026-09-22: a circle's window closes ROCK_LIVE seconds after its own burst (build_B_2026-09-22)
+    // R4-W3 2026-10-25: each rockfall circle's landing (a place's rockfall, the compound event's siege strikes, Mountain valley's red-zone rockfall) is recorded by the strike budget as a counted flash, drawn as before; was `q.burst = true; burst(q.x, q.y, K.col, 16, 220) }` (build_R4_2026-10-25)
     if (ev.pts) for (const q of ev.pts) { q.off -= dt; if (q.off <= 0 && !q.burst) {
-      q.burst = true; burst(q.x, q.y, K.col, 16, 220) }
+      q.burst = true; burst(q.x, q.y, K.col, 16, 220); r4Budget(q.x, q.y, q.r, ROCK_LIVE, true) }
       if (q.off <= -ROCK_LIVE) q.done = true }
 
     // it takes the player
@@ -7353,6 +7406,7 @@ function flash(title, sub, col, opt) {
   el.firstElementChild.style.color = col
   el.lastElementChild.textContent = sub || ''
   el.classList.toggle('big', !!(opt && opt.big))   // GR-M6 2026-09-29: a take moment's line (closeCards) shows its title larger; every other line as before (build_GR_2026-09-29)
+  el.classList.toggle('two', !!(opt && opt.two))   // R4-T 2026-10-25: a new elite's first-seen line with its source line on a second line (r4First); every other line as before (build_R4_2026-10-25)
   el.classList.add('show')
   flashT = opt && opt.evt ? FLASH_EVT_T : FLASH_T   // UX-M2 2026-09-30: was 2.2 for every line (build_UX_2026-09-30)
   flashCur = [title, sub, col, opt]
@@ -7759,6 +7813,10 @@ function spawn() {
   const d = Math.max(420, Math.max(W, H) * 0.62 + 40)
   const L = pickTarget(k.behaviour)   // PT7-P19r 2026-10-21: PLAN_PT7 P19r - the drawn kind's behaviour (an elite body keeps its kind's); was `const L = pickTarget()` (build_PT7_2026-10-21)
   const cx = L ? L.x : P.x, cy = L ? L.y : P.y
+  // R4-E 2026-10-25: PLAN_R4 item 2 - from T.e2From s (4:00) of run clock, an elite draw of the place's main hazard (E2_OF) takes the place's new elite type with chance T.e2Share; that roll is drawn only on this branch, so before 4:00 no random number is added. E3 (needs room for its five bodies under T.enemyCap) and E5 are made here and charge the budget as a front does; E1 and E9 are this draw's own body (a quake's first of three), tagged at the end (build_R4_2026-10-25)
+  const e2 = el && t >= T.e2From && E2_OF[PLACE.id] && E2_OF[PLACE.id].kind === id && Math.random() < T.e2Share ? E2_OF[PLACE.id].id : null
+  if (e2 === 'E3' && enemies.length + 5 <= T.enemyCap) { r4E3(d); spawnAcc -= 4; return }
+  if (e2 === 'E5') { const n5 = r4E5(d); if (n5 > 1) spawnAcc -= (n5 - 1); return }
 
   if (k.behaviour === 'zone') {
     // Heat settles somewhere near you rather than walking in — or straight on top of a
@@ -7819,6 +7877,7 @@ function spawn() {
     made++
   }
   if (made > 1) spawnAcc -= (made - 1)
+  if ((e2 === 'E1' || e2 === 'E9') && made) r4Tag(enemies[enemies.length - made], e2)   // R4-E1 / R4-E9 2026-10-25: the draw's first body becomes the new type (build_R4_2026-10-25)
 }
 
 // The quiet stretch is not empty. Preparation lands out in the map and has to be gone and
@@ -7840,6 +7899,7 @@ function moveHazard(e, dt) {
   if (e.behaviour === 'front') {
     e.x += e.fx * e.spd * dt + e.kx * dt
     e.y += e.fy * e.spd * dt + e.ky * dt
+    if (e.r4l) r4Proj(e)   // R4-E3 / R4-E5 2026-10-25: a wall or flash-flood body is kept on its own line of its lane (r4Proj); every other front as before (build_R4_2026-10-25)
     // Culled on how far it has travelled from where it started, not on how far it is from
     // the player. The old reading deleted any front aimed at anything but the player, and
     // before that deleted every front on a small window.
@@ -7877,6 +7937,7 @@ function moveHazard(e, dt) {
     e.y += Math.sin(a) * e.spd * dt + e.ky * dt
     return
   }
+  if (e.e2 === 'E9' && r4E9Move(e, dt, G)) return   // R4-E9 2026-10-25: a crown fire holds still while its lane is shown and runs down it after; between lanes it moves as below (build_R4_2026-10-25)
   const a = Math.atan2(G.y - e.y, G.x - e.x)
   // BS-M2 2026-09-30: an elite chaser dashes - T.eliteDashMul x its speed for the first T.eliteDashT s of every T.eliteDashEvery s of its age (which waits during a hold); e.spd is already the veil's slowed speed when the veil holds it (step), so the veil slows the dash too (C7) (build_BS_2026-09-30)
   const dk = e.elite && e.behaviour === 'chase' && e.age % T.eliteDashEvery < T.eliteDashT ? T.eliteDashMul : 1
@@ -8113,7 +8174,274 @@ function hurtEnemy(e, dmg, kx, ky, pull) {
     // BS-M2 2026-09-30: an elite orbiting storm splits into two ordinary storms where it fell, after everything above (so an aftershock picks its target as before), within T.enemyCap (build_BS_2026-09-30)
     if (e.elite && e.behaviour === 'orbit')
       for (let k = 0; k < 2 && enemies.length < T.enemyCap; k++) { const a = Math.random() * TAU; if (vbOn()) { const p = vbPt(e.x + Math.cos(a) * 18, e.y + Math.sin(a) * 18, VB.keep); enemies.push(makeHazard(e.kind, p.x, p.y)); continue } enemies.push(makeHazard(e.kind, e.x + Math.cos(a) * 18, e.y + Math.sin(a) * 18)) }   // VB-M2 2026-10-18: V3 - in Mountain valley the two storms start inside the box, 40 px from the walls; the `if ... continue` added, the rest as it was (build_VALLEY_2026-10-17)
+    if (e.e2 === 'E1') r4E1At(e.x, e.y, e)   // R4-E1 2026-10-25: an Aftershock cluster marks three circles where it fell, after everything above (build_R4_2026-10-25)
   }
+}
+
+// ---------------------------------------------------------------- R4: warning rules for new patterns, and the first four elites
+// R4-W1 2026-10-25: PLAN_R4 item 1 (ADJUDICATION_d24.md MJ-3, MN-7) - the one warning time every new pattern reads: max(T.r4WarnMin, T.r4WarnBase x DIFF.warn x the place's warnMul) x (1 + lv.pulse x T.warnPerWarnLevel). Warning culture (METALV.telegraph) is not a factor (build_R4_2026-10-25)
+const r4Warn = () => Math.max(T.r4WarnMin, T.r4WarnBase * DIFF.warn * (PLACE.bite.warnMul || 1)) * (1 + lv.pulse * T.warnPerWarnLevel)
+// R4-T 2026-10-25: the text slots of the four new elites, per id: name (the first-seen flash's title), first (its line) and src (a second line in the same flash, only while the Sources switch is on, srcShown); first and src pass through say() as ELT.<id>.first and ELT.<id>.src. Phase 1 placeholders (build_R4_2026-10-25)
+const ELITES2 = {
+  // R4-F1 2026-10-25: ADJUDICATION_R4 final list (E1, E3, E5, E9: name, first and src, verbatim) in place of the phase-1 placeholders; was, one line per id, `<id>: { name: '<P> <id> name', first: '<P> <id> first', src: '<P> <id> src' },` for E1, E3, E5 and E9, where <P> is the six-letter placeholder tag, left out of this quote so the file holds none (build_R4_2026-10-25)
+  E1: { name: 'Aftershock cluster', first: 'When you destroy it, circles fill, then strike. Do it away from you and lifelines.', src: 'USGS (US): most large earthquakes have aftershocks, and they can still be damaging or deadly.' },
+  E3: { name: 'Squall line', first: 'A band with arrows marks where a wall of storms will cross. Go through the gap.', src: 'NSSL (US): squall lines tend to pass quickly.' },
+  E5: { name: 'Flash flood', first: 'A narrow lane shows where a fast front will run. Step out of the lane.', src: 'NSSL (US): flash floods can happen within minutes of the rain, limiting the time to warn people.' },
+  E9: { name: 'Crown fire', first: 'It marks a lane, then rushes down it, leaving fire behind. Step off the lane.', src: 'DOI/USDA (US): a crown fire moves through the treetops, more or less independently of the fire below.' },
+}
+// R4-E 2026-10-25: the place map - the new elite each place's main hazard gets, and that hazard (build_R4_2026-10-25)
+const E2_OF = { fault: { id: 'E1', kind: 'quake' }, metro: { id: 'E1', kind: 'quake' }, delta: { id: 'E3', kind: 'storm' },
+                basin: { id: 'E5', kind: 'flood' }, alpine: { id: 'E5', kind: 'flood' }, wui: { id: 'E9', kind: 'fire' } }
+// R4-W2 2026-10-25: each new pattern's colours, from its hazard's own palette entries (PAL, RAMP): fill (the warning's fill), edge (the light stroke over the dark edge, and the arrow marks), flash and dim (E1's strike, bright or dimmed by the budget), burn (E9's burning ground) (build_R4_2026-10-25)
+const R4COL = {
+  E1: { fill: PAL.theirs.event.rockfall, edge: PAL.theirs.edge.earth, flash: PAL.theirs.edge.earth, dim: PAL.theirs.body.quake },
+  E3: { fill: PAL.theirs.body.storm, edge: RAMP.cold[1] },
+  E5: { fill: PAL.theirs.body.flood, edge: RAMP.water[1] },
+  E9: { fill: PAL.theirs.body.fire, edge: PAL.theirs.shot.ember, burn: PAL.theirs.body.fire },
+}
+// R4 2026-10-25: the new patterns live (r4fx), the strike budget's recent flashes (r4Fl), the patterns' own clock (r4T: it waits during a hold, as the hazards do) and the first-seen lines shown this run (r4Seen); reset() empties all four (build_R4_2026-10-25)
+let r4fx = [], r4Fl = [], r4T = 0, r4Seen = {}
+// R4-W3 2026-10-25: the screen-wide strike budget. A strike flash of radius r at (x, y) lasting dur s is allowed when fewer than T.r4FlashN flashes started in the last 1 s of run clock and the bright area it would add, with every flash still lit whose box could share a T.r4BlockW x T.r4BlockH screen block with it, stays under T.r4FlashArea screen px at the current zoom (a sum over that neighbourhood, never less than any one block's). Allowed flashes are recorded; `counted` records one without a test (an existing flash, drawn as it always was). Returns whether the flash may be bright (build_R4_2026-10-25)
+function r4Budget(x, y, r, dur, counted) {
+  const z = zoomNow(), area = Math.PI * r * r * z * z
+  for (let i = r4Fl.length - 1; i >= 0; i--) if (t - r4Fl[i].t >= 1 || t < r4Fl[i].t) r4Fl.splice(i, 1)
+  let sum = area
+  for (const f of r4Fl) if (t - f.t < f.dur && Math.abs(f.x - x) * z < T.r4BlockW + (f.r + r) * z && Math.abs(f.y - y) * z < T.r4BlockH + (f.r + r) * z) sum += f.area
+  const ok = !!counted || (r4Fl.length < T.r4FlashN && sum < T.r4FlashArea)
+  if (ok) r4Fl.push({ t, x, y, r, area, dur })
+  return ok
+}
+// R4 2026-10-25: a new pattern's hit on you - armour and exposure as every hit; with grace (a strike) only outside your grace, which it then sets; without (burning ground, per frame) it ignores it. No shake (R4-W6) (build_R4_2026-10-25)
+function r4Hurt(amount, grace) {
+  // R4-F5 2026-10-25: ADJUDICATION_R4 (V2's (c)2, code) - no call lands while P.inv > 0: a call without grace (burning ground, per frame) now does nothing then, and still does not set P.inv; a call with grace is as before (it returns while P.inv > 0, else sets P.inv = T.invuln); the R4 comment above ("without ... it ignores it") describes the code before this change; was `if (grace) { if (P.inv > 0) return false; P.inv = T.invuln }` (build_R4_2026-10-25)
+  if (P.inv > 0) return false
+  if (grace) P.inv = T.invuln
+  P.hp -= amount * (1 - P.armour) * P.exposure
+  AU.play('hurt')
+  if (P.hp <= 0) die()
+  return true
+}
+// R4-T 2026-10-25: a new elite's first-seen line, once a run: its name as the title, its line, and while the Sources switch is on its source line under it; never dropped ({ now, keep }, as the first-elite line) (build_R4_2026-10-25)
+function r4First(id) {
+  if (r4Seen[id]) return
+  const X = ELITES2[id], src = srcShown ? say('ELT.' + id + '.src', X.src) : ''
+  r4Seen[id] = flash(X.name, say('ELT.' + id + '.first', X.first) + (src ? '\n' + src : ''), ELITE_COL, { now: true, keep: true, two: !!src }) !== 'dropped'
+}
+function r4Tag(e, id) { e.e2 = id; r4First(id); return e }
+// R4-E1 2026-10-25: Aftershock cluster - where it fell, three circles T.e1Dist px out (at its own phase angle and a third of a turn apart; no random draw) fill for r4Warn(), then strike once: you, when your centre is inside one, for its damage x T.e1DmgK; each lifeline whose centre is inside one, for T.e1LL. Each circle's flash passes the budget (build_R4_2026-10-25)
+function r4E1At(x, y, e) {
+  const w = r4Warn(), pts = []
+  for (let k = 0; k < 3; k++) { const a = e.phase + k * TAU / 3; pts.push({ x: x + Math.cos(a) * T.e1Dist, y: y + Math.sin(a) * T.e1Dist, bright: false }) }
+  r4fx.push({ k: 'circ', id: 'E1', pts, R: T.e1R, w, tw: w, dmg: e.dmg * T.e1DmgK, st: 'warn', ft: 0 })
+  AU.play('r4circle')
+}
+// R4-E3 2026-10-25: Squall line - a band along the wall's way (n), through where you stand, across your path: n is a quarter turn from your heading, its side one draw (with no heading, its angle one draw). Across it, in order, two ordinary storms, the elite, two ordinary storms, with one open gap of T.e3Gap px put between them at slot 1-4 (one draw); each storm's slot is 2 x (its radius + yours) wide, so your centre anywhere in its slot is touched as it passes and anywhere in the gap is not. The five bodies are made now and enter at the strike, d px back along the band (r4Enter) (build_R4_2026-10-25)
+function r4E3(d) {
+  let nx, ny
+  if (P.hx || P.hy) { const s = Math.random() < 0.5 ? 1 : -1; nx = -P.hy * s; ny = P.hx * s }
+  else { const a = Math.random() * TAU; nx = Math.cos(a); ny = Math.sin(a) }
+  const bodies = [makeHazard('storm', P.x, P.y), makeHazard('storm', P.x, P.y), makeElite(makeHazard('storm', P.x, P.y)), makeHazard('storm', P.x, P.y), makeHazard('storm', P.x, P.y)]
+  bodies[2].e2 = 'E3'
+  const gi = 1 + ((Math.random() * 4) | 0), seq = bodies.slice()
+  seq.splice(gi, 0, null)
+  const slots = seq.map(b => ({ b, s: b ? 2 * (b.r + P.r) : T.e3Gap }))
+  const tot = slots.reduce((n, q) => n + q.s, 0)
+  let v = -tot / 2
+  for (const q of slots) { q.v0 = v; q.v = v + q.s / 2; v += q.s }
+  const w = r4Warn()
+  const f = { k: 'band', id: 'E3', x0: P.x, y0: P.y, nx, ny, mx: -ny, my: nx, u0: -d, u1: d, half: tot / 2, ext: Math.max(...bodies.map(b => b.r)) + P.r, slots, gi, w, tw: w, st: 'warn', ct: 0, crossT: 0 }
+  r4fx.push(f); AU.play('r4band'); r4First('E3')
+  return f
+}
+// R4-E5 2026-10-25: Flash flood - a narrow lane along a front's way through where you stand (its angle one draw, as spawn's front; in Mountain valley along the corridor, from the head or the foot as spawn's front, centred on the floor), 2 x T.e5Half + 1 elite flood bodies T.e5Gap px apart at T.e5SpdMul x their speed, made now and entering at the strike d px back (r4Enter); the lane is as wide as their reach. Returns the bodies made (build_R4_2026-10-25)
+function r4E5(d) {
+  let x0 = P.x, y0 = P.y, nx, ny, u0 = -d
+  if (vbOn()) {
+    const a = Math.random() * TAU, vy = vbSide(P.y, a < Math.PI ? -1 : 1, d), fy = clamp(P.y + vy * d, VB.y0 + VB.keep, VB.y1 - VB.keep)
+    x0 = clamp(P.x, VB.x0 + VB.band, VB.x1 - VB.band); nx = 0; ny = -vy; u0 = -Math.abs(fy - P.y)
+  } else { const a = Math.random() * TAU; nx = -Math.cos(a); ny = -Math.sin(a) }
+  const bodies = []
+  for (let i = -T.e5Half; i <= T.e5Half; i++) {
+    if (enemies.length + bodies.length >= T.enemyCap) break
+    const b = makeElite(makeHazard('flood', x0, y0)); b.e2 = 'E5'; b.spd *= T.e5SpdMul
+    bodies.push({ b, v: i * T.e5Gap })
+  }
+  if (!bodies.length) return 0
+  const reach = bodies[0].b.r + P.r, w = r4Warn()
+  r4fx.push({ k: 'lane', id: 'E5', x0, y0, nx, ny, mx: -ny, my: nx, u0, u1: d, hw: T.e5Half * T.e5Gap + reach, ext: reach, bodies, w, tw: w, st: 'warn', ct: 0, crossT: 0 })
+  AU.play('r4lane'); r4First('E5')
+  return bodies.length
+}
+// R4-E3 / R4-E5 2026-10-25: at the strike the bodies enter at the lane's start, each on its own line across it (v), as fronts travelling n; a wall storm moves at T.e3Spd and throws nothing (its shot clock never runs out) (build_R4_2026-10-25)
+function r4Enter(f) {
+  const list = f.k === 'band' ? f.slots.filter(q => q.b) : f.bodies
+  let spd = 0
+  for (const q of list) {
+    if (enemies.length >= T.enemyCap) break
+    const b = q.b
+    b.x = b.ox = f.x0 + f.nx * f.u0 + f.mx * q.v; b.y = b.oy = f.y0 + f.ny * f.u0 + f.my * q.v
+    b.behaviour = 'front'; b.fx = f.nx; b.fy = f.ny; b.range = f.u1 - f.u0; b.tgt = null
+    b.r4l = { x0: f.x0, y0: f.y0, nx: f.nx, ny: f.ny, mx: f.mx, my: f.my, v: q.v, u0: f.u0, u1: f.u1 + 2 }
+    if (f.k === 'band') { b.spd = T.e3Spd; b.sc = Infinity }
+    spd = b.spd
+    enemies.push(b)
+  }
+  f.crossT = spd ? (f.u1 - f.u0) / spd : 0
+}
+// R4-E3 / R4-E5 2026-10-25: a lane body's position put back on its line across the lane, and along it within the lane's ends (a knock or the crowd's push moves it along, never off its line) (build_R4_2026-10-25)
+function r4Proj(e) {
+  const L = e.r4l, rx = e.x - L.x0, ry = e.y - L.y0, u = clamp(rx * L.nx + ry * L.ny, L.u0, L.u1)
+  e.x = L.x0 + L.nx * u + L.mx * L.v; e.y = L.y0 + L.ny * u + L.my * L.v
+}
+// R4-E9 2026-10-25: Crown fire - every T.e9Every s of its own moving clock it marks a lane T.e9Len px long from where it stands toward what it is after (G), as wide as its reach, for r4Warn(); it holds still meanwhile, then runs the lane at T.e9Spd px/s, leaving burning ground behind it (r4Update). Returns true while it holds or runs (build_R4_2026-10-25)
+function r4E9Move(e, dt, G) {
+  const s = e.e9 || (e.e9 = { c: 0, lane: null })
+  const L = s.lane
+  if (!L || L.st === 'done') {
+    s.lane = null; s.c += dt
+    if (s.c < T.e9Every) return false
+    s.c = 0
+    const dx = G.x - e.x, dy = G.y - e.y, dd = Math.hypot(dx, dy) || 1, nx = dx / dd, ny = dy / dd, w = r4Warn()
+    s.lane = { k: 'lane', id: 'E9', e, x0: e.x, y0: e.y, nx, ny, mx: -ny, my: nx, u0: 0, u1: T.e9Len, hw: e.r + P.r, ext: e.r + P.r, w, tw: w, st: 'warn', u: 0, uPrev: 0, burn: null }
+    r4fx.push(s.lane); AU.play('r4lane')
+    return true
+  }
+  if (L.st === 'warn') { e.x = L.x0; e.y = L.y0; return true }
+  L.u = Math.min(L.u1, L.u + T.e9Spd * dt)
+  e.x = L.x0 + L.nx * L.u; e.y = L.y0 + L.ny * L.u
+  if (L.burn && L.u > L.uPrev) { L.burn.segs.push({ u0: L.uPrev, u1: L.u, t0: r4T }); L.uPrev = L.u }
+  if (L.u >= L.u1) { L.st = 'done'; s.lane = null }
+  return true
+}
+// R4 2026-10-25: the new patterns' clocks, strikes and after-effects, once a step after the events; nothing runs while a hold runs (every clock waits, as the hazards' do) (build_R4_2026-10-25)
+function r4Update(dt) {
+  if (over || holdOn()) return
+  r4T += dt
+  for (let i = r4fx.length - 1; i >= 0; i--) {
+    const f = r4fx[i]
+    if (f.k === 'circ') {
+      if (f.st === 'warn') {
+        f.tw -= dt
+        if (f.tw > 0) continue
+        f.st = 'flash'; f.ft = 0
+        let inP = false
+        for (const q of f.pts) {
+          q.bright = r4Budget(q.x, q.y, f.R, T.r4FlashT, false)
+          if (dist2(q, P) < f.R * f.R) inP = true
+          for (const L of lifelines) if (llUp(L) && dist2(q, L) < f.R * f.R) hitLifeline(L, T.e1LL)
+          if (over) return
+        }
+        if (inP) r4Hurt(f.dmg, true)
+        if (over) return
+        continue
+      }
+      f.ft += dt
+      if (f.ft >= T.r4FlashT) r4fx.splice(i, 1)
+      continue
+    }
+    if (f.k === 'burn') {
+      const L = f.lane, rx = P.x - f.x0, ry = P.y - f.y0, u = rx * f.nx + ry * f.ny, v = rx * f.mx + ry * f.my
+      if (Math.abs(v) < f.hw) for (const s of f.segs) if (u >= s.u0 && u <= s.u1 && r4T - s.t0 < T.e9BurnT) { r4Hurt(f.dps * dt, false); break }
+      if (over) return
+      if ((L.st === 'done' || L.e.gone) && f.segs.every(s => r4T - s.t0 >= T.e9BurnT)) r4fx.splice(i, 1)
+      continue
+    }
+    if (f.id === 'E9') {
+      if (f.e.gone) { f.st = 'done'; r4fx.splice(i, 1); continue }
+      f.tw -= dt
+      if (f.tw > 0) continue
+      f.st = 'run'
+      f.burn = { k: 'burn', id: 'E9', lane: f, x0: f.x0, y0: f.y0, nx: f.nx, ny: f.ny, mx: f.mx, my: f.my, hw: f.hw, segs: [], dps: f.e.dmg * T.e9BurnK }
+      r4fx.splice(i, 1); r4fx.push(f.burn)
+      continue
+    }
+    if (f.st === 'warn') { f.tw -= dt; if (f.tw > 0) continue; r4Enter(f); f.st = 'track'; f.ct = 0; continue }
+    f.ct += dt
+    if (f.ct >= f.crossT + 0.5) r4fx.splice(i, 1)
+  }
+}
+// R4-W2 2026-10-25: a warning's fill alpha: T.r4A0 at its start to T.r4A1 at the strike, a straight line; after the strike a lane's or band's track fades out over its last 0.5 s (build_R4_2026-10-25)
+const r4FillA = f => T.r4A0 + (T.r4A1 - T.r4A0) * clamp(1 - f.tw / f.w, 0, 1)
+const r4Fade = f => clamp((f.crossT + 0.5 - f.ct) / 0.5, 0, 1)
+// R4-W2 2026-10-25: one strip of a lane or band in lane space (u along n, v across): a fill, the dark edge with the light stroke over it, and with `arrows` chevrons along its middle pointing the way it moves (static; no dash, no pulse) (build_R4_2026-10-25)
+function r4Strip(f, uA, uB, vA, vB, fill, edge, arrows) {
+  ctx.save(); ctx.translate(f.x0, f.y0); ctx.transform(f.nx, f.ny, f.mx, f.my, 0, 0)
+  ctx.fillStyle = fill; ctx.fillRect(uA, vA, uB - uA, vB - vA)
+  ctx.beginPath(); ctx.rect(uA, vA, uB - uA, vB - vA)
+  ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 5; ctx.stroke()
+  ctx.strokeStyle = edge; ctx.lineWidth = 2; ctx.stroke()
+  if (arrows) {
+    const vc = (vA + vB) / 2, h = Math.min(12, (vB - vA) / 2 - 4)
+    ctx.beginPath()
+    for (let u = uA + 50; u < uB - 20; u += 110) { ctx.moveTo(u - 10, vc - h); ctx.lineTo(u + 8, vc); ctx.lineTo(u - 10, vc + h) }
+    ctx.lineJoin = 'round'; ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 6; ctx.stroke()
+    ctx.strokeStyle = edge; ctx.lineWidth = 2.5; ctx.stroke()
+  }
+  ctx.restore()
+}
+// R4-W2 / R4-W4 2026-10-25: the new patterns drawn. tele true (after your own paint, with the event warnings): every warning - E1's circles, E3's band with its open gap, E5's and E9's lanes with arrow marks. tele false (under the bodies): E1's strike (bright, or the dim mark when the budget said no, fading over T.r4FlashT), the band's and lane's track while their bodies cross, and E9's burning ground (steady, fading out over each piece's last 0.5 s). No random draw (build_R4_2026-10-25)
+function r4Draw(tele) {
+  for (const f of r4fx) {
+    const C = R4COL[f.id]
+    if (f.k === 'circ') {
+      if (f.st === 'warn') {
+        if (!tele) continue
+        const fill = `rgba(${rgbOf(C.fill)},${r4FillA(f).toFixed(3)})`, edge = `rgba(${rgbOf(C.edge)},.9)`
+        for (const q of f.pts) {
+          ctx.beginPath(); ctx.arc(q.x, q.y, f.R, 0, TAU); ctx.fillStyle = fill; ctx.fill()
+          ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 5; ctx.stroke()
+          ctx.strokeStyle = edge; ctx.lineWidth = 2; ctx.stroke()
+        }
+      } else if (!tele) {
+        const k = clamp(1 - f.ft / T.r4FlashT, 0, 1)
+        for (const q of f.pts) {
+          ctx.beginPath(); ctx.arc(q.x, q.y, f.R, 0, TAU)
+          ctx.fillStyle = q.bright ? `rgba(${rgbOf(C.flash)},${(T.r4FlashA * k).toFixed(3)})` : `rgba(${rgbOf(C.dim)},${(T.r4DimA * k).toFixed(3)})`
+          ctx.fill()
+        }
+      }
+      continue
+    }
+    if (f.k === 'burn') {
+      if (tele || !f.segs.length) continue
+      ctx.save(); ctx.translate(f.x0, f.y0); ctx.transform(f.nx, f.ny, f.mx, f.my, 0, 0)
+      const rgb = rgbOf(C.burn), steady = `rgba(${rgb},${T.r4BurnA.toFixed(3)})`
+      let a0 = null, a1 = null
+      for (const s of f.segs) {
+        const left = T.e9BurnT - (r4T - s.t0)
+        if (left >= 0.5) { if (a0 === null) a0 = s.u0; a1 = s.u1; continue }
+        if (a0 !== null) { ctx.fillStyle = steady; ctx.fillRect(a0, -f.hw, a1 - a0, 2 * f.hw); a0 = null }
+        if (left > 0) { ctx.fillStyle = `rgba(${rgb},${(T.r4BurnA * left / 0.5).toFixed(3)})`; ctx.fillRect(s.u0, -f.hw, s.u1 - s.u0, 2 * f.hw) }
+      }
+      if (a0 !== null) { ctx.fillStyle = steady; ctx.fillRect(a0, -f.hw, a1 - a0, 2 * f.hw) }
+      ctx.restore()
+      continue
+    }
+    const warn = f.st === 'warn'
+    if (warn !== tele || (!warn && f.st !== 'track')) continue
+    const fa = warn ? r4FillA(f) : T.r4TrackA * r4Fade(f), ea = warn ? 0.9 : 0.45 * r4Fade(f)
+    const fill = `rgba(${rgbOf(C.fill)},${fa.toFixed(3)})`, edge = `rgba(${rgbOf(C.edge)},${ea.toFixed(3)})`
+    const uA = f.u0 - f.ext, uB = f.u1 + f.ext
+    if (f.k === 'band') {
+      const g = f.slots[f.gi]
+      r4Strip(f, uA, uB, -f.half, g.v0, fill, edge, true)
+      r4Strip(f, uA, uB, g.v0 + g.s, f.half, fill, edge, true)
+    } else r4Strip(f, uA, uB, -f.hw, f.hw, fill, edge, true)
+  }
+}
+// R4-D 2026-10-25: dev only (called from initDev's buttons and keys): the spawn distance spawn() uses, a body's distance from you as the dev panel's devNear, a new elite body near you, an Aftershock cluster landing near you now, and the heaviest scene (build_R4_2026-10-25)
+const r4D = () => Math.max(420, Math.max(W, H) * 0.62 + 40)
+const r4DevNear = () => Math.min(200, Math.min(W, H) * 0.32)
+function r4DevBody(id) {
+  const e = r4Tag(makeElite(makeHazard(id === 'E1' ? 'quake' : 'fire', P.x, P.y - r4DevNear())), id)
+  if (id === 'E9') e.e9 = { c: T.e9Every, lane: null }
+  enemies.push(e)
+  return e
+}
+function r4DevE1() { const x = P.x, y = P.y - r4DevNear(), q = makeElite(makeHazard('quake', x, y)); r4First('E1'); r4E1At(x, y, q) }
+function r4Heavy() {
+  r4DevE1(); r4E3(r4D()); r4E5(r4D()); r4DevBody('E9')
+  if (!boss) { bossAcc = 0; spawnBoss('clock') }
 }
 
 // ---------------------------------------------------------------- weapons
@@ -9098,6 +9426,12 @@ function offerCards(fromLevelUp) {
   const zb = document.createElement('button')
   zb.className = 'zoombtn'; zb.onclick = zoomStep; zoomPaint(zb)
   bar.appendChild(zb)
+  // R4-DT 2026-10-25: the Details switch on the level-up row, last on the bar, in the Sources switch's pattern (the arrow in an aria-hidden span, so the accessible name is DT_TEXT.button; aria-pressed). A press turns the switch over, stores it (dtSave), repaints the start screen's switch (offerDt), and opens or closes every fold on this screen whose state differs, through its own toggle (foldToggle) (build_R4_2026-10-25)
+  const db = document.createElement('button')
+  const dbSet = () => { db.innerHTML = `<span aria-hidden="true">${dtOpen ? '&#9662;' : '&#9656;'}</span> ${DT_TEXT.button}`; db.setAttribute('aria-pressed', dtOpen ? 'true' : 'false') }
+  dbSet()
+  db.onclick = () => { dtOpen = !dtOpen; dtSave(dtOpen); dbSet(); offerDt(); for (const f of wrap.querySelectorAll('.card .fold-t')) if ((f.getAttribute('aria-expanded') === 'true') !== dtOpen) foldToggle(f) }
+  bar.appendChild(db)
   combosUi = { btn: cb, panel: cp, set: cbSet }
   wrap.appendChild(bar)
   wrap.appendChild(cp)
@@ -9968,13 +10302,15 @@ function step(dt) {
     if (P.inv <= 0 && dist2(e, P) < (e.r + P.r) ** 2) {
       // Hard defences no longer changes contact damage (2026-09-15): its cost is on lifelines, see updateLifelines.
       P.hp -= e.dmg * (1 - P.armour) * P.exposure
-      P.inv = T.invuln; shake = Math.max(shake, 9); AU.play('hurt')
+      // R4-W6 2026-10-25: phase 2a (the Lead's ruling; the user's "new patterns add none") - a touch by an R4 lane body (an E3 wall storm or an E5 flash-flood body: e.r4l) or by a crown fire while it runs its lane (e.e9.lane in 'run') sets no shake; every other touch shakes as before; was `P.inv = T.invuln; shake = Math.max(shake, 9); AU.play('hurt')` (build_R4_2026-10-25)
+      P.inv = T.invuln; if (!(e.r4l || (e.e9 && e.e9.lane && e.e9.lane.st === 'run'))) shake = Math.max(shake, 9); AU.play('hurt')
       if (P.hp <= 0) return die()
     }
   }
   updateLifelines(dt)
   updateGroundThings(dt)
   updateEvents(dt)
+  r4Update(dt)   // R4 2026-10-25: the new patterns (build_R4_2026-10-25)
   if (over) return
   updateBoss(dt)
   if (over) return
@@ -12061,6 +12397,7 @@ function draw() {
 
   // D6 2026-09-22: only what is hitting now is drawn here, under the bodies; the warnings are drawn after your own paint, below (build_D_2026-09-22)
   drawEvents('ground')
+  r4Draw(false)   // R4-W2 2026-10-25: the new patterns' strikes, tracks and burning ground, under the bodies (build_R4_2026-10-25)
   artcFx()   // ART-C 2026-10-17: C3 - the effects, under the bodies and every shot; nothing until loaded (build_ART_2026-10-17)
 
   // hazards. Zones are drawn as places rather than bodies — no outline you can shoot,
@@ -12407,6 +12744,7 @@ function draw() {
 
   // D6 2026-09-22: every event warning, drawn over all of your own paint - rings, shots, beams, particles - so none of it covers a live telegraph (S01, M2) (build_D_2026-09-22)
   drawEvents('telegraph')
+  r4Draw(true)   // R4-W2 2026-10-25: the new warnings, with the event warnings (build_R4_2026-10-25)
 
   // player — a place, not a person: a lit disc standing on ground it does not leave
   // G-M4 2026-10-13: (e) Land use - a short wake behind the disc while you move: a round-capped line straight back from the disc's edge, T.wakeLen0 + T.wakePerLv px per Land-use level, in the measure's colour; drawn under reduced motion too (it moves only as you do). Under the halo and the disc (PLAN_G G4) (build_G_2026-10-01)
@@ -12646,6 +12984,21 @@ function offerFx() {
   // P16a-T 2026-10-22: S1-10 (strings_P16a.md) (build_P16a_2026-10-22)
   $('fxnote').textContent = 'Off shows fewer moving effects.'   // PT2-P8 2026-10-19: PLAN_PT2 P8 - the note's second sentence says what the code now does: on with no stored choice (reduceMotion false), off only after a press, which this browser keeps (fxSave); the device setting no longer counts. Was: 'Off shows fewer moving effects. Until you press it, it follows your device\'s setting.' (build_PT2_2026-10-19)
 }
+// R4-DT 2026-10-25: the Details switch on the start screen, after Effects and on offerSrc()'s pattern: the button is made once and then updated in place, so keyboard focus stays on it after a press; aria-pressed; its state word in an aria-hidden span, so the accessible name is DT_TEXT.label; the note under it is DT_TEXT.note. It reads and writes the same switch as the level-up row's button (build_R4_2026-10-25)
+function offerDt() {
+  const wrap = $('dtwrap')
+  if (!wrap) return
+  let b = wrap.querySelector('button')
+  if (!b) {
+    b = document.createElement('button')
+    b.onclick = () => { dtOpen = !dtOpen; dtSave(dtOpen); offerDt() }
+    wrap.appendChild(b)
+  }
+  b.className = 'dbtn' + (dtOpen ? ' on' : '')
+  b.innerHTML = `${DT_TEXT.label}<span aria-hidden="true">: ${dtOpen ? 'on' : 'off'}</span>`
+  b.setAttribute('aria-pressed', dtOpen ? 'true' : 'false')
+  $('dtnote').textContent = DT_TEXT.note
+}
 
 // The difficulty row sits above the places, because it changes what choosing a place means.
 // DL-FIX2 2026-10-15: FX10 (review_DIAL.md F2) - the four buttons are made once (the first call) and afterwards updated in place, as offerPlain() above does, so a pressed button stays in the page and keeps keyboard focus; each carries aria-pressed true / false; class and colour styles as before, so the look does not change; the note is rewritten only when its text changes, so the live region (#diffnote, aria-live polite) speaks only on a real change (build_DIAL_2026-10-14 fix round 2)
@@ -12859,6 +13212,16 @@ function initDev() {
     spawnTrueBoss()
     tboss.x = P.x; tboss.y = P.y + devNear()
   })
+  // R4-D 2026-10-25: PLAN_R4 - the four new elites on demand, by button or key; the key listener is added here, so it exists only once dev mode is on. Keys: 1 an Aftershock cluster body near you, ! (Shift+1) a cluster landing near you now, 2 a squall line now, 3 a flash flood now, 4 a crown fire near you whose first lane starts at once, 5 the heaviest scene (a cluster, a squall line, a flash flood, a crown fire and a compound event); only during a run. Developer text only (build_R4_2026-10-25)
+  SEP('R4 elites - keys 1 to 5')
+  const r4Keys = { '1': () => r4DevBody('E1'), '!': () => r4DevE1(), '2': () => r4E3(r4D()), '3': () => r4E5(r4D()), '4': () => r4DevBody('E9'), '5': () => r4Heavy() }
+  B('E1 body near you [1]', () => r4Keys['1']())
+  B('E1 cluster now [Shift+1]', () => r4Keys['!']())
+  B('E3 squall line [2]', () => r4Keys['2']())
+  B('E5 flash flood [3]', () => r4Keys['3']())
+  B('E9 crown fire [4]', () => r4Keys['4']())
+  B('Heaviest scene [5]', () => r4Keys['5']())
+  addEventListener('keydown', e => { const f = r4Keys[e.key]; if (!f || e.repeat || over || !$('start').classList.contains('gone')) return; f() })
 
   // The two layers built on 2026-09-04 are the ones being tuned, and neither can be reached from
   // the field on demand: a lifeline only comes under attack on a 22% draw, and a response card is
@@ -13013,6 +13376,7 @@ if (COARSE) {
 offerPlaces(); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
 offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
 offerFx()   // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch drawn with the others, after offerZoom() (build_PT_2026-10-19)
+offerDt()   // R4-DT 2026-10-25: the Details switch drawn with the others, after offerFx() (build_R4_2026-10-25)
 reset(PLACE_IDS[0])
 paused = true          // the sim idles behind the place-select rather than running a ghost run
 requestAnimationFrame(frame)
