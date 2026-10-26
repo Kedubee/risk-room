@@ -75,6 +75,7 @@
     throws embers ahead of itself, and an ember that lands starts its own fire on ground
     nothing was burning on. Neither throws at you while it is on its way to a lifeline.
     // PT7-S2 2026-10-21: PLAN_PT7 S2 - "Wildfire throws embers ahead of itself" held until the melee / ranged split (SP-M2 / SP-M4 2026-10-19, build_SPLIT_2026-10-18): makeHazard makes each Wildfire body melee or ranged by turns (splitN), and enemyFire gives a melee body no shot, so only a ranged Wildfire body, or an elite one (makeElite takes the variant back), throws embers (HAZARDS.fire.shoot); comment only (build_PT7_2026-10-21)
+    // R5-FX 2026-10-26: OPEN_LEDGER T11 (K9 a) - "Storms throw what they lift, in a spread of three, while orbiting out of reach" held until the same split (SPLIT.kinds names storm): makeHazard makes each Storm body melee or ranged by turns (splitN), a melee Storm neither orbits (moveHazard: `if (e.behaviour === 'orbit' && e.split !== 'melee')`, SP-M3) nor throws (enemyFire: `sh = e.split === 'melee' ? null : ...`, SP-M3 / SP-M4), so only a ranged Storm body, or an elite one (makeElite takes the variant back), orbits and throws; the sentence stays, as the PT7-S2 note left the Wildfire one; comment only (build_R5_2026-10-26 fix round)
 
     The green belt eats what is thrown at it. That is the defensive identity a standing
     perimeter should always have had, and it is now the counter to both shooters — it blocks
@@ -1586,11 +1587,11 @@
   #cardbuild{width:100%;max-width:420px;display:grid;grid-template-columns:1fr 1fr;gap:5px 14px;margin:4px auto 0;
     padding:10px 6px 0;border-top:1px solid rgba(255,255,255,.12);pointer-events:none}
   #cardbuild .wpn{justify-content:flex-start;text-align:left;min-width:0}
-  /* P16a-F 2026-10-22: a level-up card's face line (p.face), its take region (.take, the card's button for the keys) and its Details fold (the default cursor inside the fold, where a click does not take the card) (.fold: the toggle .fold-t and the body .fold-b); the hint card's and How to play's face and fold; a fold holding only the source line hides while Sources is off (build_P16a_2026-10-22) */
+  /* P16a-F 2026-10-22: a level-up card's face line (p.face), its take region (.take, the card's button for the keys) and its Details fold (the default cursor inside the fold, where a click does not take the card) (.fold: the toggle .fold-t and the body .fold-b); the hint card's and How to play's face and fold; a fold holding only the source line hides while Sources is off (build_P16a_2026-10-22) (R5-FX 2026-10-26: OPEN_LEDGER T9 (K8) - since R4-F4 (ADJUDICATION_R4 F-08, the handler in cardFold) a click or tap inside an OPEN fold takes the card, except on the Details toggle and on a button, a link or a [role="button"] inside it, so the fold's body now shows the pointer; the toggle and the controls inside keep the cursor they had; "the default cursor inside the fold, where a click does not take the card" describes the rule before R4-F4; was `#cardwrap .card .fold-b{cursor:default}` (build_R5_2026-10-26 fix round)) */
   .card p.face{opacity:.95;font-weight:600}
   #hint-p.face,#howto-p.face{font-weight:600}
   #cardwrap .card .take{border-radius:8px}
-  #cardwrap .card .fold-b{cursor:default}
+  #cardwrap .card .fold-b{cursor:pointer}
   .card .take:focus-visible{outline:3px solid #fff;outline-offset:4px}
   .fold-t{display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:3px 10px;font:inherit;font-size:11px;font-weight:700;
     letter-spacing:.03em;line-height:1.4;color:inherit;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.25);
@@ -2605,8 +2606,8 @@ const T = {
   lifelineRepair: 16,              // per second at Maintenance 0, standing within the repair reach with nothing on it
   llRepairUnder: 0.6,              // share of that rate while something sits on it, applied net of the wear
   llRepairR: 70,                   // the player's repair reach at Maintenance 0, px from the centre
-  llTargetP: 0.22,                 // share of chasers that head for a lifeline instead of you
-  llReach: 1250,                   // ...but only one close enough that you could get there
+  llTargetP: 0.22,                 // share of the hazards spawn() draws (chasers, heat zones, flood fronts, storms) that head for a lifeline instead of you (pickTarget, one draw per spawn)   // R5-FX 2026-10-26: OPEN_LEDGER T11 (K9 d) - was "share of chasers that head for a lifeline instead of you"; comment only (build_R5_2026-10-26 fix round)
+  llReach: 1250,                   // ...one at random among the lifelines up within this reach (px); with none up within it a chaser (Earthquake, Wildfire) or a heat zone takes the nearest one still up (PT7-P19r) and a flood front or a storm comes for you   // R5-FX 2026-10-26: OPEN_LEDGER T11 (K9 d) - was "...but only one close enough that you could get there"; comment only (build_R5_2026-10-26 fix round)
 
   // Defending one, as opposed to owning one (2026-09-04). Every lifeline paid a passive for
   // STANDING and nothing at all for the act, so going to the alarm bought only not-losing
@@ -2678,6 +2679,24 @@ const T = {
   e3Gap: 64, e3Spd: 300,                // R4-E3: the wall's open gap (px across) and its speed (px/s)
   e5Half: 1, e5Gap: 46, e5SpdMul: 8,    // R4-E5: bodies each side of the centre, their spacing (px), and the speed multiple of an ordinary front
   e9Every: 5, e9Len: 520, e9Spd: 600, e9BurnT: 3, e9BurnK: 0.8,   // R4-E9: s between lanes, lane length (px), run speed (px/s), burning ground life (s), its damage per s (x the body's damage)
+  // R5-F..R5-D 2026-10-26: PLAN_R5 (build_R5_2026-10-26/PLAN_R5.md; design_2026-10-20/DESIGN_long_runs.md 8.1-8.3; design_2026-10-24/ADJUDICATION_d24.md MN-2, MN-14) - the carry tasks' numbers. r5From, r5FromB, r5Gap0, r5Gap1, r5Slow, r5DropWait and r5Time are PLAN_R5's starting values; every other value is the R5 Builder's starting value, named in build_record_R5.md (build_R5_2026-10-26)
+  r5From: 300, r5FromB: 600, r5Gap0: 90, r5Gap1: 120,   // R5-F: carry A from this run clock (s), carry B from this one; s from the end of a task to the next (one draw)
+  r5Slow: 0.85, r5DropWait: 6, r5Time: 45,              // R5-F: your speed factor while carrying; s a dropped object waits where it fell; s to deliver, from the banner
+  r5PickR: 16, r5DestR: 40,                             // R5-F: reach to pick up (px, added to your radius); the radius of a delivery ring (px)
+  r5PickD0: 300, r5PickD1: 420, r5DestD0: 380, r5DestD1: 520,   // R5-F: the pickup's distance from you, the destination's from the pickup (px; one draw each)
+  r5PatFirst: 1.5, r5PatEvery: 4.5, r5PatDmg: 12,       // R5-W: s from the first pickup to the first pattern; s between patterns while carrying; a strike's damage, x the hit ramp, the place's and the step's damage
+  r5LaneLen: 640, r5LaneHw: 24, r5LaneAhead: 90,        // R5-W lane (M2, M3): length, half width, how far ahead of you its middle lies (px)
+  r5CircR: 34, r5CircAhead: 110, r5CircSide: 70,        // R5-W circle (M6): radius; how far ahead the second and third lie; the third's offset to one side (px)
+  r5RingHw: 20, r5RingGap: 80, r5RingGapOff: 110, r5RingReach: 200, r5RingMin: 60, r5RingN: 2,   // R5-W ring (M4): half width; the gap (px of arc on the ring's middle); the gap's arc distance from you; a building within this many px of you sends one; the smallest radius; at most this many at once
+  r5LineHw: 14, r5LineExt: 140, r5LineStrikeW: 4,       // R5-W line (M1): half width; how far past you it reaches (px); the strike's drawn width (px)
+  r5M1FailLL: 35, r5BackupNeed: 4.5,                    // R5-M1: the hospital's damage on a failed carry (it keeps at least 1); the Backup power site's build time (s inside, as WORKS' need)
+  r5M2SlowK: 0.7, r5M2SlowT: 30, r5M2Later: 12, r5M2Wider: 2,   // R5-M2: flood speed factor and its s; s with no new flood front; extra bodies each side of the next front after a failure
+  r5M3HomeD: 230, r5M3XpN: 3, r5M3XpV: 12, r5M3Arm: 0.3, r5M3ArmT: 8, r5M3Ring: 10,   // R5-M3: homes' distance from the mast (px); XP motes and each one's value; armour share and s; storms in the failure ring
+  r5M4N: 4, r5M4OpenD: 360, r5M4Clear: 220, r5M4OpenR: 60, r5M4XpV: 10, r5M4Cap: 12,   // R5-M4: residents in the group; open ground's distance from the damaged building; its least distance from every building and standing lifeline; its radius (px); XP per resident who reaches it; capacity for the whole group
+  r5ResR: 6, r5ResGap: 20, r5ResSpd: 240, r5ResBack: 110,   // R5-M4: a resident's radius; gap behind the one ahead (px); following speed; walking back to the door (px/s)
+  r5M6Ring: 150, r5M6LineD: 320, r5M6LineHalf: 170, r5M6SpreadK: 0.5, r5M6ClearT: 30, r5M6Spot: 3,   // R5-M6: the cleared ring's radius; the firebreak's distance from the house; its half length (px); the spread factor inside the ring and its s; spot fires after a failure
+  r5DevPickD: 170, r5DevDestD: 420,                     // R5-D: a dev-started task's pickup straight above you, its destination to the pickup's right (px)
+  r5ResWalk: 90, r5LeaveWait: 0.8, r5LeaveD: 240, r5HudGap: 15,   // R5-M4 / R5-F phase 2a (the user's choice at the preview, PLAN_R5): residents' own walking speed after an escort ends (px/s); s they stand in the open ground before leaving; px they walk on from it, fading out; the timer track's or counter's middle, px below the lowest top HUD box
 }
 // PT5-R1a..R1f 2026-10-20: PLAN_PT5 R1 (the user's go-ahead relayed in record 3fc807d8; the approval of this round in PLAN_PT5.md) - the long-run numbers, one new table beside T (T itself is unchanged). Every number is from ../design_2026-10-20/curves_proposal.js (its P table and xpTable(80, 15, 72)) and DESIGN_long_runs.md; read by rampTimeAt, hpRampNow, hitRampNow (helpers), eliteShare, the spawn rate (step), the two P.need lines and rebuildLifeline (build_PT5_2026-10-20)
 const LONGRUN = {
@@ -2843,6 +2862,9 @@ const AU = (() => {
     r4circle: () => tone({ type: 'sine', f: 620, f2: 420, d: 0.28, g: 0.07 }),
     r4lane: () => tone({ type: 'triangle', f: 330, f2: 660, d: 0.3, g: 0.07 }),
     r4band: () => tone({ type: 'square', f: 165, f2: 196, d: 0.4, g: 0.05 }),
+    // R5-W 2026-10-26: PLAN_R5 - one sound for each of the two new warning shapes (ring, line), played once when a warning starts; one tone() each (no noise buffer, so no random draw); the circle and the lane keep R4's r4circle and r4lane (build_R5_2026-10-26)
+    r5ring: () => tone({ type: 'sine', f: 247, f2: 185, d: 0.45, g: 0.07 }),
+    r5line: () => tone({ type: 'triangle', f: 880, f2: 990, d: 0.22, g: 0.05 }),
   }
 
   // A bed per place. Filtered noise plus a root, with a slow sweep on the filter so it is
@@ -4730,6 +4752,7 @@ function reset(placeId) {
   picked = []; worksDone = []; worksMissed = []
   events = []; eventAcc = 0; eventsSeen = []; eventsHit = 0; warnBought = 0
   r4fx = []; r4Fl = []; r4T = 0; r4Seen = {}   // R4 2026-10-25: the new patterns, the strike budget and the first-seen lines do not cross into the next run (build_R4_2026-10-25)
+  r5 = null; r5fx = []; r5Next = T.r5From; r5Cnt = {}; r5Last = null; r5M1 = { handled: false, pending: false }; r5Eff = { slowTo: 0, lateTo: 0, wider: 0, arm: null, clear: null }; r5Walk = null   // R5-F 2026-10-26: no task, pattern, M1 watch, after-effect or residents walking off cross into the next run (build_R5_2026-10-26)
   vbRzAcc = 0   // VB-M4 2026-10-18: V5 - the red-zone rockfall's clock does not cross into the next run (build_VALLEY_2026-10-17)
   boss = null; bossAcc = 0; bossesKilled = 0; bossesSurvived = 0; bossSeen = []
   tboss = null; tbossState = null; tbossWarned = false; tbossBonus = 0   // BS-M3 2026-09-30: the true boss does not cross into the next run (build_BS_2026-09-30)
@@ -4816,6 +4839,7 @@ function doDodge() {
   emit('spark', P.x, P.y, 14, 'cold', { dir: Math.atan2(-P.dodgeY, -P.dodgeX), spread: 1.6 })
   emit('smoke', P.x, P.y, 5, 'ash', { scale: .8 })
   AU.play('dodge')
+  r5Drop()   // R5-F 2026-10-26: Evacuate drops what you carry (the long-run design's Q4) (build_R5_2026-10-26)
   return true
 }
 
@@ -4948,7 +4972,7 @@ const DIFFS = {
     // DL-M1 2026-10-14: display name Pressed -> Booming (PLAN_DIAL D1, D2) (build_DIAL_2026-10-14)
     name: 'Booming', short: 'Booming', col: '#ffd166',
     // CORRECTED 2026-09-23: "less warning" now names its exception, as the Learning blurb does - DIFF.warn scales only fireEvent's warnings; a compound event's arrival (T.bossWarn), its charge wind-up (T.bossWind) and its siege strikes (warn: 1.05) keep their times on every difficulty (section C round 3, section_C_2026-09-22)
-    // DL-M4 2026-10-14: the step note, strings_DIAL.md N-3 - "than on Growing" names the comparison (its rampTime() clock and its hit multiplier (1 + rampTime() / T.dmgRamp) * DIFF.dmg are above Growing's at every second, scratchpad dial_build/test_dial.js, section E, 0-3600 s by 0.001 s); the late-clock clause dropped (plain reading; nothing it said is contradicted); the warning sentence verbatim (build_DIAL_2026-10-14)
+    // DL-M4 2026-10-14: the step note, strings_DIAL.md N-3 - "than on Growing" names the comparison (its rampTime() clock and its hit multiplier hitRampNow() * DIFF.dmg [R5-FX 2026-10-26: OPEN_LEDGER T11 (K9 c) - since PT5-R1c every hit reads hitRampNow(), which is (1 + rampTime() / T.dmgRamp) up to LONGRUN.split and the LONGRUN ramp after it; was "(1 + rampTime() / T.dmgRamp) * DIFF.dmg"; comment only (build_R5_2026-10-26 fix round)] are above Growing's at every second, scratchpad dial_build/test_dial.js, section E, 0-3600 s by 0.001 s); the late-clock clause dropped (plain reading; nothing it said is contradicted); the warning sentence verbatim (build_DIAL_2026-10-14)
     // DL-FIX 2026-10-15: FX2 (check_DIAL.md F2) - the warning sentence split in two, the exception kept, as on Planned above (DIFF.warn only in fireEvent) (build_DIAL_2026-10-14 fix round)
     // DL-FIX2 2026-10-15: FX8 (review_DIAL.md F1) - the exception sentence reworded as on Planned above, same claim; the first two sentences unchanged (build_DIAL_2026-10-14 fix round 2)
     // P16a-T 2026-10-22: S1-05 (strings_P16a.md) (build_P16a_2026-10-22)
@@ -5679,6 +5703,32 @@ const PLAIN = {
   'ELT.E5.first': 'A thin lane shows where a fast flood will run. Get out of the lane.',
   'ELT.E5.src': 'NSSL (US): flash floods can happen within minutes of the rain. That leaves less time to warn people.',
   'ELT.E9.first': 'It shows a lane, then runs down it fast, leaving fire. Get off the lane.',
+  // R5-FX 2026-10-26: ADJUDICATION_R5 K1 (strings_R5_final.md) - the Learning twins of the R5 carry lines and of the Backup power site's gain line, read through say() as CRY.<id>.<slot> (r5Start: name, banner, src; r5End: name, done, fail; r5Pick: name, pick; r5Arrived: CRY.M3.next) and WRK.backup.gain (the works built flash); rows with no Learning line (every name, M1 banner, M1 done, M4 count, backup note) show their Steady text in both modes (build_R5_2026-10-26 fix round)
+  'CRY.M1.pick': 'You have the generator. Take it to the hospital. EVAC drops it.',
+  'CRY.M1.fail': 'The generator did not get there in time. The hospital loses health.',
+  'CRY.M1.src': 'A WHO and PAHO guide helps check how safe hospitals are. Backup power that can only be started by hand is rated Low.',
+  'CRY.M2.banner': 'Get the river reading from the gauge. Take it to the siren.',
+  'CRY.M2.pick': 'You have the reading. Take it to the siren. EVAC drops it.',
+  'CRY.M2.done': 'Warning issued. Floods move slower. The next flood front comes later.',
+  'CRY.M2.fail': 'The warning did not go out. The next flood front is wider.',
+  'CRY.M2.src': 'UNDRR: an early warning system has linked parts. If one part fails, the whole system could fail.',
+  'CRY.M3.banner': 'Carry the storm warning from the radio mast to three homes. Go one home at a time.',
+  'CRY.M3.pick': 'You have the warning. Take it to the marked home. EVAC drops it.',
+  'CRY.M3.next': 'This home has the warning. Go back to the mast for the next home.',
+  'CRY.M3.done': 'All three homes have the warning. You get XP. Hits hurt you less for a few seconds.',
+  'CRY.M3.fail': 'Some homes did not get the warning. One more ring of storms is coming.',
+  'CRY.M3.src': 'In Bangladesh, volunteers take cyclone warnings around their area. One survey found many people got them door to door.',
+  'CRY.M4.banner': 'People are in a damaged building. Lead them out, away from all buildings.',
+  'CRY.M4.pick': 'They follow you now. Stay away from buildings.',
+  'CRY.M4.done': 'They are away from the buildings. You get XP and capacity.',
+  'CRY.M4.fail': 'They walk to open ground by themselves. You get no reward.',
+  'CRY.M4.src': 'Ready.gov (US): if you are in a damaged building, get out and move away fast. Do not go back in.',
+  'CRY.M6.banner': 'Dry plants are around the house. Carry them past the firebreak line.',
+  'CRY.M6.pick': 'You have the brush. Take it past the firebreak line. EVAC drops it.',
+  'CRY.M6.done': 'The ring is clear. For 30s, fire spreads into it at half its rate. It can still burn.',
+  'CRY.M6.fail': 'The dry plants stayed. Small new fires start.',
+  'CRY.M6.src': 'UNEP: clearing plants around buildings can cut fire risk. But it does not necessarily stop fires.',
+  'WRK.backup.gain': 'If power is lost, the hospital\'s backup power starts by itself. You do not carry a generator.',
   'EVT.inbound.warned': warn => `Your warning system gives you ${(warn).toFixed(1)}s.`,
   'LL.lost.more': left => ` If you lose ${left} more, the run ends here.`,
   'LL.hospital.gain': 'Your capacity comes back slowly while it stands.',
@@ -6321,7 +6371,8 @@ const LIFELINES = {
               cost: 'And 12% slower after. The other lifelines now fail faster.',
               on: P => { P.rateMul *= 1.12 }, off: P => { P.rateMul /= 1.12 },
               lost: P => { P.rateMul *= 0.88; P.cascade = true },
-              note: 'Nothing else on this list works without it — warning systems and hospitals first.',
+              // R5-FX 2026-10-26: ADJUDICATION_R5 F5 (K3) - c3 of strings_R5_final.md: true with and without a Backup power site or a delivered generator; was `note: 'Nothing else on this list works without it — warning systems and hospitals first.',` (build_R5_2026-10-26 fix round)
+              note: 'Little else on this list works without it — warning systems first, and hospitals with no backup.',
               gone: 'This is the cascade. The pumps, the signals, the cold chain and the hospital\u2019s own equipment all run on it, so losing power does not subtract one service — it starts taking the others with it. Every remaining lifeline now degrades faster.' },
   water:    { name: 'Water', col: PAL.place.lifeline.water, tag: 'heat −40%',
               gain: 'Heat takes 40% less off you.',
@@ -6400,7 +6451,8 @@ const defMul = () => onSite ? T.defendMul : 1
 // The four stats a fired service touches that are not `eff`. Read these, never P.<stat>, at the
 // four places that consume them.
 const heatResNow = () => P.heatRes * (sfOn('water')    ? 0.25 : 1)
-const spdNow     = () => P.spd     * (sfOn('road')     ? 1.20 : 1)
+// R5-F 2026-10-26: x r5SpdK() - T.r5Slow while you carry a task's object or residents follow you, exactly 1 otherwise; was `const spdNow     = () => P.spd     * (sfOn('road')     ? 1.20 : 1)` (build_R5_2026-10-26)
+const spdNow     = () => P.spd     * (sfOn('road')     ? 1.20 : 1) * r5SpdK()
 const xpMulNow   = () => (P.xpMul || 1) * (sfOn('school')   ? 1.50 : 1)
 const regenNow   = () => P.regen   * (sfOn('hospital') ? 3.00 : 1)
 
@@ -7209,6 +7261,11 @@ const WORKS = {
               gain: '+24 capacity, and it is filled.',
               note: 'Stocks pre-positioned before the season rather than shipped in after the event. The same supplies, months earlier, at a fraction of the cost.',
               apply: () => { P.max += 24; P.hp = Math.min(P.max, P.hp + 24) } },
+  // R5-M1 2026-10-26: PLAN_R5 (ADJUDICATION_d24 MN-2) - the Backup power site, occupied like the others: in the rotation only from T.r5From, in a run with both the hospital and the power lifeline (r5WorksOk, spawnWorks). Built, the hospital keeps working by itself when power falls and nothing needs carrying (r5BackupBuilt, r5M1Watch). Phase-1 placeholders: gain reaches the screen through say() as WRK.backup.gain (the built flash); name and note reach it through the lines every works site uses, which do not call say() (build_R5_2026-10-26)   // R5-FX 2026-10-26: K1 - the placeholders replaced by the Steady lines of strings_R5_final.md, byte for byte; the gain line's Learning twin sits in PLAIN under WRK.backup.gain (build_R5_2026-10-26 fix round)
+  backup:   { name: 'Backup power', col: PAL.place.lifeline.power, need: T.r5BackupNeed,
+              gain: 'When power is lost, the hospital\'s backup starts by itself. Nothing to carry.',
+              note: 'A generator that starts by itself the moment the power goes. Backup that can only be started by hand is rated Low in WHO and PAHO\'s hospital guide.',
+              apply: () => { r5BackupBuilt() } },
 }
 const WORKS_IDS = Object.keys(WORKS)
 
@@ -7220,7 +7277,8 @@ function spawnPickup() {
 }
 
 function spawnWorks() {
-  const left = WORKS_IDS.filter(k => !worksDone.includes(k))
+  // R5-M1 2026-10-26: && r5WorksOk(k) - the Backup power site joins the rotation only from T.r5From in a run with both the hospital and the power lifeline, so before 5:00 the list and its draw are as before; was `const left = WORKS_IDS.filter(k => !worksDone.includes(k))` (build_R5_2026-10-26)
+  const left = WORKS_IDS.filter(k => !worksDone.includes(k) && r5WorksOk(k))
   if (!left.length) return
   const kind = pick(left)
   const a = Math.random() * TAU, d = rand(320, 700)
@@ -7557,7 +7615,8 @@ function hitLifeline(L, amount) {
   // cost you could not have acted on; the count belongs on the field, at the moment.
   const cap = failCap()
   const left = cap - lifelinesLost.length
-  flash(K.name + ' lost', say('LL.' + L.kind + '.cost', K.cost) + (left > 0
+  // R5-FX 2026-10-26: K4 (i) - for the power lifeline, r5BkNote() right after the cost line and before LL.lost.more; was `flash(K.name + ' lost', say('LL.' + L.kind + '.cost', K.cost) + (left > 0` (build_R5_2026-10-26 fix round)
+  flash(K.name + ' lost', say('LL.' + L.kind + '.cost', K.cost) + (L.kind === 'power' ? r5BkNote() : '') + (left > 0
     ? say('LL.lost.more', ` ${left} more and the run ends here.`, left)
     : ' That was the last one this place could lose.'), '#ff9d9d')
   syncHud()
@@ -7576,6 +7635,8 @@ function rebuildLifeline(kind) {
   for (const e of enemies) if (e.tgt === L) e.tgt = null
   LL_UNLOST[kind](P)
   K.on(P)
+  // R5-FX 2026-10-26: ADJUDICATION_R5 F9 (K5) - a hospital rebuilt while the power lifeline is in the set and down: r5M1.handled is cleared, so r5M1Watch on the next step starts its backup when the Backup power site is built, or makes an M1 carry due when it is not (pending stays the watch's); a rebuild while power stands, or of any other lifeline, changes nothing (build_R5_2026-10-26 fix round)
+  if (kind === 'hospital') { const pw = lifelines.find(O => O.kind === 'power'); if (pw && !pw.alive) r5M1.handled = false }
   // PT5-R1f 2026-10-20: PLAN_PT5 R1-f (DESIGN_long_runs.md 4.4; Q3) - the price is LONGRUN.rebuildCost (15%) of the capacity you have at this moment (P.hp); maximum capacity is not changed, so heals can win it back. Was `P.max *= T.lifelineRebuildMax` (x0.75 of maximum, for the rest of the run); T.lifelineRebuildMax stays in T, read by nothing now. The clamp below is kept and changes nothing (build_PT5_2026-10-20)
   P.hp *= 1 - LONGRUN.rebuildCost
   P.hp = Math.min(P.hp, P.max)
@@ -7689,7 +7750,8 @@ function updateLifelines(dt) {
 
     // Once power is gone the rest go faster. Not a difficulty knob — it is the mechanic the
     // dense-city compound event is named after, made real on the map.
-    const casc = P.cascade && L.kind !== 'power' ? T.cascadeMul : 1
+    // R5-M1 2026-10-26: && !L.r5bk - a hospital whose backup power runs (r5HospOn) keeps working: the cascade does not speed its wear; every other case as before; was `const casc = P.cascade && L.kind !== 'power' ? T.cascadeMul : 1` (build_R5_2026-10-26)
+    const casc = P.cascade && L.kind !== 'power' && !L.r5bk ? T.cascadeMul : 1
     // Hard defences (2026-09-15): with the card, each flood front here counts leveeFloodWear times (exact up to the 4-occupier cap).
     // SY-M1 2026-09-29: held zones and fronts wear nothing while a hold runs, but they still count as sitting on it (`under`), so it is not repaired under them: the repair rule is unchanged (ruling RS5) (build_SY_2026-09-29)
     // XL-M2 2026-10-13: R1 (RX4) - standing within the reach while something sits on it now repairs at T.llRepairUnder x the full rate, Maintenance's x(1 + 0.3 per level) included, applied net of the wear in one step: below 0 the net goes through hitLifeline (the alarm, the loss), above 0 it repairs. The SY-M1 line above ("so it is not repaired under them: the repair rule is unchanged") was true before this build (RX7): during a hold the occupiers still wear nothing and still count as `under`, so the reduced rate applies. A full lifeline with the net at or above 0 stays full and says nothing (no "repaired" line every frame); a save that reaches 100 while occupied secures it as before. With nothing on it, or nobody there, each term is computed as before, so those cases are unchanged (build_XP_2026-10-13)
@@ -7807,6 +7869,7 @@ function makeElite(e) {
 function spawn() {
   const id = drawHazard()
   const k = HAZARDS[id]
+  if (id === 'flood' && r5FloodLate()) return   // R5-M2 2026-10-26: Warning issued - a flood draw makes no front while r5FloodLate() holds (only after a delivered Flood gauge, so never before 5:00 in natural play) (build_R5_2026-10-26)
   // BS-M2 2026-09-30: one roll per draw, from T.eliteFrom on (before it no random number is drawn, so an early run is as it was); every body of an elite draw is made elite (mk), and an elite front is T.eliteFrontExtra bodies wider on each side (build_BS_2026-09-30)
   const el = t >= T.eliteFrom && Math.random() < eliteShare()
   const mk = (...a) => el ? makeElite(makeHazard(...a)) : makeHazard(...a)
@@ -7833,7 +7896,8 @@ function spawn() {
     const a = Math.random() * TAU
     const nx = Math.cos(a), ny = Math.sin(a)
     const px = -ny, py = nx
-    const half = (PLACE.bite.frontHalf || 3) + (el ? T.eliteFrontExtra : 0)   // BS-M2 2026-09-30: an elite front is wider (build_BS_2026-09-30)
+    // R5-M2 2026-10-26: + r5Wider() - after a failed Flood gauge the next front is T.r5M2Wider bodies wider each side, once; 0 otherwise; was `const half = (PLACE.bite.frontHalf || 3) + (el ? T.eliteFrontExtra : 0)   // BS-M2 2026-09-30: an elite front is wider (build_BS_2026-09-30)` (build_R5_2026-10-26)
+    const half = (PLACE.bite.frontHalf || 3) + (el ? T.eliteFrontExtra : 0) + r5Wider()   // BS-M2 2026-09-30: an elite front is wider (build_BS_2026-09-30)
     // VB-M7 2026-10-18: V8 - in Mountain valley a flood front travels along the corridor: the draw above (a) picks the side - a < pi: from the head side, travelling +y; else from the foot side, travelling -y - starting d from its target along the axis (an end it would pass is the nearest point inside, 40 px from the end), its line centred on the floor (its target's x, held within the floor between the bands); a member that would stand outside the box (40 px from the walls) is not made, and the budget counts the members made, as below (build_VALLEY_2026-10-17)
     // VB-FIX F1 2026-10-18: "an end it would pass is the nearest point inside" no longer holds - a front whose start d along the axis would pass an end comes from the other end (vbSide), so it starts d from its target, as in the open; only with d over 2,960 px (vbSide) is it still the nearest point inside (build_VALLEY_2026-10-17 fix round)
     if (vbOn()) {
@@ -7897,8 +7961,10 @@ function moveHazard(e, dt) {
     return
   }
   if (e.behaviour === 'front') {
-    e.x += e.fx * e.spd * dt + e.kx * dt
-    e.y += e.fy * e.spd * dt + e.ky * dt
+    // R5-M2 2026-10-26: x fk - a flood body moves at T.r5M2SlowK of its speed for T.r5M2SlowT s after a delivered Flood gauge (r5FloodK), exactly 1 otherwise; was `e.x += e.fx * e.spd * dt + e.kx * dt`; was `e.y += e.fy * e.spd * dt + e.ky * dt` (build_R5_2026-10-26)
+    const fk = e.kind === 'flood' ? r5FloodK() : 1
+    e.x += e.fx * e.spd * fk * dt + e.kx * dt
+    e.y += e.fy * e.spd * fk * dt + e.ky * dt
     if (e.r4l) r4Proj(e)   // R4-E3 / R4-E5 2026-10-25: a wall or flash-flood body is kept on its own line of its lane (r4Proj); every other front as before (build_R4_2026-10-25)
     // Culled on how far it has travelled from where it started, not on how far it is from
     // the player. The old reading deleted any front aimed at anything but the player, and
@@ -8162,7 +8228,8 @@ function hurtEnemy(e, dmg, kx, ky, pull) {
     // Fire is the one that answers back. Green defences are what hold it, and so does
     // running out of ground that has not already burned — the same fuel guard the embers
     // use, because it is the same physical fact and one rule should govern both paths.
-    const spreadP = e.spread * (PLACE.bite.spreadMul || 1) * (lv.ring > 0 ? 0.5 : 1)
+    // R5-M6 2026-10-26: x r5SpreadK - a fire that dies within reach of a cleared ring spreads at T.r5M6SpreadK of its chance while the ring's T.r5M6ClearT s run (a delivered Brush clearing), exactly 1 otherwise; was `const spreadP = e.spread * (PLACE.bite.spreadMul || 1) * (lv.ring > 0 ? 0.5 : 1)` (build_R5_2026-10-26)
+    const spreadP = e.spread * (PLACE.bite.spreadMul || 1) * (lv.ring > 0 ? 0.5 : 1) * r5SpreadK(e.x, e.y, 60)
     const burning = e.spread ? enemies.reduce((n, x) => n + (x.kind === 'fire' ? 1 : 0), 0) : 0
     if (e.spread && enemies.length < T.enemyCap && burning < T.fuelCap && Math.random() < spreadP) {
       const a = Math.random() * TAU
@@ -8443,6 +8510,519 @@ function r4Heavy() {
   r4DevE1(); r4E3(r4D()); r4E5(r4D()); r4DevBody('E9')
   if (!boss) { bossAcc = 0; spawnBoss('clock') }
 }
+
+// ---------------------------------------------------------------- R5: carry tasks - the framework, M1 Backup power, M2, M3, M4, M6
+// R5-T 2026-10-26: PLAN_R5 item 3 - the text slots of the five carry tasks, per id: name (the banner's title, and the title of the task's short flashes), banner (the banner's one line), pick, done and fail (the short flashes' lines), src (the teaching line: a second banner line, only while the Sources switch is on, srcShown, as R4's first-seen line), and for M4 count (the escort counter; {n} is the number). Every slot reaches the screen through say() as CRY.<id>.<slot>, so a Learning twin can follow. Phase-1 placeholders (build_R5_2026-10-26)   // R5-FX 2026-10-26: K1 / K2 - the placeholders replaced by the Steady lines of strings_R5_final.md, byte for byte; the Learning twins sit in PLAIN under CRY.<id>.<slot> (build_R5_2026-10-26 fix round)
+const CARRY = {
+  M1: { name: 'Hospital generator', banner: 'The power is out. Carry the generator to the hospital.', pick: 'Take it to the hospital. EVAC drops it.', done: 'The generator is on. The hospital keeps working. A Backup power site starts one by itself.', fail: 'Too late. The hospital loses health.', src: 'WHO/PAHO hospital guide: backup you can only start by hand is rated Low.' },
+  M2: { name: 'Flood gauge', banner: 'Take the gauge reading to the warning siren.', pick: 'Reading taken. Get it to the siren. EVAC drops it.', done: 'Warning issued. Floods slow, and the next front comes later.', fail: 'No warning went out. The next front comes in wider.', src: 'UNDRR: if one part of an early warning system fails, the whole system could fail.' },
+  M3: { name: 'Warning round', banner: 'Take the warning from the mast to three homes, one at a time.', pick: 'Warning in hand. Take it to the marked home. EVAC drops it.', done: 'All three homes warned. You get XP, and armour for a few seconds.', fail: 'Not every home was warned. One more ring of storms comes in.', src: 'Studies in Bangladesh: volunteers spread cyclone warnings with megaphones. In one survey, many got them door to door.', next: 'Home warned. Back to the mast for the next home.' },   // R5-T phase 2a: next - after homes 1 and 2, back to the mast (CRY.M3.next)
+  M4: { name: 'Lead them out', banner: 'Lead them out of the damaged building, away from all buildings.', pick: 'They are following you. Keep away from buildings.', done: 'Clear of the buildings. You get XP and capacity.', fail: 'They walk to open ground on their own. No reward.', src: 'Ready.gov (US): in a damaged building, go outside and quickly move away. Do not enter damaged buildings.', count: '{n} reached open ground' },
+  M6: { name: 'Brush clearing', banner: 'Carry the brush from around the house past the firebreak.', pick: 'Brush picked up. Get it past the firebreak. EVAC drops it.', done: 'Ring cleared. For 30s, fire spreads into it at half its rate. It is not stopped.', fail: 'The brush stayed. Spot fires start.', src: 'UNEP: managing plants around buildings is one way to cut fire risk. Fuel treatments do not necessarily stop fires.' },
+}
+// R5-F 2026-10-26: PLAN_R5's table (DESIGN_long_runs.md 8.3) - per place, carry A (from T.r5From) and carry B (from T.r5FromB); null where carry B is M5, which is out of R5. M1 is in every place, on its own trigger (r5M1Watch) (build_R5_2026-10-26)
+const R5PLAN = { delta: ['M3', 'M2'], fault: ['M4', 'M6'], wui: ['M6', null], basin: ['M2', 'M3'], metro: ['M4', null], alpine: ['M2', 'M3'] }
+// R5-W 2026-10-26: colours. ui: the tasks' own colour (banner title, objects, field marker, delivery rings, edge arrow, timer track, counter), a pale green no other family uses. Per task, its pattern's fill, edge (the light stroke over the dark edge, and the arrow marks), flash and dim (the strike, bright or dimmed by the budget), from its hazard's own palette and ramp entries (build_R5_2026-10-26)
+const R5COL = {
+  ui: '#a8e6cf',
+  M1: { fill: RAMP.gold[1], edge: RAMP.gold[0], flash: RAMP.gold[0], dim: RAMP.gold[2] },
+  M2: { fill: PAL.theirs.body.flood, edge: RAMP.water[1], flash: RAMP.water[0], dim: RAMP.water[2] },
+  M3: { fill: PAL.theirs.body.storm, edge: RAMP.cold[1], flash: RAMP.cold[0], dim: RAMP.cold[2] },
+  M4: { fill: PAL.theirs.event.rockfall, edge: PAL.theirs.edge.earth, flash: PAL.theirs.edge.earth, dim: PAL.theirs.body.quake },
+  M6: { fill: PAL.theirs.body.fire, edge: PAL.theirs.shot.ember, flash: RAMP.fire[0], dim: RAMP.fire[1] },
+}
+// R5-F 2026-10-26: the task running (r5, null when none), the patterns live (r5fx), the run clock at which the next cadence task may start (r5Next), tasks started per id this run (r5Cnt: the first of an id is tier I, later ones tier II), the last cadence task (r5Last: from T.r5FromB carry A and carry B take turns), M1's watch on the power lifeline (r5M1) and what runs on after a task ends (r5Eff: flood slow and late, the wider front, the armour, the cleared ring); reset() sets every one (build_R5_2026-10-26)
+let r5 = null, r5fx = [], r5Next = 0, r5Cnt = {}, r5Last = null, r5M1 = { handled: false, pending: false }, r5Eff = { slowTo: 0, lateTo: 0, wider: 0, arm: null, clear: null }
+// R5-M4 2026-10-26 phase 2a: the residents of an ended escort walking off (r5WalkOff), null when none (build_R5_2026-10-26)
+let r5Walk = null
+// R5-F 2026-10-26: the hooks the rest of the file reads; each gives exactly what the code gave before (1, false, 0, true) unless a task or its after-effect is running. r5SpdK: your speed factor (spdNow). r5FloodK: a flood body's speed factor (moveHazard). r5FloodLate: a flood draw makes no front (spawn). r5Wider: the next front's extra bodies each side, used once (spawn). r5SpreadK: a fire's spread or an ember's ignition chance factor at (x, y) within m px of the cleared ring (hurtEnemy, enemyFire). r5WorksOk: whether a works kind may be drawn (spawnWorks) (build_R5_2026-10-26)
+function r5SpdK() { return r5 && r5.st === 'carry' ? T.r5Slow : 1 }
+function r5FloodK() { return t < r5Eff.slowTo ? T.r5M2SlowK : 1 }
+function r5FloodLate() { return t < r5Eff.lateTo }
+function r5Wider() { const n = r5Eff.wider; r5Eff.wider = 0; return n }
+function r5SpreadK(x, y, m) { const c = r5Eff.clear; return c && t < c.to && (x - c.x) ** 2 + (y - c.y) ** 2 < (c.R + m) ** 2 ? T.r5M6SpreadK : 1 }
+function r5WorksOk(k) { return k !== 'backup' || (t >= T.r5From && r5M1Apt()) }
+// R5-M1 2026-10-26: the run has both the hospital and the power lifeline (the Lead's default: M1 and its works site only then); r5LL: that kind's lifeline, or null (build_R5_2026-10-26)
+const r5M1Apt = () => lifelines.some(L => L.kind === 'hospital') && lifelines.some(L => L.kind === 'power')
+const r5LL = kind => lifelines.find(L => L.kind === kind) || null
+// R5-F 2026-10-26: a point the task can use - in Mountain valley on the floor, 50 px clear of the red zone and 80 px from the ends; elsewhere as given. r5At: the point d px from (cx, cy) at angle a, kept so (build_R5_2026-10-26)
+function r5Keep(x, y) { return vbOn() ? { x: clamp(x, VB.x0 + VB.band + 50, VB.x1 - VB.band - 50), y: clamp(y, VB.y0 + 80, VB.y1 - 80) } : { x, y } }
+function r5At(cx, cy, a, d) { return r5Keep(cx + Math.cos(a) * d, cy + Math.sin(a) * d) }
+// R5-W 2026-10-26: a pattern strike's damage: T.r5PatDmg x the hit ramp, the place's and the step's damage, as a body's touch is scaled (makeHazard) (build_R5_2026-10-26)
+const r5Dmg = () => T.r5PatDmg * hitRampNow() * (PLACE.bite.dmgMul || 1) * DIFF.dmg
+// R5-F 2026-10-26: a task's places. Natural play (dev false; all draws, at or after T.r5From): the pickup T.r5PickD0-T.r5PickD1 px from you at a random angle a; the destination T.r5DestD0-T.r5DestD1 px from the pickup toward the far side of you (angle a + pi, +/- 0.8). Dev (R5-D; no draw): the pickup T.r5DevPickD px straight above you, the destination T.r5DevDestD px to the pickup's right. Per task: M1 the depot (the pickup) T.r5DestD0-T.r5DestD1 px from the hospital toward you, delivered at the hospital where it stands (its source for the line: the power lifeline); M2 the gauge (in Mountain valley up the corridor, toward the head) and the siren; M3 the mast and three homes T.r5M3HomeD px from it; M4 the damaged building with two more beside it, its door, the residents at the door and the open ground (the first of 12 directions from the damaged building, starting toward you, T.r5M4OpenD px out and T.r5M4Clear px from every building and standing lifeline); M6 the house, the brush on the ring 70 px out, and the firebreak line T.r5M6LineD px out (build_R5_2026-10-26)
+function r5Place(k, dev) {
+  const a = dev ? -Math.PI / 2 : Math.random() * TAU
+  let p = r5At(P.x, P.y, a, dev ? T.r5DevPickD : rand(T.r5PickD0, T.r5PickD1))
+  const b = dev ? 0 : a + Math.PI + rand(-0.8, 0.8), dd = dev ? T.r5DevDestD : rand(T.r5DestD0, T.r5DestD1)
+  let q = r5At(p.x, p.y, b, dd)
+  k.b = b
+  if (k.id === 'M2' && vbOn() && !dev) { p = r5Keep(P.x, P.y - (dd * 0.6)); q = r5Keep(P.x, P.y + dd * 0.4) }
+  if (k.id === 'M1') {
+    const ho = r5LL('hospital'), pw = r5LL('power')
+    if (ho && !dev) p = r5At(ho.x, ho.y, Math.atan2(P.y - ho.y, P.x - ho.x) + rand(-0.5, 0.5), dd)
+    k.dest = ho ? { x: ho.x, y: ho.y, r: T.lifelineR, L: ho } : { x: q.x, y: q.y, r: T.r5DestR, L: null }
+    k.src = pw ? { x: pw.x, y: pw.y } : null
+  }
+  k.obj = { x: p.x, y: p.y, sx: p.x, sy: p.y, st: 'ground', wait: 0 }
+  if (k.id === 'M2') k.dest = { x: q.x, y: q.y, r: T.r5DestR }
+  else if (k.id === 'M3') { k.homes = [-0.9, 0, 0.9].map(da => Object.assign(r5At(p.x, p.y, b + da, T.r5M3HomeD), { r: T.r5DestR, done: false })); k.hi = 0 }
+  else if (k.id === 'M4') {
+    k.blds = [{ x: p.x, y: p.y, dmg: true }, r5At(p.x, p.y, b + Math.PI / 2, 95), r5At(p.x, p.y, b - Math.PI / 2, 95)]
+    const a0 = dev ? 0 : Math.atan2(P.y - p.y, P.x - p.x), others = k.blds.concat(lifelines.filter(L => L.alive))
+    let o = null
+    for (let i = 0; i < 12 && !o; i++) { const c = r5At(p.x, p.y, a0 + (i % 2 ? 1 : -1) * Math.ceil(i / 2) * TAU / 12, T.r5M4OpenD); if (others.every(B => dist2(B, c) >= T.r5M4Clear ** 2)) o = c }
+    k.open = Object.assign(o || r5At(p.x, p.y, a0, T.r5M4OpenD), { r: T.r5M4OpenR })
+    const dx = k.open.x - p.x, dy = k.open.y - p.y, dm = Math.hypot(dx, dy) || 1
+    k.door = { x: p.x + dx / dm * 30, y: p.y + dy / dm * 30 }
+    k.res = []
+    for (let i = 0; i < T.r5M4N; i++) k.res.push({ x: k.door.x - dy / dm * (i - (T.r5M4N - 1) / 2) * 10, y: k.door.y + dx / dm * (i - (T.r5M4N - 1) / 2) * 10, st: 'wait', wait: 0 })
+  } else if (k.id === 'M6') {
+    const bx = Math.cos(b), by = Math.sin(b)
+    k.house = { x: p.x, y: p.y }
+    const s = r5Keep(p.x + bx * 70, p.y + by * 70), c = r5Keep(p.x + bx * T.r5M6LineD, p.y + by * T.r5M6LineD)
+    k.obj = { x: s.x, y: s.y, sx: s.x, sy: s.y, st: 'ground', wait: 0 }
+    k.fb = { x: c.x, y: c.y, nx: bx, ny: by, mx: -by, my: bx }
+  }
+}
+// R5-F 2026-10-26: a task begins: tier I for the first of its id this run, tier II after (unless given), the timer at T.r5Time, its places (r5Place), and its banner - the name as the title, the banner line, and while the Sources switch is on the teaching line under it - shown at once and never dropped ({ now, keep }, as R4's first-seen line). Returns the task (build_R5_2026-10-26)
+function r5Start(id, tier, dev) {
+  const n = r5Cnt[id] || 0
+  r5Cnt[id] = n + 1
+  const k = { id, tier: tier || (n ? 2 : 1), st: 'go', tw: T.r5Time, T0: T.r5Time, patT: 0, picked: false, count: 0 }
+  r5Place(k, !!dev)
+  r5 = k
+  const X = CARRY[id], src = srcShown ? say('CRY.' + id + '.src', X.src) : ''
+  flash(say('CRY.' + id + '.name', X.name), say('CRY.' + id + '.banner', X.banner) + (src ? '\n' + src : ''), R5COL.ui, { now: true, keep: true, two: !!src })
+  AU.play('offer')
+  return k
+}
+// R5-F 2026-10-26: a task ends - true delivered (its reward, its done line), false failed (its consequence, which never ends the run by itself, and its fail line), null ended with neither (a dev restart, M1 when the hospital falls or the Backup power site is built). Both lines are shown at once ({ now }). The next cadence task may start T.r5Gap0-T.r5Gap1 s later (one draw) (build_R5_2026-10-26)
+function r5End(ok) {
+  const k = r5
+  if (!k) return
+  r5 = null
+  const X = CARRY[k.id], nm = say('CRY.' + k.id + '.name', X.name)
+  if (k.id === 'M4' && ok !== null) r5WalkOff(k)   // phase 2a: delivered or timed out, the residents walk off; nobody vanishes on the spot
+  if (ok === true) { r5Reward(k); flash(nm, say('CRY.' + k.id + '.done', X.done), R5COL.ui, { now: true }); AU.play('worksDone') }
+  else if (ok === false) { r5Fail(k); flash(nm, say('CRY.' + k.id + '.fail', X.fail), R5COL.ui, { now: true }); AU.play('wrong') }
+  r5Next = t + rand(T.r5Gap0, T.r5Gap1)
+}
+// R5-F 2026-10-26: n XP motes of value v, 30 px round you and pulled in, so they are collected as every mote is (build_R5_2026-10-26)
+function r5Motes(n, v) { for (let i = 0; i < n; i++) { const a = i * TAU / n; motes.push({ x: P.x + Math.cos(a) * 30, y: P.y + Math.sin(a) * 30, v, r: 4 + Math.min(3, v), pull: true }) } }
+// R5-M1..R5-M6 2026-10-26: the rewards, as PLAN_R5's table states them. M1: the hospital keeps working (r5HospOn). M2: Warning issued - floods move at T.r5M2SlowK for T.r5M2SlowT s and no new front comes for T.r5M2Later s. M3: T.r5M3XpN motes of T.r5M3XpV XP, and T.r5M3Arm less of every hit for T.r5M3ArmT s. M4: T.r5M4Cap capacity, filled (the XP came per resident, r5Escort). M6: within T.r5M6Ring px of the house fire spreads at T.r5M6SpreadK of its chance for T.r5M6ClearT s; it is not stopped (build_R5_2026-10-26)
+function r5Reward(k) {
+  if (k.id === 'M1') { const L = k.dest.L; if (L && L.alive) r5HospOn(L) }
+  else if (k.id === 'M2') { r5Eff.slowTo = t + T.r5M2SlowT; r5Eff.lateTo = t + T.r5M2Later }
+  else if (k.id === 'M3') { r5Motes(T.r5M3XpN, T.r5M3XpV); if (!r5Eff.arm) P.armour = 1 - (1 - P.armour) * (1 - T.r5M3Arm); r5Eff.arm = { to: t + T.r5M3ArmT } }
+  else if (k.id === 'M4') { P.max += T.r5M4Cap; P.hp = Math.min(P.max, P.hp + T.r5M4Cap); syncHud() }
+  else if (k.id === 'M6') r5Eff.clear = { x: k.house.x, y: k.house.y, R: T.r5M6Ring, to: t + T.r5M6ClearT }
+}
+// R5-M1..R5-M6 2026-10-26: the failures, as PLAN_R5's table states them; none ends the run by itself. M1: the hospital loses T.r5M1FailLL health, never its last 1. M2: the next flood front is T.r5M2Wider bodies wider each side. M3: an extra ring of T.r5M3Ring storms round you, at a surge's distance, under T.enemyCap. M4: none beyond the time lost. M6: T.r5M6Spot spot fires on the house's ring, under T.enemyCap and the fuel guard (T.fuelCap) (build_R5_2026-10-26)
+function r5Fail(k) {
+  if (k.id === 'M1') { const L = k.dest.L; if (L && llUp(L) && L.hp > 1) hitLifeline(L, Math.min(T.r5M1FailLL, L.hp - 1)) }
+  else if (k.id === 'M2') r5Eff.wider = T.r5M2Wider
+  else if (k.id === 'M3') {
+    const n = T.r5M3Ring, d = Math.max(460, Math.max(W, H) * 0.6)
+    for (let i = 0; i < n && enemies.length < T.enemyCap; i++) { const a = i / n * TAU, p = vbOn() ? vbTurn(P.x, P.y, a, d) : { x: P.x + Math.cos(a) * d, y: P.y + Math.sin(a) * d }; enemies.push(makeHazard('storm', p.x, p.y)) }
+  } else if (k.id === 'M6') {
+    for (let i = 0; i < T.r5M6Spot; i++) {
+      const burning = enemies.reduce((m, e) => m + (e.kind === 'fire' ? 1 : 0), 0)
+      if (enemies.length >= T.enemyCap || burning >= T.fuelCap) break
+      const a = k.b + i * TAU / T.r5M6Spot, p = r5At(k.house.x, k.house.y, a, T.r5M6Ring * 0.8), q = vbOn() ? vbPt(p.x, p.y, VB.keep) : p
+      enemies.push(makeHazard('fire', q.x, q.y))
+    }
+  }
+}
+// R5-M1 2026-10-26: the hospital keeps working (ADJUDICATION_d24 MN-2; DESIGN_long_runs.md 8.2: "its Hospital holds fires"). It is spared the power cascade until power stands again (L.r5bk, read by updateLifelines; r5M1Watch clears it), and when it is on the map its Hospital holds service fires as fireService fires it - the same effect, title, line, sound, burst and ring - without fireService's shake (R5: no new shake) (build_R5_2026-10-26)
+function r5HospOn(L) {
+  L.r5bk = true
+  if (!llUp(L)) return
+  const K = LIFELINES.hospital, S = SERVICE_FIRE.hospital
+  SF = { kind: 'hospital', t: T.serviceDur }
+  L.fireCd = T.serviceCd
+  S.go(L)
+  flash(say('SVC.hospital.title', S.title), say('SVC.hospital.line', S.line), K.col)
+  AU.play('mastery')
+  burst(L.x, L.y, K.col, 40, 380)
+  fxPush({ ring: true, noHit: true, x: L.x, y: L.y, r: 12, max: 520, life: 0.7, col: PAL.yours.ring.service, style: 'dash', hit: new Set() })
+  syncHud()
+}
+// R5-FX 2026-10-26: ADJUDICATION_R5 F1 / F2 (K4) - the sentence the Power lifeline's lost lines carry while a hospital is spared the cascade (L.r5bk: set by r5HospOn from the site or from a delivered carry, cleared by r5M1Watch when power stands again): in the "Power lost" flash (hitLifeline, the power lifeline only), in the report's LOST highlight after the power cost, and at the end of the report row of a lost Power, once per surface; '' otherwise. The text is strings_R5_final.md's sentence with its leading space (build_R5_2026-10-26 fix round)
+// R5-FX 2026-10-26 (K4', the Lead's addendum, 12:4x, on fix_record_R5 (c) 2): also while the Backup power site is built (worksDone), a hospital stands, the power lifeline is in the set and down, and the run clock is at or past T.r5From - the case in which r5M1Watch starts the hospital's backup on the very next step, so the "Power lost" flash raised at the loss (hitLifeline runs before that step) carries the sentence in natural play too; was `function r5BkNote() { return lifelines.some(L => L.kind === 'hospital' && L.r5bk) ? ' A hospital with backup power does not.' : '' }` (build_R5_2026-10-26 fix round)
+function r5BkNote() {
+  const pw = lifelines.find(L => L.kind === 'power')
+  const spared = lifelines.some(L => L.kind === 'hospital' && L.r5bk)
+  const next = worksDone.includes('backup') && t >= T.r5From && !!pw && !pw.alive && lifelines.some(L => L.kind === 'hospital' && L.alive)
+  return spared || next ? ' A hospital with backup power does not.' : ''
+}
+// R5-M1 2026-10-26: the Backup power site built (WORKS.backup.apply). If power is already down and the hospital stands, its backup starts now: no carry is wanted, and an M1 carry running ends with neither reward nor failure (build_R5_2026-10-26)
+function r5BackupBuilt() {
+  const pw = r5LL('power'), ho = r5LL('hospital')
+  if (!pw || !ho || pw.alive || !ho.alive) return
+  r5M1.handled = true; r5M1.pending = false
+  if (r5 && r5.id === 'M1') r5End(null)
+  if (!ho.r5bk) r5HospOn(ho)
+}
+// R5-M1 2026-10-26: from T.r5From, in a run with both lifelines: the step after the power lifeline is down (lost before 5:00 counts at 5:00), once per loss - with the Backup power site built the hospital's backup starts by itself (r5HospOn); without it an M1 carry is due (r5M1.pending; r5Cadence starts it when no task runs and the hospital is on the map). Power standing again (rebuilt) re-arms the watch and ends the hospital's backup; a lost hospital cancels a due carry (build_R5_2026-10-26)
+function r5M1Watch() {
+  if (!r5M1Apt()) return
+  const pw = r5LL('power'), ho = r5LL('hospital')
+  if (pw.alive) { r5M1.handled = false; r5M1.pending = false; ho.r5bk = false; return }
+  if (!r5M1.handled) { r5M1.handled = true; if (ho.alive) { if (worksDone.includes('backup')) r5HospOn(ho); else r5M1.pending = true } }
+  if (!ho.alive) r5M1.pending = false
+}
+// R5-F 2026-10-26: when no task runs - a due M1 first (once the hospital is on the map), else from r5Next the place's cadence task: carry A, and from T.r5FromB carry B and carry A in turn (build_R5_2026-10-26)
+function r5Cadence() {
+  if (r5M1.pending) { const ho = r5LL('hospital'); if (ho && llUp(ho)) { r5M1.pending = false; r5Start('M1'); return } }
+  if (t < r5Next) return
+  const pl = R5PLAN[PLACE.id]
+  if (!pl) return
+  const id = t >= T.r5FromB && pl[1] && r5Last === pl[0] ? pl[1] : pl[0]
+  r5Last = id
+  r5Start(id)
+}
+// R5-F 2026-10-26: the carry tasks, once a step after R4's patterns. Before T.r5From with no task, pattern or armour running it returns at once (no draw, nothing changed). A hold (holdOn) stops the task's timer and its patterns, as it stops every hazard clock; the after-effects run on the run clock (build_R5_2026-10-26)
+function r5Update(dt) {
+  if (over || (t < T.r5From && !r5 && !r5fx.length && !r5Eff.arm && !r5Walk)) return
+  if (t >= T.r5From) r5M1Watch()
+  r5Effects()
+  if (r5Walk) r5WalkStep(dt)   // phase 2a: residents walking off keep walking, a hold or not (they are not hazards)
+  if (holdOn()) return
+  if (!r5 && t >= T.r5From) r5Cadence()
+  if (r5) r5Task(dt)
+  if (over) return
+  r5Pats(dt)
+}
+// R5-M3 2026-10-26: the armour's end gives back exactly the share it took; R5-M6: the cleared ring's end (build_R5_2026-10-26)
+function r5Effects() {
+  if (r5Eff.arm && t >= r5Eff.arm.to) { P.armour = 1 - (1 - P.armour) / (1 - T.r5M3Arm); r5Eff.arm = null }
+  if (r5Eff.clear && t >= r5Eff.clear.to) r5Eff.clear = null
+}
+// R5-F 2026-10-26: one step of the task: its timer (out = failure); M1 ends with neither when the hospital falls, and follows it when it moves; walking onto the object picks it up (not during Evacuate's dash); a dropped object waits T.r5DropWait s, then goes back to its start; carried, it moves with you, is delivered on arrival, and at tier II a pattern comes every T.r5PatEvery s (the first T.r5PatFirst s after the first pickup). M4 is r5Escort (build_R5_2026-10-26)
+function r5Task(dt) {
+  const k = r5
+  k.tw -= dt
+  if (k.tw <= 0) return r5End(false)
+  if (k.id === 'M1' && k.dest.L) { const L = k.dest.L; if (!L.alive) return r5End(null); k.dest.x = L.x; k.dest.y = L.y }
+  if (k.id === 'M4') return r5Escort(k, dt)
+  const o = k.obj
+  if (o.st === 'held') {
+    o.x = P.x; o.y = P.y
+    if (r5Arrived(k)) return
+    if (k.tier > 1 && (k.patT -= dt) <= 0) { k.patT = T.r5PatEvery; r5Pattern(k) }
+    return
+  }
+  if (o.st === 'drop' && (o.wait -= dt) <= 0) { o.x = o.sx; o.y = o.sy; o.st = 'ground' }
+  if (P.dodgeGo <= 0 && dist2(o, P) < (T.r5PickR + P.r) ** 2) r5Pick(k)
+}
+// R5-F 2026-10-26: picked up: you carry it (k.st 'carry', so r5SpdK slows you); the first pickup of a task raises its pick line and starts the pattern clock (build_R5_2026-10-26)
+function r5Pick(k) {
+  if (k.obj) k.obj.st = 'held'
+  k.st = 'carry'
+  if (k.picked) return
+  k.picked = true; k.patT = T.r5PatFirst
+  const X = CARRY[k.id]
+  flash(say('CRY.' + k.id + '.name', X.name), say('CRY.' + k.id + '.pick', X.pick), R5COL.ui)
+  AU.play('pickup')
+}
+// R5-F 2026-10-26: arrival while carrying. M1 at the hospital (only while it is on the map), M2 at the siren, M3 at the next home - the warning then goes back to the mast to be fetched again (the return to the mast is game licence, NT-4), the third home delivers -, M6 once you are past the firebreak line within its length. Returns true when the task ended (build_R5_2026-10-26)
+function r5Arrived(k) {
+  if (k.id === 'M6') { const f = k.fb, rx = P.x - f.x, ry = P.y - f.y
+    if (rx * f.nx + ry * f.ny > 0 && Math.abs(rx * f.mx + ry * f.my) < T.r5M6LineHalf) { r5End(true); return true }
+    return false }
+  const d = k.id === 'M3' ? k.homes[k.hi] : k.dest
+  if (k.id === 'M1' && d.L && !llUp(d.L)) return false
+  if (dist2(d, P) >= (d.r + P.r) ** 2) return false
+  if (k.id === 'M3') {
+    d.done = true; k.hi++
+    if (k.hi >= k.homes.length) { r5End(true); return true }
+    const o = k.obj; o.st = 'ground'; o.x = o.sx; o.y = o.sy; k.st = 'go'; AU.play('pickup')
+    flash(say('CRY.M3.name', CARRY.M3.name), say('CRY.M3.next', CARRY.M3.next), R5COL.ui, { now: true })   // phase 2a: the next line, after homes 1 and 2 (the return to the mast is game licence, NT-4)
+    return false
+  }
+  r5End(true); return true
+}
+// R5-F 2026-10-26: Evacuate drops what you carry (the long-run design's Q4; called by doDodge when a dash starts): it waits T.r5DropWait s where it fell, then goes back to its start. In M4 the residents following stop where they are, wait as long, then walk back to the door (outside: the building is never re-entered) (build_R5_2026-10-26)
+function r5Drop() {
+  const k = r5
+  if (!k || k.st !== 'carry') return
+  k.st = 'go'
+  if (k.id === 'M4') { for (const r of k.res) if (r.st === 'follow') { r.st = 'stop'; r.wait = T.r5DropWait } return }
+  const o = k.obj
+  o.st = 'drop'; o.wait = T.r5DropWait; o.x = P.x; o.y = P.y
+}
+// R5-M4 2026-10-26: the escort (MN-14: no time counter - the timer runs, but nothing shows it; the counter says only how many reached open ground; nobody is shown hurt: residents take no damage). Touching a waiting, stopped or returning resident (not during Evacuate's dash) makes the whole group follow you in a line, T.r5ResGap px apart at up to T.r5ResSpd px/s; a follower inside the open ground stays there, counts, and pays T.r5M4XpV XP; the whole group there delivers. You carry (r5SpdK) while any follows; at tier II a pattern comes every T.r5PatEvery s while they do (build_R5_2026-10-26)
+function r5Escort(k, dt) {
+  let lead = P, any = false, grab = false
+  const inOpen = dist2(P, k.open) < k.open.r ** 2   // once you stand in the open ground, the followers walk into it rather than queue behind you
+  for (const r of k.res) {
+    if (r.st === 'safe') continue
+    if (r.st === 'follow') {
+      const G = inOpen ? k.open : lead, gap = inOpen ? 0 : T.r5ResGap, dx = G.x - r.x, dy = G.y - r.y, d = Math.hypot(dx, dy)
+      if (d > gap) { const s = Math.min(d - gap, T.r5ResSpd * dt); r.x += dx / d * s; r.y += dy / d * s }
+      if (dist2(r, k.open) < (k.open.r - T.r5ResR) ** 2) { r.st = 'safe'; k.count++; r5Motes(1, T.r5M4XpV); AU.play('pickup'); continue }
+      lead = r; any = true
+      continue
+    }
+    if (r.st === 'stop') { if ((r.wait -= dt) <= 0) r.st = 'back' }
+    else if (r.st === 'back') {
+      const dx = k.door.x - r.x, dy = k.door.y - r.y, d = Math.hypot(dx, dy)
+      if (d <= T.r5ResBack * dt) { r.x = k.door.x; r.y = k.door.y; r.st = 'wait' } else { r.x += dx / d * T.r5ResBack * dt; r.y += dy / d * T.r5ResBack * dt }
+    }
+    if (P.dodgeGo <= 0 && dist2(r, P) < (P.r + T.r5ResR + 10) ** 2) grab = true
+  }
+  if (k.count >= k.res.length) return r5End(true)
+  if (grab) { for (const r of k.res) if (r.st !== 'safe') r.st = 'follow'; any = true; r5Pick(k) }
+  k.st = any ? 'carry' : 'go'
+  if (any && k.tier > 1 && (k.patT -= dt) <= 0) { k.patT = T.r5PatEvery; r5Pattern(k) }
+}
+// R5-M4 2026-10-26 phase 2a: the user's choice at the preview (PLAN_R5, M4 timeout): when an escort ends - delivered, or the timer out - its residents walk off by themselves. Those not yet in the open ground walk to it at T.r5ResWalk px/s, each to its own place there; once all stand in it, they wait T.r5LeaveWait s and then walk on, away from the damaged building, at the same speed, fading out over T.r5LeaveD px, and are gone. Nobody is hurt and nobody vanishes on the spot. The count is frozen (n): those who walk in by themselves are not counted, and nothing is paid for them (build_R5_2026-10-26)
+function r5WalkOff(k) {
+  const dx = k.open.x - k.door.x, dy = k.open.y - k.door.y, dm = Math.hypot(dx, dy) || 1, ux = dx / dm, uy = dy / dm, m = (k.res.length - 1) / 2
+  r5Walk = { n: k.count, ux, uy, wait: T.r5LeaveWait, res: k.res.map((r, i) => ({ x: r.x, y: r.y, st: r.st === 'safe' ? 'in' : 'go', tx: k.open.x - uy * (i - m) * 12, ty: k.open.y + ux * (i - m) * 12, d: 0 })) }
+}
+function r5WalkStep(dt) {
+  const W5 = r5Walk, s = T.r5ResWalk * dt
+  if (W5.res.some(r => r.st === 'go')) {
+    for (const r of W5.res) { if (r.st !== 'go') continue; const dx = r.tx - r.x, dy = r.ty - r.y, d = Math.hypot(dx, dy); if (d <= s) { r.x = r.tx; r.y = r.ty; r.st = 'in' } else { r.x += dx / d * s; r.y += dy / d * s } }
+    return
+  }
+  if (W5.wait > 0) { W5.wait -= dt; return }
+  for (const r of W5.res) { r.x += W5.ux * s; r.y += W5.uy * s; r.d += s }
+  if (W5.res.every(r => r.d >= T.r5LeaveD)) r5Walk = null
+}
+// R5-F 2026-10-26: where the task wants you now - the object (or the residents) while not carrying, else where it is delivered (M6: the firebreak line) - for the edge arrow, and for a pattern's direction while you stand still (build_R5_2026-10-26)
+function r5Goal(k) {
+  if (k.id === 'M4') { if (k.st === 'carry') return k.open; return k.res.find(q => q.st !== 'safe' && q.st !== 'follow') || k.open }
+  if (k.obj.st !== 'held') return k.obj
+  if (k.id === 'M6') return k.fb
+  return k.id === 'M3' ? k.homes[k.hi] : k.dest
+}
+const r5Dest = k => k.id === 'M4' ? k.open : k.id === 'M3' ? k.homes[k.hi] : k.id === 'M6' ? null : k.dest
+// R5-W 2026-10-26: one tier-II pattern, from R4's library and rules: its warning lasts r4Warn() (never under T.r4WarnMin, 1.2 s), its fill rises steadily, it strikes once (r5Pats), one sound per shape. M2, M3 lane: a band T.r5LaneLen x 2 T.r5LaneHw px across your path, its middle T.r5LaneAhead px ahead of you, its arrows the way it sweeps (one draw for the side). M6 circle: three circles of T.r5CircR px - where you stand, T.r5CircAhead px ahead, and as far ahead and T.r5CircSide px to one side (one draw). M4 ring: from each damaged-site building within T.r5RingReach px of you (the nearest T.r5RingN), a ring centred on it through where you stand (at least T.r5RingMin px), 2 T.r5RingHw px wide, with a gap of T.r5RingGap px T.r5RingGapOff px of arc from you to one side (one draw each); none in the open. M1 line: from the power lifeline's site through where you stand and T.r5LineExt px on, 2 T.r5LineHw px wide, its arrows toward you. Your heading sets the way; standing still, the way to r5Goal (build_R5_2026-10-26)
+function r5Pattern(k) {
+  const w = r4Warn(), dmg = r5Dmg()
+  let hx = P.hx, hy = P.hy
+  if (!hx && !hy) { const g = r5Goal(k), dx = g.x - P.x, dy = g.y - P.y, m = Math.hypot(dx, dy) || 1; hx = dx / m; hy = dy / m }
+  if (k.id === 'M2' || k.id === 'M3') {
+    const s = Math.random() < 0.5 ? 1 : -1, nx = -hy * s, ny = hx * s, cx = P.x + hx * T.r5LaneAhead, cy = P.y + hy * T.r5LaneAhead
+    r5fx.push({ k: 'lane', id: k.id, x0: cx - nx * T.r5LaneLen / 2, y0: cy - ny * T.r5LaneLen / 2, nx, ny, mx: -ny, my: nx, len: T.r5LaneLen, hw: T.r5LaneHw, w, tw: w, dmg, st: 'warn', ft: 0, bright: false })
+    AU.play('r4lane')
+  } else if (k.id === 'M6') {
+    const s = Math.random() < 0.5 ? 1 : -1, ax = P.x + hx * T.r5CircAhead, ay = P.y + hy * T.r5CircAhead
+    const pts = [{ x: P.x, y: P.y }, { x: ax, y: ay }, { x: ax - hy * s * T.r5CircSide, y: ay + hx * s * T.r5CircSide }].map(q => Object.assign(q, { bright: false }))
+    r5fx.push({ k: 'circ', id: 'M6', pts, R: T.r5CircR, w, tw: w, dmg, st: 'warn', ft: 0 })
+    AU.play('r4circle')
+  } else if (k.id === 'M4') {
+    const near = k.blds.filter(B => dist2(B, P) < T.r5RingReach ** 2).sort((A, B) => dist2(A, P) - dist2(B, P)).slice(0, T.r5RingN)
+    if (!near.length) return
+    for (const B of near) {
+      const rc = Math.max(T.r5RingMin, Math.sqrt(dist2(B, P))), pa = Math.atan2(P.y - B.y, P.x - B.x), s = Math.random() < 0.5 ? 1 : -1
+      r5fx.push({ k: 'ring', id: 'M4', x: B.x, y: B.y, rc, hw: T.r5RingHw, ga: pa + s * T.r5RingGapOff / rc, gh: T.r5RingGap / 2 / rc, w, tw: w, dmg, st: 'warn', ft: 0, bright: false })
+    }
+    AU.play('r5ring')
+  } else if (k.id === 'M1') {
+    const S = k.src || { x: P.x - hx * 600, y: P.y - hy * 600 }, dx = P.x - S.x, dy = P.y - S.y, d = Math.hypot(dx, dy) || 1, nx = dx / d, ny = dy / d
+    r5fx.push({ k: 'line', id: 'M1', x0: S.x, y0: S.y, nx, ny, mx: -ny, my: nx, len: d + T.r5LineExt, hw: T.r5LineHw, w, tw: w, dmg, st: 'warn', ft: 0, bright: false })
+    AU.play('r5line')
+  }
+}
+// R5-W 2026-10-26: whether (x, y) lies inside a pattern's drawn shape - the same shape r5Shape fills: a circle; the ring's band less its gap (by angle, as the arcs are drawn); a lane or line's strip, along it 0 to len, across it within hw (build_R5_2026-10-26)
+function r5In(f, x, y) {
+  if (f.k === 'circ') return f.pts.some(q => (x - q.x) ** 2 + (y - q.y) ** 2 < f.R * f.R)
+  if (f.k === 'ring') {
+    const dx = x - f.x, dy = y - f.y
+    if (Math.abs(Math.hypot(dx, dy) - f.rc) > f.hw) return false
+    const da = Math.atan2(dy, dx) - f.ga
+    return Math.abs(Math.atan2(Math.sin(da), Math.cos(da))) > f.gh
+  }
+  const rx = x - f.x0, ry = y - f.y0, u = rx * f.nx + ry * f.ny, v = rx * f.mx + ry * f.my
+  return u >= 0 && u <= f.len && Math.abs(v) <= f.hw
+}
+// R5-W 2026-10-26: for the strike budget (r4Budget), the most bright screen area the strike can put in one T.r4BlockW x T.r4BlockH block - its length on screen, at most the block's diagonal, times its bright width on screen (a line's thin strike: T.r5LineStrikeW) - given as the radius of a circle of that area, at its middle (build_R5_2026-10-26)
+function r5BudgetAt(f) {
+  const z = zoomNow(), diag = Math.hypot(T.r4BlockW, T.r4BlockH)
+  let x, y, A
+  if (f.k === 'ring') { x = f.x; y = f.y; A = Math.min(TAU * f.rc * z, diag) * 2 * f.hw * z }
+  else { x = f.x0 + f.nx * f.len / 2; y = f.y0 + f.ny * f.len / 2; A = Math.min(f.len * z, diag) * (f.k === 'line' ? T.r5LineStrikeW : 2 * f.hw) * z }
+  return { x, y, r: Math.sqrt(A / Math.PI) / z }
+}
+// R5-W 2026-10-26: the patterns' clocks and strikes (they wait during a hold: r5Update returns before this). At the end of its warning a pattern strikes once: each bright flash only if the budget allows it (r4Budget; a dimmed one is drawn dim, the damage unchanged), and you are hit when your centre is inside the shape (r4Hurt with grace, no shake); then it fades over T.r4FlashT (build_R5_2026-10-26)
+function r5Pats(dt) {
+  for (let i = r5fx.length - 1; i >= 0; i--) {
+    const f = r5fx[i]
+    if (f.st === 'warn') {
+      f.tw -= dt
+      if (f.tw > 0) continue
+      f.st = 'flash'; f.ft = 0
+      if (f.k === 'circ') { for (const q of f.pts) q.bright = r4Budget(q.x, q.y, f.R, T.r4FlashT, false) }
+      else { const b = r5BudgetAt(f); f.bright = r4Budget(b.x, b.y, b.r, T.r4FlashT, false) }
+      if (r5In(f, P.x, P.y)) r4Hurt(f.dmg, true)
+      if (over) return
+      continue
+    }
+    f.ft += dt
+    if (f.ft >= T.r4FlashT) r5fx.splice(i, 1)
+  }
+}
+// R5-W 2026-10-26: a pattern's shape filled (and, with edge, outlined: the dark edge with the light stroke over it, as R4's; a lane or line also with R4's arrow marks) (build_R5_2026-10-26)
+function r5Shape(f, fill, edge) {
+  if (f.k === 'circ') {
+    for (const q of f.pts) {
+      ctx.beginPath(); ctx.arc(q.x, q.y, f.R, 0, TAU); ctx.fillStyle = fill; ctx.fill()
+      if (edge) { ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 5; ctx.stroke(); ctx.strokeStyle = edge; ctx.lineWidth = 2; ctx.stroke() }
+    }
+    return
+  }
+  if (f.k === 'ring') {
+    const a0 = f.ga + f.gh, a1 = f.ga - f.gh + TAU
+    ctx.beginPath(); ctx.arc(f.x, f.y, f.rc + f.hw, a0, a1); ctx.arc(f.x, f.y, Math.max(1, f.rc - f.hw), a1, a0, true); ctx.closePath()
+    ctx.fillStyle = fill; ctx.fill()
+    if (edge) { ctx.lineJoin = 'round'; ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 5; ctx.stroke(); ctx.strokeStyle = edge; ctx.lineWidth = 2; ctx.stroke() }
+    return
+  }
+  if (edge) { r4Strip(f, 0, f.len, -f.hw, f.hw, fill, edge, true); return }
+  ctx.save(); ctx.translate(f.x0, f.y0); ctx.transform(f.nx, f.ny, f.mx, f.my, 0, 0)
+  ctx.fillStyle = fill; ctx.fillRect(0, -f.hw, f.len, 2 * f.hw)
+  ctx.restore()
+}
+// R5-W 2026-10-26: the patterns drawn. tele true (with the event warnings, over your own paint): the object you carry, above you; every warning, its fill rising from T.r4A0 to T.r4A1 (r4FillA). tele false (under the bodies): the strike, bright (T.r4FlashA, a line's as a thin stroke) or dim (T.r4DimA), fading over T.r4FlashT. Static: no dash, no pulse (build_R5_2026-10-26)
+function r5Draw(tele) {
+  if (tele && r5 && r5.id !== 'M4' && r5.obj.st === 'held') r5Icon(r5.id, P.x, P.y - 30, 1)
+  for (const f of r5fx) {
+    const C = R5COL[f.id]
+    if (f.st === 'warn') { if (tele) r5Shape(f, `rgba(${rgbOf(C.fill)},${r4FillA(f).toFixed(3)})`, `rgba(${rgbOf(C.edge)},.9)`); continue }
+    if (tele) continue
+    const kk = clamp(1 - f.ft / T.r4FlashT, 0, 1)
+    const br = `rgba(${rgbOf(C.flash)},${(T.r4FlashA * kk).toFixed(3)})`, dm = `rgba(${rgbOf(C.dim)},${(T.r4DimA * kk).toFixed(3)})`
+    if (f.k === 'circ') { for (const q of f.pts) { ctx.beginPath(); ctx.arc(q.x, q.y, f.R, 0, TAU); ctx.fillStyle = q.bright ? br : dm; ctx.fill() } continue }
+    if (f.k === 'line' && f.bright) {
+      ctx.save(); ctx.strokeStyle = br; ctx.lineWidth = T.r5LineStrikeW; ctx.lineCap = 'butt'
+      ctx.beginPath(); ctx.moveTo(f.x0, f.y0); ctx.lineTo(f.x0 + f.nx * f.len, f.y0 + f.ny * f.len); ctx.stroke(); ctx.restore()
+      continue
+    }
+    r5Shape(f, f.bright ? br : dm, null)
+  }
+}
+// R5-F 2026-10-26: a task's own small icon (the object, its edge arrow's sign), on a dark disc: M1 a bolt (the generator core), M2 a wave over a line (the gauge reading), M3 a dot with an arc (the warning), M4 two figures (the residents), M6 three strokes (the brush) (build_R5_2026-10-26)
+function r5Icon(id, x, y, s) {
+  ctx.save(); ctx.translate(x, y); if (s !== 1) ctx.scale(s, s)
+  ctx.fillStyle = 'rgba(8,10,13,.72)'; ctx.beginPath(); ctx.arc(0, 0, 11, 0, TAU); ctx.fill()
+  ctx.strokeStyle = R5COL.ui; ctx.fillStyle = R5COL.ui; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'
+  ctx.beginPath()
+  if (id === 'M1') { ctx.moveTo(2, -7); ctx.lineTo(-4, 1); ctx.lineTo(1, 1); ctx.lineTo(-2, 7); ctx.stroke() }
+  else if (id === 'M2') { ctx.moveTo(-6, -1); ctx.quadraticCurveTo(-3, -5, 0, -1); ctx.quadraticCurveTo(3, 3, 6, -1); ctx.moveTo(-6, 5); ctx.lineTo(6, 5); ctx.stroke() }
+  else if (id === 'M3') { ctx.arc(-2, 3, 2.2, 0, TAU); ctx.fill(); ctx.beginPath(); ctx.arc(-2, 3, 7, -1.3, 0.1); ctx.stroke() }
+  else if (id === 'M4') { ctx.arc(-3.5, -3, 2.2, 0, TAU); ctx.moveTo(5.7, -3); ctx.arc(3.5, -3, 2.2, 0, TAU); ctx.fill(); ctx.beginPath(); ctx.moveTo(-3.5, 1); ctx.lineTo(-3.5, 7); ctx.moveTo(3.5, 1); ctx.lineTo(3.5, 7); ctx.stroke() }
+  else { ctx.moveTo(-5, 6); ctx.lineTo(-2, -6); ctx.moveTo(0, 6); ctx.lineTo(0.5, -6); ctx.moveTo(5, 6); ctx.lineTo(3, -6); ctx.stroke() }
+  ctx.restore()
+}
+// R5-F 2026-10-26: the field marker over an object: a downward triangle in the task colour over a dark outline, still (build_R5_2026-10-26)
+function r5Mark(x, y) {
+  ctx.beginPath(); ctx.moveTo(x - 7, y - 8); ctx.lineTo(x + 7, y - 8); ctx.lineTo(x, y); ctx.closePath()
+  ctx.strokeStyle = 'rgba(8,10,13,.7)'; ctx.lineWidth = 3; ctx.stroke(); ctx.fillStyle = R5COL.ui; ctx.fill()
+}
+// R5-F 2026-10-26: a still dashed ring (a delivery ring, the open ground, the house's ring), over a dark pass so it reads on every ground (build_R5_2026-10-26)
+function r5Dash(x, y, r, col, a) {
+  ctx.save(); ctx.globalAlpha = a
+  ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.strokeStyle = 'rgba(8,10,13,.5)'; ctx.lineWidth = 4; ctx.stroke()
+  ctx.setLineDash([8, 6]); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke()
+  ctx.restore()
+}
+// R5-F 2026-10-26: the places drawn as plain shapes in the place's neutrals, still: a box (the depot, a building), a house, the gauge post, the siren, the mast, the firebreak line (build_R5_2026-10-26)
+function r5Box(x, y, w, h, col) { ctx.strokeStyle = 'rgba(8,10,13,.55)'; ctx.lineWidth = 4; ctx.strokeRect(x - w / 2, y - h / 2, w, h); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.strokeRect(x - w / 2, y - h / 2, w, h) }
+function r5House(x, y, col, done) {
+  ctx.beginPath(); ctx.moveTo(x - 13, y + 10); ctx.lineTo(x - 13, y - 3); ctx.lineTo(x, y - 14); ctx.lineTo(x + 13, y - 3); ctx.lineTo(x + 13, y + 10); ctx.closePath()
+  ctx.strokeStyle = 'rgba(8,10,13,.55)'; ctx.lineWidth = 4; ctx.stroke(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke()
+  if (done) { ctx.fillStyle = 'rgba(168,230,207,.45)'; ctx.fill() }
+}
+function r5Post(x, y, col, kind) {
+  ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.beginPath()
+  if (kind === 'gauge') { ctx.moveTo(x, y + 14); ctx.lineTo(x, y - 16); for (let i = 0; i < 4; i++) { ctx.moveTo(x, y - 12 + i * 7); ctx.lineTo(x + 6, y - 12 + i * 7) } }
+  else if (kind === 'siren') { ctx.moveTo(x, y + 14); ctx.lineTo(x, y - 4); ctx.moveTo(x - 3, y - 4); ctx.lineTo(x + 9, y - 12); ctx.lineTo(x + 9, y + 4); ctx.closePath() }
+  else { ctx.moveTo(x - 9, y + 14); ctx.lineTo(x, y - 20); ctx.lineTo(x + 9, y + 14); ctx.moveTo(x - 5, y); ctx.lineTo(x + 5, y); ctx.moveTo(x, y - 20); ctx.arc(x, y - 20, 3, 0, TAU) }
+  ctx.stroke(); ctx.restore()
+}
+function r5Break(f) {
+  const L = T.r5M6LineHalf, x0 = f.x - f.mx * L, y0 = f.y - f.my * L, x1 = f.x + f.mx * L, y1 = f.y + f.my * L
+  ctx.save(); ctx.lineCap = 'butt'
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.strokeStyle = 'rgba(8,10,13,.55)'; ctx.lineWidth = 7; ctx.stroke()
+  ctx.setLineDash([12, 8]); ctx.strokeStyle = R5COL.ui; ctx.lineWidth = 3; ctx.stroke()
+  ctx.restore()
+}
+// R5-F 2026-10-26: the task on the field, under the bodies: its places, the delivery ring, the object with its field marker (or the residents, with the marker at the door while any wait there), and while a Brush clearing reward runs, the cleared ring (build_R5_2026-10-26)
+function r5Field() {
+  const c = r5Eff.clear
+  if (c && t < c.to) r5Dash(c.x, c.y, c.R, R5COL.ui, 0.35)
+  if (r5Walk) {   // phase 2a: residents walking off, fading out as they leave (steady, no flicker)
+    ctx.save()
+    for (const r of r5Walk.res) { ctx.globalAlpha = clamp(1 - r.d / T.r5LeaveD, 0, 1); ctx.beginPath(); ctx.arc(r.x, r.y, T.r5ResR + 1.5, 0, TAU); ctx.fillStyle = 'rgba(8,10,13,.7)'; ctx.fill(); ctx.beginPath(); ctx.arc(r.x, r.y, T.r5ResR, 0, TAU); ctx.fillStyle = R5COL.ui; ctx.fill() }
+    ctx.restore()
+  }
+  const k = r5
+  if (!k) return
+  const N = PAL.place.season
+  if (k.id === 'M1') { r5Box(k.obj.sx, k.obj.sy, 28, 22, PAL.place.works.depot); worksGlyph('depot', k.obj.sx, k.obj.sy - 24, PAL.place.works.depot) }
+  else if (k.id === 'M2') { r5Post(k.obj.sx, k.obj.sy, N, 'gauge'); r5Post(k.dest.x, k.dest.y, N, 'siren') }
+  else if (k.id === 'M3') { r5Post(k.obj.sx, k.obj.sy, N, 'mast'); for (const h of k.homes) r5House(h.x, h.y, N, h.done) }
+  else if (k.id === 'M4') {
+    for (const B of k.blds) {
+      r5Box(B.x, B.y, 34, 28, N)
+      if (B.dmg) { ctx.save(); ctx.strokeStyle = N; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(B.x - 9, B.y - 14); ctx.lineTo(B.x - 3, B.y - 4); ctx.lineTo(B.x - 7, B.y + 3); ctx.lineTo(B.x + 1, B.y + 14); ctx.moveTo(B.x + 17, B.y - 6); ctx.lineTo(B.x + 8, B.y + 1); ctx.stroke(); ctx.restore() }
+    }
+  } else if (k.id === 'M6') { r5House(k.house.x, k.house.y, N, false); r5Dash(k.house.x, k.house.y, T.r5M6Ring, N, 0.4); r5Break(k.fb) }
+  const g = r5Dest(k)
+  if (g) r5Dash(g.x, g.y, g.r, R5COL.ui, 0.9)
+  if (k.id === 'M4') {
+    for (const r of k.res) { ctx.beginPath(); ctx.arc(r.x, r.y, T.r5ResR + 1.5, 0, TAU); ctx.fillStyle = 'rgba(8,10,13,.7)'; ctx.fill(); ctx.beginPath(); ctx.arc(r.x, r.y, T.r5ResR, 0, TAU); ctx.fillStyle = R5COL.ui; ctx.fill() }
+    if (k.res.some(r => r.st === 'wait')) r5Mark(k.door.x, k.door.y - 14)
+  } else if (k.obj.st !== 'held') { r5Icon(k.id, k.obj.x, k.obj.y, 1); r5Mark(k.obj.x, k.obj.y - 15) }
+}
+// R5-F 2026-10-26: the edge arrow (draw's own mark: the place family's triangle, in the task colour, the task's icon as its sign, still) to where the task wants you (r5Goal) (build_R5_2026-10-26)
+function r5Marks(mark) {
+  const k = r5
+  if (!k) return
+  const g = r5Goal(k)
+  mark(g.x, g.y, R5COL.ui, 10, .6, false, () => r5Icon(k.id, 0, 0, 0.7))
+}
+// R5-F 2026-10-26: in screen space, centred at r5HudY() (phase 2a; phase 1: 15 px above the edge pointers' top edge): the timer as a track that fills in the task colour as the time runs (no number shown); M4 shows no timer (MN-14) - only its counter, CRY.M4.count with the number of residents who reached open ground (build_R5_2026-10-26)
+// R5-F 2026-10-26 phase 2a: the HUD line's middle - T.r5HudGap px below the lowest of the top HUD boxes ptrFrame keeps clear of (top bar, alarm strip, sound button, end-run button) and any boss bar drawn on the canvas, so the track and the counter no longer touch the alarm strip; with no box measured, as in phase 1 (15 px above ptrFrame's top edge) (build_R5_2026-10-26)
+function r5HudY() {
+  let b = -1
+  for (const id of ['topbar', 'alarm', 'mute', 'endrun']) { const e = $(id); if (!e || typeof e.getBoundingClientRect !== 'function') continue; const r = e.getBoundingClientRect(); if (r.width > 0 && r.height > 0) b = Math.max(b, r.bottom) }
+  if (b >= 0) for (const B of bossesUp()) if (B.barY && B.state !== 'arrive') b = Math.max(b, B.barY + 20)   // and below a boss bar drawn there (its box ends 20 px under its barY)
+  return b < 0 ? ptrFrame().t - 15 : b + T.r5HudGap
+}
+function r5Hud() {
+  const k = r5
+  if (!k && !r5Walk) return
+  const y = r5HudY()
+  ctx.save()
+  if (!k || k.id === 'M4') {
+    const n = k ? k.count : r5Walk.n   // phase 2a: while residents walk off, the counter stays as it was
+    const s = say('CRY.M4.count', CARRY.M4.count.replace('{n}', n), n)
+    ctx.font = '700 13px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+    // R5-FX 2026-10-26: measure_R5.md M2 (K10) - the counter text's middle 5 px below r5HudY(), so its glyph tops clear the lowest top box by about the 8 px the timer track's box does (they sat about 3 px below it); nothing else here changes; was `ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(6,8,11,.8)'; ctx.strokeText(s, W / 2, y); ctx.fillStyle = R5COL.ui; ctx.fillText(s, W / 2, y)` (build_R5_2026-10-26 fix round)
+    ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(6,8,11,.8)'; ctx.strokeText(s, W / 2, y + 5); ctx.fillStyle = R5COL.ui; ctx.fillText(s, W / 2, y + 5)
+  } else {
+    const w = Math.min(240, W - 120), x0 = (W - w) / 2, frac = clamp(1 - k.tw / k.T0, 0, 1)
+    ctx.fillStyle = 'rgba(6,8,11,.62)'; ctx.beginPath(); ctx.roundRect(x0 - 6, y - 7, w + 12, 14, 7); ctx.fill()
+    ctx.fillStyle = 'rgba(255,255,255,.14)'; ctx.beginPath(); ctx.roundRect(x0, y - 3, w, 6, 3); ctx.fill()
+    ctx.fillStyle = R5COL.ui; ctx.beginPath(); ctx.roundRect(x0, y - 3, Math.max(3, w * frac), 6, 3); ctx.fill()
+  }
+  ctx.restore()
+}
+// R5-D 2026-10-26: dev only (initDev's buttons and keys): a task now near you at the tier given (one already running ends with neither reward nor failure); the heaviest scene (M4 at tier II with the residents following you and its rings now, and R4's heaviest scene); a Backup power works site beside you (build_R5_2026-10-26)
+function r5DevStart(id, tier) { if (r5) r5End(null); return r5Start(id, tier, true) }
+function r5Heavy() {
+  const k = r5DevStart('M4', 2)
+  for (const r of k.res) { r.st = 'follow'; r.x = P.x; r.y = P.y + 20 }
+  r5Pick(k); k.patT = T.r5PatEvery
+  r5Pattern(k)
+  r4Heavy()
+}
+function r5DevSite() { works.push({ kind: 'backup', x: P.x + r4DevNear(), y: P.y, prog: 0, need: WORKS.backup.need, life: T.worksLife, inside: false }) }
 
 // ---------------------------------------------------------------- weapons
 // Misallocation multiplies at the point of use rather than being written into dmgMul or
@@ -8774,9 +9354,12 @@ function updateFusions(dt) {
 
 // ---------------------------------------------------------------- what is thrown at you
 // Contact was the only way anything could hurt you, so the whole game was a question of
-// whether a crowd could touch you, and standing in open ground was always the answer. Two
-// hazards now reach across it. Both only throw at YOU — one that is on its way to a
-// lifeline has somewhere else to be.
+// whether a crowd could touch you, and standing in open ground was always the answer. Some
+// hazards now reach across it: since the melee / ranged split the ranged half of three kinds throws (a ranged
+// Earthquake body SPLIT.chip, a ranged Storm or Wildfire body its kind's own shot), a melee body throws
+// nothing, and an elite or a kind with no variant throws as before (the SP-M3 / SP-M4 line below). They only
+// throw at YOU — one that is on its way to a lifeline has somewhere else to be.
+// R5-FX 2026-10-26: OPEN_LEDGER T11 (K9 b) - the header above reworded for the split; was "the answer. Two" / "hazards now reach across it. Both only throw at YOU — one that is on its way to a" / "lifeline has somewhere else to be."; the SP-M3 / SP-M4 line's last sentence ("The header above ... now holds for the ranged half of three") stays; comment only (build_R5_2026-10-26 fix round)
 function enemyFire(dt) {
   if (holdOn()) return   // SY-M1 2026-09-29: held bodies throw nothing, and their shot clocks wait (build_SY_2026-09-29)
   for (const e of enemies) {
@@ -8846,7 +9429,8 @@ function updateEbullets(dt) {
       // that is not already burning, so past this many there is none.
       const burning = enemies.reduce((n, e) => n + (e.kind === 'fire' ? 1 : 0), 0)
       if (b.ember && enemies.length < T.enemyCap && burning < T.fuelCap &&
-          Math.random() < b.ember * (lv.ring > 0 ? 0.4 : 1)) {
+          // R5-M6 2026-10-26: x r5SpreadK - an ember landing inside a cleared ring starts a fire at T.r5M6SpreadK of its chance while the ring lasts, exactly 1 otherwise; was `Math.random() < b.ember * (lv.ring > 0 ? 0.4 : 1)) {` (build_R5_2026-10-26)
+          Math.random() < b.ember * (lv.ring > 0 ? 0.4 : 1) * r5SpreadK(b.x, b.y, 0)) {
         emberFires++; AU.play('ember')
         if (vbOn()) { const p = vbPt(b.x, b.y, VB.keep); enemies.push(makeHazard('fire', p.x, p.y)) }   // VB-M2 2026-10-18: V3 - in Mountain valley a fire an ember starts stands inside the box, 40 px from the walls (build_VALLEY_2026-10-17)
         else enemies.push(makeHazard('fire', b.x, b.y))   // VB-M2 2026-10-18: "else" added (build_VALLEY_2026-10-17)
@@ -10311,6 +10895,7 @@ function step(dt) {
   updateGroundThings(dt)
   updateEvents(dt)
   r4Update(dt)   // R4 2026-10-25: the new patterns (build_R4_2026-10-25)
+  r5Update(dt)   // R5-F 2026-10-26: the carry tasks and their patterns (build_R5_2026-10-26)
   if (over) return
   updateBoss(dt)
   if (over) return
@@ -10704,7 +11289,8 @@ function renderReport() {
   const hls = []
   if (lifelinesLost.length)
     hls.push(row('#ff9d9d', lifelinesLost.map(k => LIFELINES[k].name).join(' · ') + ' LOST',
-      lifelinesLost.map(k => LIFELINES[k].cost).join(' ') +
+      // R5-FX 2026-10-26: K4 (ii) - r5BkNote() after the power lifeline's cost; was `lifelinesLost.map(k => LIFELINES[k].cost).join(' ') +` (build_R5_2026-10-26 fix round)
+      lifelinesLost.map(k => LIFELINES[k].cost + (k === 'power' ? r5BkNote() : '')).join(' ') +
       ' The cost lands after the event, on the recovery — the part a run does not show you.'))
   else if (lifelines.length && standing.length === lifelines.length)
     hls.push(row('#7ee787', 'Every service still running',
@@ -10870,7 +11456,8 @@ function renderReport() {
         return row(L.alive ? k.col : '#3a3f47',
                    k.name + (L.alive ? ` ${Math.round(L.hp)}%` : ' LOST'),
                    L.alive ? k.note
-                           : `<b>${k.cost}</b> ${k.gone}`)
+                           // R5-FX 2026-10-26: K4 (iii) - r5BkNote() at the end of the row of a lost Power, after gone (not after cost: the row holds both); was `: `<b>${k.cost}</b> ${k.gone}`)` (build_R5_2026-10-26 fix round)
+                           : `<b>${k.cost}</b> ${k.gone}${L.kind === 'power' ? r5BkNote() : ''}`)
       }).join('') +
       (lifelines.every(L => L.alive)
         // CORRECTED 2026-09-22: bonus named: damage and fire rate (svc() feeds eff() only) (sweep 3, sweep3_2026-09-22/source_verification.md n/a, code; Lead F7)
@@ -12096,6 +12683,9 @@ function worksGlyph(kind, x, y, col) {
   } else if (kind === 'muster') {
     ctx.moveTo(-5, 7); ctx.lineTo(-5, -7); ctx.stroke()
     ctx.beginPath(); ctx.moveTo(-5, -7); ctx.lineTo(7, -3.5); ctx.lineTo(-5, 0); ctx.closePath(); ctx.fill()
+  // R5-M1 2026-10-26: the Backup power site's glyph, a bolt, so shape tells it apart from the other sites (build_R5_2026-10-26)
+  } else if (kind === 'backup') {
+    ctx.moveTo(2, -7); ctx.lineTo(-4, 1); ctx.lineTo(1, 1); ctx.lineTo(-2, 7); ctx.stroke()
   } else if (kind === 'planting') {
     ctx.moveTo(0, 7); ctx.lineTo(0, -1)
     ctx.moveTo(0, -1); ctx.quadraticCurveTo(-7, -1, -6, -7)
@@ -12398,6 +12988,7 @@ function draw() {
   // D6 2026-09-22: only what is hitting now is drawn here, under the bodies; the warnings are drawn after your own paint, below (build_D_2026-09-22)
   drawEvents('ground')
   r4Draw(false)   // R4-W2 2026-10-25: the new patterns' strikes, tracks and burning ground, under the bodies (build_R4_2026-10-25)
+  r5Field(); r5Draw(false)   // R5-F / R5-W 2026-10-26: the carry task on the field, and the patterns' strikes, under the bodies (build_R5_2026-10-26)
   artcFx()   // ART-C 2026-10-17: C3 - the effects, under the bodies and every shot; nothing until loaded (build_ART_2026-10-17)
 
   // hazards. Zones are drawn as places rather than bodies — no outline you can shoot,
@@ -12745,6 +13336,7 @@ function draw() {
   // D6 2026-09-22: every event warning, drawn over all of your own paint - rings, shots, beams, particles - so none of it covers a live telegraph (S01, M2) (build_D_2026-09-22)
   drawEvents('telegraph')
   r4Draw(true)   // R4-W2 2026-10-25: the new warnings, with the event warnings (build_R4_2026-10-25)
+  r5Draw(true)   // R5-W 2026-10-26: the carried object over you, and the patterns' warnings, with the event warnings (build_R5_2026-10-26)
 
   // player — a place, not a person: a lit disc standing on ground it does not leave
   // G-M4 2026-10-13: (e) Land use - a short wake behind the disc while you move: a round-capped line straight back from the disc's edge, T.wakeLen0 + T.wakePerLv px per Land-use level, in the measure's colour; drawn under reduced motion too (it moves only as you do). Under the halo and the disc (PLAN_G G4) (build_G_2026-10-01)
@@ -12853,6 +13445,7 @@ function draw() {
     const near = eventMarkNear(ev)
     if (near) mark(near.x, near.y, near.col, 12, .6 + .35 * Math.sin(t * 12), true)
   }
+  r5Marks(mark); r5Hud()   // R5-F 2026-10-26: the carry task's edge arrow, and its timer track or counter (build_R5_2026-10-26)
 
   // the stick, drawn where the thumb actually is
   if (stick.on) {
@@ -13222,6 +13815,18 @@ function initDev() {
   B('E9 crown fire [4]', () => r4Keys['4']())
   B('Heaviest scene [5]', () => r4Keys['5']())
   addEventListener('keydown', e => { const f = r4Keys[e.key]; if (!f || e.repeat || over || !$('start').classList.contains('gone')) return; f() })
+  // R5-D 2026-10-26: PLAN_R5 - the carry tasks on demand, by button or key; the key listener is added here, so it exists only once dev mode is on. Keys: 6 7 8 9 0 start M1, M2, M3, M4, M6 at tier I near you, the same keys with Shift (^ & * ( ) on a US layout) at tier II, - the heaviest scene, = a Backup power site beside you; only during a run. Developer text only (build_R5_2026-10-26)
+  SEP('R5 carry tasks - keys 6 to 0, Shift for tier II')
+  const r5Keys = { '6': () => r5DevStart('M1', 1), '7': () => r5DevStart('M2', 1), '8': () => r5DevStart('M3', 1), '9': () => r5DevStart('M4', 1), '0': () => r5DevStart('M6', 1),
+    '^': () => r5DevStart('M1', 2), '&': () => r5DevStart('M2', 2), '*': () => r5DevStart('M3', 2), '(': () => r5DevStart('M4', 2), ')': () => r5DevStart('M6', 2), '-': () => r5Heavy(), '=': () => r5DevSite() }
+  B('M1 Backup power I [6] / II [Shift+6]', () => r5Keys['6']())
+  B('M2 Flood gauge I [7] / II [Shift+7]', () => r5Keys['7']())
+  B('M3 Warning round I [8] / II [Shift+8]', () => r5Keys['8']())
+  B('M4 Quake escort I [9] / II [Shift+9]', () => r5Keys['9']())
+  B('M6 Brush clearing I [0] / II [Shift+0]', () => r5Keys['0']())
+  B('Carry heaviest scene [-]', () => r5Keys['-']())
+  B('Backup power site [=]', () => r5Keys['=']())
+  addEventListener('keydown', e => { const f = r5Keys[e.key]; if (!f || e.repeat || over || !$('start').classList.contains('gone')) return; f() })
 
   // The two layers built on 2026-09-04 are the ones being tuned, and neither can be reached from
   // the field on demand: a lifeline only comes under attack on a 22% draw, and a response card is
