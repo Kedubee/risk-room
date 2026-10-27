@@ -713,12 +713,23 @@
      is true. Directions are computed per frame; nothing here is a decoration. */
   #alarm{top:46px;left:0;right:0;display:flex;flex-direction:column;align-items:center;
     gap:4px;z-index:7;pointer-events:none}
+  /* R2b-2a 2026-10-27: PLAN_R2b 2 (a) - each row on a solid dark backing with a 2 px border in its state colour (under attack #ff6b7a since R2b-F1, inbound rgba(255,209,102,.85), critical rgba(255,157,157,.85)); text 14 px (13 px on a phone, body.small below, and in the 760 px rule); the arrow 20 px, its line box kept at 14 px so the row does not grow. Was `font-size:11.5px`, `background:rgba(255,77,94,.14);border:1px solid rgba(255,77,94,.5)`, `.alm.warn{background:rgba(255,209,102,.12);border-color:rgba(255,209,102,.42)}`, `.alm.crit{background:rgba(255,157,157,.10);border-color:rgba(255,157,157,.34)}`, `.alm .dir{...font-size:14px;line-height:1;...}` (build_R2b_2026-10-27) */
   .alm{display:flex;align-items:center;gap:9px;padding:5px 13px;border-radius:99px;
-    font-size:11.5px;font-weight:700;letter-spacing:.02em;text-shadow:0 1px 6px rgba(0,0,0,.85);
-    background:rgba(255,77,94,.14);border:1px solid rgba(255,77,94,.5)}
-  .alm.warn{background:rgba(255,209,102,.12);border-color:rgba(255,209,102,.42)}
-  .alm.crit{background:rgba(255,157,157,.10);border-color:rgba(255,157,157,.34)}
-  .alm .dir{display:inline-block;font-size:14px;line-height:1;transform-origin:50% 50%}
+    font-size:14px;font-weight:700;letter-spacing:.02em;text-shadow:0 1px 6px rgba(0,0,0,.85);
+    background:rgba(8,10,13,.9);border:2px solid #ff6b7a}
+  /* R2b-F1 2026-10-27: the Lead's addendum (the red-ratio finding) - the under-attack border #ff6b7a (linear red ratio 0.745, the colour of the enemy health bars); was `border:2px solid #ff4d5e` in R2b-2a (build_R2b_2026-10-27) */
+  .alm.warn{background:rgba(8,10,13,.9);border-color:rgba(255,209,102,.85)}
+  .alm.crit{background:rgba(8,10,13,.9);border-color:rgba(255,157,157,.85)}
+  .alm .dir{display:inline-block;font-size:20px;line-height:14px;transform-origin:50% 50%}
+  /* R2b-2a 2026-10-27: the lifeline's mark at the row's left, as the bottom-right lifeline rows draw theirs (a square in LIFELINES[kind].col), 12 px; the threat's names (.r2bT); the "+N more" row in a neutral border; the row under attack breathes (opacity 1 to .85 and back over 1.6 s, 0.625 Hz), and not under the Effects switch (body.rm); the lost-lifelines line keeps its 1 px border (build_R2b_2026-10-27) */
+  .alm .r2bG{display:block;flex:none;width:12px;height:12px;border-radius:3px}
+  .alm .r2bT{font-weight:700}
+  .alm.r2bMore{border-color:rgba(232,238,247,.4)}
+  .alm.lostline{border-width:1px}
+  .alm.r2bU{animation:r2bBreathe 1.6s ease-in-out infinite}
+  @keyframes r2bBreathe{0%,100%{opacity:1}50%{opacity:.85}}
+  body.rm .alm.r2bU{animation:none}
+  body.small .alm{font-size:13px}
   .alm .dist,.alm .hp{opacity:.62;font-variant-numeric:tabular-nums;font-weight:600}
   .alm .st{opacity:.9;font-size:10px;letter-spacing:.09em;text-transform:uppercase}
   .alm.lostline{background:rgba(255,77,94,.2);border-color:rgba(255,77,94,.6);
@@ -1134,7 +1145,13 @@
   @media (max-width:760px){
     #topbar{padding:8px 10px;gap:9px}
     #alarm{top:40px;gap:3px}
-    .alm{font-size:10.5px;padding:4px 10px;gap:7px}
+    .alm{font-size:13px;line-height:15px;padding:3px 9px;gap:5px}   /* R2b-2a 2026-10-27: PLAN_R2b 2 (a) - 13 px text, a 15 px line and 3 px padding so five rows stay above the end-run button (K10); was `.alm{font-size:10.5px;padding:4px 10px;gap:7px}` (build_R2b_2026-10-27) */
+    /* R2b-2a 2026-10-27: here the strip ends 58 px short of the right edge, so no row reaches the sound button's column (#mute, 321 to 363 px on a 375 px phone, measured), as the 10.5 px rows did not; each row stays on one line, its parts do not shrink, and the threat's names alone are cut with an ellipsis when the row would be wider than the strip; the state word 9.5 px (build_R2b_2026-10-27) */
+    #alarm{right:58px}
+    .alm{max-width:calc(100% - 8px);gap:4px;padding:3px 7px;white-space:nowrap}
+    .alm > *{flex:none}
+    .alm .r2bT, .alm.warn .st{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+    .alm .st{font-size:9.5px;letter-spacing:.02em}
     #clock{font-size:20px}
     #kills{font-size:11px}
     #lvl{font-size:11px}
@@ -2709,6 +2726,9 @@ const T = {
   r2Tier: 0.20,                    // R2-T: each tier adds this share of a measure's main effect where that effect's formula is held at max0 and scaled (Codes area, Warning rate, Drills reach and rate); PLAN_R2 "+20 %"
   r2FinTier: 40,                   // R2-T: Risk financing's capacity per tier, in place of a level's 25 (PLAN_R2 "+40 capacity")
   r2EdgeW: 1, r2EdgeWSmall: 2,     // R2-G: the gold edge's width in screen px on a computer and on a phone (PLAN_R2 "1 px at x1, 2 px at the phones' x1.25"); drawn in game units as px / zoom
+  // R2b-T 2026-10-27: PLAN_R2b 2 (a), (b), (c) - the alarm rows shown before one "+N more" row (r2bRows); the edge pointer's radius for a lifeline under attack or inbound (r2bPtrR, was 10); the guide line's start in screen px outside your disc (r2bGuideGap) and the most guide lines at once, the nearest first (r2bGuideMax) (build_R2b_2026-10-27)
+  r2bRows: 3, r2bPtrR: 16, r2bGuideGap: 30, r2bGuideMax: 2,
+  r2bGuideAlpha: 0.25,             // R2b-F2 2026-10-27: PLAN_R2b 2 (c) as changed by the user at the preview - the guide line's alpha; was `ctx.globalAlpha = .5` at the draw site (build_R2b_2026-10-27)
   r2LlClear: 10,                   // R2-X3: a telegraph circle's centre is kept T.lifelineR + its radius + this many px from a standing lifeline's centre (PLAN_R2 R2-X3)
   r2CrewRepair: 0.15,              // R2-X4: lifelines repair this share faster per Repair crews level (META crews; PLAN_R2 R2-X4)
 }
@@ -4995,7 +5015,7 @@ const DIFFS = {
     // position by itself, and Learning's knee was already the furthest out, so it compounded twice
     // and the gentlest mode measured 8:49 against its own blurb's "a short, readable run". At 1.0 it
     // takes the same ~1.5x every other mode took: 3:35 before, 5:09 after, still the longest mode.
-    ramp: 0.60, dmg: 0.60, spawn: 0.75, warn: 1.9, len: 1.0, hard: 11, pay: 1.0,
+    ramp: 0.60, dmg: 0.50, spawn: 0.75, warn: 1.9, len: 1.0, hard: 11, pay: 1.0,   // R2b-1 2026-10-27: PLAN_R2b 1 - enemy damage per step; was `dmg: 0.60` (build_R2b_2026-10-27)
     fail: 99, llDmg: 0.5,
     // BS-M4 2026-09-30: levelHeal - capacity back per level, before any choice (PLAN_BS H1: Learning 8%, Steady 5%, Pressed 3%, Exposed 2%; was T.levelHeal 0.20 on every difficulty). BS-M3: tbossAt - the true boss's arrival on the run clock (PLAN_BS B3, the user's "4분, 3분30초, 3분, 2분30초" read in the order Learning, Steady, Pressed, Exposed) (build_BS_2026-09-30)
     levelHeal: 0.08, tbossAt: 240,
@@ -5007,7 +5027,7 @@ const DIFFS = {
     name: 'Growing', short: 'Growing', col: '#57c7ff',
     // DL-FIX 2026-10-15: FX5 (check_DIAL.md F6) - "The tuned run." -> "The standard run." ("tuned" is jargon for this reader); "at the game's normal level" kept, true as above (build_DIAL_2026-10-14 fix round)
     blurb: 'The standard run. Hazards, hits and warnings are at the game\'s normal level.',
-    ramp: 1, dmg: 1, spawn: 1, warn: 1, len: 1.25, pay: 1.3,
+    ramp: 1, dmg: 0.85, spawn: 1, warn: 1, len: 1.25, pay: 1.3,   // R2b-1 2026-10-27: PLAN_R2b 1 - enemy damage per step; was `dmg: 1` (build_R2b_2026-10-27)
     fail: 3, llDmg: 1,
     levelHeal: 0.05, tbossAt: 210,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
     cap: 1.25,   // R2-X2 2026-10-27: PLAN_R2 R2-X2 (build_R2_2026-10-27)
@@ -5022,7 +5042,7 @@ const DIFFS = {
     // P16a-T 2026-10-22: S1-05 (strings_P16a.md) (build_P16a_2026-10-22)
     blurb: 'Hazards build up faster than on Growing. They hit harder too. You get less warning, except for several hazards arriving together.',
     // GP-M2 2026-09-29: ramp 1.35 -> 1.5, dmg 1.20 -> 1.5, spawn 1.15 -> 1.35, warn 0.78 -> 0.7, len 1.55 -> 1.6, llDmg 1.2 -> 1.25 (the user's list, PLAN_GP G3); pay 1.7 and fail 3 kept (build_GP_2026-09-29)
-    ramp: 1.5, dmg: 1.5, spawn: 1.35, warn: 0.7, len: 1.6, pay: 1.7,
+    ramp: 1.5, dmg: 1.25, spawn: 1.35, warn: 0.7, len: 1.6, pay: 1.7,   // R2b-1 2026-10-27: PLAN_R2b 1 - enemy damage per step; was `dmg: 1.5` (build_R2b_2026-10-27)
     fail: 3, llDmg: 1.25,
     levelHeal: 0.03, tbossAt: 180,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
     cap: 1.20,   // R2-X2 2026-10-27: PLAN_R2 R2-X2 (build_R2_2026-10-27)
@@ -5037,7 +5057,7 @@ const DIFFS = {
     // P16a-T 2026-10-22: S1-06 (strings_P16a.md) (build_P16a_2026-10-22)
     blurb: 'Hazards build up faster than on Growing. Hits are harder than on any other step. You get the least warning, except for several hazards arriving together.',
     // GP-M2 2026-09-29: ramp 1.75 -> 2, dmg 1.45 -> 2, spawn 1.30 -> 2, warn 0.58 -> 0.5, len 1.9 -> 2, llDmg 1.4 -> 1.5 (the user's list, PLAN_GP G3); pay 2.2 and fail 2 kept (build_GP_2026-09-29)
-    ramp: 2, dmg: 2, spawn: 2, warn: 0.5, len: 2, pay: 2.2,
+    ramp: 2, dmg: 1.70, spawn: 2, warn: 0.5, len: 2, pay: 2.2,   // R2b-1 2026-10-27: PLAN_R2b 1 - enemy damage per step; was `dmg: 2` (build_R2b_2026-10-27)
     fail: 2, llDmg: 1.5,
     levelHeal: 0.02, tbossAt: 150,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
     cap: 1.15,   // R2-X2 2026-10-27: PLAN_R2 R2-X2 (build_R2_2026-10-27)
@@ -7472,6 +7492,14 @@ const HOLD_COL = '#cfe3ff'
 // LL-M3 2026-09-25: standing AND on the map - false while a saved lifeline is secured (L.away, its own countdown). Every path that attacks, targets, alarms or points at a lifeline reads this; every path that counts it as standing (servicesIntact, the HUD, runFunds, the report) keeps reading L.alive, so a secured one still counts (build_LL_2026-09-25)
 const llUp = L => L.alive && !(L.away > 0)
 let alarmSig = ''    // the alarm strip is rebuilt only when the threatened SET changes
+// R2b-2a 2026-10-27: PLAN_R2b 2 (a) - the threat named on an alarm row: under attack, the kinds sitting on it (L.underKinds, counted in updateLifelines), inbound, the kinds heading for it (L.inKinds); each as HAZARDS[kind].name, with " x" and the count when the count is over 1, joined by ", "; a kind not in HAZARDS is not named (build_R2b_2026-10-27)
+function r2bThreat(L, st) {
+  const m = st === 'under attack' ? L.underKinds : st === 'inbound' ? L.inKinds : null
+  if (!m) return ''
+  return Object.keys(m).filter(k => HAZARDS[k]).map(k => HAZARDS[k].name + (m[k] > 1 ? ' \u00d7' + m[k] : '')).join(', ')
+}
+// R2b-2b / R2b-2c 2026-10-27: what draw() last drew for the lifeline danger guide - the guide lines and the pointer labels, in screen px; read by nothing in the game (build_R2b_2026-10-27)
+let r2bLast = { guides: [], labels: [] }
 let pickups = [], works = [], pickAcc = 0, worksAcc = 0
 let picked = [], worksDone = [], worksMissed = []
 let events = [], eventAcc = 0, eventsSeen = [], eventsHit = 0, warnBought = 0
@@ -7786,14 +7814,16 @@ function updateLifelines(dt) {
     if (L.away > 0) { if ((L.away -= dt) <= 0) llReturn(L); continue }
     // UXBS-FIX 2026-09-30: F4 - underK sums each occupier's damage factor (T.eliteDmg for an elite zone or front, else 1); the wear below is multiplied by underK / under, the mean factor, so an elite sitting on a lifeline wears it T.eliteDmg x as fast and a lifeline with no elite on it wears exactly as before; `under` stays a count (the 4-occupier cap, the repair gate, L.under) (build_BS_2026-09-30 fix round)
     let under = 0, inbound = 0, underF = 0, underK = 0
+    const uKinds = {}, iKinds = {}   // R2b-2a 2026-10-27: PLAN_R2b 2 (a) - the kinds and counts behind `under` and `inbound`, kept on L for the alarm row (build_R2b_2026-10-27)
     for (const e of enemies) {
-      if (e.tgt === L) inbound++
+      if (e.tgt === L) { inbound++; iKinds[e.kind] = (iKinds[e.kind] || 0) + 1 }   // R2b-2a 2026-10-27: was `if (e.tgt === L) inbound++` (build_R2b_2026-10-27)
       if (e.behaviour !== 'zone' && e.behaviour !== 'front') continue
       const rr = T.lifelineR + e.r
       const dx = e.x - L.x, dy = e.y - L.y
-      if (dx * dx + dy * dy < rr * rr) { under++; underK += e.elite ? T.eliteDmg : 1; if (e.kind === 'flood') underF++ }   // UXBS-FIX 2026-09-30: F4 - underK (build_BS_2026-09-30 fix round)
+      if (dx * dx + dy * dy < rr * rr) { under++; underK += e.elite ? T.eliteDmg : 1; if (e.kind === 'flood') underF++; uKinds[e.kind] = (uKinds[e.kind] || 0) + 1 }   // UXBS-FIX 2026-09-30: F4 - underK (build_BS_2026-09-30 fix round)   // R2b-2a 2026-10-27: the kind counted, uKinds; was `... if (e.kind === 'flood') underF++ }` (build_R2b_2026-10-27)
     }
     L.under = under; L.inbound = inbound
+    L.underKinds = uKinds; L.inKinds = iKinds   // R2b-2a 2026-10-27 (build_R2b_2026-10-27)
     // LL-M1 2026-09-25: "standing there" reads the repair reach (T.lifelineR at Maintenance 0, wider per level) in place of T.lifelineR; it gates the pulse and the repair below; `under` above and the pulse's own hit test keep T.lifelineR (build_LL_2026-09-25)
     // XL-M2 2026-10-13: the repair reach is now T.llRepairR at Maintenance 0, wider per level (R2; the line above says T.lifelineR, true before this build, RX7); the rest of the line holds (build_XP_2026-10-13)
     const here = dist2(L, P) < (repairReach() + P.r) ** 2
@@ -10822,21 +10852,27 @@ function paintAlarm() {
   const threat = lifelines.filter(L => llUp(L) && state(L))
   const cap = failCap()
   const lost = lifelinesLost.length
-  const sig = threat.map(L => L.kind + state(L)).join(',') + '|' + lost
+  // R2b-2a 2026-10-27: PLAN_R2b 2 (a) - the threat's names join the signature, so the row is rebuilt when what threatens it changes; was `const sig = threat.map(L => L.kind + state(L)).join(',') + '|' + lost` (build_R2b_2026-10-27)
+  const sig = threat.map(L => L.kind + state(L) + r2bThreat(L, state(L))).join(',') + '|' + lost
   if (sig !== alarmSig) {
     alarmSig = sig
+    // R2b-2a 2026-10-27: PLAN_R2b 2 (a) - the first T.r2bRows rows, then one "+N more" row for the rest; each row: the lifeline's mark (.r2bG), the arrow, the name, the state word (inbound: the kinds heading for it and "inbound"), under attack the kinds on it (.r2bT), health and distance as before; the row under attack is .r2bU (it breathes, CSS). Was `threat.map(L => {` ... `const cls = st === 'under attack' ? '' : ...` ... `return `<div class="alm${cls}"><i class="dir">` (the arrow U+2191) `</i><b>${k.name}</b>` + `<span class="st">${st}</span>` + ...`, and the rows were every .alm but the lost line (build_R2b_2026-10-27)
+    const shown = threat.slice(0, T.r2bRows)
     box.innerHTML =
       (lost ? `<div class="alm lostline">${lost} of ${cap} lost · ${Math.max(0, cap - lost)} left before the run ends</div>` : '') +
-      threat.map(L => {
+      shown.map(L => {
         const k = LIFELINES[L.kind]
         const st = state(L)
-        const cls = st === 'under attack' ? '' : st === 'inbound' ? ' warn' : ' crit'
-        return `<div class="alm${cls}"><i class="dir">↑</i><b>${k.name}</b>` +
-               `<span class="st">${st}</span>` +
+        const cls = st === 'under attack' ? ' r2bU' : st === 'inbound' ? ' warn' : ' crit'
+        const th = r2bThreat(L, st)
+        return `<div class="alm${cls}"><em class="r2bG" style="background:${k.col}"></em><i class="dir">\u2191</i><b>${k.name}</b>` +
+               `<span class="st">${st === 'inbound' && th ? th + ' inbound' : st}</span>` +
+               (st === 'under attack' && th ? `<span class="r2bT">${th}</span>` : '') +
                `<span class="hp"></span><span class="dist"></span></div>`
-      }).join('')
-    const rows = [...box.querySelectorAll('.alm:not(.lostline)')]
-    threat.forEach((L, i) => { L.alm = rows[i] })
+      }).join('') +
+      (threat.length > shown.length ? `<div class="alm r2bMore">+${threat.length - shown.length} more</div>` : '')
+    const rows = [...box.querySelectorAll('.alm:not(.lostline):not(.r2bMore)')]
+    threat.forEach((L, i) => { L.alm = rows[i] || null })
   }
   for (const L of threat) {
     if (!L.alm) continue
@@ -13555,12 +13591,56 @@ function draw() {
     ctx.closePath(); ctx.fill()
     ctx.fillStyle = 'rgba(8,10,13,.75)'; ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, TAU); ctx.fill()
   }
+  // R2b-2c 2026-10-27: PLAN_R2b 2 (c) - the on-field guide: for each lifeline under attack or inbound whose point is outside the view (the test `mark` uses, 26 px in from the edge), nearest first, at most T.r2bGuideMax, a still dotted line (2 px, dash [3, 7], round caps, alpha T.r2bGuideAlpha (0.25 since R2b-F2), under attack #ff6b7a since R2b-F1, inbound rgb(255,209,102)) from T.r2bGuideGap screen px outside your disc (P.r * z + the gap from the screen's centre) to the pointer's place in the frame (ptrFrame); drawn the same with the Effects switch off; nothing nearer the disc (build_R2b_2026-10-27)
+  const r2bOff = (wx, wy) => { const lx = (wx - P.x) * z + W / 2, ly = (wy - P.y) * z + H / 2, m = 26; return lx > m && lx < W - m && ly > m && ly < H - m ? null : { lx, ly } }
+  const r2bHot = []
+  for (const L of lifelines) {
+    if (!llUp(L) || !(L.under || L.inbound)) continue
+    const o = r2bOff(L.x, L.y)
+    if (o) r2bHot.push({ L, lx: o.lx, ly: o.ly, d: dist2(L, P) })
+  }
+  r2bHot.sort((a, b) => a.d - b.d)
+  r2bLast = { guides: [], labels: [] }
+  if (r2bHot.length) {
+    pf = pf || ptrFrame()
+    const g0 = P.r * z + T.r2bGuideGap
+    ctx.save(); ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.setLineDash([3, 7]); ctx.globalAlpha = T.r2bGuideAlpha   // R2b-F2 2026-10-27: was `ctx.globalAlpha = .5` (build_R2b_2026-10-27)
+    for (const h of r2bHot.slice(0, T.r2bGuideMax)) {
+      const px = clamp(h.lx, pf.l, pf.r), py = clamp(h.ly, pf.t, pf.b)
+      const dx = px - W / 2, dy = py - H / 2, len = Math.hypot(dx, dy)
+      if (len <= g0) continue
+      const x0 = W / 2 + dx / len * g0, y0 = H / 2 + dy / len * g0
+      ctx.strokeStyle = h.L.under ? '#ff6b7a' : 'rgb(255,209,102)'   // R2b-F1 2026-10-27: the Lead's addendum - the under-attack line #ff6b7a (linear red ratio 0.745); was `h.L.under ? '#ff4d5e' : ...` in R2b-2c (build_R2b_2026-10-27)
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(px, py); ctx.stroke()
+      r2bLast.guides.push({ kind: h.L.kind, x0, y0, x1: px, y1: py, g0 })
+    }
+    ctx.setLineDash([]); ctx.restore()
+  }
+  // R2b-2b 2026-10-27: PLAN_R2b 2 (b) - a lifeline under attack or inbound: the pointer's radius T.r2bPtrR (was 10) and its mark at x0.9 (was .6); the pulse and a cold lifeline's pointer as before. Was `mark(L.x, L.y, hot ? '#ff4d5e' : LIFELINES[L.kind].col, 10,` and `() => { ctx.scale(.6, .6); lifelineSprite(...) })` (build_R2b_2026-10-27)
   for (const L of lifelines) {
     if (!llUp(L)) continue   // LL-M3 2026-09-25: no edge pointer to a secured lifeline (build_LL_2026-09-25)
     const hot = L.under || L.inbound
-    mark(L.x, L.y, hot ? '#ff4d5e' : LIFELINES[L.kind].col, 10,
+    mark(L.x, L.y, hot ? '#ff4d5e' : LIFELINES[L.kind].col, hot ? T.r2bPtrR : 10,
          hot ? .5 + .45 * Math.sin(t * 9) : .45, hot,
-         () => { ctx.scale(.6, .6); lifelineSprite(L.kind, 0, 0, LIFELINES[L.kind].col) })
+         () => { const g = hot ? .9 : .6; ctx.scale(g, g); lifelineSprite(L.kind, 0, 0, LIFELINES[L.kind].col) })
+  }
+  // R2b-2b 2026-10-27: PLAN_R2b 2 (b) - under each such pointer a dark label (rgba(8,10,13,.85), 11 px bold, white): the lifeline's name and health %; below the pointer and its mark, above them when that would leave the frame at the bottom; kept inside the frame left and right (build_R2b_2026-10-27)
+  for (const h of r2bHot) {
+    const L = h.L, size = T.r2bPtrR, gr = 13 * .9
+    const px = clamp(h.lx, pf.l, pf.r), py = clamp(h.ly, pf.t, pf.b)
+    const gy = py - Math.sin(Math.atan2(h.ly - H / 2, h.lx - W / 2)) * (size + 13)
+    const txt = LIFELINES[L.kind].name + ' ' + Math.round(L.hp) + '%'
+    ctx.save(); ctx.font = '700 11px system-ui,sans-serif'
+    const w = Math.ceil(ctx.measureText(txt).width) + 10, lh = 16
+    let y = Math.max(py + size, gy + gr) + 4
+    const flip = y + lh > pf.b
+    if (flip) y = Math.min(py - size, gy - gr) - 4 - lh
+    y = clamp(y, pf.t, pf.b - lh)   // inside the frame top and bottom also when the frame is short (ptrFrame's 60 px fallback)
+    const x = clamp(px - w / 2, pf.l, pf.r - w)
+    ctx.fillStyle = 'rgba(8,10,13,.85)'; ctx.beginPath(); ctx.roundRect(x, y, w, lh, 4); ctx.fill()
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(txt, x + 5, y + lh / 2 + .5)
+    ctx.restore()
+    r2bLast.labels.push({ kind: L.kind, x, y, w, h: lh, txt, flip, px, py })
   }
   for (const w of works) mark(w.x, w.y, WORKS[w.kind].col, 9, .3 + .3 * Math.sin(t * 4), false, () => worksGlyph(w.kind, 0, 0, WORKS[w.kind].col))
   for (const q of pickups) mark(q.x, q.y, PICKUPS[q.kind].col, 7, .34, false, () => pickupStar(q.kind))
@@ -13811,6 +13891,16 @@ function initDev() {
   const toggle = () => panel.classList.toggle('show')
   pill.onclick = toggle
   addEventListener('keydown', e => { if (e.key === '`' && !e.repeat) toggle() })
+  // R2b-D 2026-10-27: PLAN_R2b, the guard's dev scene - key J: two heat zones placed on the first standing lifeline (under attack), a storm 600 px east of the second heading for it (inbound), and you moved 900 px east of the first; only here, in dev mode (build_R2b_2026-10-27)
+  addEventListener('keydown', e => {
+    if ((e.key !== 'j' && e.key !== 'J') || e.repeat || over) return
+    const up = lifelines.filter(L => llUp(L))
+    if (up.length < 2) return
+    const A = up[0], B2 = up[1]
+    enemies.push(makeHazard('heat', A.x - 20, A.y), makeHazard('heat', A.x + 20, A.y))
+    enemies.push(makeHazard('storm', B2.x + 600, B2.y, { tgt: B2 }))
+    P.x = A.x + 900; P.y = A.y
+  })
 
   const devLevel = () => {
     if (over) return
