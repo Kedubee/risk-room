@@ -1083,6 +1083,8 @@
   #flash.big b{font-size:26px;letter-spacing:-.01em}
   /* R4-T 2026-10-25: a flash raised with { two: true } (a new elite's first-seen line with its source line) breaks its line at the newline it carries (build_R4_2026-10-25) */
   #flash.two span{white-space:pre-line}
+  /* BATCH-FIX 2026-10-26: K10 (review_batch_B F2) - on a short screen (420 px tall or less: a phone held sideways) the flash line sits 48 px higher than its 58 %, so it keeps clear of EVAC (#dodge, centred 78 px / 72 px up since PT2-P7c): on the pre-fix copy the two overlapped by 24 px at 812 x 375 and 41 px at 740 x 360 (review_batch_B F2, re-measured by bf_edge.js). Taller screens unchanged */
+  @media (max-height:420px){ #flash{top:calc(58% - 48px)} }
 
   #snd{font-size:11px;opacity:.35;font-weight:700;letter-spacing:.06em}
 
@@ -1097,6 +1099,7 @@
     cursor:pointer;transition:opacity .12s,border-color .12s,background .12s}
   #dodge.ready{opacity:1;border-color:#8fe3ff;color:#8fe3ff;background:rgba(143,227,255,.12)}
   /* PT6-C 2026-10-21: PLAN_PT6 C (O3a) - while the start screen is up (#start without .gone: opaque, z-index 23, over EVAC's 9) EVAC is hidden from view and so from Tab, so the first Tab lands on the start screen's first control; visibility, not display, so its box and place are kept for anything that measures it; it is back the moment a place is chosen. A browser without :has() ignores the rule and behaves as before (build_PT6_2026-10-21) */ body:has(#start:not(.gone)) #dodge{visibility:hidden}
+  /* BATCH-FIX 2026-10-26: K2 (review_batch_B F6) - while the level-up card screen is up (#cards.show, z-index 20 over EVAC's 9) EVAC is hidden from view and so from Tab, as PT6-C above hides it while the start screen is up, so the first Tab on the card screen lands on the first card's take region; visibility, not display, so its box is kept for ptrFrame; it is back when the screen closes. A browser without :has() ignores the rule and behaves as before */ body:has(#cards.show) #dodge{visibility:hidden}
   /* PT7-S1 2026-10-21: PLAN_PT7 S1 - on touch screens (body.touch #mute{display:flex}) the sound button, as EVAC in PT6-C O3a above, is hidden from view and so from Tab while the start screen is up (#start without .gone: opaque, z-index 23, over the button's 9), so the first Tab lands on the start screen's first control; visibility, not display, so its box is kept for ptrFrame, which measures it; it is back the moment a place is chosen. A browser without :has() ignores the rule and behaves as before (build_PT7_2026-10-21) */ body:has(#start:not(.gone)) #mute{visibility:hidden}
   #svc{position:fixed;right:14px;bottom:118px;z-index:7;font-size:10px;font-weight:800;
     letter-spacing:.09em;padding:4px 10px;border-radius:99px;pointer-events:none;
@@ -1121,7 +1124,8 @@
   #endrun.armed{opacity:1;border-color:rgba(255,77,94,.6);background:rgba(255,77,94,.16);color:#ff9d9d}
   body.touch #endrun{position:fixed;top:102px;right:12px;height:42px;min-width:42px;padding:0 12px;font-weight:800}
   /* PT8-F2 2026-10-22: ADJUDICATION_strings_PT8.md, "Rulings on the phase-2 stop points", 2 - in a window 760 px wide or less the alarm strip (#alarm, z-index 7, over the top bar's 5) is centred and its rows can reach the right column, so there the touch button stays in the right column under #mute but starts below the strip's deepest reach. By the CSS: #alarm top 40 px and gap 3 px there; a row (.alm, and .alm.lostline) is its 1 px borders + 4 px paddings + one line of 10.5 px text at the body's line-height 1.4 (14.7 px; the arrow .dir is 14 px) = 24.7 px; the ruling's 5 rows (one lost line + one row per lifeline up; paintAlarm) end at 40 + 5 x 24.7 + 4 x 3 = 175.5 px; the button starts 8.5 px below, at 184 px, as it sat 8 px under #mute. Wider windows keep 102 px: there the rows are centred in a wider strip and the right column is clear of them (measured; build record). ptrFrame reads the button's box, so the edge pointers stay 22 px below its new bottom (build_PT8_2026-10-21) */
-  @media (max-width:760px){ body.touch #endrun{top:184px} }
+  /* BATCH-FIX 2026-10-26: K10 (review_batch_B F2) - the 184 px rule now applies only in a portrait window: a phone held sideways (812 x 375, 740 x 360) is 760 px wide or less too, but the alarm strip's reach that the rule answers is a portrait phone's, and at 740 x 360 the button sat on the flash line (measured 82 x 17 px on the pre-fix copy); in landscape the button keeps 102 px as on wider screens; portrait phones (375 x 812, 360 x 740) unchanged; was `@media (max-width:760px){ body.touch #endrun{top:184px} }` */
+  @media (max-width:760px) and (orientation: portrait){ body.touch #endrun{top:184px} }
   /* PT8-E1 2026-10-21: PLAN_PT8 E1 - the button is hidden from view and so from Tab while the start screen is up (as PT6-C O3a and PT7-S1 hide EVAC and #mute), while the level-up card screen is shown and while the report (with its debrief) is shown; visibility, not display, as there. A browser without :has() ignores the rule: the button is then under those screens (their z-index 20 to 23 over the top bar's 5) and still reached by Tab, and a press there does nothing (endLive, script) (build_PT8_2026-10-21) */
   body:has(#start:not(.gone)) #endrun, body:has(#cards.show) #endrun, body:has(#over.show) #endrun{visibility:hidden}
   /* PT8-E1 2026-10-21: PLAN_PT8 E1 - #endsay, the polite live region that speaks after a first press (endArm; its sentence is PT8-T D8a / D8b), kept off the screen by the same rule as #zoomsay (build_PT8_2026-10-21) */
@@ -1817,7 +1821,8 @@
     <h2 id="howto-t" tabindex="-1"></h2>
     <p id="howto-p"></p>
     <!-- P16a-F 2026-10-22: the page's Details fold: its toggle and the page text, closed (facePage in the script) (build_P16a_2026-10-22) -->
-    <button type="button" class="fold-t" id="howto-fd" aria-expanded="false" aria-controls="howto-fb"><span aria-hidden="true">&#9656;</span> Details</button>
+    <!-- BATCH-FIX 2026-10-26: K7 (review_batch_A F6a) - the toggle's accessible name is "Details" plus the page's heading (aria-labelledby: itself, then #howto-t), so a screen reader hears which page's details it opens; the visible word unchanged; was `<button type="button" class="fold-t" id="howto-fd" aria-expanded="false" aria-controls="howto-fb"><span aria-hidden="true">&#9656;</span> Details</button>` -->
+    <button type="button" class="fold-t" id="howto-fd" aria-expanded="false" aria-controls="howto-fb" aria-labelledby="howto-fd howto-t"><span aria-hidden="true">&#9656;</span> Details</button>
     <p id="howto-fb" class="fold-b" hidden></p>
     <div class="howbar">
       <button id="how-back" type="button"></button>
@@ -1827,7 +1832,8 @@
 </div>
 <div id="hint" hidden role="dialog" aria-modal="true" aria-labelledby="hint-t" aria-describedby="hint-p">
   <!-- P16a-F 2026-10-22: the card's Details fold (#hint-fd, #hint-fb) after its face (#hint-p); was was `<div class="hintcard"><h3 id="hint-t"></h3><p id="hint-p"></p><div id="hint-g"></div><button id="hint-ok" type="button"></button></div>` (build_P16a_2026-10-22) -->
-  <div class="hintcard"><h3 id="hint-t"></h3><p id="hint-p"></p><button type="button" class="fold-t" id="hint-fd" aria-expanded="false" aria-controls="hint-fb"><span aria-hidden="true">&#9656;</span> Details</button><p id="hint-fb" class="fold-b" hidden></p><div id="hint-g"></div><button id="hint-ok" type="button"></button></div>
+  <!-- BATCH-FIX 2026-10-26: K7 (review_batch_A F6a) - the hint card's toggle is named "Details" plus the card's title (aria-labelledby: itself, then #hint-t); the visible word unchanged; was `<div class="hintcard"><h3 id="hint-t"></h3><p id="hint-p"></p><button type="button" class="fold-t" id="hint-fd" aria-expanded="false" aria-controls="hint-fb"><span aria-hidden="true">&#9656;</span> Details</button><p id="hint-fb" class="fold-b" hidden></p><div id="hint-g"></div><button id="hint-ok" type="button"></button></div>` -->
+  <div class="hintcard"><h3 id="hint-t"></h3><p id="hint-p"></p><button type="button" class="fold-t" id="hint-fd" aria-expanded="false" aria-controls="hint-fb" aria-labelledby="hint-fd hint-t"><span aria-hidden="true">&#9656;</span> Details</button><p id="hint-fb" class="fold-b" hidden></p><div id="hint-g"></div><button id="hint-ok" type="button"></button></div>
 </div>
 <!-- ART-E 2026-10-17: E2 - the "Art credits" dialog (build_ART_2026-10-17). A direct child of body like #howto (see its CSS). Its words
      around the data are drafted for this build; the data (titles, authors, pages, licences, changes, the credit lines and the full LPC
@@ -2152,7 +2158,8 @@
         <p class="cl">Page: <a href="https://karsiori.itch.io/free-pixel-art-gem-pack" target="_blank" rel="noopener noreferrer">https://karsiori.itch.io/free-pixel-art-gem-pack</a></p>
         <p class="cl">Licence: CC0, <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">https://creativecommons.org/publicdomain/zero/1.0/</a></p>
         <p class="cl">Changed: one gem's 10 frames</p>
-        <p class="cl">Used for: the blue dots that destroyed hazards drop</p>
+        <!-- BATCH-FIX 2026-10-26: K5 (review_batch_A N1) - "blue dots" -> "blue gems", How to play's word for them; was `<p class="cl">Used for: the blue dots that destroyed hazards drop</p>` -->
+        <p class="cl">Used for: the blue gems that destroyed hazards drop</p>
       </li>
       <li class="ca" data-id="I6-94">
         <h5 class="ct">2D Health &amp; Ammo Pickups</h5>
@@ -3314,70 +3321,70 @@ const POOL_Q = {
            'The storm’s size on the satellite picture',
            'The rainfall total where the eye makes landfall'],
     correct: 1,
-    why: 'Evacuation planning is zone-based, not category-based: NWS guidance starts with “find out if you live in a hurricane evacuation zone”, and a well-built home outside the zone can be the safest place to stay. The category measures wind — one hazard of five. (NOAA NWS / NHC, read 2026-08-30)' },
+    why: 'Evacuation planning is zone-based, not category-based: NWS guidance starts with “find out if you live in a hurricane evacuation zone”, and a well-built home outside the zone can be the safest place to stay. The category measures wind — one hazard of five. (NOAA NWS / NHC)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q2', form: 'misconception', q: 'A surge warning is up. You live inland of the surge zone in a solid building. Best move?',
     opts: ['Drive 300 km inland — farther is always safer',
            'Go to the coast to help watch the water',
            'Shelter where you are — you are outside the zone the warning is for',
            'Move into the basement for the duration'],
     correct: 2,
-    why: 'Run from the water, hide from the wind: surge evacuation is for the mapped zone. NWS: you do not need to travel hundreds of miles, and a well-built home outside the zone may be the safest place. Long shadow evacuations clog the roads the zone’s residents need. (NOAA NWS, read 2026-08-30)' },
+    why: 'Run from the water, hide from the wind: surge evacuation is for the mapped zone. NWS: you do not need to travel hundreds of miles, and a well-built home outside the zone may be the safest place. Long shadow evacuations clog the roads the zone’s residents need. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q3', form: 'judgment', q: 'Landfall is forecast for tomorrow evening. Your only road out crosses a low causeway. When do you leave?',
     opts: ['Tomorrow afternoon, once the track is certain',
            'Tonight — the water can close the road a day before the storm arrives',
            'When you can see the surge coming',
            'After the eye passes, in the calm'],
     correct: 1,
-    why: 'In Hurricane Ike (2008), coastal water rose rapidly about 24 hours before landfall and cut evacuation routes off the Bolivar Peninsula — people who waited for certainty could no longer leave, and some of them died there. The deadline is set by the water, not by landfall time. (NHC Tropical Cyclone Report, read 2026-08-30)' },
+    why: 'In Hurricane Ike (2008), coastal water rose rapidly about 24 hours before landfall and cut evacuation routes off the Bolivar Peninsula — people who waited for certainty could no longer leave, and some of them died there. The deadline is set by the water, not by landfall time. (NHC Tropical Cyclone Report)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q4', form: 'warning-literacy', q: 'A hurricane watch just went up. What is that 48-hour clock actually counting down to?',
     opts: ['Landfall of the eye',
            'The peak of the surge',
            'The all-clear',
            'The arrival of conditions that end outdoor preparation'],
     correct: 3,
-    why: 'Watches are issued about 48 hours before hazardous conditions are possible, warnings about 36 — explicitly because it may not be safe to prepare once the storm is close. The clock is your work window, not a countdown to the eye. (NOAA, read 2026-08-30)' },
+    why: 'Watches are issued about 48 hours before hazardous conditions are possible, warnings about 36 — explicitly because it may not be safe to prepare once the storm is close. The clock is your work window, not a countdown to the eye. (NOAA)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q5', form: 'warning-literacy', q: 'Two days out, the storm is “only” a Category 1 over very warm water. What do you prepare for?',
     opts: ['A Category 1 — the current strength is the forecast',
            'Something possibly much stronger — storms can gain 30 knots of wind in a day',
            'Nothing yet — preparation starts at Category 3',
            'Rain only — weak storms carry no surge'],
     correct: 1,
-    why: 'Rapid intensification is a defined phenomenon: a gain of at least 30 knots of sustained wind within 24 hours. Decisions keyed to today’s category systematically lag the real threat — plan for the envelope, not the snapshot. (NHC glossary, read 2026-08-30)' },
+    why: 'Rapid intensification is a defined phenomenon: a gain of at least 30 knots of sustained wind within 24 hours. Decisions keyed to today’s category systematically lag the real threat — plan for the envelope, not the snapshot. (NHC glossary)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q6', form: 'judgment', q: 'At the shore, the ground shakes hard for half a minute; the tide then races out absurdly far. Your phone is silent. Next move?',
     opts: ['Walk out on the exposed seabed to look',
            'Wait — no siren means no tsunami',
            'Move immediately to high ground or inland: what you just felt WAS the warning',
            'Film it and check the news'],
     correct: 2,
-    why: 'A strong or long quake, the sea acting strange, or a loud ocean roar are natural tsunami warnings — the wave can arrive within minutes, before any official message. NWS: do not wait for an official warning to act on them. (NOAA NWS, read 2026-08-30)' },
+    why: 'A strong or long quake, the sea acting strange, or a loud ocean roar are natural tsunami warnings — the wave can arrive within minutes, before any official message. NWS: do not wait for an official warning to act on them. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q7', form: 'misconception', q: 'The first tsunami wave hit and drained back. The shore looks calm and your house is right there. Do you go?',
     opts: ['Yes — the tsunami has passed',
            'No — waves can keep arriving from five minutes to two hours apart, and the first is often not the largest',
            'Yes, but only for ten minutes',
            'Only if the water looks clear'],
     correct: 1,
-    why: 'A tsunami is a series of waves that flood, drain and reflood for hours. The gap between waves ranges from five minutes to two hours, and the first to arrive may not be the largest. Returning after wave one is the classic fatal move — stay out until the official all-clear. (NOAA NWS, read 2026-08-30)' },
+    why: 'A tsunami is a series of waves that flood, drain and reflood for hours. The gap between waves ranges from five minutes to two hours, and the first to arrive may not be the largest. Returning after wave one is the classic fatal move — stay out until the official all-clear. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q8', form: 'judgment', q: 'The shaking stops on the delta shore. The official guidance for the next sixty seconds is:',
     opts: ['Check social media for confirmation first',
            'Go as high and as far inland as you can, without waiting for an order',
            'Get in the car and drive along the coast road',
            'Return home for documents, then leave'],
     correct: 1,
-    why: 'For a near-source tsunami the protocol is: survive the quake first, then move immediately to a safe place as high and as far inland as possible — explicitly without waiting for official warnings or evacuation orders. Preparedness guidance points at shelter sites 30 metres up or well inland. (FEMA / Ready.gov, read 2026-08-30)' },
+    why: 'For a near-source tsunami the protocol is: survive the quake first, then move immediately to a safe place as high and as far inland as possible — explicitly without waiting for official warnings or evacuation orders. Preparedness guidance points at shelter sites 30 metres up or well inland. (FEMA / Ready.gov)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q9', form: 'recovery', q: 'The wind has stopped and the sky is blue. When does this disaster stop killing people?',
     opts: ['It already has — danger ends with the weather',
            'Within 24 hours of landfall',
            'Not for days or weeks: cleanup, power loss and generators keep taking people after the storm',
            'Only if a second storm follows'],
     correct: 2,
-    why: 'Indirect deaths arrive days, weeks, even months after a storm: generator accidents — carbon monoxide, shock, fire are the most common hazards — overexertion during cleanup, and crashes. Surviving the storm is not yet surviving the disaster. (NOAA, read 2026-08-30)' },
+    why: 'Indirect deaths arrive days, weeks, even months after a storm: generator accidents — carbon monoxide, shock, fire are the most common hazards — overexertion during cleanup, and crashes. Surviving the storm is not yet surviving the disaster. (NOAA)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q55', form: 'warning-literacy', q: 'The forecast cone does not reach your town. What has the map actually told you?',
     opts: ['You are outside the storm’s reach — the cone is the danger area',
            'Only that the centre will probably not pass over you',
            'That the storm has a two-thirds chance of missing you entirely',
            'That the track is still too uncertain to plan against'],
     correct: 1,
-    why: 'The cone is the probable track of the CENTRE, drawn so that two-thirds of past official forecast errors fall inside it — a third of the time the error is bigger than the cone allows for. It carries no information at all about how wide the storm is. The forecasters’ own note is that tropical cyclones are not a point, their effects can span many hundreds of miles from the centre, and hurricane- and tropical-storm-force winds can extend well beyond the cone. (NOAA National Hurricane Center, read 2026-09-01)' },
+    why: 'The cone is the probable track of the CENTRE, drawn so that two-thirds of past official forecast errors fall inside it — a third of the time the error is bigger than the cone allows for. It carries no information at all about how wide the storm is. The forecasters’ own note is that tropical cyclones are not a point, their effects can span many hundreds of miles from the centre, and hurricane- and tropical-storm-force winds can extend well beyond the cone. (NOAA National Hurricane Center)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
   basin: [
   { id: 'Q11', form: 'misconception', q: 'Your town had its “100-year flood” last spring. What is this year’s chance of an equal one?',
@@ -3386,70 +3393,70 @@ const POOL_Q = {
            'Half the usual chance',
            '100%, because the cycle has started'],
     correct: 0,
-    why: 'A “100-year flood” means a 1-percent chance in ANY year — USGS states plainly that such floods can happen two years in a row, and that a rare flood does not reduce the chances of another within a short period. Last year bought you nothing. (USGS, read 2026-08-30)' },
+    why: 'A “100-year flood” means a 1-percent chance in ANY year — USGS states plainly that such floods can happen two years in a row, and that a rare flood does not reduce the chances of another within a short period. Last year bought you nothing. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q12', form: 'judgment', q: 'Water covers the road ahead. It looks shallow and your SUV is heavy. The rule is:',
     opts: ['Cross slowly in low gear',
            'Cross fast to carry momentum',
            'Follow the car in front through',
            'Turn around — a foot of moving water carries most cars, and the road under it may be gone'],
     correct: 3,
-    why: 'Six inches of fast-moving water can knock over an adult; twelve inches carries away most cars; two feet takes SUVs and trucks — and the roadbed itself may have collapsed where you cannot see it. Turn Around Don’t Drown is the whole rule. (NOAA NWS, read 2026-08-30)' },
+    why: 'Six inches of fast-moving water can knock over an adult; twelve inches carries away most cars; two feet takes SUVs and trucks — and the roadbed itself may have collapsed where you cannot see it. Turn Around Don’t Drown is the whole rule. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q13', form: 'judgment', q: 'A flash flood warning lands at 11 pm. You are driving a familiar road with dips in it. What changes?',
     opts: ['Nothing — familiarity substitutes for visibility',
            'Everything: at night you cannot read depth or missing road, and vehicles are where nearly half of flash-flood deaths happen',
            'Only your speed — slow down and continue',
            'Use high beams and follow the tail lights ahead'],
     correct: 1,
-    why: 'Nearly half of flash-flood fatalities are vehicle-related, and NWS singles out night as the dangerous time because flood dangers are harder to recognize. The same warning demands a stricter answer after dark: stop somewhere high and wait. (NOAA NWS, read 2026-08-30)' },
+    why: 'Nearly half of flash-flood fatalities are vehicle-related, and NWS singles out night as the dangerous time because flood dangers are harder to recognize. The same warning demands a stricter answer after dark: stop somewhere high and wait. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q14', form: 'mechanism', q: 'Sunny afternoon in a narrow gorge. The creek turns muddy and starts rising with sticks in it. What is happening?',
     opts: ['Nothing — no rain here means no flood here',
            'The tide is coming in',
            'Rain far upstream is arriving where you stand — your position in the drainage sets your risk, not the sky above you',
            'A dam is being tested'],
     correct: 2,
-    why: 'NWS warns that a flash flood can strike areas not immediately receiving rain — the catchment above you collects it and the channel delivers it. Rising, muddying water with debris is the river announcing it. Move up the walls, not downstream. (NOAA NWS, read 2026-08-30)' },
+    why: 'NWS warns that a flash flood can strike areas not immediately receiving rain — the catchment above you collects it and the channel delivers it. Rising, muddying water with debris is the river announcing it. Move up the walls, not downstream. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q15', form: 'warning-literacy', q: 'A flood WATCH is issued for your valley for tomorrow. Tonight you should:',
     opts: ['Ready the kit, plan the route, move what matters up a floor — the watch is your preparation window',
            'Evacuate immediately',
            'Nothing — a watch is just weather talk',
            'Drive to the river to judge it yourself'],
     correct: 0,
-    why: 'Watch means conditions are favorable — be prepared; warning means it is imminent or occurring — take action. Treating them as synonyms either wastes the free hours the watch gives you or delays the action the warning demands. (NOAA NWS, read 2026-08-30)' },
+    why: 'Watch means conditions are favorable — be prepared; warning means it is imminent or occurring — take action. Treating them as synonyms either wastes the free hours the watch gives you or delays the action the warning demands. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q16', form: 'mechanism', q: 'A moderate storm — the kind that never flooded your valley — is forecast. Last summer a fire burned the slopes upstream. Today’s risk is:',
     opts: ['The same as always — the flood threshold is a fact about the river',
            'Lower — the fire cleared out the debris',
            'Zero — fires and floods are unrelated hazards',
            'Much higher: burned basins flood on far less rain, for a season or two'],
     correct: 3,
-    why: 'It takes much less rainfall to trigger floods and debris flows from burned basins — USGS records southern California flows triggered by as little as 7 mm of rain in 30 minutes — and the elevated risk runs on the order of two rainy seasons. The catchment’s state, not custom, sets the threshold. (USGS, read 2026-08-30)' },
+    why: 'It takes much less rainfall to trigger floods and debris flows from burned basins — USGS records southern California flows triggered by as little as 7 mm of rain in 30 minutes — and the elevated risk runs on the order of two rainy seasons. The catchment’s state, not custom, sets the threshold. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q17', form: 'recovery', q: 'The river dropped overnight and your street is mud. First correct move at the house?',
     opts: ['Power on, to check the fridge',
            'Wait for the all-clear, then enter carefully with the power OFF — the dangers left behind are the ones you cannot see',
            'Wade into the basement to salvage first',
            'Hose everything down barefoot while it is soft'],
     correct: 1,
-    why: 'Floodwater leaves contamination, gas leaks and live wiring that are not obvious at a glance; NWS says do not enter until authorities give the all-clear, make sure the electrical system is off, and never run a generator indoors — carbon monoxide is a leading killer after storms. (NOAA NWS, read 2026-08-30)' },
+    why: 'Floodwater leaves contamination, gas leaks and live wiring that are not obvious at a glance; NWS says do not enter until authorities give the all-clear, make sure the electrical system is off, and never run a generator indoors — carbon monoxide is a leading killer after storms. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q18', form: 'mechanism', q: 'The same storm falls on a forested valley and on a paved district. Where does the water rise faster, and why?',
     opts: ['The forest — trees funnel water to the ground',
            'Equal — the same rain is the same flood',
            'The paved district: sealed ground cannot drink, so the storm runs straight to the stream',
            'Neither — floods come only from rivers overflowing'],
     correct: 2,
-    why: 'In a forested watershed much of the storm soaks in and drains out slowly; urbanization replaces that surface with pavement and roofs, so more stormwater runs off faster — USGS ties impervious cover to more frequent and more severe flooding. The city manufactures its own flash floods. (USGS, read 2026-08-30)' },
+    why: 'In a forested watershed much of the storm soaks in and drains out slowly; urbanization replaces that surface with pavement and roofs, so more stormwater runs off faster — USGS ties impervious cover to more frequent and more severe flooding. The city manufactures its own flash floods. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q19', form: 'compound', q: 'A hurricane’s REMNANT — no longer even a hurricane — crosses a megacity a thousand kilometres from landfall. How dangerous is that?',
     opts: ['Barely — the label downgrade means the danger has passed',
            'Deadly: record-rate rain on a drained-by-design city killed dozens in Ida’s remnants, most far from the coast',
            'Dangerous only on the coast',
            'Dangerous only if the eye reforms'],
     correct: 1,
-    why: 'Ida’s post-tropical remnants dropped rain at three-plus inches per hour — Central Park logged 3.15 inches in a single hour — and the flash flooding killed 49 people across the Northeast, 13 of them in New York City. Drainage has a design ceiling; a record rate finds it. (NWS Service Assessment, read 2026-08-30)' },
+    why: 'Ida’s post-tropical remnants dropped rain at three-plus inches per hour — Central Park logged 3.15 inches in a single hour — and the flash flooding killed 49 people across the Northeast, 13 of them in New York City. Drainage has a design ceiling; a record rate finds it. (NWS Service Assessment)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q56', form: 'misconception', q: 'Your street is just outside the 100-year flood zone on the map. What does that line mean?',
     opts: ['Flooding there happens roughly once a century',
            'You are outside the 1%-a-year zone — and the map keeps going past it',
            'The ground cannot flood; that is what the line is drawn for',
            'The zone is redrawn after every flood, so it is current'],
     correct: 1,
-    why: 'The 100-year flood is the flood with a 1 per cent chance of being equalled or exceeded IN ANY GIVEN YEAR, which is a different statement from once a century. Past it the map keeps going: a further band is mapped between the base flood and the 0.2-per-cent-annual-chance (500-year) flood, and only beyond THAT is an area labelled minimal hazard. The edge is a probability contour, not a border between ground that floods and ground that does not. (FEMA, flood zones, read 2026-09-01)' },
+    why: 'The 100-year flood is the flood with a 1 per cent chance of being equalled or exceeded IN ANY GIVEN YEAR, which is a different statement from once a century. Past it the map keeps going: a further band is mapped between the base flood and the 0.2-per-cent-annual-chance (500-year) flood, and only beyond THAT is an area labelled minimal hazard. The edge is a probability contour, not a border between ground that floods and ground that does not. (FEMA, flood zones)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q57', form: 'mechanism', q: 'A levee now runs along your reach of the river. What has changed about the risk to you?',
     opts: ['It is gone — that is what the levee was built to do',
            'Reduced, not removed — and if it is overtopped the damage can be worse than with no levee',
@@ -3457,7 +3464,7 @@ const POOL_Q = {
            'Reduced permanently, and it needs no upkeep to stay that way'],
     correct: 1,
     // CORRECTED 2026-09-16: FEMA hedge "can help reduce" restored; causal join + development sentence dropped (option A); read date 2026-09-15 (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
-    why: 'The agency that draws the flood maps says it plainly: levees can help reduce the risk of flooding, but they do not eliminate it. They deteriorate over time and must be maintained to keep working. When one fails or is overtopped, the damage can be greater than if it had never been built. (FEMA, Living With Levees, read 2026-09-15)' },
+    why: 'The agency that draws the flood maps says it plainly: levees can help reduce the risk of flooding, but they do not eliminate it. They deteriorate over time and must be maintained to keep working. When one fails or is overtopped, the damage can be greater than if it had never been built. (FEMA, Living With Levees)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
   metro: [
   { id: 'Q20', form: 'mechanism', q: 'Two heatwaves peak at the same daytime temperature, but in the city the nights stay hot. Why does that matter?',
@@ -3466,70 +3473,70 @@ const POOL_Q = {
            'The city’s built surfaces hold heat into the night, and the cool-down hours are where homes and bodies were supposed to recover',
            'Night heat only matters for crops'],
     correct: 2,
-    why: 'The urban heat island keeps city nights roughly 2–5°F warmer than the surroundings (EPA), and the standard advice for cooling a home is to use the cooler night air (WHO) — a night that stays hot takes that recovery away, day after day. (EPA / WHO, read 2026-08-30)' },
+    why: 'The urban heat island keeps city nights roughly 2–5°F warmer than the surroundings (EPA), and the standard advice for cooling a home is to use the cooler night air (WHO) — a night that stays hot takes that recovery away, day after day. (EPA / WHO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q21', form: 'mechanism', q: 'Same thermometer reading in two districts — one dry, one very humid. Where is heat illness likelier, and why?',
     opts: ['The humid one: near body temperature, sweating is the only cooling left, and humid air blocks the evaporation it depends on',
            'The dry one: dry air pulls water out of you',
            'Equal: temperature is temperature',
            'Neither, if you stay in the shade'],
     correct: 0,
-    why: 'Once air temperature reaches about 95°F (35°C), heat loss by radiation and convection essentially stops and sweating becomes all-important — but sweat only cools when it evaporates, and high humidity slows that to a crawl. That is the entire reason the heat index exists. (NOAA JetStream, read 2026-08-30)' },
+    why: 'Once air temperature reaches about 95°F (35°C), heat loss by radiation and convection essentially stops and sweating becomes all-important — but sweat only cools when it evaporates, and high humidity slows that to a crawl. That is the entire reason the heat index exists. (NOAA JetStream)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q22', form: 'misconception', q: 'Power is strained, your flat is at 36°C, and the fan is your only cooling. What is true?',
     opts: ['More airflow is always safer in heat',
            'Past roughly the high 90s °F / 40 °C, a fan blows heat INTO you — water on the skin and a cooler place beat a bigger fan',
            'Fans work best pointed at the ceiling',
            'A fan plus coffee keeps you alert and safe'],
     correct: 1,
-    why: 'Both NWS and WHO put a ceiling on fans: above roughly the high-90s °F heat index (WHO says above 40°C), moving hot air adds heat to the body instead of removing it. The escalation is a cool shower, wet cloth, or a cooler room — not more airflow. (NOAA NWS / WHO, read 2026-08-30)' },
+    why: 'Both NWS and WHO put a ceiling on fans: above roughly the high-90s °F heat index (WHO says above 40°C), moving hot air adds heat to the body instead of removing it. The escalation is a cool shower, wet cloth, or a cooler room — not more airflow. (NOAA NWS / WHO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q23', form: 'judgment', q: 'A brutal heat week is forecast. Which single action most reduces deaths on your street?',
     opts: ['Handing out sunscreen at the park',
            'Warning the joggers',
            'Stocking the freezer with ice',
            'Checking twice a day on the older neighbours who live alone — they are who heat kills, often unnoticed'],
     correct: 3,
-    why: 'Heat concentrates its deaths among the isolated: older people, the chronically ill, those alone without cooling, who may not notice their own warning signs. The Red Cross names the counter-practice: check in twice a day on those who are older, have health problems, or live alone. (Red Cross / NOAA NWS, read 2026-08-30)' },
+    why: 'Heat concentrates its deaths among the isolated: older people, the chronically ill, those alone without cooling, who may not notice their own warning signs. The Red Cross names the counter-practice: check in twice a day on those who are older, have health problems, or live alone. (Red Cross / NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q24', form: 'judgment', q: 'Your workmate was sweating heavily; now he is confused and his skin is hot. He says he feels “better, drier”. This is:',
     opts: ['Recovery — the sweating did its job',
            'Heat stroke — a medical emergency: call for help, cool him aggressively, and do not give him fluids',
            'Ordinary tiredness — walk him home',
            'Heat cramps — massage and continue'],
     correct: 1,
-    why: 'Heavy sweating with cool clammy skin is heat exhaustion; confusion with hot skin — dry or damp — is heat stroke, a severe medical emergency where delay can be fatal. NWS first aid: emergency call, aggressive cooling, and do NOT give fluids to someone with altered consciousness. The “drying out” is deterioration wearing recovery’s face. (NOAA NWS, read 2026-08-30)' },
+    why: 'Heavy sweating with cool clammy skin is heat exhaustion; confusion with hot skin — dry or damp — is heat stroke, a severe medical emergency where delay can be fatal. NWS first aid: emergency call, aggressive cooling, and do NOT give fluids to someone with altered consciousness. The “drying out” is deterioration wearing recovery’s face. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q25', form: 'compound', q: 'Why is a blackout DURING a heatwave worse than a blackout plus a heatwave on separate weeks?',
     opts: ['It is not — risks simply add',
            'Because the same hours that make cooling a matter of life also strip the power that cooling, hospitals and water systems run on',
            'Because blackouts make the air hotter',
            'Because heatwaves only matter when the news covers them'],
     correct: 1,
-    why: 'WHO names the compound directly: power shortages that accompany heatwaves disrupt health facilities, transport and water infrastructure — the failure lands at the hour of maximum need. Correlated hazards multiply; the game is named after this. (WHO, read 2026-08-30)' },
+    why: 'WHO names the compound directly: power shortages that accompany heatwaves disrupt health facilities, transport and water infrastructure — the failure lands at the hour of maximum need. Correlated hazards multiply; the game is named after this. (WHO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q26', form: 'judgment', q: 'A violent cloudburst catches you on a city street. Which refuge is WRONG?',
     opts: ['The subway concourse below the street',
            'A shop one floor up',
            'A concrete office lobby on ground level, doors shut',
            'A pedestrian bridge over the avenue'],
     correct: 0,
-    why: 'Sheltering has a direction, and for water it is UP: Japan’s urban-flood record runs through inundated underground malls (Fukuoka 1999), and its ministry lists underground facilities among the most water-vulnerable in a cloudburst; NWS pairs that with basement electrical danger. Down is for wind, never for water. (MLIT / NOAA NWS, read 2026-08-30)' },
+    why: 'Sheltering has a direction, and for water it is UP: Japan’s urban-flood record runs through inundated underground malls (Fukuoka 1999), and its ministry lists underground facilities among the most water-vulnerable in a cloudburst; NWS pairs that with basement electrical danger. Down is for wind, never for water. (MLIT / NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q27', form: 'judgment', q: 'The met office gives the city three days’ notice of extreme heat. There is nowhere to evacuate a heatwave to. What are the three days FOR?',
     opts: ['Nothing — un-evacuatable means un-preparable',
            'Repainting the roofs white in time',
            'Activating the heat plan: cooling centres open, check-in lists running, hospitals staffed before the peak',
            'Moving the city’s servers out of town'],
     correct: 2,
-    why: 'For heat, warning lead time buys social pre-positioning, not movement: WHO’s heat-health machinery is action plans wired to early warnings — mapped vulnerable people, response capacity stood up in advance. The measure is the plan the warning triggers. (WHO, read 2026-08-30)' },
+    why: 'For heat, warning lead time buys social pre-positioning, not movement: WHO’s heat-health machinery is action plans wired to early warnings — mapped vulnerable people, response capacity stood up in advance. The measure is the plan the warning triggers. (WHO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q28', form: 'mechanism', q: 'A tsunami warning reaches a coastal city. What do most people actually do FIRST?',
     opts: ['Evacuate immediately and in good order',
            'Panic and stampede',
            'Ignore it entirely',
            'Check another channel and ask people nearby whether it is real'],
     correct: 3,
-    why: 'Warning research calls it milling: before acting, people seek confirmation — another source, a neighbour, a call — regardless of hazard or technology, and that lag spends the very minutes the warning bought. It is also why drills and specific wording matter: they shorten the confirmation. (US National Academies, read 2026-08-30)' },
+    why: 'Warning research calls it milling: before acting, people seek confirmation — another source, a neighbour, a call — regardless of hazard or technology, and that lag spends the very minutes the warning bought. It is also why drills and specific wording matter: they shorten the confirmation. (US National Academies)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q58', form: 'compound', q: 'A cold wave takes the power grid down for days. What is the next system to go?',
     opts: ['Nothing else — the grid fails alone and comes back on its own timetable',
            'Water: treatment stops, pumps fail, pipes freeze and burst',
            'Only heating, since that is what the electricity was doing',
            'The mobile network, and nothing past it'],
     correct: 1,
-    why: 'In the Texas cold wave of February 2021 the hazard was only the trigger. An un-winterised grid running unconnected to its neighbours and without reserve dropped about 4.5 million homes and businesses — and then treatment plants released untreated sewage, supply pumps failed and pipes burst, boil-water notices reached people who could not run a tap at all, food spoiled as distribution broke, and emergency, social and pandemic-response services stuttered and stopped. The toll was first put at 58 and later revised to at least 264. (UNDRR feature, The Texas coldwave disaster, read 2026-09-01)' },
+    why: 'In the Texas cold wave of February 2021 the hazard was only the trigger. An un-winterised grid running unconnected to its neighbours and without reserve dropped about 4.5 million homes and businesses — and then treatment plants released untreated sewage, supply pumps failed and pipes burst, boil-water notices reached people who could not run a tap at all, food spoiled as distribution broke, and emergency, social and pandemic-response services stuttered and stopped. The toll was first put at 58 and later revised to at least 264. (UNDRR feature, The Texas coldwave disaster)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
   fault: [
   { id: 'Q29', form: 'recovery', q: 'The shaking has stopped. Your block has visible cracks and your documents are inside. The rule is:',
@@ -3538,63 +3545,63 @@ const POOL_Q = {
            'Wait exactly one hour, then enter',
            'Enter, but stay near the doorway'],
     correct: 1,
-    why: 'Aftershocks continue for days, weeks, months or even years after a large mainshock, in the same area — and official guidance is blunt: do not enter damaged buildings. The calm between shocks is not safety; it is the interval. (USGS / Ready.gov, read 2026-08-30)' },
+    why: 'Aftershocks continue for days, weeks, months or even years after a large mainshock, in the same area — and official guidance is blunt: do not enter damaged buildings. The calm between shocks is not safety; it is the interval. (USGS / Ready.gov)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q30', form: 'warning-literacy', q: 'The day after a major quake, which statement can seismologists honestly issue?',
     opts: ['“The next quake arrives Tuesday, magnitude 6”',
            '“No further shaking will occur”',
            '“Aftershock probabilities are elevated in this area and will decay over time”',
            '“Animal behaviour will signal the next shock”'],
     correct: 2,
-    why: 'What exists is aftershock FORECASTING — statistical probabilities that aid response and recovery decisions, issued by several countries. What does not exist is prediction of a specific future earthquake. Knowing the difference is knowing what science can actually give you. (USGS, read 2026-08-30)' },
+    why: 'What exists is aftershock FORECASTING — statistical probabilities that aid response and recovery decisions, issued by several countries. What does not exist is prediction of a specific future earthquake. Knowing the difference is knowing what science can actually give you. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q31', form: 'mechanism', q: 'Two identical, code-compliant buildings ride the same quake — one on rock, one on saturated sandy fill. Why can only one fall over?',
     opts: ['Inspection quality varies block to block',
            'The fill can liquefy — the ground itself briefly becomes a fluid and stops holding the foundation up',
            'Distance to the epicentre decides everything',
            'Taller buildings attract stronger shaking'],
     correct: 1,
-    why: 'In strong shaking, saturated loose sands and silts can temporarily lose strength and behave as viscous fluids — buildings settle and tip, as at Niigata in 1964. The younger, looser and wetter the ground, the more susceptible: WHERE you build can matter as much as HOW. (USGS, read 2026-08-30)' },
+    why: 'In strong shaking, saturated loose sands and silts can temporarily lose strength and behave as viscous fluids — buildings settle and tip, as at Niigata in 1964. The younger, looser and wetter the ground, the more susceptible: WHERE you build can matter as much as HOW. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q32', form: 'judgment', q: 'A hospital rides out the quake structurally intact — and still ends the day with injured staff and dead equipment. The likeliest reason:',
     opts: ['The foundation quietly failed',
            'Nothing that stands can be hurt',
            'The contents were never anchored — shelving, equipment and fixtures became the hazard the building was not',
            'Aftershocks are always to blame'],
     correct: 2,
-    why: 'Preparedness guidance is explicit about the inside of buildings: secure the heavy items — bookcases, refrigerators, water heaters, what hangs on walls — and keep heavy objects low. A structure can pass the test while its unanchored contents fail it. Anchoring is among the cheapest measures that exist. (FEMA / Ready.gov, read 2026-08-30)' },
+    why: 'Preparedness guidance is explicit about the inside of buildings: secure the heavy items — bookcases, refrigerators, water heaters, what hangs on walls — and keep heavy objects low. A structure can pass the test while its unanchored contents fail it. Anchoring is among the cheapest measures that exist. (FEMA / Ready.gov)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q33', form: 'recovery', q: 'After the shaking, the quiet dangers begin. Which pair kills without announcing itself?',
     opts: ['Leaking gas lines and downed power lines',
            'Rain and traffic',
            'Aftershock sirens and dust',
            'Neither — a stopped quake is a finished quake'],
     correct: 0,
-    why: 'The official post-quake hazard list starts with what you cannot see working: damage to the building, leaking gas and water lines, downed power lines — with aftershocks still coming. The response is to get out, stay out of damaged buildings, and treat utilities as suspect. (FEMA / Ready.gov, read 2026-08-30)' },
+    why: 'The official post-quake hazard list starts with what you cannot see working: damage to the building, leaking gas and water lines, downed power lines — with aftershocks still coming. The response is to get out, stay out of damaged buildings, and treat utilities as suspect. (FEMA / Ready.gov)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q34', form: 'judgment', q: 'Twelfth floor, shaking over, evacuation advised. The fastest SAFE way down is:',
     opts: ['The elevator — speed matters',
            'The stairs, watching for debris: shafts, power and controls are all unverified after a quake',
            'Wait in the elevator lobby for rescue',
            'The roof, for the helicopter'],
     correct: 1,
-    why: 'After shaking, an elevator is a machine of unknown condition in a shaft of unknown condition, on power that may fail in an aftershock. Stairs put every step under your own control. (Modern early-warning systems park elevators at the nearest floor for exactly this reason.) (FEMA / Ready.gov basis, read 2026-08-30)' },
+    why: 'After shaking, an elevator is a machine of unknown condition in a shaft of unknown condition, on power that may fail in an aftershock. Stairs put every step under your own control. (Modern early-warning systems park elevators at the nearest floor for exactly this reason.) (FEMA / Ready.gov basis)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q35', form: 'judgment', q: 'The first jolt hits while you are in a classroom. The move that reduces injury, per every official preparedness body:',
     opts: ['Sprint for the exit before it gets worse',
            'Stand in the middle of the room, balanced',
            'Drop, get under the desk, hold on until it stops',
            'Crowd to the windows to see what is happening'],
     correct: 2,
-    why: 'Strong shaking can be violent enough that you cannot run or crawl — you will likely be knocked to the ground where you are, and running outside puts you under falling debris and glass. Drop, Cover, and Hold On is the agreed answer of the official preparedness bodies. (ShakeOut, read 2026-08-30)' },
+    why: 'Strong shaking can be violent enough that you cannot run or crawl — you will likely be knocked to the ground where you are, and running outside puts you under falling debris and glass. Drop, Cover, and Hold On is the agreed answer of the official preparedness bodies. (ShakeOut)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q36', form: 'misconception', q: 'Italy’s civil protection lists the load-bearing doorway as a shelter; US guidance says modern doorways are no safer than any other spot. Who is wrong?',
     opts: ['Italy — the doorway advice is folklore',
            'The US — doorways are universally strong',
            'Both — shelter advice is arbitrary',
            'Neither: each is tuned to its own building stock, and both agree on the core — protect yourself where you are, under something sturdy, and do not run outside'],
     correct: 3,
-    why: 'Italy’s DPC names the doorway IN A LOAD-BEARING WALL, a load-bearing wall, a beam, or a sturdy table — masonry logic; ShakeOut says modern (light-frame) doorways are no safer and points to the table. Both say: do not rush outside, take cover where you are. Good guidance is context-tuned, not universal. (Protezione Civile / ShakeOut, both read 2026-08-30)' },
+    why: 'Italy’s DPC names the doorway IN A LOAD-BEARING WALL, a load-bearing wall, a beam, or a sturdy table — masonry logic; ShakeOut says modern (light-frame) doorways are no safer and points to the table. Both say: do not rush outside, take cover where you are. Good guidance is context-tuned, not universal. (Protezione Civile / ShakeOut)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q37', form: 'warning-literacy', q: 'An earthquake early-warning alert sounds on your phone. What is it telling you?',
     opts: ['A quake is predicted for today — stay alert',
            'A quake has ALREADY begun — shaking may reach you in seconds; act now',
            'The danger has passed',
            'A quake might happen this week somewhere in the region'],
     correct: 1,
-    why: 'ShakeAlert is not earthquake prediction — USGS says so in exactly those words. Sensors detect a quake already underway and race the shaking with an estimate; the seconds you get scale with your distance. Detection buys you the telegraph; nothing buys you the future. (USGS, read 2026-08-30)' },
+    why: 'ShakeAlert is not earthquake prediction — USGS says so in exactly those words. Sensors detect a quake already underway and race the shaking with an estimate; the seconds you get scale with your distance. Detection buys you the telegraph; nothing buys you the future. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q38', form: 'mechanism', q: 'A city adopted a modern seismic code ten years ago. Which buildings did that decision protect?',
     opts: ['All of them — codes apply retroactively',
            'None — codes are paperwork',
@@ -3602,14 +3609,14 @@ const POOL_Q = {
            'Only government buildings'],
     correct: 2,
     // CORRECTED 2026-09-16: placeholder tag became a FEMA source note; explanation rewritten to carry FEMA's exception (renovation / alteration / change of use, as examples) and enforcement; Lead terminal fix restored the hedge (sweep 2, sweep2_2026-09-15/ADJUDICATION_predeploy_2026-09-16.md, F1 resolution)
-    why: 'A code protects what is built after the city adopts and enforces it; a building already standing keeps the code it was designed and built under, unless, for example, it is significantly renovated or altered or changes its use. That is why codes and retrofitting are two different measures in this game — one governs the future stock, one reaches the existing. (FEMA, Seismic Building Codes, read 2026-09-16)' },
+    why: 'A code protects what is built after the city adopts and enforces it; a building already standing keeps the code it was designed and built under, unless, for example, it is significantly renovated or altered or changes its use. That is why codes and retrofitting are two different measures in this game — one governs the future stock, one reaches the existing. (FEMA, Seismic Building Codes)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q39', form: 'mechanism', q: 'Two schools teach identical earthquake safety. One also physically drills each term. In a real quake, why does the drilling school fare better?',
     opts: ['Drills scare students into caution',
            'It does not — knowing and doing are the same thing',
            'Drills are mostly for the teachers',
            'Because the practiced action fires immediately when shaking starts — that is the entire purpose ShakeOut gives its annual drill'],
     correct: 3,
-    why: 'ShakeOut’s premise, in its own words: practice Drop, Cover, and Hold On at least once a year, because you must be ready to protect yourself IMMEDIATELY when the ground begins to shake. Reading prepares the mind; rehearsal prepares the seconds. (ShakeOut, read 2026-08-30)' },
+    why: 'ShakeOut’s premise, in its own words: practice Drop, Cover, and Hold On at least once a year, because you must be ready to protect yourself IMMEDIATELY when the ground begins to shake. Reading prepares the mind; rehearsal prepares the seconds. (ShakeOut)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
   wui: [
   { id: 'Q40', form: 'misconception', q: 'The fire front is forecast to pass a kilometre from your street. The main threat to your house is:',
@@ -3618,70 +3625,70 @@ const POOL_Q = {
            'Nothing — a miss is a miss',
            'Ash weight on the roof'],
     correct: 1,
-    why: 'NIST’s hardening guidance rests on this: research and experience from past WUI fires show a majority of structures are ignited by embers, which travel miles ahead of the front and shower unpredictably — which is why every structure needs ember hardening, not just the ones the flames reach. (NIST, read 2026-08-30)' },
+    why: 'NIST’s hardening guidance rests on this: research and experience from past WUI fires show a majority of structures are ignited by embers, which travel miles ahead of the front and shower unpredictably — which is why every structure needs ember hardening, not just the ones the flames reach. (NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q41', form: 'misconception', q: 'The front passed your neighbourhood two hours ago and the sky is clearing. Why can houses still be lost NOW?',
     opts: ['They cannot — danger ends with the front',
            'Only lightning restarts fires',
            'Embers lodged on and around structures keep working — ignitions can come hours after the front has passed',
            'Heat radiating from the burned ground'],
     correct: 2,
-    why: 'NIST states it flatly: ember ignitions may occur hours after the flame front has passed — material lodged in decks, vehicles, sheds and structures smolders toward ignition long after the visible danger moves on. The fire is not over when the front is. (NIST, read 2026-08-30)' },
+    why: 'NIST states it flatly: ember ignitions may occur hours after the flame front has passed — material lodged in decks, vehicles, sheds and structures smolders toward ignition long after the visible danger moves on. The fire is not over when the front is. (NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q42', form: 'mechanism', q: 'A homeowner clears perfect defensible space — and does nothing to the building. What did the vegetation work not buy?',
     opts: ['Anything at all — clearing is wasted effort',
            'Protection from the flame front, which is all that matters',
            'The ember problem: exposure cannot be eliminated, so the structure itself must be hardened too',
            'Insurance discounts'],
     correct: 2,
-    why: 'NIST’s rule is unconditional: ALL structures must be hardened for ember exposures, because ember arrival cannot be eliminated or reliably reduced by anything around the house. Vegetation work and structure hardening are complements — the pair, not either alone. (NIST, read 2026-08-30)' },
+    why: 'NIST’s rule is unconditional: ALL structures must be hardened for ember exposures, because ember arrival cannot be eliminated or reliably reduced by anything around the house. Vegetation work and structure hardening are complements — the pair, not either alone. (NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q43', form: 'judgment', q: 'Catastrophic fire danger is forecast for tomorrow. No fire exists anywhere near you tonight. “Leave early” means:',
     opts: ['Leave when you smell smoke',
            'Leave when you see flames on the ridge',
            'Leave when a fire truck comes through',
            'Leave tonight or at first light — before any fire exists, on the forecast alone'],
     correct: 3,
-    why: 'CFA’s definition is exact: leaving early means leaving before a fire starts — not when you can see flames or smell smoke — and on a Catastrophic day that means the night before or early morning. Do not rely on an official warning: fires can threaten lives within minutes of starting. (CFA Victoria, read 2026-08-30)' },
+    why: 'CFA’s definition is exact: leaving early means leaving before a fire starts — not when you can see flames or smell smoke — and on a Catastrophic day that means the night before or early morning. Do not rely on an official warning: fires can threaten lives within minutes of starting. (CFA Victoria)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q44', form: 'judgment', q: 'Black Saturday, 2009: about 400 fires in one Victorian day, 78 communities hit, 173 people dead. What does a day like that say your trigger to leave must be?',
     opts: ['The forecast rating — because once fires start, there are too many, too fast, for warnings to reach everyone in time',
            'The first official evacuation order',
            'Visible flames on your own ridge',
            'The neighbours leaving first'],
     correct: 0,
-    why: 'When four hundred fires ignite across one forecast-catastrophic day, per-fire warning simply cannot cover everyone — which is why the rating itself is the trigger. The record: 173 lives and over two thousand homes in a single day. (AIDR / CFA Victoria, read 2026-08-30)' },
+    why: 'When four hundred fires ignite across one forecast-catastrophic day, per-fire warning simply cannot cover everyone — which is why the rating itself is the trigger. The record: 173 lives and over two thousand homes in a single day. (AIDR / CFA Victoria)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q45', form: 'judgment', q: 'Worst case: you are caught on a road as the front approaches. The least-bad option is:',
     opts: ['Drive fast through the smoke',
            'Abandon the car and run',
            'Park in the most open ground available, face the fire, stay in with windows shut, and get below window level under wool',
            'Stand behind the car and watch for a gap'],
     correct: 2,
-    why: 'CFA’s in-car protocol: park away from dense bush in a clearing, ideally behind a barrier, facing the oncoming front, hazard lights on — then stay inside, windows and vents shut, engine off, below window level under woollen blankets. And its framing is honest: plan to leave early so this moment never exists. (CFA Victoria, read 2026-08-30)' },
+    why: 'CFA’s in-car protocol: park away from dense bush in a clearing, ideally behind a barrier, facing the oncoming front, hazard lights on — then stay inside, windows and vents shut, engine off, below window level under woollen blankets. And its framing is honest: plan to leave early so this moment never exists. (CFA Victoria)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q46', form: 'judgment', q: 'The fire is 40 km away; the sky is orange and the air is acrid. For unavoidable time outdoors, what actually protects your lungs?',
     opts: ['A bandana over the mouth',
            'Distance — 40 km means safe air',
            'Breathing through the nose only',
            'A properly fitted, NIOSH-certified N95 or P100 respirator — certification and seal are the whole point'],
     correct: 3,
-    why: 'EPA: worn according to instructions — gaps minimized, tight seal — NIOSH-approved N95/P100 respirators significantly reduce smoke-particle exposure; the guidance is specific about certification marks, two straps and fit. The hazard is the fine particles, and they outrange the flames by far. (EPA, read 2026-08-30)' },
+    why: 'EPA: worn according to instructions — gaps minimized, tight seal — NIOSH-approved N95/P100 respirators significantly reduce smoke-particle exposure; the guidance is specific about certification marks, two straps and fit. The hazard is the fine particles, and they outrange the flames by far. (EPA)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q47', form: 'warning-literacy', q: 'Which day is the dangerous fire day?',
     opts: ['The windy, bone-dry, warm day after a rainless fortnight',
            'The hottest still, humid day of the year',
            'A cold windy day after rain',
            'Any day above 30°C'],
     correct: 0,
-    why: 'A Red Flag day is a COMBINATION: a dry spell has cured the fuels, and the forecast stacks sustained wind of 15 mph or more onto relative humidity of 25% or less with warmth on top. Wind and dryness — not the peak temperature — turn an ignition into a catastrophe. (NOAA NWS glossary, read 2026-08-30)' },
+    why: 'A Red Flag day is a COMBINATION: a dry spell has cured the fuels, and the forecast stacks sustained wind of 15 mph or more onto relative humidity of 25% or less with warmth on top. Wind and dryness — not the peak temperature — turn an ignition into a catastrophe. (NOAA NWS glossary)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q59', form: 'judgment', q: 'You have one weekend to cut fuel around the house. Where do you start?',
     opts: ['At the property line, working inward',
            'In the first five feet against the walls, working outward',
            'Evenly everywhere, so nothing is left out',
            'On the side the fire is expected to arrive from'],
     correct: 1,
-    why: 'Defensible space is ordered from the building outward, and the work gets more intense the closer it comes to the house: the guidance is to start at the house and reach out to 100 feet or the property line. The first five feet are Zone 0, the ember-resistant zone, where fuel reduction is most intense because that is where an ember attack lands. Zones 1 and 2 carry the rest and are required by law. Clearing the far edge first leaves the trap against your own walls intact. (CAL FIRE, Ready for Wildfire, read 2026-09-01)' },
+    why: 'Defensible space is ordered from the building outward, and the work gets more intense the closer it comes to the house: the guidance is to start at the house and reach out to 100 feet or the property line. The first five feet are Zone 0, the ember-resistant zone, where fuel reduction is most intense because that is where an ember attack lands. Zones 1 and 2 carry the rest and are required by law. Clearing the far edge first leaves the trap against your own walls intact. (CAL FIRE, Ready for Wildfire)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q60', form: 'mechanism', q: 'A fire starts at the bottom of a steep slope and your house is above it. How much time does the slope buy you?',
     opts: ['More than on flat ground — the fire has to climb',
            'Less — fire runs faster uphill, preheating the fuel above it',
            'The same; slope only changes where the smoke goes',
            'It depends on the wind and on nothing else'],
     correct: 1,
-    why: 'Fire typically moves more quickly uphill than downhill or across flat ground. A fire igniting at the foot of a steep slope spreads much faster upward, because the rising hot air preheats fuel it has not reached yet and the upward draft makes spot fires ahead of the front more likely. Slope sits in the fire behaviour triangle beside fuels and weather — not a detail of the terrain, one of the three things that set how a fire moves. (US National Park Service, Wildland Fire Behavior, read 2026-09-01)' },
+    why: 'Fire typically moves more quickly uphill than downhill or across flat ground. A fire igniting at the foot of a steep slope spreads much faster upward, because the rising hot air preheats fuel it has not reached yet and the upward draft makes spot fires ahead of the front more likely. Slope sits in the fire behaviour triangle beside fuels and weather — not a detail of the terrain, one of the three things that set how a fire moves. (US National Park Service, Wildland Fire Behavior)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
   any: [
   { id: 'Q48', form: 'mechanism', q: 'A country runs world-class sensors and forecast models, yet people keep dying unwarned. Which link most likely failed?',
@@ -3690,35 +3697,35 @@ const POOL_Q = {
            'The last two pillars — the warning never reached people, or reached people unprepared to act on it',
            'The hazards were simply too rare'],
     correct: 2,
-    why: 'The UN’s Early Warnings for All architecture has four pillars: risk knowledge; detection and forecasting; dissemination and communication; preparedness and response capability. A system is only as good as its weakest pillar — a perfect forecast that reaches no one, or someone who cannot act, saves no one. (WMO, read 2026-08-30)' },
+    why: 'The UN’s Early Warnings for All architecture has four pillars: risk knowledge; detection and forecasting; dissemination and communication; preparedness and response capability. A system is only as good as its weakest pillar — a perfect forecast that reaches no one, or someone who cannot act, saves no one. (WMO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q49', form: 'warning-literacy', q: 'How does the world’s own DRR framework define success?',
     opts: ['Zero earthquakes and storms by 2030',
            'Substantially fewer deaths, fewer affected, smaller losses, less infrastructure disruption — and more countries with strategies, cooperation and early warning access',
            'Bigger response budgets every year',
            'Moving everyone out of hazard zones'],
     correct: 1,
-    why: 'The Sendai Framework’s seven global targets reduce mortality, affected people, economic loss and infrastructure/service disruption, and increase strategies, cooperation and early-warning access. Success is measured in reduced losses and increased capability — never in hazards prevented, which no one can promise. (Sendai Framework ¶18, read 2026-08-30)' },
+    why: 'The Sendai Framework’s seven global targets reduce mortality, affected people, economic loss and infrastructure/service disruption, and increase strategies, cooperation and early-warning access. Success is measured in reduced losses and increased capability — never in hazards prevented, which no one can promise. (Sendai Framework ¶18)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q50', form: 'recovery', q: 'A flood levelled the riverside district. Which reconstruction follows the framework the world actually signed?',
     opts: ['Fastest identical rebuild — restore normal above all',
            'No rebuild for a decade, pending perfect data',
            'Rebuild with reduced risk designed in — the recovery phase is named in the framework as the moment to prevent the next disaster',
            'Rebuild elsewhere without asking the residents'],
     correct: 2,
-    why: 'The Sendai Framework puts it in the recovery clause itself: in reconstruction it is critical to prevent the creation of new risk by Building Back Better — the phrase sits inside Priority 4. Rebuilding identically reconstructs the next disaster on schedule. (Sendai Framework ¶19(k), read 2026-08-30)' },
+    why: 'The Sendai Framework puts it in the recovery clause itself: in reconstruction it is critical to prevent the creation of new risk by Building Back Better — the phrase sits inside Priority 4. Rebuilding identically reconstructs the next disaster on schedule. (Sendai Framework ¶19(k))' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q51', form: 'mechanism', q: 'Two identical magnitude-7 quakes strike two cities. One suffers catastrophe, the other disruption. The framework’s explanation:',
     opts: ['Luck, mostly',
            'One quake was secretly stronger',
            'Fate follows geology and nothing else',
            'Risk is not the hazard alone — exposure and vulnerability differed, and those are exactly the dimensions communities can change'],
     correct: 3,
-    why: 'The Sendai Framework treats disaster risk in its dimensions of exposure, vulnerability and hazard characteristics, and aims policy at the first two — which is why every measure in this game works on exposure, vulnerability or capacity, and none switches the hazard off. (Sendai Framework, read 2026-08-30)' },
+    why: 'The Sendai Framework treats disaster risk in its dimensions of exposure, vulnerability and hazard characteristics, and aims policy at the first two — which is why every measure in this game works on exposure, vulnerability or capacity, and none switches the hazard off. (Sendai Framework)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q52', form: 'misconception', q: 'Disaster economic losses keep rising decade over decade — US$4.3 trillion since 1970. Proof that warnings and risk reduction achieve nothing?',
     opts: ['Yes — rising losses mean failure',
            'No: over the same half-century, mortality rates FELL — WMO credits early warnings — while losses rose because far more value now sits in harm’s way',
            'The data must simply be wrong',
            'Yes, and hazards are angrier too'],
     correct: 1,
-    why: 'WMO’s ledger for 1970–2021 holds both lines at once: two million deaths (90% in developing countries) with mortality rates falling — credited to early warnings — while economic losses climbed to US$4.3 trillion as exposure grew. Two trends, two drivers; collapsing them into one is the mistake. (WMO, read 2026-08-30)' },
+    why: 'WMO’s ledger for 1970–2021 holds both lines at once: two million deaths (90% in developing countries) with mortality rates falling — credited to early warnings — while economic losses climbed to US$4.3 trillion as exposure grew. Two trends, two drivers; collapsing them into one is the mistake. (WMO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q53', form: 'compound', q: 'Twenty years after the levee went up, the district behind it has tripled in value and population. Total flood risk has:',
     opts: ['Been eliminated — that is what levees are for',
            'Stayed exactly the same',
@@ -3726,7 +3733,7 @@ const POOL_Q = {
            'Become the river’s problem'],
     correct: 2,
     // CORRECTED 2026-09-15: unsourced levee mechanism removed; Galloway quote via Mallea; tag corrected (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-    why: 'The risk changed shape: floods reach the district less often, but when one gets over, it finds three times the value behind the levee. An engineer who co-wrote a US government assessment of the 1993 floods warns “there’s no such thing as absolute protection”. (Quoted in Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis. Read 2026-09-14.)' },
+    why: 'The risk changed shape: floods reach the district less often, but when one gets over, it finds three times the value behind the levee. An engineer who co-wrote a US government assessment of the 1993 floods warns “there’s no such thing as absolute protection”. (Quoted in Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis.)' },   // BATCH-FIX 2026-10-26: K4' (addendum 2026-10-27) - the capitalised read date deleted from this line's text
   { id: 'Q54', form: 'mechanism', q: 'Equal budgets: a response warehouse, or code enforcement plus retrofits. What can only the second one do?',
     opts: ['Look good at a ribbon-cutting',
            'Arrive quickly after the event',
@@ -3734,7 +3741,7 @@ const POOL_Q = {
            'Shrink the size of the future disaster itself — response, however vital, meets losses it can no longer reduce'],
     correct: 3,
     // CORRECTED 2026-09-15: figures re-attributed to the World Bank, scoped, net benefit; tag updated (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-    why: 'Prevention is decided before the event and reduces what the event can take — a World Bank estimate that UNDRR repeats says building resilience into infrastructure in developing countries adds only 3% to investment costs, for a net benefit of four dollars per dollar invested. Response spending is necessary and honourable, and it shrinks nothing. (World Bank estimate on UNDRR’s Earthquake Day microsite, re-read 2026-09-14)' },
+    why: 'Prevention is decided before the event and reduces what the event can take — a World Bank estimate that UNDRR repeats says building resilience into infrastructure in developing countries adds only 3% to investment costs, for a net benefit of four dollars per dollar invested. Response spending is necessary and honourable, and it shrinks nothing. (World Bank estimate on UNDRR’s Earthquake Day microsite)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
 }
 
@@ -3759,7 +3766,7 @@ const EVENT_Q = {
     // CORRECTED 2026-09-22: was an absolute for all five events ("no build that survives them"); game and world now separated, NWS route and hedge added (sweep 3, sweep3_2026-09-22/source_verification.md E2-s1 E2-s2 E1b E3c E5b; round 2: F3, NWS route to vertical evacuation (ask the local emergency office ahead of time) and its fallback status added, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     // CORRECTED 2026-09-23: comment made true - the word counts in the next line leave out the four-word source tag (section C round 2, section_C_2026-09-22)
     // CORRECTED 2026-09-23: shortened 110 -> 94 words, not counting the four-word source tag (114 -> 98 with it) (sweep 3 R4): the game part condensed; the NWS part, its hedge, the ask-ahead step and the tag unchanged (section C, section_C_2026-09-22)
-    why: 'In the game, no measure stops an event. Armour only cuts the damage, and Early warning gives you more time to get out of the lane. In real life, the plan is to reach high ground, or to go inland away from the water, before the wave arrives. If you worry that you will not reach a safe place in time, plan ahead. Ask your local emergency office about going up high in a building instead. Some strong, tall buildings may be able to provide protection, but that is a fallback, not the plan. (NOAA NWS, read 2026-09-22)' },
+    why: 'In the game, no measure stops an event. Armour only cuts the damage, and Early warning gives you more time to get out of the lane. In real life, the plan is to reach high ground, or to go inland away from the water, before the wave arrives. If you worry that you will not reach a safe place in time, plan ahead. Ask your local emergency office about going up high in a building instead. Some strong, tall buildings may be able to provide protection, but that is a fallback, not the plan. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   debris: {
     q: 'The debris flow came down the channel and through the village. Why did none of your measures stop it?',
     opts: ['The channel was built too narrow for it',
@@ -3769,7 +3776,7 @@ const EVENT_Q = {
            'It stops once Maintenance is high enough'],
     correct: 1,
     // CORRECTED 2026-09-22: was "not a landslide" (it is a type of landslide), "a delay" (no source), "The measure" (USGS names evacuation/avoidance/relocation as best) (sweep 3, sweep3_2026-09-22/source_verification.md E3a E3c E3c-Qwhy; round 2: F1, basin scope as USGS pp.17, 111, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-    why: 'A debris flow is a fast type of landslide: soil, rock and water mixed into one moving mass. Like every event in the game, it has no health bar to shoot at, and the warning is what gets you out of the lane. In real life, basins can be built to hold a debris flow, and they should be big enough for the largest flows in the area. Over time they fill up and must be emptied regularly, or they will overflow. Leaving, staying away and moving homes out of its path are the best ways to protect people. (USGS, read 2026-09-22)' },
+    why: 'A debris flow is a fast type of landslide: soil, rock and water mixed into one moving mass. Like every event in the game, it has no health bar to shoot at, and the warning is what gets you out of the lane. In real life, basins can be built to hold a debris flow, and they should be big enough for the largest flows in the area. Over time they fill up and must be emptied regularly, or they will overflow. Leaving, staying away and moving homes out of its path are the best ways to protect people. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   rockfall: {
     q: 'A rockfall just landed. What decided whether it caught you?',
     opts: ['Your armour and capacity',
@@ -3781,7 +3788,7 @@ const EVENT_Q = {
     correct: 1,
     // CORRECTED 2026-09-22: was "cannot be absorbed, only avoided" (USGS names rockfall measures that lessen the hazard; armour cuts the hit in the game) (sweep 3, sweep3_2026-09-22/source_verification.md E1b E1b-Q; round 2: F6, standing in a circle is necessary for a hit, not the only decider (P.inv grace), sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     // CORRECTED 2026-09-23: was "inside its circle when it lands" - a circle hurts while it is drawn filled, from its rock landing for ROCK_LIVE (0.35 s) (B3); USGS sentence and tag unchanged (section C, section_C_2026-09-22)
-    why: 'The warning circles were drawn before anything fell, and the fall landed exactly there. Each circle fills when its rock lands and stays filled for a moment. In the game, armour can cut the hit, but a rock can only catch you if you are inside its circle while it is filled. The warning is what makes that fair, and Early warning makes it longer. In real life, rock nets, rock anchors, walls and covers over roads can reduce the risk from falling rock, but they do not stop every rock. (USGS, read 2026-09-22)' },
+    why: 'The warning circles were drawn before anything fell, and the fall landed exactly there. Each circle fills when its rock lands and stays filled for a moment. In the game, armour can cut the hit, but a rock can only catch you if you are inside its circle while it is filled. The warning is what makes that fair, and Early warning makes it longer. In real life, rock nets, rock anchors, walls and covers over roads can reduce the risk from falling rock, but they do not stop every rock. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   landslide: {
     // CORRECTED 2026-09-22: q was "What was the only way through it?" (opt 0 "Absorbing it with enough capacity" was also true in the game: one impact, then P.inv grace) (sweep 3 round 2: F2, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     q: 'The landslide crossed the map in one straight lane. How could you avoid being hit by it?',
@@ -3791,7 +3798,7 @@ const EVENT_Q = {
            'Standing behind a lifeline'],
     correct: 2,
     // CORRECTED 2026-09-22: "moving out of the way IS the measure" scoped to the game; hedged runout fact added (sweep 3, sweep3_2026-09-22/source_verification.md E4b; round 2: F11 USGS scope "in steep terrain" restored, F2 "how you get through" now "how you avoid being hit", sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-    why: 'The lane was fixed at the moment of the warning and never turned to follow you. In the game, a warning you can outrun is the whole mechanic. Moving out of the way is how you avoid being hit, and that is why evacuation has its own control. In real life, in steep terrain, some kinds of landslide, like debris flows, can travel kilometres from where they start. (USGS, read 2026-09-22)' },
+    why: 'The lane was fixed at the moment of the warning and never turned to follow you. In the game, a warning you can outrun is the whole mechanic. Moving out of the way is how you avoid being hit, and that is why evacuation has its own control. In real life, in steep terrain, some kinds of landslide, like debris flows, can travel kilometres from where they start. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   fissure: {
     // CORRECTED 2026-09-22: q was false to the code ("your armour did not help"; armour cuts event damage) (sweep 3, sweep3_2026-09-22/source_verification.md E5b; Lead F8)
     q: 'Ground failure opened under the district. Why can armour not make it safe to stand on?',
@@ -3803,7 +3810,7 @@ const EVENT_Q = {
            'Armour makes you immune once it is high enough'],
     correct: 1,
     // CORRECTED 2026-09-22: was "Strengthening ... changes nothing" (unverifiable) and land-use planning as THE measure (one of several for liquefaction) (sweep 3, sweep3_2026-09-22/source_verification.md E5a E5b E5-Qwhy; round 2: F6 P.inv grace, F7 surface-rupture sentence dropped (no capture explains surface rupture or active faults in plain words), sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-    why: 'In the game, armour cuts the damage but never to zero, and ground failure keeps hurting you while you stand on it. In real life, liquefaction is loose, water-soaked ground near the surface losing its strength for a while in strong shaking. Packing the ground tighter, draining it or not building on it can reduce the risk. (USGS / NIST, read 2026-09-22)' },
+    why: 'In the game, armour cuts the damage but never to zero, and ground failure keeps hurting you while you stand on it. In real life, liquefaction is loose, water-soaked ground near the surface losing its strength for a while in strong shaking. Packing the ground tighter, draining it or not building on it can reduce the risk. (USGS / NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
 }
 
 // ---------------------------------------------------------------- fusion
@@ -4855,7 +4862,7 @@ const cardScreenUp = () => !$('start').classList.contains('gone') || $('cards').
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase()
   if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k)) e.preventDefault()
-  if (k === 'm') AU.toggle()
+  if (k === 'm') { AU.toggle(); mutePaint() }   // BATCH-FIX 2026-10-26: K3 (review_batch_B F7, review_batch_A F6b) - the touch sound button's glyph and name follow the M key too (mutePaint, below the dodge handlers); was `if (k === 'm') AU.toggle()`
   if (k === ' ' && !e.repeat) doDodge()
   if (cardScreenUp()) keyMute[k] = true   // PT-P6 2026-10-19 (build_PT_2026-10-19)
   if (!keyMute[k]) keys[k] = true   // PT-P6 2026-10-19: was keys[k] = true (build_PT_2026-10-19)
@@ -5077,6 +5084,7 @@ function onboardSeen(id) {
 }
 function onboardMark(id) {
   const st = onboardStore()
+  if (!st.hints || typeof st.hints !== 'object' || Array.isArray(st.hints)) st.hints = {}   // BATCH-FIX 2026-10-26: K6 (review_batch_B F8) - a stored hints that is not an object (a hand-edited store; onboardStore passes any truthy value through) is treated as {} before writing into it; K6' (addendum 2026-10-27): an array too, which typeof calls an object; was `if (!st.hints || typeof st.hints !== 'object') st.hints = {}`
   if (id === 'intro') { onboardMem.intro = true; st.intro = true }
   else { onboardMem.hints[id] = true; st.hints[id] = true }
   onboardSave(st)
@@ -5110,6 +5118,7 @@ function hint(id) {
 function hintRender(id) {
   onboardMark(id)
   hintOpen = id; keys = {}
+  if (endArmed) endArm(false)   // BATCH-FIX 2026-10-26: K1 (review_batch_B F1) - the same when a hint card opens
   const C = ONBOARD_COPY[HINTS[id]]
   $('hint-t').textContent = C.title
   // P16a-F 2026-10-22: the face on the card, the body in its fold, closed (facePage); was was `$('hint-p').textContent = C.body` (build_P16a_2026-10-22)
@@ -5337,6 +5346,7 @@ function cardKeyable(el) {
   t.setAttribute('role', 'button')
   h.id = 'cardname-' + n
   t.setAttribute('aria-labelledby', h.id)
+  const ft = el.querySelector('.fold-t'); if (ft && ft.id) ft.setAttribute('aria-labelledby', ft.id + ' ' + h.id)   // BATCH-FIX 2026-10-26: K7 (review_batch_A F6a) - the card's Details toggle (cardFold) is named by itself and the card's title, so a screen reader hears "Details <title>" per card; a place card has no toggle
   let i = 0
   for (const c of cardParts(el)) c.id = 'carddesc-' + n + '-' + (++i)
   cardDescribe(el)
@@ -5542,6 +5552,8 @@ function cardFold(el) {
   w.className = 'fold'
   b.type = 'button'
   b.className = 'fold-t'
+  // BATCH-FIX 2026-10-26: K7 (review_batch_A F6a) - the toggle gets its own id here; its accessible name (aria-labelledby: itself, then the card's h3, "Details <title>") is set in cardKeyable, which offerCards runs right after cardFold and which gives the title its id (cardname-<n>), so the reference never dangles; the visible word Details unchanged
+  b.id = 'fold-t-' + n
   b.setAttribute('aria-expanded', 'false')
   b.setAttribute('aria-controls', 'fold-' + n)
   b.innerHTML = '<span aria-hidden="true">&#9656;</span> Details'
@@ -5776,9 +5788,9 @@ const PLAIN = {
   'TRD.relief.desc': 'Help arrives each time you level up. You get 30% of your capacity back.',
   'TRD.relief.src': 'Money spent rebuilding is money not spent making the thing stronger first. That is the opposite of the measure UNDRR values at US$4 in benefit for every US$1 in low- and middle-income countries.',
   // CORRECTED 2026-09-23: the projection sentence split in two to read at or below the other plain entries (reading level); "project", the condition, the Dominican Republic scope and the quotation unchanged, the quotation now introduced by "The rise they project is" (section C round 2, section_C_2026-09-22)
-  'TRD.growth.src': 'GAR 2025: earthquake risk rises mainly because of what people do, not because the hazard is getting stronger. What people do, such as building unsafe housing in earthquake zones, puts more people and assets in danger. Global Earthquake Model analysts project that the Dominican Republic’s earthquake death rate will rise without stepped-up risk reduction. The rise they project is “mainly due to demographic growth, urbanization and policy choices”. (Re-read 2026-09-14.)',
+  'TRD.growth.src': 'GAR 2025: earthquake risk rises mainly because of what people do, not because the hazard is getting stronger. What people do, such as building unsafe housing in earthquake zones, puts more people and assets in danger. Global Earthquake Model analysts project that the Dominican Republic’s earthquake death rate will rise without stepped-up risk reduction. The rise they project is “mainly due to demographic growth, urbanization and policy choices”.',   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   // CORRECTED 2026-09-23: the Missouri development figure removed, as in the English (pre-deploy check F1); the floodplain sentence now given as Mallea's view in two plain sentences, "Mallea writes that ..." and "Mallea also writes that ...", resting on Mallea's "However, this trend quickly reversed." (capture P03 L382), no figure; game half unchanged; tag unchanged but the re-read date (pre-deploy text, predeploy_2026-09-23)
-  'TRD.levee.src': 'In this game, hard defences cut every hit by 40%. But a flood sitting on a lifeline wears it down twice as fast. Mallea writes that after the 1993 Midwest floods, some communities were moved off the floodplain. Mallea also writes that this trend quickly reversed. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis. Re-read 2026-09-23.)',
+  'TRD.levee.src': 'In this game, hard defences cut every hit by 40%. But a flood sitting on a lifeline wears it down twice as fast. Mallea writes that after the 1993 Midwest floods, some communities were moved off the floodplain. Mallea also writes that this trend quickly reversed. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis.)',   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   'BOSS.passes.line': 'It was not absorbed this time. You lasted until it passed.',
   // BS-M3 2026-09-30: the true boss's Learning lines, strings_BS.md S-B1 (c)-(g) verbatim; its warning and the "still on the field" row have no Learning variant (the same text) (build_BS_2026-09-30)
   'BOSS.true.arrive': 'Several hazards, arriving together. This is the boss. Beat it, or last until it passes.',
@@ -6509,7 +6521,7 @@ const BOSSES = {
       note: 'The building stood through the mainshock and is standing damaged. The aftershocks are smaller and it is the aftershocks that bring it down, often onto people who went back inside.' },
     { name: 'Liquefaction under the district', col: PAL.theirs.event.landslide, ramp: 'rock', how: 'siege',
       // CORRECTED 2026-09-22: scope of liquefaction restored (loose, near-surface, strong shaking); "Nothing is wrong with the building" removed (sweep 3, sweep3_2026-09-22/source_verification.md E5-boss-s1 E5-boss-s2 E5b; round 2: F8, USGS attribution added in the string, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-      note: 'Loose, water-soaked ground near the surface can lose its strength for a while in strong shaking and act like a liquid. When that happens under buildings, it can cause major damage: the problem starts in the ground. (USGS, read 2026-09-22)' },
+      note: 'Loose, water-soaked ground near the surface can lose its strength for a while in strong shaking and act like a liquid. When that happens under buildings, it can cause major damage: the problem starts in the ground. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
   wui: [
     { name: 'Firestorm under wind', col: PAL.theirs.boss.firestorm, ramp: 'fire', how: 'spiral',
@@ -6934,7 +6946,7 @@ const EVENTS = {
     // CORRECTED 2026-09-22: was "after the shaking stops" and "You cannot strengthen your way out of it"; measures reduce, do not stop every rock; src added (sweep 3, sweep3_2026-09-22/source_verification.md E1a E1b E1c; round 2: F4 CDC chimney step given as CDC advice, F5 CDC sections in src, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     // CORRECTED 2026-09-23: bare "CDC" named in full the first time (sweep 3 R4); the name and "United States" as the CDC page itself gives them (capture S07) (section C, section_C_2026-09-22)
     note: 'Rock from slopes and pieces of building fronts can fall while the ground shakes, and more can fall in the aftershocks. Rock nets, rock anchors, walls and covers over roads can reduce the risk. They do not stop every rock, so staying out of the danger zone is part of the answer too. The US Centers for Disease Control and Prevention (CDC) advises checking your chimney and roof and repairing loose tiles and bricks.',
-    src: 'Source: U.S. Geological Survey, The Landslide Handbook (Circular 1325), Rockfall, p.6, and Appendix C, p.100; CDC, Safety Guidelines: During an Earthquake, Indoors and Outdoors (read 2026-09-22).',
+    src: 'Source: U.S. Geological Survey, The Landslide Handbook (Circular 1325), Rockfall, p.6, and Appendix C, p.100; CDC, Safety Guidelines: During an Earthquake, Indoors and Outdoors.',   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
     make(P0) {
       const pts = []
       const n = 7 + ((Math.random() * 5) | 0)
@@ -6951,7 +6963,7 @@ const EVENTS = {
     // CORRECTED 2026-09-16: exclusivity and the absolute "Nothing you build" claim removed; vertical evacuation named in NWS's hedge (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
     // CORRECTED 2026-09-22: was "being uphill" (NWS: high ground or inland; community routes and assembly areas); condition now NWS "safe place"; src added (sweep 3, sweep3_2026-09-22/source_verification.md E2-s1 E2-s2; round 2: F3, NWS route to vertical evacuation (ask the local emergency office ahead of time) and the reinforced concrete example added, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     note: 'The answer here is the warning and the route. The plan is to reach high ground, or go inland away from the water, before it arrives. Find out if your community has set evacuation routes and meeting points. If you worry that you will not reach a safe place in time, plan ahead. Ask your local emergency office about going up high in a building instead. Some strong, tall buildings, such as ones made of reinforced concrete, may be able to provide protection — a fallback, not the plan.',
-    src: 'Source: NOAA National Weather Service, Before a Tsunami, Plan for Evacuation (read 2026-09-22).',
+    src: 'Source: NOAA National Weather Service, Before a Tsunami, Plan for Evacuation.',   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
     make(P0) {
       const a = Math.random() * TAU
       // span narrow enough that the warning plus the approach is genuinely enough time to
@@ -6964,7 +6976,7 @@ const EVENTS = {
     name: 'Debris flow', col: PAL.theirs.event.debris, warn: 2.2, dur: 4,
     // CORRECTED 2026-09-22: was "not a landslide", "always", "a delay"; USGS best methods added; src added (sweep 3, sweep3_2026-09-22/source_verification.md E3a E3b E3c; round 2: F1 basin scope as USGS pp.17, 111, F5 p.30 in src, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     note: 'A debris flow is a fast type of landslide: soil, rock and water mixed into one moving mass. It usually runs down steep gullies and stream channels. Basins can be built to hold it, and they should be big enough for the largest flows in the area. Over time they fill up and must be emptied regularly, or they will overflow. Leaving, staying away and moving homes out of its path are the best ways to protect people.',
-    src: 'Source: U.S. Geological Survey, The Landslide Handbook (Circular 1325), Debris Flows, pp.16-17, Landslides and Water, p.30, and Debris-flow basins, p.111 (read 2026-09-22).',
+    src: 'Source: U.S. Geological Survey, The Landslide Handbook (Circular 1325), Debris Flows, pp.16-17, Landslides and Water, p.30, and Debris-flow basins, p.111.',   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
     make(P0) {
       const a = Math.random() * TAU
       // Narrower and faster than the sea's wave: a channel, not a coastline. ~2.2s of
@@ -6978,7 +6990,7 @@ const EVENTS = {
     name: 'Landslide', col: PAL.theirs.event.landslide, warn: 1.9, dur: 5,
     // CORRECTED 2026-09-22: causes were a complete list and runout was stated for every landslide; both hedged; src added (sweep 3, sweep3_2026-09-22/source_verification.md E4a E4b; round 2: F11 "in steep terrain" restored, F5 BGS section and USGS p.30 in src, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     note: 'Some of the main causes are a steep slope and water in the ground. Another is a slope losing its support at the bottom, for example when a river or the sea wears it away. In steep terrain, some kinds of landslide, like debris flows, can travel kilometres from where they start.',
-    src: 'Source: British Geological Survey, Understanding landslides, What can increase the chance of a landslide?; U.S. Geological Survey, The Landslide Handbook (Circular 1325), pp.16, 30 (read 2026-09-22).',
+    src: 'Source: British Geological Survey, Understanding landslides, What can increase the chance of a landslide?; U.S. Geological Survey, The Landslide Handbook (Circular 1325), pp.16, 30.',   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
     make(P0) {
       const a = Math.random() * TAU
       return { nx: Math.cos(a), ny: Math.sin(a), a, dist: -1100, span: 620, thick: 96,
@@ -6989,7 +7001,7 @@ const EVENTS = {
     name: 'Ground failure', col: PAL.theirs.event.fissure, warn: 1.2, dur: 6.5,
     // CORRECTED 2026-09-22: was "no amount of strengthening the building above it helps" (unverifiable); USGS definition and site measures; src added (sweep 3, sweep3_2026-09-22/source_verification.md E5a E5b; round 2: F7 label "Liquefaction and surface rupture." dropped (no capture explains surface rupture in plain words), F5 glossary p.61 in src, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     note: 'In liquefaction, loose, water-soaked ground near the surface loses its strength for a while in strong shaking. Under buildings, this can cause major damage. People can avoid building on such ground, and where the water in the ground is high, the site can be drained.',
-    src: 'Source: U.S. Geological Survey, What is liquefaction? (FAQ); USGS, The Landslide Handbook (Circular 1325), p.15, and Glossary, p.61 (read 2026-09-22).',
+    src: 'Source: U.S. Geological Survey, What is liquefaction? (FAQ); USGS, The Landslide Handbook (Circular 1325), p.15, and Glossary, p.61.',   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
     make(P0) {
       const lines = []
       for (let i = 0; i < 3; i++) {
@@ -7357,13 +7369,13 @@ const TRADEOFFS = [
     // CHANGED 2026-09-15: cost moved from contact damage to lifelines (sweep_2026-09-14 follow-up 1; levee_2026-09-15/)
     // CORRECTED 2026-09-16: caveat spelling harmonised to "not UNDRR’s own analysis" (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
     // CORRECTED 2026-09-23: the Missouri development figure removed - a load-bearing figure resting on one tier-3 source that had drifted (pre-deploy check F1); the floodplain sentence now given as Mallea's view ("Mallea writes that ..."), with Mallea's "this trend quickly reversed" (capture P03 L382) and no figure; game half unchanged; tag unchanged but the re-read date (capture re-read 2026-09-23) (pre-deploy text, predeploy_2026-09-23)
-    src: 'In this game, hard defences cut every hit by 40%, but a flood sitting on a lifeline wears it down twice as fast. Mallea writes that after the 1993 Midwest floods some communities were moved off the floodplain, but that this trend quickly reversed. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis. Re-read 2026-09-23.)' },
+    src: 'In this game, hard defences cut every hit by 40%, but a flood sitting on a lifeline wears it down twice as fast. Mallea writes that after the 1993 Midwest floods some communities were moved off the floodplain, but that this trend quickly reversed. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis.)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'growth', name: 'Rapid development', short: 'Growth', col: '#ffa94d', from: 4,   // G-M5 2026-10-13: was 3 (build_G_2026-10-01)
     desc: 'More gets built, faster. Everything you collect is worth 70% more.',
     cost: 'None of it waited for the plan. Every hazard now takes 20% more off you.',
     apply: P => { P.xpMul = (P.xpMul || 1) * 1.7; P.exposure = (P.exposure || 1) * 1.20 },
     // CORRECTED 2026-09-15: opener gives GAR 2025's cause; GEM projection scoped to the Dominican Republic (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-    src: 'GAR 2025: earthquake risk rises mainly because human action, such as unsafe housing construction in seismic zones, puts more people and assets in harm’s way, not because the hazard is getting stronger. Global Earthquake Model analysts project the Dominican Republic’s earthquake death rate rising without stepped-up risk reduction, “mainly due to demographic growth, urbanization and policy choices”. (Re-read 2026-09-14.)' },
+    src: 'GAR 2025: earthquake risk rises mainly because human action, such as unsafe housing construction in seismic zones, puts more people and assets in harm’s way, not because the hazard is getting stronger. Global Earthquake Model analysts project the Dominican Republic’s earthquake death rate rising without stepped-up risk reduction, “mainly due to demographic growth, urbanization and policy choices”.' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'relief', name: 'Relief-funded recovery', short: 'Relief', col: '#ff8a9b', from: 4,
     // CORRECTED 2026-09-23: was "Help arrives after each event ... on every level" - the relief heal runs in the level-up loop (if (P.relief) heal(...)), not after events (section C, section_C_2026-09-22)
     desc: 'Help arrives each time you level up: 30% of capacity back.',
@@ -7466,7 +7478,9 @@ function flash(title, sub, col, opt) {
   el.classList.toggle('big', !!(opt && opt.big))   // GR-M6 2026-09-29: a take moment's line (closeCards) shows its title larger; every other line as before (build_GR_2026-09-29)
   el.classList.toggle('two', !!(opt && opt.two))   // R4-T 2026-10-25: a new elite's first-seen line with its source line on a second line (r4First); every other line as before (build_R4_2026-10-25)
   el.classList.add('show')
-  flashT = opt && opt.evt ? FLASH_EVT_T : FLASH_T   // UX-M2 2026-09-30: was 2.2 for every line (build_UX_2026-09-30)
+  // BATCH-FIX 2026-10-26: K9 (review_batch_A F1) - a line with a second line ({ two: true }: a new elite's first-seen line with its source line, R5's task banner with Sources on) or whose text (title and line together) has more than 20 words stays twice as long, 2 x FLASH_T (6.6 s); every other line as before (an event line FLASH_EVT_T, the rest FLASH_T); was `flashT = opt && opt.evt ? FLASH_EVT_T : FLASH_T   // UX-M2 2026-09-30: was 2.2 for every line (build_UX_2026-09-30)`
+  const longLine = !!(opt && opt.two) || ((title || '') + ' ' + (sub || '')).trim().split(/\s+/).length > 20
+  flashT = longLine ? 2 * FLASH_T : (opt && opt.evt ? FLASH_EVT_T : FLASH_T)
   flashCur = [title, sub, col, opt]
   return 'shown'
 }
@@ -8246,8 +8260,9 @@ function hurtEnemy(e, dmg, kx, ky, pull) {
 }
 
 // ---------------------------------------------------------------- R4: warning rules for new patterns, and the first four elites
-// R4-W1 2026-10-25: PLAN_R4 item 1 (ADJUDICATION_d24.md MJ-3, MN-7) - the one warning time every new pattern reads: max(T.r4WarnMin, T.r4WarnBase x DIFF.warn x the place's warnMul) x (1 + lv.pulse x T.warnPerWarnLevel). Warning culture (METALV.telegraph) is not a factor (build_R4_2026-10-25)
-const r4Warn = () => Math.max(T.r4WarnMin, T.r4WarnBase * DIFF.warn * (PLACE.bite.warnMul || 1)) * (1 + lv.pulse * T.warnPerWarnLevel)
+// R4-W1 2026-10-25: PLAN_R4 item 1 (ADJUDICATION_d24.md MJ-3, MN-7) - the one warning time every new pattern reads: max(T.r4WarnMin, T.r4WarnBase x DIFF.warn x the place's warnMul) x (1 + lv.pulse x T.warnPerWarnLevel) x (1 + 0.06 x METALV.telegraph) (build_R4_2026-10-25)
+// BATCH-FIX 2026-10-26: K8 (review_batch_B F3) - Warning culture (METALV.telegraph, +6 % a level) is now a factor, as it is in fireEvent's warn, so the bought node reaches the four new patterns and R5's too; it only lengthens; the floor T.r4WarnMin and the strike budget are unchanged; the R4-W1 line above read "Warning culture (METALV.telegraph) is not a factor"; was `const r4Warn = () => Math.max(T.r4WarnMin, T.r4WarnBase * DIFF.warn * (PLACE.bite.warnMul || 1)) * (1 + lv.pulse * T.warnPerWarnLevel)`
+const r4Warn = () => Math.max(T.r4WarnMin, T.r4WarnBase * DIFF.warn * (PLACE.bite.warnMul || 1)) * (1 + lv.pulse * T.warnPerWarnLevel) * (1 + 0.06 * (METALV.telegraph || 0))
 // R4-T 2026-10-25: the text slots of the four new elites, per id: name (the first-seen flash's title), first (its line) and src (a second line in the same flash, only while the Sources switch is on, srcShown); first and src pass through say() as ELT.<id>.first and ELT.<id>.src. Phase 1 placeholders (build_R4_2026-10-25)
 const ELITES2 = {
   // R4-F1 2026-10-25: ADJUDICATION_R4 final list (E1, E3, E5, E9: name, first and src, verbatim) in place of the phase-1 placeholders; was, one line per id, `<id>: { name: '<P> <id> name', first: '<P> <id> first', src: '<P> <id> src' },` for E1, E3, E5 and E9, where <P> is the six-letter placeholder tag, left out of this quote so the file holds none (build_R4_2026-10-25)
@@ -10025,6 +10040,7 @@ function offerCards(fromLevelUp) {
   // Belt and braces: a card screen with nothing takeable must never show.
   if (!wrap.querySelector('.card')) { closeCards(); return }
 
+  if (endArmed) endArm(false)   // BATCH-FIX 2026-10-26: K1 (review_batch_B F1) - an armed END RUN button goes back to rest when the card screen opens (endLive turns false), so a press after the screen closes arms it again instead of ending the run; die() already does this for the report
   $('cards').classList.add('show')
   AU.play('offer')
   // First-time hint cards, only once the screen is really up (the two returns above skip them). The
@@ -11448,7 +11464,7 @@ function renderReport() {
     html += sec(`Lifelines — ${standing.length} of ${lifelines.length} still standing`,
       row('#8fe3ff', 'Why these five',
           // CORRECTED 2026-09-16: Framework modality (its targets "have been agreed", para. 18); quotation matched to the source bytes (capital S); read date 2026-09-15 (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
-          'They are the Sendai Framework’s Target D, one of its seven agreed global targets: “Substantially reduce disaster damage to critical infrastructure and disruption of basic services, among them health and educational facilities, including through developing their resilience by 2030”. Health and educational facilities are named in the target itself — the hospital and the school are not decoration. (Verbatim from UNDRR’s PreventionWeb, read 2026-09-15.)') +
+          'They are the Sendai Framework’s Target D, one of its seven agreed global targets: “Substantially reduce disaster damage to critical infrastructure and disruption of basic services, among them health and educational facilities, including through developing their resilience by 2030”. Health and educational facilities are named in the target itself — the hospital and the school are not decoration. (Verbatim from UNDRR’s PreventionWeb.)') +   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
       lifelines.map(L => {
         const k = LIFELINES[L.kind]
         // Standing: what it is and what it was doing for you.
@@ -11509,7 +11525,7 @@ function renderReport() {
             // PL-M2 2026-10-15: P2 - the closing sentences, each now grade 7 or below on both scorers (they graded 15.64 and 8.01). What is released goes to the recovery budget on the start screen (bankShare / releaseFunds -> metaStore().funds, shown by offerMeta), where it buys META nodes, "held permanently" (METALV, every run). The paraphrase stays inside Sendai para. 19(k) (prevent the creation of and reduce disaster risk by "Building Back Better", in recovery); the term and the citation are unchanged. It read "It becomes standing capacity on the start screen: recovery spent reducing the next disaster rather than restoring the last one’s vulnerability. That loop is the framework’s own recovery clause: Building Back Better." (build_POLISH_2026-10-15)
             // PL-FIX 2026-10-15: FX-A (check_POLISH.md F1, F4) - the last two sentences replaced by two that say only what Sendai para. 19(k) says: in the post-disaster recovery phase "it is critical to prevent the creation of and to reduce disaster risk by" Building Back Better. "do this" is the sentence before it (recovery cuts the risk of the next disaster: "to reduce disaster risk"); "prevent new risk" is "prevent the creation of ... disaster risk"; "do both by" is "by". Nothing about putting an old risk back, and no claim that the framework names this loop. The first two sentences, the term and the citation are unchanged; each new sentence is grade 7 or below on both of c3_fk.py's methods. It read "It does not put the old risk back. That loop is what the framework calls Building Back Better." (build_POLISH_2026-10-15 fix round)
             // PL-FIX2 2026-10-15: FX-G (review_POLISH.md M1) - one sentence added before the citation, the same words as the start-screen meta note ($('metanote')): Sendai para. 19(k) names two means, "by "Building Back Better" and increasing public education and awareness of disaster risk"; "It says to do both by Building Back Better." alone read as the whole method. "It also says to do both by" is the source's "by ... and"; "helping people learn and know more about disaster risk" is "increasing public education and awareness of disaster risk" (learn = education, know = awareness, more = increasing, people = public). It follows all three branches above, like the rest of this literal; every other word, the term and the citation are unchanged; the new sentence grades 6.88 on c3_fk.py (DICT and HEUR), r4_text.py (V3 and VG) and quiz_audit.py's fk() (6.9) (build_POLISH_2026-10-15 fix round 2)
-            'You can spend what is released on the start screen, on measures you keep for every run. That way, recovery cuts the risk of the next disaster. The Sendai Framework says it is critical to do this, and to prevent new risk. It says to do both by Building Back Better. It also says to do both by helping people learn and know more about disaster risk. (Sendai Framework ¶19(k), read 2026-08-30)')
+            'You can spend what is released on the start screen, on measures you keep for every run. That way, recovery cuts the risk of the next disaster. The Sendai Framework says it is critical to do this, and to prevent new risk. It says to do both by Building Back Better. It also says to do both by helping people learn and know more about disaster risk. (Sendai Framework ¶19(k))')   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
         })()
       : '') +
     row('#8fe3ff', 'Evacuate',
@@ -13917,8 +13933,10 @@ function syncDoor(banked) {
 }
 $('dodge').onclick = e => { e.preventDefault(); doDodge() }
 $('dodge').addEventListener('touchstart', e => { e.preventDefault(); doDodge() }, { passive: false })
-$('mute').onclick = () => { $('mute').innerHTML = AU.toggle() ? '&#9834;' : '&#9835;'
-                            $('mute').style.opacity = AU.muted ? .45 : 1 }
+// BATCH-FIX 2026-10-26: K3 (review_batch_B F7, review_batch_A F6b) - one function paints the touch sound button from AU.muted: the glyph (&#9834; muted, &#9835; sound on, as before), its opacity (as before) and an aria-label ("Sound off" / "Sound on"), so its accessible name is a word and not the note symbol; called once at load, from the button's own click and from the M key (the keydown listener that reads 'm'); was `$('mute').onclick = () => { $('mute').innerHTML = AU.toggle() ? '&#9834;' : '&#9835;'` / `$('mute').style.opacity = AU.muted ? .45 : 1 }`
+function mutePaint() { const b = $('mute'); b.innerHTML = AU.muted ? '&#9834;' : '&#9835;'; b.style.opacity = AU.muted ? .45 : 1; b.setAttribute('aria-label', AU.muted ? 'Sound off' : 'Sound on') }
+$('mute').onclick = () => { AU.toggle(); mutePaint() }
+mutePaint()
 // PT8-E1 / PT8-E2 / PT8-E3 2026-10-21: PLAN_PT8 E1-E3 - the end-run button (#endrun) and Esc (build_PT8_2026-10-21).
 // endLive() is true while a run is in play: the start screen is gone and no level-up card screen, report, How to play, credits dialog or hint
 // card is up. A press - a click or tap, Enter on the focused button, or Esc - does nothing unless endLive(). The first press arms the button
