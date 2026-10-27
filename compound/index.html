@@ -2704,6 +2704,13 @@ const T = {
   r5M6Ring: 150, r5M6LineD: 320, r5M6LineHalf: 170, r5M6SpreadK: 0.5, r5M6ClearT: 30, r5M6Spot: 3,   // R5-M6: the cleared ring's radius; the firebreak's distance from the house; its half length (px); the spread factor inside the ring and its s; spot fires after a failure
   r5DevPickD: 170, r5DevDestD: 420,                     // R5-D: a dev-started task's pickup straight above you, its destination to the pickup's right (px)
   r5ResWalk: 90, r5LeaveWait: 0.8, r5LeaveD: 240, r5HudGap: 15,   // R5-M4 / R5-F phase 2a (the user's choice at the preview, PLAN_R5): residents' own walking speed after an escort ends (px/s); s they stand in the open ground before leaving; px they walk on from it, fading out; the timer track's or counter's middle, px below the lowest top HUD box
+  // R2 2026-10-27: PLAN_R2 (DESIGN_long_runs 4.2-4.3; the X items) - the extra tiers, the pool rule, the gold edge, the X items; every number a starting value (build_R2_2026-10-27)
+  r2From: 480,                     // R2-P: a level at or past a measure's old maximum (max0) is offered only from this run clock (s; PLAN_R2 "from 8:00")
+  r2Tier: 0.20,                    // R2-T: each tier adds this share of a measure's main effect where that effect's formula is held at max0 and scaled (Codes area, Warning rate, Drills reach and rate); PLAN_R2 "+20 %"
+  r2FinTier: 40,                   // R2-T: Risk financing's capacity per tier, in place of a level's 25 (PLAN_R2 "+40 capacity")
+  r2EdgeW: 1, r2EdgeWSmall: 2,     // R2-G: the gold edge's width in screen px on a computer and on a phone (PLAN_R2 "1 px at x1, 2 px at the phones' x1.25"); drawn in game units as px / zoom
+  r2LlClear: 10,                   // R2-X3: a telegraph circle's centre is kept T.lifelineR + its radius + this many px from a standing lifeline's centre (PLAN_R2 R2-X3)
+  r2CrewRepair: 0.15,              // R2-X4: lifelines repair this share faster per Repair crews level (META crews; PLAN_R2 R2-X4)
 }
 // PT5-R1a..R1f 2026-10-20: PLAN_PT5 R1 (the user's go-ahead relayed in record 3fc807d8; the approval of this round in PLAN_PT5.md) - the long-run numbers, one new table beside T (T itself is unchanged). Every number is from ../design_2026-10-20/curves_proposal.js (its P table and xpTable(80, 15, 72)) and DESIGN_long_runs.md; read by rampTimeAt, hpRampNow, hitRampNow (helpers), eliteShare, the spawn rate (step), the two P.need lines and rebuildLifeline (build_PT5_2026-10-20)
 const LONGRUN = {
@@ -3131,6 +3138,32 @@ const UPGRADES = {
             src: 'A World Bank estimate, via UNDRR. In developing countries, building resilience into infrastructure adds only 3% to investment costs. It gives a net benefit of US$4 per US$1.' },
 }
 
+// R2-T 2026-10-27: PLAN_R2 (DESIGN_long_runs 4.2) - three tiers after each measure's maximum, set once here from the table's values: max0 is the table's max (today's maximum: read by synF, the Planting site, the pool rule and the dot ring), max becomes max0 + 3. A card for a level at or past max0 takes its text from R2_TIER_DESC (R2PROV placeholders, one per measure and tier, for the Drafter's lines) and its tier name from TIERS; below max0 the table's own desc runs as before; src is unchanged (no new claim). The table itself is byte-identical (build_R2_2026-10-27)
+// R2-FX-1 2026-10-27: strings_R2.md D1 - the three tier names as drafted (the Lead's provisional ruling, PLAN_R2 "The user's decision on the order"); was `const TIERS = ['R2PROV tier1', 'R2PROV tier2', 'R2PROV tier3']` (build_R2_2026-10-27 fix round)
+const TIERS = ['Advanced I', 'Advanced II', 'Mainstreamed']
+// R2-FX-4 2026-10-27: strings_R2.md D3-S - the Mainstreamed teaching line (Steady); its Learning twin is PLAIN['UPG.T1'] (D3-L); printed by the measure card builder as a second line in the card's .src div on the card that confers the new maximum, so the Sources switch governs it (#cards:not(.srcon) .card .src); the curly quotes are the list's own, written as escapes (build_R2_2026-10-27 fix round)
+const R2_T1 = 'The Sendai Framework asks countries to mainstream disaster risk reduction \u201cwithin and across all sectors\u201d.'
+const R2_TIER_DESC = {
+  // R2-FX-2 2026-10-27: strings_R2.md D2-01..D2-30, the S text column character for character ("(Lv N)" and the final full stop as the list writes them; N = max0 + n of each measure, checked by the Fixer's script); the ten placeholder lines were (each quoted on its own line below) (build_R2_2026-10-27 fix round)
+  field:  ['Enforced across a wider area (Lv 6).', 'Enforced across a wider area again (Lv 7).', 'Enforced across a wider area again. Top level, marked in gold (Lv 8).'],   // R2-FX-2: D2-01..03; was `field:  ['R2PROV field tier1', 'R2PROV field tier2', 'R2PROV field tier3'],`
+  pulse:  ['Faster, and reaches past the first thing it meets (Lv 7).', 'Faster again, and reaches past the first thing it meets (Lv 8).', 'Faster again, and reaches past the first thing it meets. Top level, marked in gold (Lv 9).'],   // R2-FX-2: D2-04..06; was `pulse:  ['R2PROV pulse tier1', 'R2PROV pulse tier2', 'R2PROV pulse tier3'],`
+  wave:   ['More often, and further out (Lv 6).', 'More often again, and further out (Lv 7).', 'More often again, and further out. Top level, marked in gold (Lv 8).'],   // R2-FX-2: D2-07..09; was `wave:   ['R2PROV wave tier1', 'R2PROV wave tier2', 'R2PROV wave tier3'],`
+  ring:   ['A wider belt (Lv 6).', 'A wider belt again (Lv 7).', 'A wider belt again. Top level, marked in gold (Lv 8).'],   // R2-FX-2: D2-10..12; was `ring:   ['R2PROV ring tier1', 'R2PROV ring tier2', 'R2PROV ring tier3'],`
+  armour: ['Hits on you are 12% smaller again (Lv 5).', 'Hits on you are 12% smaller again (Lv 6).', 'Hits on you are 12% smaller again. Top level, marked in gold (Lv 7).'],   // R2-FX-2: D2-13..15; was `armour: ['R2PROV armour tier1', 'R2PROV armour tier2', 'R2PROV armour tier3'],`
+  magnet: ['You collect from 40% further (Lv 5).', 'You collect from 40% further again (Lv 6).', 'You collect from 40% further again. Top level, marked in gold (Lv 7).'],   // R2-FX-2: D2-16..18; was `magnet: ['R2PROV magnet tier1', 'R2PROV magnet tier2', 'R2PROV magnet tier3'],`
+  hp:     ['+40 capacity (Lv 6).', '+40 capacity again (Lv 7).', '+40 capacity again. Top level, marked in gold (Lv 8).'],   // R2-FX-2: D2-19..21; was `hp:     ['R2PROV hp tier1', 'R2PROV hp tier2', 'R2PROV hp tier3'],`
+  speed:  ['You move 10% faster (Lv 6).', 'You move 10% faster again (Lv 7).', 'You move 10% faster again. Top level, marked in gold (Lv 8).'],   // R2-FX-2: D2-22..24; was `speed:  ['R2PROV speed tier1', 'R2PROV speed tier2', 'R2PROV speed tier3'],`
+  rate:   ['Lifelines repair faster. Your repair reach is wider (Lv 7).', 'Lifelines repair faster again. Your repair reach is wider again (Lv 8).', 'Lifelines repair faster again. Top level, marked in gold (Lv 9).'],   // R2-FX-2: D2-25..27; was `rate:   ['R2PROV rate tier1', 'R2PROV rate tier2', 'R2PROV rate tier3'],`
+  dmg:    ['You hit 20% harder (Lv 7).', 'You hit 20% harder again (Lv 8).', 'You hit 20% harder again. Top level, marked in gold (Lv 9).'],   // R2-FX-2: D2-28..30; was `dmg:    ['R2PROV dmg tier1', 'R2PROV dmg tier2', 'R2PROV dmg tier3'],`
+}
+for (const k in UPGRADES) { const u = UPGRADES[k], d0 = u.desc; u.max0 = u.max; u.max = u.max0 + TIERS.length; u.desc = l => l >= u.max0 ? R2_TIER_DESC[k][Math.min(l - u.max0, TIERS.length - 1)] : d0(l) }
+// R2-T 2026-10-27: the tier helpers. r2N: tiers held past max0; r2L: the level term held at max0 (today's maximum); r2K: the tier factor 1 + T.r2Tier x r2N, applied to a main effect whose formula reads r2L (Codes area, Warning rate, Drills reach and rate). R2-G: r2Gold - the measure is at its new maximum (Mainstreamed). R2-P: r2Cap - the pool rule's ceiling: today's maximum before T.r2From of run clock, the new one from then (build_R2_2026-10-27)
+const r2N = k => Math.max(0, (lv[k] || 0) - UPGRADES[k].max0)
+const r2L = k => Math.min(lv[k] || 0, UPGRADES[k].max0)
+const r2K = k => 1 + T.r2Tier * r2N(k)
+const r2Gold = k => (lv[k] || 0) >= UPGRADES[k].max
+const r2Cap = k => t >= T.r2From ? UPGRADES[k].max : UPGRADES[k].max0
+
 // ---------------------------------------------------------------- synergies
 // Measures compound (not attributed to UNDRR: unverified in the 2026-09-14 sweep), and compounding is also the
 // best part of this genre. A pair the player owns offers the bonus on a card; the question
@@ -3268,7 +3301,8 @@ const SYN_PARTS = {
 function synF(id) {
   if (!SYN_PARTS[id]) return 1
   const sy = SYNERGIES.find(s => s.id === id)
-  return clamp((lv[sy.a] + lv[sy.b] - 2) / Math.min(T.synRipenK, UPGRADES[sy.a].max + UPGRADES[sy.b].max - 2), T.synRipen0, 1)
+  // R2-S 2026-10-27: the pair's level room reads max0 (today's maximum), so the ripening is today's over the same states and f = 1 at both old maxima; above them the clamp holds 1; was `return clamp((lv[sy.a] + lv[sy.b] - 2) / Math.min(T.synRipenK, UPGRADES[sy.a].max + UPGRADES[sy.b].max - 2), T.synRipen0, 1)` (build_R2_2026-10-27)
+  return clamp((lv[sy.a] + lv[sy.b] - 2) / Math.min(T.synRipenK, UPGRADES[sy.a].max0 + UPGRADES[sy.b].max0 - 2), T.synRipen0, 1)
 }
 // G-M2 2026-10-13: how a ripened part is re-applied without compounding (the plan's design point): P.synF[id] holds the f the synergy's parts now stand at (0 before the take). Moving it from f0 to f1, a multiplier m acting as 1 + (m - 1) x f is divided out at f0 and multiplied in at f1 - so the field holds every other factor on it (levels, lifelines, trade-offs, mastery) times exactly the synergy's factor at f1, however many times it is re-read; the armour part does the same on 1 - P.armour (every other armour source also multiplies 1 - P.armour, so the order does not matter); concrete's +60s add m x (f1 - f0). Called by the synergy's apply (the take, f0 = 0) and by apply() when either of its measures levels. At f1 = 1 the factor is m itself, today's number (build_G_2026-10-01)
 function synRipen(P, id) {
@@ -4794,6 +4828,7 @@ function reset(placeId) {
   lv.pulse = 1
   // DL-M2 2026-10-14: growth pressure's xp and exposure terms removed (PLAN_DIAL D2); at Planned (PRESSURE 0) the block they sat in never ran, so P.xpMul and P.exposure come out of reset exactly as they did there (build_DIAL_2026-10-14)
   // Institutional capacity: bounded, bought between runs with what earlier runs protected.
+  P.max *= DIFF.cap || 1   // R2-X2 2026-10-27: PLAN_R2 R2-X2 - the step's starting-capacity factor (DIFFS[*].cap) on P.max, before the reserves add below, which then sets P.hp = P.max; nothing else reads cap (build_R2_2026-10-27)
   P.max += 8 * (METALV.reserves || 0); P.hp = P.max
   P.spd *= 1 + 0.04 * (METALV.routes || 0)
   P.pickup *= 1 + 0.06 * (METALV.monitor || 0)
@@ -4964,6 +4999,7 @@ const DIFFS = {
     fail: 99, llDmg: 0.5,
     // BS-M4 2026-09-30: levelHeal - capacity back per level, before any choice (PLAN_BS H1: Learning 8%, Steady 5%, Pressed 3%, Exposed 2%; was T.levelHeal 0.20 on every difficulty). BS-M3: tbossAt - the true boss's arrival on the run clock (PLAN_BS B3, the user's "4분, 3분30초, 3분, 2분30초" read in the order Learning, Steady, Pressed, Exposed) (build_BS_2026-09-30)
     levelHeal: 0.08, tbossAt: 240,
+    cap: 1.30,   // R2-X2 2026-10-27: PLAN_R2 R2-X2 - starting capacity x this (reset), the gentlest step gains most (build_R2_2026-10-27)
   },
   steady: {
     // DL-M1 2026-10-14: display name Steady -> Growing, the first-time default (PLAN_DIAL D7); DL-M4: the step note, strings_DIAL.md N-2 (was "The tuned run, and a longer one."): ramp, dmg, spawn, warn and llDmg are 1 here, so those five of T's numbers run unscaled; len 1.25 still moves the rampTime() knee to 262.5 s (T.hardAt 105 x len 1.25 x T.pace 2), against 210 s for T's own hardAt x pace (build_DIAL_2026-10-14)
@@ -4974,6 +5010,7 @@ const DIFFS = {
     ramp: 1, dmg: 1, spawn: 1, warn: 1, len: 1.25, pay: 1.3,
     fail: 3, llDmg: 1,
     levelHeal: 0.05, tbossAt: 210,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
+    cap: 1.25,   // R2-X2 2026-10-27: PLAN_R2 R2-X2 (build_R2_2026-10-27)
   },
   pressed: {
     // DL-M1 2026-10-14: display name Pressed -> Booming (PLAN_DIAL D1, D2) (build_DIAL_2026-10-14)
@@ -4988,6 +5025,7 @@ const DIFFS = {
     ramp: 1.5, dmg: 1.5, spawn: 1.35, warn: 0.7, len: 1.6, pay: 1.7,
     fail: 3, llDmg: 1.25,
     levelHeal: 0.03, tbossAt: 180,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
+    cap: 1.20,   // R2-X2 2026-10-27: PLAN_R2 R2-X2 (build_R2_2026-10-27)
   },
   exposed: {
     // DL-M1 2026-10-14: display name Exposed -> Unchecked (PLAN_DIAL D1, D2) (build_DIAL_2026-10-14)
@@ -5002,6 +5040,7 @@ const DIFFS = {
     ramp: 2, dmg: 2, spawn: 2, warn: 0.5, len: 2, pay: 2.2,
     fail: 2, llDmg: 1.5,
     levelHeal: 0.02, tbossAt: 150,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
+    cap: 1.15,   // R2-X2 2026-10-27: PLAN_R2 R2-X2 (build_R2_2026-10-27)
   },
 }
 const DIFF_IDS = Object.keys(DIFFS)
@@ -5434,7 +5473,8 @@ const CARD_FACES = {
   'FC-S3-17': "Each level, hits on you are 12% smaller.",
   'FC-S3-20': "You collect from 40% further.",
   'FC-S3-19': "Shots turn toward targets; you collect 40% further.",
-  'FC-S3-23': "Each level, +25 capacity.",
+  'FC-S3-23': "This level, +25 capacity.",   // R2-FX-7 2026-10-27: the Lead's addendum to the Fixer guard (14:1x) - faceId returns this face for Risk financing at every level below max0 (Lv 1-5); "Each level" is untrue once a tier adds T.r2FinTier (40) in place of a level's 25 (apply), so the face takes the tier face's form with the live face's own "+25 capacity"; was `'FC-S3-23': "Each level, +25 capacity.",` (build_R2_2026-10-27 fix round)
+  'FC-R2-HP': 'This level, +40 capacity.',   // R2-2a-3 2026-10-27: the placeholder face of a Risk financing tier card (faceId routes hp at a level at or past max0 here); the Drafter's face replaces it (build_R2_2026-10-27)   // R2-FX-6 2026-10-27: strings_R2.md D5 F1 - the Finance tier face as drafted (the Lead's provisional ruling); was `'FC-R2-HP': 'R2PROV hp tierface',   // R2-2a-3 2026-10-27: the placeholder face of a Risk financing tier card (faceId routes hp at a level at or past max0 here); the Drafter's face replaces it (build_R2_2026-10-27)` (build_R2_2026-10-27 fix round)
   'FC-S3-25': "Each level, you move 10% faster.",
   'FC-S3-26': "Each level, lifelines repair 30% faster.",
   'FC-S3-28': "Each level, you hit 20% harder.",
@@ -5500,6 +5540,7 @@ const CARD_FACES = {
 // P16a-F 2026-10-22: the face a card or page shows, by its kind, id and level (l: 0 on a "New measure" card); an Early warning level by what it does to the small shot, as UPGRADES.pulse.desc branches (build_P16a_2026-10-22)
 function faceId(kind, id, l) {
   if (kind === 'upg') {
+    if (l >= UPGRADES[id].max0) return id === 'hp' ? 'FC-R2-HP' : undefined   // R2-T 2026-10-27: a tier card has no face line yet (its text is the R2PROV placeholder, shown plain); the Drafter's face comes with its lines (build_R2_2026-10-27)   // R2-2a-3 2026-10-27: Risk financing's tier cards take the placeholder face FC-R2-HP (CARD_FACES), so they get a face line and the Details fold like its other level cards and never today's "Each level, +25 capacity." (false at +40); the other measures' tier cards stay faceless; was `if (l >= UPGRADES[id].max0) return undefined` (build_R2_2026-10-27)
     const two = { field: ['FC-S3-01', 'FC-S3-02a'], wave: ['FC-S3-11', 'FC-S3-13'], ring: ['FC-S3-14', 'FC-S3-16'], magnet: ['FC-S3-20', 'FC-S3-19'] }
     if (two[id]) return two[id][l === 0 ? 0 : 1]
     if (id === 'pulse') return l === 0 ? 'FC-S3-03' : pulseSmall(l + 1) > pulseSmall(l) ? 'FC-S3-04' : pulseSmall(l + 1) < pulseSmall(l) ? 'FC-S3-05' : 'FC-S3-06'
@@ -5616,14 +5657,26 @@ const PLAIN = {
   'UPG.pulse.descN': l => pulseSmall(l + 1) > pulseSmall(l) ? `Faster. It also goes past the first thing it meets. One more shot, small until your next Early warning level (Lv ${l + 1}).`
                         : pulseSmall(l + 1) < pulseSmall(l) ? `Faster. It also goes past the first thing it meets. Your small shot grows to full size (Lv ${l + 1}).`
                         : `Faster. It also goes past the first thing it meets (Lv ${l + 1}).`,
+  // R2-FX-3 2026-10-27: strings_R2.md D2-04L, D2-05L, D2-06L - the Learning twins of Early warning's three tier cards; descRow gives a tier card the row id UPG.<id>.tier<n>, which say() reads here with the Plain English switch on (the Builder's unit test: no code change) (build_R2_2026-10-27 fix round)
+  'UPG.pulse.tier1': 'Faster. It also goes past the first thing it meets (Lv 7).',
+  'UPG.pulse.tier2': 'Faster again. It also goes past the first thing it meets (Lv 8).',
+  'UPG.pulse.tier3': 'Faster again. It also goes past the first thing it meets. Top level, marked in gold (Lv 9).',
   'UPG.wave.desc0': 'Practised regularly. It does not stop the hazard. It moves people out of its way.',
   'UPG.armour.desc0': 'The buildings that are already there, made stronger. Less of every hit gets through.',
   'UPG.magnet.desc0': 'Monitoring, and records of losses. You see further out. Nothing is collected that was never measured.',
   'UPG.magnet.descN': 'Monitoring, and records of losses. From now on, what you fire turns toward what it was aimed at.',
+  // R2-FX-3 2026-10-27: strings_R2.md D2-16L, D2-17L, D2-18L - the Learning twins of Risk data's three tier cards (as above, read by say() under descRow's tier row id) (build_R2_2026-10-27 fix round)
+  'UPG.magnet.tier1': 'You collect from 40% further away (Lv 5).',
+  'UPG.magnet.tier2': 'You collect from 40% further away again (Lv 6).',
+  'UPG.magnet.tier3': 'You collect from 40% further away again. Top level, marked in gold (Lv 7).',
   'UPG.hp.desc0': 'Money saved up, and insurance. Capacity to take a hit and still be standing.',
+  // R2-FX-3 2026-10-27: strings_R2.md D2-20L - the Learning twin of Risk financing's Advanced II card (the one D2 row above grade 7); its other two tier cards have no twin and show their Steady line in both modes (build_R2_2026-10-27 fix round)
+  'UPG.hp.tier2': 'Capacity up by 40 again (Lv 7).',
   // LL-M1 2026-09-25: was "All you have built, working when it is needed." - replaced where it stands, never deleted (deleted, Learning would fall through to the Steady text); S-L1's Learning text verbatim (strings_LL.md) (build_LL_2026-09-25)
   'UPG.rate.desc0': 'Each level, lifelines repair 30% faster. You can stand in a ring 10% wider and still repair them.',
   'UPG.dmg.desc0': 'Money spent making things stronger first, not on rebuilding them after.',
+  // R2-FX-4 2026-10-27: strings_R2.md D3-L - the Learning twin of the Mainstreamed teaching line R2_T1, read by say('UPG.T1', R2_T1) in the measure card builder (build_R2_2026-10-27 fix round)
+  'UPG.T1': 'The Sendai Framework is a UN plan to cut disaster risk. It asks countries to make this part of all sectors.',
   // G-M2 2026-10-13: the Learning gains of act, stock, concrete, who (and keep, below) say "up to" and which parts grow, strings_G.md S-G2a verbatim. Were: "Warning fires 25% faster. Drills reach 30% further. And one more shot goes out each time." / "Codes cover 35% more ground. Retrofitting stops 10% more. What you stop bursts where it falls." / "+60 capacity. Retrofitting also stops 8% more." / "Drills reach 25% further. You collect from 25% further away. A shot that lands sends another on to the next thing." (build_G_2026-10-01)
   // P16a-T 2026-10-22: S3-31 (strings_P16a.md; ADJUDICATION_P16a.md M1) (build_P16a_2026-10-22)
   'SYN.act.gain': 'Warning fires up to 25% faster. Drills reach up to 30% further. One more shot goes out each time. The 25% and 30% can start smaller. They grow as you level Warning and Drills.',
@@ -5818,7 +5871,8 @@ function say(id, cur, arg) {
 }
 // Which of a card's two description rows is on screen. A desc with no level branch prints its level-0
 // text at every level, which is how the copy keys those rows ("all levels if no level branch").
-const descRow = (pre, id, desc, l) => pre + id + (desc(l) === desc(0) ? '.desc0' : '.descN')
+// R2-T 2026-10-27: a measure card at a tier level has its own row id, UPG.<id>.tier<n>, so PLAIN's .descN entry (Early warning, Risk data) does not replace the tier text under the Plain English switch, and the Drafter's Learning twins have a slot; every other row id as before; was `const descRow = (pre, id, desc, l) => pre + id + (desc(l) === desc(0) ? '.desc0' : '.descN')` (build_R2_2026-10-27)
+const descRow = (pre, id, desc, l) => pre === 'UPG.' && l >= UPGRADES[id].max0 ? pre + id + '.tier' + (l - UPGRADES[id].max0 + 1) : pre + id + (desc(l) === desc(0) ? '.desc0' : '.descN')
 
 // ---- Learning: term glosses (S7) ----------------------------------------------------------------
 // Shown on cards, which stop play and can be read. (No banner carries one: S7.B10m, "Compound", was dropped
@@ -5945,6 +5999,13 @@ const META = [
     src: 'Drills shorten the wait, because that is what a drill is.',
     now: l => `Evacuate comes back ${5 * l}% sooner.`,
     of: 'wave' },
+  // R2-X4 2026-10-27: PLAN_R2 R2-X4 (the user's item 3) - Repair crews: lifelines repair T.r2CrewRepair faster per level (updateLifelines, both repair branches); bought with recovery budget between runs only - never a run card (offerCards reads UPGRADES, not META). Four R2PROV placeholders for the Drafter; src is to reuse a shipped verified line (no new claim) (build_R2_2026-10-27)
+  // R2-FX-5 2026-10-27: strings_R2.md D4 - the node's four lines as drafted (the Lead's provisional ruling); now(l) is the additive template because repDt's factor is additive, 1 + T.r2CrewRepair x (METALV.crews || 0) with r2CrewRepair 0.15 (updateLifelines, both branches); was `{ id: 'crews', name: 'R2PROV crews name', max: 3, cost: l => 6 + l * 5,` / was `fx: 'R2PROV crews fx',` / was `src: 'R2PROV crews src',` / was `now: l => 'R2PROV crews now ' + l,` (build_R2_2026-10-27 fix round)
+  { id: 'crews', name: 'Repair crews', max: 3, cost: l => 6 + l * 5,
+    fx: 'Lifelines repair 15% faster per level.',
+    src: 'Crews kept on between runs. Every lifeline repairs faster, every run.',
+    now: l => `Lifelines repair ${15 * l}% faster.`,
+    of: 'rate' },
 ]
 
 const META_KEY = 'compoundMetaV1'
@@ -6267,6 +6328,7 @@ function vbRzTick(dt) {
     const r = rand(34, 52)
     pts.push({ x: rand(b0 + r, b1 - r), y: clamp(P.y + rand(-VB.rzDy, VB.rzDy), VB.y0 + r, VB.y1 - r), r, off: rand(0, 0.9) })
   }
+  for (const q of pts) r2Clear(q, q.r)   // R2-X3 2026-10-27: after the draws above, each circle is kept out of a standing lifeline (the band one included); a pushed circle may then lie partly outside the band (build_R2_2026-10-27)
   events.push({ kind: 'rockfall', phase: 'warn', tw: warn, warn, td: EVENTS.rockfall.dur, ox: P.x, oy: P.y, pts, dmg: 17, vbRz: true })   // dmg 17: EVENTS.rockfall.make's own figure
 }
 // VB-M8 2026-10-18: V9 re-based - the ground in Mountain valley, in place of draw()'s one ground fill: the floor pattern (groundPat) only inside the box; beyond the walls and the foot the dark rock texture, beyond the head the brown rubble (VB_ART, [LPC] Terrains), or a dark fill until they load (and headless); then the red zone (V4: a translucent band along each long wall, in the palette's alarm red, with a dashed inner edge) and a plain dark edge line along the box. All of it over the same view rectangle draw() filled before (W / z by H / z game units around you, 96 px over each side), so no repeating floor shows past a wall or an end at any zoom; the view stays centred on you (build_VALLEY_2026-10-17)
@@ -6718,6 +6780,7 @@ function bossTick(B, dt) {
         const pts = []
         for (let k = 0; k < 4; k++)
           pts.push({ x: P.x + rand(-130, 130), y: P.y + rand(-130, 130), r: 46, off: rand(0, .5) })
+        for (const q of pts) r2Clear(q, q.r)   // R2-X3 2026-10-27: after the four draws above, each strike circle is kept out of a standing lifeline (build_R2_2026-10-27)
         // SY-FIX 2026-09-29: `byBoss` marks a strike as the compound event's, so a hold holds it (updateEvents; ADJUDICATION_SY F3); the place's own scheduled events carry no mark and are not held (build_SY_2026-09-29 fix round)
         // BS-M1 2026-09-30: dmg x B.dmgK, and llK carries the same factor to the wear its circles put on a lifeline (updateEvents) (build_BS_2026-09-30)
         events.push({ kind: 'rockfall', phase: 'warn', tw: 1.05, warn: 1.05, td: .45,
@@ -6955,6 +7018,7 @@ const EVENTS = {
         pts.push({ x: P0.x + Math.cos(a) * d, y: P0.y + Math.sin(a) * d, r: rand(34, 52),
                    off: rand(0, 0.9) })
       }
+      for (const q of pts) r2Clear(q, q.r)   // R2-X3 2026-10-27: after the draws above, each circle is kept out of a standing lifeline (build_R2_2026-10-27)
       return { pts, dmg: 17 }
     },
   },
@@ -7268,7 +7332,8 @@ const WORKS = {
   planting: { name: 'Planting', col: PAL.place.works.planting, need: 5.0,
               gain: 'The green belt gains a level.',
               note: 'Dunes and mangroves replanted. It only pays if it is still standing on the day, which is a question about land-use planning and not about planting.',
-              apply: () => { if (lv.ring < UPGRADES.ring.max) apply('ring'); else P.synRing = (P.synRing || 1) * 1.15 } },
+              // R2-S 2026-10-27: reads max0 (today's maximum), so the site adds a level only below it and widens the belt above it, as today over the same states; was `apply: () => { if (lv.ring < UPGRADES.ring.max) apply('ring'); else P.synRing = (P.synRing || 1) * 1.15 } },` (build_R2_2026-10-27)
+              apply: () => { if (lv.ring < UPGRADES.ring.max0) apply('ring'); else P.synRing = (P.synRing || 1) * 1.15 } },
   depot:    { name: 'Depot', col: PAL.place.works.depot, need: 4.2,
               gain: '+24 capacity, and it is filled.',
               note: 'Stocks pre-positioned before the season rather than shipped in after the event. The same supplies, months earlier, at a fraction of the cost.',
@@ -7544,6 +7609,23 @@ function nextSeason() {
   startSeason(PLACE.seasons[seasonIx])
 }
 
+// R2-X3 2026-10-27: PLAN_R2 R2-X3 (the user's item 3) - no telegraph circle inside a lifeline: a point whose centre lies within T.lifelineR + its radius + T.r2LlClear of a standing lifeline's centre (alive and on the map: not lost, not away) is moved outward along the radial to exactly that distance. Deterministic, no random draw: the radial is from the lifeline's centre; a point exactly at the centre takes the direction toward you, or +x when that is nil too. Up to four passes so a point pushed into a second lifeline is pushed again; a point already clear is not moved. Called by every site that places a point telegraph, after its own draws: the siege strikes, the rockfall event, Mountain valley's red-zone rockfall, R4's aftershock cluster (E1), R5's ember circles (M6). Lanes, bands and lines are not moved (build_R2_2026-10-27)
+function r2Clear(q, r) {
+  for (let pass = 0; pass < 4; pass++) {
+    let moved = false
+    for (const L of lifelines) {
+      if (!L.alive || L.away > 0) continue
+      const need = T.lifelineR + r + T.r2LlClear, dx = q.x - L.x, dy = q.y - L.y, d = Math.hypot(dx, dy)
+      if (d >= need) continue
+      let ux = dx / d, uy = dy / d
+      if (!(d > 1e-9)) { const px = P.x - L.x, py = P.y - L.y, pm = Math.hypot(px, py); if (pm > 1e-9) { ux = px / pm; uy = py / pm } else { ux = 1; uy = 0 } }
+      q.x = L.x + ux * need; q.y = L.y + uy * need; moved = true
+    }
+    if (!moved) break
+  }
+  return q
+}
+
 // ---------------------------------------------------------------- lifelines: build + tick
 function placeLifelines() {
   lifelines = []; lifelinesLost = []
@@ -7770,7 +7852,8 @@ function updateLifelines(dt) {
     // SY-M1 2026-09-29: held zones and fronts wear nothing while a hold runs, but they still count as sitting on it (`under`), so it is not repaired under them: the repair rule is unchanged (ruling RS5) (build_SY_2026-09-29)
     // XL-M2 2026-10-13: R1 (RX4) - standing within the reach while something sits on it now repairs at T.llRepairUnder x the full rate, Maintenance's x(1 + 0.3 per level) included, applied net of the wear in one step: below 0 the net goes through hitLifeline (the alarm, the loss), above 0 it repairs. The SY-M1 line above ("so it is not repaired under them: the repair rule is unchanged") was true before this build (RX7): during a hold the occupiers still wear nothing and still count as `under`, so the reduced rate applies. A full lifeline with the net at or above 0 stays full and says nothing (no "repaired" line every frame); a save that reaches 100 while occupied secures it as before. With nothing on it, or nobody there, each term is computed as before, so those cases are unchanged (build_XP_2026-10-13)
     const wearDt = under && !holdOn() ? T.lifelineDps * (DIFF.llDmg || 1) * Math.min(under, 4) * casc * dt * (trade.levee ? 1 + (T.leveeFloodWear - 1) * underF / under : 1) * (underK / under) : 0   // UXBS-FIX 2026-09-30: F4 - x underK / under (1 with no elite on it) (build_BS_2026-09-30 fix round)
-    const repDt = here && (under || L.hp < 100) ? (under ? T.lifelineRepair * (1 + lv.rate * 0.3) * T.llRepairUnder * dt : T.lifelineRepair * (1 + lv.rate * 0.3) * dt) : 0
+    // R2-X4 2026-10-27: x (1 + T.r2CrewRepair x Repair crews level) in both branches (the occupied and the clear one); x 1 with the node unbought; was `const repDt = here && (under || L.hp < 100) ? (under ? T.lifelineRepair * (1 + lv.rate * 0.3) * T.llRepairUnder * dt : T.lifelineRepair * (1 + lv.rate * 0.3) * dt) : 0` (build_R2_2026-10-27)
+    const repDt = here && (under || L.hp < 100) ? (under ? T.lifelineRepair * (1 + lv.rate * 0.3) * (1 + T.r2CrewRepair * (METALV.crews || 0)) * T.llRepairUnder * dt : T.lifelineRepair * (1 + lv.rate * 0.3) * (1 + T.r2CrewRepair * (METALV.crews || 0)) * dt) : 0
     const netDt = repDt - wearDt
     if (netDt < 0) hitLifeline(L, -netDt)
     else if (netDt > 0 && L.hp < 100) {
@@ -8314,6 +8397,7 @@ function r4Tag(e, id) { e.e2 = id; r4First(id); return e }
 function r4E1At(x, y, e) {
   const w = r4Warn(), pts = []
   for (let k = 0; k < 3; k++) { const a = e.phase + k * TAU / 3; pts.push({ x: x + Math.cos(a) * T.e1Dist, y: y + Math.sin(a) * T.e1Dist, bright: false }) }
+  for (const q of pts) r2Clear(q, T.e1R)   // R2-X3 2026-10-27: the three circles (radius T.e1R) kept out of a standing lifeline; no draw here (build_R2_2026-10-27)
   r4fx.push({ k: 'circ', id: 'E1', pts, R: T.e1R, w, tw: w, dmg: e.dmg * T.e1DmgK, st: 'warn', ft: 0 })
   AU.play('r4circle')
 }
@@ -8827,6 +8911,7 @@ function r5Pattern(k) {
   } else if (k.id === 'M6') {
     const s = Math.random() < 0.5 ? 1 : -1, ax = P.x + hx * T.r5CircAhead, ay = P.y + hy * T.r5CircAhead
     const pts = [{ x: P.x, y: P.y }, { x: ax, y: ay }, { x: ax - hy * s * T.r5CircSide, y: ay + hx * s * T.r5CircSide }].map(q => Object.assign(q, { bright: false }))
+    for (const q of pts) r2Clear(q, T.r5CircR)   // R2-X3 2026-10-27: the three ember circles (radius T.r5CircR) kept out of a standing lifeline, after the side draw above (build_R2_2026-10-27)
     r5fx.push({ k: 'circ', id: 'M6', pts, R: T.r5CircR, w, tw: w, dmg, st: 'warn', ft: 0 })
     AU.play('r4circle')
   } else if (k.id === 'M4') {
@@ -9066,12 +9151,14 @@ function fireWeapons(dt) {
   // cooldown, Broadside adds a wide sweep alongside them inside firePulse, and Continuous adds a
   // held beam over them, handled per frame rather than per cooldown. A build may hold both.
   if (lv.pulse > 0) {
-    if (step('pulse', 0.55 - lv.pulse * 0.05)) firePulse(sh)
+    // R2-T 2026-10-27: Warning's main effect is its rate: the cooldown's level term is held at max0 and divided by the tier factor (+20 % rate a tier); the shot's damage, pierce and the warning time read the raw level, as a level grows them; identical below max0; was `if (step('pulse', 0.55 - lv.pulse * 0.05)) firePulse(sh)` (build_R2_2026-10-27)
+    if (step('pulse', (0.55 - r2L('pulse') * 0.05) / r2K('pulse'))) firePulse(sh)
     if (sh.beam) fireBeam(dt, sh)
   }
 
   // shockwave — expanding ring that knocks back
-  if (lv.wave > 0 && step('wave', 2.4 - lv.wave * 0.22)) {
+  // R2-T 2026-10-27: Drills' main effect is its reach and rate: the cooldown's level term is held at max0 and divided by the tier factor (fireWave scales the reach by it); the ring's damage reads the raw level; identical below max0; was `if (lv.wave > 0 && step('wave', 2.4 - lv.wave * 0.22)) {` (build_R2_2026-10-27)
+  if (lv.wave > 0 && step('wave', (2.4 - r2L('wave') * 0.22) / r2K('wave'))) {
     fireWave(sh, 1)
     // Volley reaches the drills too: a second, smaller ring a beat behind the first. It is the
     // same mechanic the modifier already means - one more of the thing you fire - and it was
@@ -9082,7 +9169,8 @@ function fireWeapons(dt) {
 
   // field — continuous damage close in
   if (lv.field > 0 && step('field', 0.30)) {
-    const rad = (85 + lv.field * 18) * (P.synField || 1)
+    // R2-T 2026-10-27: Codes' main effect is its area: the level term is held at max0 and the radius grows by the square root of the tier factor, so each tier adds T.r2Tier of the area (the damage below reads the raw level, as a level grows it); identical below max0; was `const rad = (85 + lv.field * 18) * (P.synField || 1)` (build_R2_2026-10-27)
+    const rad = (85 + r2L('field') * 18) * (P.synField || 1) * Math.sqrt(r2K('field'))
     for (const B of bossesUp()) if (B.state !== 'arrive' && dist2(B, P) < (rad + B.r) ** 2)   // BS-M3 2026-09-30: each body on the field (build_BS_2026-09-30)
       hurtBoss((5 + lv.field * 3) * P.dmgMul * eff(), 0, 0, B)
     // B2 2026-09-22: over a copy, as the beam and the blast helper already iterate - hurtEnemy splices the dead out, which skipped the body after each kill; `gone` stops a body killed mid-loop (a Residual burst) being billed again (build_B_2026-09-22)
@@ -9235,7 +9323,8 @@ function fireWave (sh, scale) {
   const echo = scale < 1
   // G-M6 2026-10-13: pushed through fxPush, so it obeys T.fxCap (build_G_2026-10-01)
   fxPush({ ring: true, x: P.x, y: P.y, r: 10,
-            max: (120 + lv.wave * 34) * (P.synWave || 1) * scale,
+            // R2-T 2026-10-27: the ring's reach, held at max0 and scaled by the tier factor (+20 % a tier); was `max: (120 + lv.wave * 34) * (P.synWave || 1) * scale,` (build_R2_2026-10-27)
+            max: (120 + r2L('wave') * 34) * (P.synWave || 1) * scale * r2K('wave'),
             dmg: (18 + lv.wave * 9) * P.dmgMul * eff() * scale, life: 0.42,
             col: echo ? PAL.yours.ring.echo : PAL.yours.ring.shock, style: echo ? 'echo' : 'shock',
             burst: sh.burstR, burstMul: sh.burstMul, pull: sh.pull, hit: new Set() })
@@ -9458,7 +9547,8 @@ function updateEbullets(dt) {
 }
 
 // GR-M4 2026-09-29: the shield's block chance at the current Green defences level: 20% + 8% per level, 60% at Lv 5 (T.grShieldBase, T.grShieldPerLv) (build_GR_2026-09-29)
-const grShieldChance = () => T.grShieldBase + T.grShieldPerLv * (lv.ring || 0)
+// R2-2a-2 2026-10-27: the chance reads the level held at today's maximum, so it stops at 60 % at Lv 5 through the tiers and the GRANDS line "(60% at Lv 5)" and its PLAIN twin stay exactly true (the Lead's ruling at the preview); was `const grShieldChance = () => T.grShieldBase + T.grShieldPerLv * (lv.ring || 0)` (build_R2_2026-10-27)
+const grShieldChance = () => T.grShieldBase + T.grShieldPerLv * Math.min(lv.ring || 0, UPGRADES.ring.max0)
 // GR-M4 2026-09-29: a blocked thrown thing - a shimmer at the point of contact (a short dashed ring and a few sparks, within T.fxCap; the belt's `block` sound) and the thing itself sent back the way it came (its velocity reversed, so it flies toward the point it was thrown from) as your shot: src 'reflect' (it starts no chain, relay, burst or split), damage T.grShieldBack x its own x P.dmgMul (build_GR_2026-09-29)
 function grReflect(b) {
   const g = GRANDS.find(x => x.id === 'shield')
@@ -9614,7 +9704,8 @@ function combosHtml() {
   const row = (sum, body) => `<details class="cb"><summary>${sum}</summary><p>${body}</p></details>`
   // G-M2 / G-M3 2026-10-13: a held synergy's or grand programme's ripening word after its status pill, strings_G.md S-G2b and S-G3c verbatim (RG10): "growing" while a part that ripens is below full, with the title "It grows as you level {A} and {B}." (a programme: its partner measures, "{X}, {Y} and {Z}"; the shield: "It grows with each Green defences level."), else "full strength" with no title. The word is text, read after "owned" (build_G_2026-10-01)
   // G-FIX 2026-10-13: F4 - below full with none of its partner measures able to level any more (`ks`: each at its max, or ruled out - a ruled-out measure is never offered again; Green defences can still gain the Planting site's one level, as noReach reads it), the row shows no ripening word and no title: neither "growing" nor "full strength" is true then. Was: `ripe = (grows, title) => grows ? growing : full strength` (ADJUDICATION_G F4) (build_G_2026-10-01 fix round)
-  const canLevel = k => lv[k] < UPGRADES[k].max && (!banished[k] || (k === 'ring' && !worksDone.includes('planting')))
+  // R2-P 2026-10-27: the pool rule's ceiling (r2Cap: today's maximum before T.r2From, the new one from then), so the ripening word follows what the pool can offer; was `const canLevel = k => lv[k] < UPGRADES[k].max && (!banished[k] || (k === 'ring' && !worksDone.includes('planting')))` (build_R2_2026-10-27)
+  const canLevel = k => lv[k] < r2Cap(k) && (!banished[k] || (k === 'ring' && !worksDone.includes('planting')))
   const ripe = (grows, title, ks) => grows ? (ks.some(canLevel) ? `<span class="cb-rp" title="${title}">growing</span>` : '') : '<span class="cb-rp">full strength</span>'
   const names = ks => ks.length > 1 ? ks.slice(0, -1).join(', ') + ' and ' + ks[ks.length - 1] : ks.join('')
   // SYN-T 2026-10-23: R1 (ADJUDICATION_SYN; strings_SYN.md D1) - the Combos intro under T.synLv; was `let h = '<h3 id="combos-t">Combos</h3><p class="cb-intro">Own both measures of a pair. Then its synergy card can appear when you level up.</p>'` (build_SYN_2026-10-22)
@@ -9649,7 +9740,8 @@ function combosHtml() {
       + status(grand[g.id], capOut || lost, syn[A.id] || syn[B.id])
       // G-M3 2026-10-13: a held programme's ripening word (S-G3c, RG10): growing until grFull, with its partner measures in the title; the shield by its own Green-defences rule (build_G_2026-10-01)
       // G-FIX 2026-10-13: F4 - the measures that can still level (ripe's `ks`): the shield's Green defences, any other programme's grMeasures (build_G_2026-10-01 fix round)
-      + (grand[g.id] ? (g.id === 'shield' ? ripe(lv.ring < UPGRADES.ring.max, 'It grows with each Green defences level.', ['ring'])
+      // R2-2a-2 2026-10-27: the shield's chance stops at today's maximum (grShieldChance reads min(lv.ring, max0), so "60% at Lv 5" stays exactly true), and its ripening row reads max0 too - "full strength" at Lv 5 as today; phase 1 had r2Cap('ring') here (the Lead's ruling at the preview); was `+ (grand[g.id] ? (g.id === 'shield' ? ripe(lv.ring < UPGRADES.ring.max, 'It grows with each Green defences level.', ['ring'])` (build_R2_2026-10-27)
+      + (grand[g.id] ? (g.id === 'shield' ? ripe(lv.ring < UPGRADES.ring.max0, 'It grows with each Green defences level.', ['ring'])
                                           : ripe(!grFull(g.id), `It grows as you level ${names(grMeasures(g).map(k => UPGRADES[k].short))}.`, grMeasures(g))) : '')
       + `<span class="cb-op">Needs the synergies “${A.name}” (you: ${syn[A.id] ? 'yes' : 'no'}) and “${B.name}” (you: ${syn[B.id] ? 'yes' : 'no'}).${capOut ? ` You already have ${T.grandCap}, the most a run allows.` : ''}</span>`,
       say('GRD.' + g.id + '.gain', g.gain))
@@ -9888,7 +9980,8 @@ function offerCards(fromLevelUp) {
     wrap.appendChild(el)
   }
 
-  const pool = Object.keys(UPGRADES).filter(k => lv[k] < UPGRADES[k].max && !banished[k])
+  // R2-P 2026-10-27: PLAN_R2 (DESIGN_long_runs 4.2) - a level at or past today's maximum (max0) is offered only from T.r2From of run clock (r2Cap); before it the pool is exactly today's; a measure at its new maximum leaves the pool as today; was `const pool = Object.keys(UPGRADES).filter(k => lv[k] < UPGRADES[k].max && !banished[k])` (build_R2_2026-10-27)
+  const pool = Object.keys(UPGRADES).filter(k => lv[k] < r2Cap(k) && !banished[k])
   // Three on screen, always (2026-09-02, user direction). A special card takes one of the
   // three rather than sitting beside four: fewer options, each one read.
   // LL-M2 2026-09-25: the rebuild card takes one of these slots (build_LL_2026-09-25)
@@ -9918,12 +10011,14 @@ function offerCards(fromLevelUp) {
     // P6-A3 2026-09-25: B-02 counted per run (the Lead, BUILD_PLAN_P6) - on Learning the measure's own definition box shows on its "New measure" card (l === 0; lv is zeroed at every reset()) and on a "Level N" card goes with the source line, behind the Sources switch (build_P6_2026-09-25)
     // CB-M1 2026-09-30: the preview line(s) (completesHtml) go between the description and the "Compounds with" pills, which stay as they were (PLAN_CB C1) (build_CB_2026-09-30)
     // P16a-F 2026-10-22: the face line and the text for the fold (cardFace) in place of the text paragraph; was was `<h3>${u.name}</h3><p>${d}</p>${completesHtml(id)}` (build_P16a_2026-10-22)
+    // R2-T 2026-10-27: a tier card's label carries the tier's name from TIERS after the level ("Level 6 - R2PROV tier1"); every other card's label as before; was `<div class="tier">${l === 0 ? 'New measure' : 'Level ' + (l + 1)}</div>` (build_R2_2026-10-27)
+    // R2-FX-4 2026-10-27: strings_R2.md D3 - on the card that confers the measure's new maximum (l + 1 === u.max, the Mainstreamed card) the .src div gets a second line after the source line: the teaching line R2_T1 through say() under UPG.T1 (its Learning twin with the Plain English switch on); the .src div's own show/hide governs it (#cards:not(.srcon) .card .src{display:none}, the Sources switch), so with Sources off nothing new shows; glossWithSrc still reads uSrc alone; was `<div class="src">${uSrc}</div>${glossHtml((GLOSS_MEASURE[id] ? [[u.name, GLOSS_MEASURE[id], l > 0]] : []).concat(glossWithSrc(id, d, uSrc)))}` (build_R2_2026-10-27 fix round)
     el.innerHTML = `<div class="ic" style="background:${u.col}"></div>
-      <div class="tier">${l === 0 ? 'New measure' : 'Level ' + (l + 1)}</div>
+      <div class="tier">${l === 0 ? 'New measure' : 'Level ' + (l + 1) + (l >= u.max0 ? ' ' + String.fromCharCode(183) + ' ' + TIERS[Math.min(l - u.max0, TIERS.length - 1)] : '')}</div>
       <h3>${u.name}</h3>${cardFace('upg', id, l, d, u.desc(l), sayPlain(descRow('UPG.', id, u.desc, l), u.desc(l), l))}${completesHtml(id)}
       ${pw ? `<div class="pairs">Compounds with ${pw}</div>` : ''}
       ${shotChanges({ lv: Object.assign({}, lv, { [id]: l + 1 }) })}
-      <div class="src">${uSrc}</div>${glossHtml((GLOSS_MEASURE[id] ? [[u.name, GLOSS_MEASURE[id], l > 0]] : []).concat(glossWithSrc(id, d, uSrc)))}
+      <div class="src">${uSrc}${l + 1 === u.max ? '<br>' + say('UPG.T1', R2_T1) : ''}</div>${glossHtml((GLOSS_MEASURE[id] ? [[u.name, GLOSS_MEASURE[id], l > 0]] : []).concat(glossWithSrc(id, d, uSrc)))}
       ${banishLeft > 0 ? '<div class="banx" title="Rule this measure out for this run">✕</div>' : ''}`
     el.onclick = () => {
       apply(id)
@@ -10552,7 +10647,8 @@ function apply(id) {
   if (id === 'speed')  P.spd     *= 1.10
   if (id === 'magnet') P.pickup  *= 1.40
   if (id === 'armour') P.armour   = 1 - (1 - P.armour) * 0.88
-  if (id === 'hp')     { P.max += 25; P.hp = Math.min(P.max, P.hp + 25) }
+  // R2-T 2026-10-27: a Risk financing tier (lv.hp past max0 after the ++ above) adds T.r2FinTier capacity in place of a level's 25 (PLAN_R2 "+40"); the five multiplier measures above apply the same factor at a tier as at a level; was `if (id === 'hp')     { P.max += 25; P.hp = Math.min(P.max, P.hp + 25) }` (build_R2_2026-10-27)
+  if (id === 'hp')     { const d = lv.hp > UPGRADES.hp.max0 ? T.r2FinTier : 25; P.max += d; P.hp = Math.min(P.max, P.hp + d) }
   // G-M2 2026-10-13: a held synergy with this measure in it re-reads its f (synRipen: never compounding) (build_G_2026-10-01)
   for (const sy of SYNERGIES) if (syn[sy.id] && SYN_PARTS[sy.id] && (sy.a === id || sy.b === id)) synRipen(P, sy.id)
   syncHud()
@@ -10581,7 +10677,8 @@ function syncHud() {
   }
   const PAIR_DOT = 'Pair ready. Its synergy card can appear when you level up.'
   const rows = owned.map(k =>
-    `<div class="wpn${pairPulse[k] ? ' pp' : ''}" data-k="${k}"><i style="background:${UPGRADES[k].col}"></i><b>${UPGRADES[k].short}</b><span>${lv[k]}</span>${ready.some(sy => sy.a === k || sy.b === k) ? `<i class="pr" role="img" aria-label="${PAIR_DOT}" title="${PAIR_DOT}"></i>` : ''}</div>`)
+    // R2-G 2026-10-27: a Mainstreamed measure's dot (lv at the new maximum, r2Gold) takes a ring - a 1 px dark gap and a 1 px ring in the gold (RAMP.gold[0]) as a box-shadow set inline, so the CSS is untouched and a phone shows it too; a class r2m names it; was ``<div class="wpn${pairPulse[k] ? ' pp' : ''}" data-k="${k}"><i style="background:${UPGRADES[k].col}"></i><b>${UPGRADES[k].short}</b><span>${lv[k]}</span>${ready.some(sy => sy.a === k || sy.b === k) ? `<i class="pr" role="img" aria-label="${PAIR_DOT}" title="${PAIR_DOT}"></i>` : ''}</div>`)` (build_R2_2026-10-27)
+    `<div class="wpn${pairPulse[k] ? ' pp' : ''}" data-k="${k}"><i${r2Gold(k) ? ' class="r2m"' : ''} style="background:${UPGRADES[k].col}${r2Gold(k) ? ';box-shadow:0 0 0 1px rgba(8,10,13,.9),0 0 0 2px ' + RAMP.gold[0] : ''}"></i><b>${UPGRADES[k].short}</b><span>${lv[k]}</span>${ready.some(sy => sy.a === k || sy.b === k) ? `<i class="pr" role="img" aria-label="${PAIR_DOT}" title="${PAIR_DOT}"></i>` : ''}</div>`)
   // G-M2 2026-10-13: a held synergy's row carries its colour as a 1 px edge (the CB merge row's --mc form) at an alpha that follows f (class `rp`, --rp); a synergy with nothing that ripens (lane, see) shows full alpha from the take (RG2, P4); while the merge mark (fresh) is on, it shows instead (build_G_2026-10-01)
   for (const sy of SYNERGIES) if (syn[sy.id]) {
     const rp = cbFresh[sy.id] ? '' : ` style="--rp:rgba(${rgbOf(sy.col)},${synF(sy.id).toFixed(3)})"`
@@ -12822,6 +12919,9 @@ function draw() {
   const z = zoomNow()
   ctx.translate(W / 2 - P.x * z + sx, H / 2 - P.y * z + sy)
   if (z !== 1) ctx.scale(z, z)
+  // R2-G 2026-10-27: PLAN_R2 (DESIGN_long_runs 4.3) - the gold edge of a Mainstreamed measure, resolved once a frame: r2G[k] true while lv[k] is at its new maximum (r2Gold); r2Gc the gold (RAMP.gold[0]); r2E its width in game units (T.r2EdgeW px on a computer, T.r2EdgeWSmall on a phone, over the zoom). A state, not motion: the Effects switch does not read it; no shake, no flash (build_R2_2026-10-27)
+  const r2E = (SMALL ? T.r2EdgeWSmall : T.r2EdgeW) / z, r2Gc = RAMP.gold[0], r2G = {}
+  for (const k in UPGRADES) r2G[k] = r2Gold(k)
 
   // the place, repeating in world space. Motion needs a reference or the world reads as
   // static, and the reference may as well say where you are.
@@ -12841,14 +12941,13 @@ function draw() {
   ctx.strokeStyle = 'rgba(87,199,255,.10)'
   ctx.beginPath(); ctx.arc(P.x, P.y, P.pickup, 0, TAU); ctx.stroke()
   // G-M4 2026-10-13: (e) Risk data from Lv 3 - one tick across the pickup ring per Risk data level (3 at Lv 3, 4 at Lv 4), evenly spaced from the top, in the measure's colour; still, so nothing moves under reduced motion. Lv 1 and Lv 2 keep their own forms (a wider ring, homing) (PLAN_G G4) (build_G_2026-10-01)
-  if (lv.magnet >= 3) {
-    ctx.save(); ctx.strokeStyle = 'rgba(87,199,255,.55)'; ctx.lineWidth = 2; ctx.beginPath()
-    for (let k = 0; k < lv.magnet; k++) {
-      const a = -Math.PI / 2 + k * TAU / lv.magnet, c = Math.cos(a), s = Math.sin(a)
-      ctx.moveTo(P.x + c * (P.pickup - 6), P.y + s * (P.pickup - 6)); ctx.lineTo(P.x + c * (P.pickup + 6), P.y + s * (P.pickup + 6))
-    }
-    ctx.stroke(); ctx.restore()
-  }
+  // R2-2a-1 2026-10-27: Risk data's ticks across the pickup ring removed (the user's preview decision of 13:39:46, "remove all those outlines": every per-measure mark on the player's body goes; the G-M4 line above describes the removed mark; Risk data's Mainstreamed sign is now the build-list dot ring alone; the pickup ring itself stays); was `if (lv.magnet >= 3) {` (build_R2_2026-10-27)
+  // R2-2a-1: was `ctx.save(); ctx.strokeStyle = 'rgba(87,199,255,.55)'; ctx.lineWidth = 2; ctx.beginPath()`
+  // R2-2a-1: was `for (let k = 0; k < lv.magnet; k++) {`
+  // R2-2a-1: was `const a = -Math.PI / 2 + k * TAU / lv.magnet, c = Math.cos(a), s = Math.sin(a)`
+  // R2-2a-1: was `ctx.moveTo(P.x + c * (P.pickup - 6), P.y + s * (P.pickup - 6)); ctx.lineTo(P.x + c * (P.pickup + 6), P.y + s * (P.pickup + 6))`
+  // R2-2a-1: was `}`
+  // R2-2a-1: was `ctx.stroke(); ctx.restore()`
 
   // A saved service is running at full stretch. It is running on YOU, so it is drawn on you,
   // and it fades as it runs out.
@@ -12877,10 +12976,12 @@ function draw() {
 
   // field aura
   if (lv.field > 0) {
-    const rad = (85 + lv.field * 18) * (P.synField || 1)
+    // R2-T 2026-10-27: the aura drawn at the radius the hit test uses (the same formula); was `const rad = (85 + lv.field * 18) * (P.synField || 1)` (build_R2_2026-10-27)
+    const rad = (85 + r2L('field') * 18) * (P.synField || 1) * Math.sqrt(r2K('field'))
     const g = ctx.createRadialGradient(P.x, P.y, rad * .35, P.x, P.y, rad)
     g.addColorStop(0, 'rgba(255,157,226,.14)'); g.addColorStop(1, 'rgba(255,157,226,0)')
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(P.x, P.y, rad, 0, TAU); ctx.fill()
+    if (r2G.field) { ctx.strokeStyle = r2Gc; ctx.lineWidth = r2E; ctx.beginPath(); ctx.arc(P.x, P.y, rad + r2E / 2, 0, TAU); ctx.stroke() }   // R2-G 2026-10-27: Codes Mainstreamed - a gold edge just outside the aura's radius (build_R2_2026-10-27)
   }
 
   // lifelines — drawn as ground, under everything, so a crowd standing on one still reads
@@ -13113,6 +13214,7 @@ function draw() {
     ctx.setLineDash(S.dash); ctx.beginPath()
     for (const f of list) ringPath(f)
     ctx.strokeStyle = `rgba(8,10,13,${(a * .55).toFixed(3)})`; ctx.lineWidth = S.w + 3; ctx.stroke()
+    if (r2G.wave && (style === 'shock' || style === 'echo')) { ctx.strokeStyle = r2Gc; ctx.lineWidth = S.w + 2 * r2E; ctx.stroke() }   // R2-G 2026-10-27: Drills Mainstreamed - the drill ring and its Volley echo take a gold pass between the dark pass and their colour, r2E px each side (build_R2_2026-10-27)
     ctx.strokeStyle = `rgba(${rgbOf(col)},${a})`; ctx.lineWidth = S.w; ctx.stroke()
     // GR-M6 2026-09-29: the synergy ring (and a grand programme's, which uses it) gets a light core down its middle (232,236,255: in the YOURS band, OKLCH C 0.026 H 276), so it reads brighter than its colour alone (PLAN_GR X6) (build_GR_2026-09-29)
     if (style === 'syn') { ctx.strokeStyle = `rgba(232,236,255,${(a * .75).toFixed(3)})`; ctx.lineWidth = 3; ctx.stroke() }
@@ -13125,6 +13227,7 @@ function draw() {
     ctx.fillStyle = '#8ef6c6'
     for (const s of ringPoints()) {
       ctx.beginPath(); ctx.arc(s.x, s.y, fused.buffer ? 8 : 7, 0, TAU); ctx.fill()
+      if (r2G.ring) { ctx.strokeStyle = r2Gc; ctx.lineWidth = 2 * r2E; ctx.stroke() }   // R2-G 2026-10-27: Green defences Mainstreamed - each belt shard takes a gold edge (build_R2_2026-10-27)
     }
   }
 
@@ -13277,6 +13380,7 @@ function draw() {
       ctx.ellipse(sx0, sy0, b.r * sl, sw, ang, 0, TAU)
     }
     ctx.fill()
+    if (r2G.dmg) { ctx.strokeStyle = r2Gc; ctx.lineWidth = 2 * r2E; ctx.stroke() }   // R2-G 2026-10-27: Resilient investment Mainstreamed - its own mark is the smear (G-M4 c: its width follows P.dmgMul), so every shot's smear takes a gold edge (build_R2_2026-10-27)
   }
   for (const [key, list] of bulletLooks) {
     const i = key.indexOf('|'), col = key.slice(0, i), look = key.slice(i + 1)
@@ -13286,6 +13390,11 @@ function draw() {
     if (look === 'back') { ctx.lineWidth = 2; ctx.stroke() } else ctx.fill()
     }   // ART-C 2026-10-17: C5 - end of the old body fallback; the second mark below stays (build_ART_2026-10-17)
     bulletMark(list, look, col)
+    if (r2G.pulse) {   // R2-G 2026-10-27: Early warning Mainstreamed - the aimed shots and Broadside's sweep (src aim, fan: firePulse's) take a gold edge over their body; relay children, shards and returned shots are not the measure's and keep their look (build_R2_2026-10-27)
+      let n = 0; ctx.beginPath()
+      for (const b of list) if (b.src === 'aim' || b.src === 'fan') { bulletPath(b, look); n++ }
+      if (n) { ctx.strokeStyle = r2Gc; ctx.lineWidth = 2 * r2E; ctx.stroke() }
+    }
   }
 
   // particles. Two passes: everything that reflects light, then everything that emits it,
@@ -13356,14 +13465,17 @@ function draw() {
 
   // player — a place, not a person: a lit disc standing on ground it does not leave
   // G-M4 2026-10-13: (e) Land use - a short wake behind the disc while you move: a round-capped line straight back from the disc's edge, T.wakeLen0 + T.wakePerLv px per Land-use level, in the measure's colour; drawn under reduced motion too (it moves only as you do). Under the halo and the disc (PLAN_G G4) (build_G_2026-10-01)
-  if (lv.speed > 0 && P.moving) {
-    ctx.save(); ctx.strokeStyle = 'rgba(126,231,135,.45)'; ctx.lineWidth = P.r * .7; ctx.lineCap = 'round'; ctx.beginPath()
-    const wl = P.r + T.wakeLen0 + T.wakePerLv * lv.speed
-    ctx.moveTo(P.x - P.hx * P.r, P.y - P.hy * P.r); ctx.lineTo(P.x - P.hx * wl, P.y - P.hy * wl); ctx.stroke(); ctx.restore()
-  }
+  // R2-2a-1 2026-10-27: the Land-use wake removed (the user's preview decision of 13:39:46, "remove all those outlines"; the G-M4 line above describes the removed mark; Land-use planning's Mainstreamed sign is now the build-list dot ring alone; T.wakeLen0 and T.wakePerLv stay in T, now unused); was `if (lv.speed > 0 && P.moving) {` (build_R2_2026-10-27)
+  // R2-2a-1: was `ctx.save(); ctx.strokeStyle = 'rgba(126,231,135,.45)'; ctx.lineWidth = P.r * .7; ctx.lineCap = 'round'; ctx.beginPath()`
+  // R2-2a-1: was `const wl = P.r + T.wakeLen0 + T.wakePerLv * lv.speed`
+  // R2-2a-1: was `ctx.moveTo(P.x - P.hx * P.r, P.y - P.hy * P.r); ctx.lineTo(P.x - P.hx * wl, P.y - P.hy * wl); ctx.stroke(); ctx.restore()`
+  // R2-2a-1: was `}`
   // G-M4 2026-10-13: (d) Risk financing - the halo's base alpha rises T.haloPerLv per level from T.haloA0 (the old .09), at most T.haloMax; its 0.48 Hz breathing (sin(t x 3)) stops under reduced motion, the halo then held at its middle size (PLAN_G G4: the carried gap) (build_G_2026-10-01)
   ctx.fillStyle = `rgba(247,244,238,${Math.min(T.haloMax, T.haloA0 + T.haloPerLv * lv.hp).toFixed(3)})`
-  ctx.beginPath(); ctx.arc(P.x, P.y, P.r * (2.05 + (reduceMotion ? 0 : Math.sin(t * 3) * .12)), 0, TAU); ctx.fill()
+  // R2-G 2026-10-27: Risk financing Mainstreamed - a gold edge just outside the halo (the halo's radius unchanged, named so the edge can follow it); was `ctx.beginPath(); ctx.arc(P.x, P.y, P.r * (2.05 + (reduceMotion ? 0 : Math.sin(t * 3) * .12)), 0, TAU); ctx.fill()` (build_R2_2026-10-27)
+  const r2HaloR = P.r * (2.05 + (reduceMotion ? 0 : Math.sin(t * 3) * .12))
+  ctx.beginPath(); ctx.arc(P.x, P.y, r2HaloR, 0, TAU); ctx.fill()
+  if (r2G.hp) { ctx.strokeStyle = r2Gc; ctx.lineWidth = r2E; ctx.beginPath(); ctx.arc(P.x, P.y, r2HaloR + r2E / 2, 0, TAU); ctx.stroke() }
   // ART-A 2026-10-17: A3 - the robot (artRobot) in place of the lit disc and its dark centre once its strip has loaded; until then, and headless, the four lines below as before. The halo above and the wake, plating arcs and maintenance ring are unchanged; the hit box is P.r as before (build_ART_2026-10-17)
   if (!artRobot()) {
   ctx.fillStyle = P.inv > 0 && ((t * 20) | 0) % 2 ? '#ffffff' : '#f7f4ee'
@@ -13372,20 +13484,18 @@ function draw() {
   ctx.beginPath(); ctx.arc(P.x, P.y, P.r * .42, 0, TAU); ctx.fill()
   }   // ART-A 2026-10-17: A3 - end of the disc fallback (build_ART_2026-10-17)
   // G-M4 2026-10-13: (b) Retrofitting - one plating arc per level on the disc's edge (four at max, Lv 4), each a quarter's middle 0.9 rad, starting at the top, in the measure's colour (#c9d1d9) over a dark pass, 3 px - thicker than the 2 px rings round you, so it is told by shape and weight, not colour alone (PLAN_G G4) (build_G_2026-10-01)
-  if (lv.armour > 0) {
-    ctx.save(); ctx.lineCap = 'butt'
-    for (const [col, w] of [['rgba(8,10,13,.55)', 5], ['#c9d1d9', 3]]) {
-      ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath()
-      for (let k = 0; k < lv.armour; k++) { const a = -Math.PI / 2 + k * Math.PI / 2; ctx.moveTo(P.x + Math.cos(a - .45) * (P.r + 2), P.y + Math.sin(a - .45) * (P.r + 2)); ctx.arc(P.x, P.y, P.r + 2, a - .45, a + .45) }
-      ctx.stroke()
-    }
-    ctx.restore()
-  }
+  // R2-2a-1 2026-10-27: Retrofitting's plating arcs removed (the user's preview decision of 13:39:46, "remove all those outlines"; the G-M4 line above describes the removed mark; Retrofitting's Mainstreamed sign is now the build-list dot ring alone); was `if (lv.armour > 0) {` (build_R2_2026-10-27)
+  // R2-2a-1: was `ctx.save(); ctx.lineCap = 'butt'`
+  // R2-2a-1: was `for (const [col, w] of [['rgba(8,10,13,.55)', 5], ['#c9d1d9', 3]]) {`
+  // R2-2a-1: was `ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath()`
+  // R2-2a-1: was `for (let k = 0; k < lv.armour; k++) { const a = -Math.PI / 2 + k * Math.PI / 2; ctx.moveTo(P.x + Math.cos(a - .45) * (P.r + 2), P.y + Math.sin(a - .45) * (P.r + 2)); ctx.arc(P.x, P.y, P.r + 2, a - .45, a + .45) }`
+  // R2-2a-1: was `ctx.stroke()`
+  // R2-2a-1: was `ctx.restore()`
+  // R2-2a-1: was `}`
   // G-M4 2026-10-13: (e) Maintenance - a ring of spaced round dots on you (RG11: round cap, a near-zero dash of 0.1, a gap of 7 px, 2 px wide - the gap over three times the stroke, the pattern of the lifeline repair-reach ring, so it cannot read as a works site's 9 / 9 dashed ring), 8 px out from the disc, in the measure's colour; still (PLAN_G G4) (build_G_2026-10-01)
-  if (lv.rate > 0) {
-    ctx.save(); ctx.strokeStyle = 'rgba(255,122,47,.75)'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.setLineDash([0.1, 7])
-    ctx.beginPath(); ctx.arc(P.x, P.y, P.r + 8, 0, TAU); ctx.stroke(); ctx.restore()
-  }
+  // R2-2a-1 2026-10-27: Maintenance's dot ring removed (the same decision; the G-M4 line above describes the removed mark; Maintenance's Mainstreamed sign is now the build-list dot ring alone); was `if (lv.rate > 0) {` (build_R2_2026-10-27)
+  // R2-2a-1: was `ctx.save(); ctx.strokeStyle = 'rgba(255,122,47,.75)'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.setLineDash([0.1, 7])`
+  // R2-2a-1: was `ctx.beginPath(); ctx.arc(P.x, P.y, P.r + 8, 0, TAU); ctx.stroke(); ctx.restore()`
   // UX-M1 2026-09-30: the SY-M3 / GR-M6 marks circling you (one diamond per synergy held) are removed (PLAN_UX U1, the user's choice): nothing unexplained orbits you now. The aimed shots' trail, the take ring and the banner are unchanged (build_UX_2026-09-30)
   ctx.restore()
 
@@ -13843,6 +13953,12 @@ function initDev() {
   B('Carry heaviest scene [-]', () => r5Keys['-']())
   B('Backup power site [=]', () => r5Keys['=']())
   addEventListener('keydown', e => { const f = r5Keys[e.key]; if (!f || e.repeat || over || !$('start').classList.contains('gone')) return; f() })
+  // R2-D 2026-10-27: PLAN_R2 - the tiers on demand, by button or key; the listener is added here, so it exists only once dev mode is on (inert with it off). Keys: , (comma) takes every measure to its new maximum through apply (so the gold edge shows on every colour), . (full stop) sets the run clock to T.r2From (8:00); only during a run. Developer text only (build_R2_2026-10-27)
+  SEP('R2 tiers - keys , and .')
+  const r2Keys = { ',': () => { for (const k in UPGRADES) for (let i = 0; i < 12 && lv[k] < UPGRADES[k].max; i++) apply(k) }, '.': () => { t = T.r2From } }
+  B('All measures to new max [,]', () => r2Keys[',']())
+  B('Clock to 8:00 [.]', () => r2Keys['.']())
+  addEventListener('keydown', e => { const f = r2Keys[e.key]; if (!f || e.repeat || over || !$('start').classList.contains('gone')) return; f() })
 
   // The two layers built on 2026-09-04 are the ones being tuned, and neither can be reached from
   // the field on demand: a lifeline only comes under attack on a 22% draw, and a response card is
@@ -14115,7 +14231,8 @@ window.__surv = {
     heatRes: +heatResNow().toFixed(3), spd: +spdNow().toFixed(1),
     xpMul: +xpMulNow().toFixed(3), regen: +regenNow().toFixed(3),
     pulseDmg: +((10 + lv.pulse * 4) * P.dmgMul * eff()).toFixed(2),
-    pulseCd: +((0.55 - lv.pulse * 0.05) / (P.rateMul * eff())).toFixed(4),
+    // R2-T 2026-10-27: the readout follows fireWeapons' cooldown (held at max0, over the tier factor), so it does not go stale above max0; was `pulseCd: +((0.55 - lv.pulse * 0.05) / (P.rateMul * eff())).toFixed(4),` (build_R2_2026-10-27)
+    pulseCd: +(((0.55 - r2L('pulse') * 0.05) / r2K('pulse')) / (P.rateMul * eff())).toFixed(4),
     hardOnField: enemies.reduce((n, e) => n + (e.hard ? 1 : 0), 0),
     hardHpAvg: (() => { const h = enemies.filter(e => e.hard), o = enemies.filter(e => !e.hard && e.kind === (h[0] || {}).kind)
       return h.length && o.length ? +(h.reduce((a2, e) => a2 + e.max, 0) / h.length /
