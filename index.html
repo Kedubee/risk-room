@@ -8,18 +8,17 @@
 <!--
   The collection hub. One screen, one job: pick a game.
 
-  Source of truth for this file is 04_Sandbox/EduGames/ in the workspace repo. The public
-  site is a BUILD ARTIFACT assembled by build.ps1 and force-pushed to a throwaway repo —
-  the same pattern Watershed used (03_Methodology/Deploy_GitHub_Pages.md). Nothing here is
+  Source of truth for this file is the workspace repo. The public
+  site is a BUILD ARTIFACT assembled and force-pushed to a throwaway repo. Nothing here is
   edited on the deployed side.
 
-  Adding a game: one entry in GAMES below, one row in build.ps1's $GAMES list. Two kinds of
-  row — a prebuilt file to copy, or a project to compile first (build.ps1 handles both).
+  Adding a game: one entry in GAMES below, one row in $GAMES list. Two kinds of
+  row — a prebuilt file to copy, or a project to compile first.
 
   The hub itself stays self-contained: no dependencies, no assets, no external requests, and
   card art painted rather than loaded. The GAMES it points at do not have to be — the quake
   prototype ships 38 MB of Poly Haven CC0 scenery, which is fine because that licence permits
-  redistribution and it was verified first-hand (ASSET_MANIFEST.md, 2026-08-14).
+  redistribution and it was verified first-hand.
 
   Self-contained: no dependencies, no assets, no external requests. Same rule as the games.
 -->
@@ -40,21 +39,21 @@
   h1 span{color:var(--accent)}
   .sub{font-size:16px;color:var(--dim);margin-top:14px;max-width:640px;line-height:1.6}
   .rule{height:1px;background:rgba(255,255,255,.10);margin:34px 0 30px}
-  /* New-here block (2026-09-14, accessibility feedback): the first thing someone who has never
+  /* New-here block: the first thing someone who has never
      played a browser game reads. Same measure as .sub, full ink instead of dim, and an accent
      edge so it is found by shape as well as by colour. */
   .new{font-size:15px;color:var(--paper);margin-top:16px;max-width:640px;line-height:1.6;
     padding:11px 15px;border-left:3px solid var(--accent);border-radius:0 12px 12px 0;
     background:rgba(255,255,255,.05)}
-  /* The intro (2026-09-25): the New-here box now holds one short line and the button that opens the
-     intro again (user decision). A row that wraps under the line on a narrow screen. The button is
+  /* The intro: the New-here box now holds one short line and the button that opens the
+     intro again. A row that wraps under the line on a narrow screen. The button is
      Compound's How to play button: an accent outline, so it reads as a button by shape too. */
   .new.introrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
   .introbtn{font:inherit;font-size:14px;font-weight:800;min-height:44px;padding:10px 18px;border-radius:12px;
     cursor:pointer;color:var(--accent);background:transparent;border:2px solid var(--accent)}
   .introbtn:hover{background:rgba(255,122,47,.12)}
 
-  /* The intro popup: Compound's How to play panel (Survivors_Proto/index.html, the onboarding CSS),
+  /* The intro popup: Compound's How to play panel (the onboarding CSS),
      so the site reads as one thing. A direct child of body, over everything; the page behind is inert
      while it is open and does not scroll. The [hidden] rules are needed because a display:flex rule
      would otherwise beat the attribute. Nothing is told apart by colour alone: the current step dot is
@@ -72,7 +71,7 @@
   #intro-t{font-size:24px;line-height:1.2;letter-spacing:-.01em;margin:0 0 10px;color:var(--accent)}
   #intro-t:focus{outline:none}
   #intro-p{font-size:15px;line-height:1.65;opacity:.92}
-  #intro-p b{font-weight:800;color:#fff;background:rgba(255,122,47,.16);
+  #intro-p b,#intro-full b{font-weight:800;color:#fff;background:rgba(255,122,47,.16);
     border-bottom:2px solid var(--accent);padding:0 2px}
   /* The button row sticks to the bottom of the scrolling layer, so the buttons are reachable on a
      short phone screen without scrolling past the picture first. */
@@ -105,15 +104,14 @@
   /* min(300px,100%) rather than 300px: a fixed minimum cannot shrink, so on a 320px phone
      the track stayed 300 wide, the body padding pushed it past the edge and the page
      scrolled sideways. This lets the track collapse to the container on narrow screens. */
-  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))}
+  .grid{display:grid;gap:16px;align-items:start;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))}
   .card{display:block;text-decoration:none;color:inherit;position:relative;
     background:#14171c;border:1px solid rgba(255,255,255,.11);border-radius:16px;
     overflow:hidden;transition:transform .12s,border-color .12s,background .12s}
   a.card:hover{transform:translateY(-4px);border-color:var(--accent);background:#191d23}
   .card.soon{opacity:.62}
   /* A card's extra link sits under the card, not inside it: the card is itself one link, and a link cannot hold
-     another. The wrapper is the grid item; the card fills the cell above its link, so a card with a link ends higher
-     than a card without one in the same row. */
+     another. The wrapper is the grid item. */
   .cardwrap{display:flex;flex-direction:column;gap:8px}
   .cardwrap>.card{flex:1}
   .guidelink{align-self:flex-start;font-size:13px;font-weight:700;color:var(--paper);text-decoration:none;
@@ -160,6 +158,18 @@
     h2{font-size:18px}
     footer{font-size:11.5px}
   }
+  .fold-t{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;font:inherit;font-size:11px;font-weight:700;
+    letter-spacing:.03em;line-height:1.4;color:var(--paper);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.25);
+    border-radius:99px;cursor:pointer}
+  .fold-t:hover{background:rgba(255,255,255,.14)}
+  .fold-t:focus-visible{outline:2px solid #fff;outline-offset:2px}
+  .fold-t[hidden],.fold-b[hidden]{display:none}
+  @media (pointer:coarse){.fold-t{min-height:32px;padding:5px 13px;font-size:12px}}
+  .cardfold{align-self:flex-start}
+  #intro-fold{margin-top:10px}
+  #intro-full{font-size:15px;line-height:1.65;opacity:.92}
+  @media (max-width:600px){ #intro-full{font-size:14.5px} }
+  .footfold{margin-top:10px}
 </style>
 </head>
 <body>
@@ -175,6 +185,9 @@
   <div class="grid" id="grid"></div>
 
   <footer>
+    <div id="footshort"><b>These are prototypes.</b> They are internship work in progress, not an official publication of any organisation, and no organisation has endorsed them.<br><br>
+    Everything here runs in the browser with nothing to install and no data collected. Third-party scenery is Poly Haven, CC0.</div>
+    <div class="fold-b" id="footmore" hidden>
     <b>These are prototypes.</b> They are internship work in
     progress, not an official publication of any organisation, and no organisation has
     endorsed them. Where a game cites a body of guidance, the citation is to that
@@ -183,10 +196,12 @@
     Third-party scenery is Poly Haven, CC0. Where a game leans on a body of guidance, the
     citation is inside the game and names the document rather than the organisation's
     reputation.
+    </div>
+    <div class="fold footfold"><button type="button" class="fold-t" id="footmore-t" aria-expanded="false" aria-controls="footmore" data-short="footshort"><span aria-hidden="true">&#9656;</span> More</button></div>
   </footer>
 </div>
 
-<!-- The intro (2026-09-25; records in hub_intro_2026-09-25/). Three steps: what Risk Room is
+<!-- The intro. Three steps: what Risk Room is
      about, the games, how it works. Every word in it is filled in from INTRO_COPY in the script. The
      pictures are decoration for the words beside them, carry no words, and are hidden from screen readers. -->
 <div id="intro" hidden role="dialog" aria-modal="true" aria-labelledby="intro-t" aria-describedby="intro-p">
@@ -285,6 +300,8 @@
     <div class="introdots" aria-hidden="true"><i></i><i></i><i></i></div>
     <h2 id="intro-t" tabindex="-1"><span class="sr" id="intro-n"></span> <span id="intro-tt"></span></h2>
     <p id="intro-p"></p>
+    <p class="fold-b" id="intro-full" hidden></p>
+    <div class="fold" id="intro-fold"><button type="button" class="fold-t" id="intro-more" aria-expanded="false" aria-controls="intro-full" data-short="intro-p"><span aria-hidden="true">&#9656;</span> More</button></div>
     <div class="introbar">
       <button id="intro-back" type="button"></button>
       <span><button id="intro-skip" type="button"></button><button id="intro-next" type="button"></button></span>
@@ -295,8 +312,8 @@
 <script>
 (() => {
 'use strict'
-// One entry per game. `href` is relative because the deployed layout is assembled by
-// build.ps1 into exactly this shape; `art` paints the card header so the hub needs no
+// One entry per game. `href` is relative because the deployed layout is assembled
+// into exactly this shape; `art` paints the card header so the hub needs no
 // image files, same constraint the games hold themselves to.
 const GAMES = [
   {
@@ -307,6 +324,7 @@ const GAMES = [
           'disaster-risk measures, and measures that go together offer more. When the run ' +
           'ends, the place asks whether you can say why — and what you answer carries into ' +
           'the next one.',
+    descShort: 'You are a place that hazards keep arriving at. The upgrades are real disaster-risk measures.',
     meta: ['UNDRR guidance', 'Six places', 'Four difficulties', 'No install'],
     art: 'compound',
     // The label is the guide's own title words; the path names index.html so the hub still works opened from disk.
@@ -320,6 +338,7 @@ const GAMES = [
           'read off where you actually are and what you are actually under when the shaking ' +
           'stops, never off a button. UNDRR and Italy\u2019s civil protection disagree about ' +
           'the doorway — both positions are shown and neither is resolved for you.',
+    descShort: 'An earthquake, indoors, ten seconds. A drill rather than a quiz: the verdict is read off where you are when the shaking stops.',
     meta: ['UNDRR + Italy DPC', 'Poly Haven CC0 scenery', '3D, ~38 MB', 'No install'],
     note: 'Loads about 38 MB of scenery on first open — give it a moment.',
     art: 'quake',
@@ -367,6 +386,15 @@ const PAINT = {
   },
 }
 
+function foldSet(btn, open) {
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false')
+  btn.firstElementChild.innerHTML = open ? '&#9662;' : '&#9656;'
+  document.getElementById(btn.getAttribute('aria-controls')).hidden = !open
+  if (btn.dataset.short) document.getElementById(btn.dataset.short).hidden = open
+}
+function foldToggle(btn) { foldSet(btn, btn.getAttribute('aria-expanded') !== 'true') }
+document.getElementById('footmore-t').onclick = e => foldToggle(e.currentTarget)
+
 const grid = document.getElementById('grid')
 for (const G of GAMES) {
   const el = document.createElement(G.href ? 'a' : 'div')
@@ -378,13 +406,21 @@ for (const G of GAMES) {
     `<div class="art"><canvas width="600" height="224"></canvas></div>` +
     `<div class="body">` +
       `<div class="tag"><i style="background:${G.col}"></i>${G.kind}</div>` +
-      `<h2>${G.title}</h2><p>${G.desc}</p>` +
+      `<h2 id="cardtitle-${G.id}">${G.title}</h2>` +
+      (G.descShort ? `<p id="cardshort-${G.id}">${G.descShort}</p><p class="fold-b" id="cardmore-${G.id}" hidden>${G.desc}</p>` : `<p>${G.desc}</p>`) +
       `<div class="meta">${G.meta.map(m => `<b>${m}</b>`).join('')}</div>` +
       (G.note ? `<div class="note">${G.note}</div>` : '') +
     `</div>`
   const wrap = document.createElement('div')
   wrap.className = 'cardwrap'
   wrap.appendChild(el)
+  if (G.descShort) {
+    const fd = document.createElement('div')
+    fd.className = 'fold cardfold'
+    fd.innerHTML = `<button type="button" class="fold-t" id="cardmore-t-${G.id}" aria-expanded="false" aria-controls="cardmore-${G.id}" data-short="cardshort-${G.id}" aria-labelledby="cardmore-t-${G.id} cardtitle-${G.id}"><span aria-hidden="true">&#9656;</span> More</button>`
+    fd.firstElementChild.onclick = e => foldToggle(e.currentTarget)
+    wrap.appendChild(fd)
+  }
   if (G.guide) {
     const gl = document.createElement('a')
     gl.className = 'guidelink'
@@ -397,11 +433,10 @@ for (const G of GAMES) {
   PAINT[G.art](cv.getContext('2d'), cv.width, cv.height)
 }
 
-// --- the intro (2026-09-25) ---------------------------------------------------------
-// Three steps: what Risk Room is about, the games, how it works. The pattern is Compound's How to play
-// (Survivors_Proto/index.html, "how-to-play overlay (S3)"): on a first visit it opens by itself with no
+// --- the intro ---------------------------------------------------------
+// Three steps: what Risk Room is about, the games, how it works. The pattern is Compound's How to play: on a first visit it opens by itself with no
 // Skip and no Escape, the page behind is inert, and the finishing button on the last step is the only
-// thing that marks it seen (user decision 2026-09-25: a first visit closes only at the end). Back stays available. From the
+// thing that marks it seen (a first visit closes only at the end). Back stays available. From the
 // header button it opens with Skip and Escape, and every close only closes.
 //
 // The copy, one entry per row id. Plain JSON between the two markers, so a script can read it back out of
@@ -411,13 +446,16 @@ for (const G of GAMES) {
 const INTRO_COPY = {
   "HI.1.title": "Games about preventing disasters",
   "HI.1.body": "Risk Room has two games. Neither game lets you stop the hazards from coming. In each, you choose what to do about them. These games are prototypes, still in progress.",
+  "HI.1.short": "Risk Room has two games, and neither lets you stop the hazards from coming. In each, you choose what to do about them.",
   "HI.1.bold": "choose what to do about them",
   "HI.2.title": "The two games",
   "HI.2.body": "Compound: you are a place that hazards keep arriving at. You pick which measures to take, and can answer questions after the run. Drop, Cover, Hold On: an earthquake, indoors. First you decide what some signs are actually worth. Then you fix things in the room, find a safe place, and get out.",
+  "HI.2.short": "Compound: you are a place that hazards keep arriving at. Drop, Cover, Hold On: an earthquake, indoors.",
   "HI.2.bold": "",
   "HI.3.title": "How to start a game",
   "HI.3.body": "Each card opens a game. Move with the arrow keys or W, A, S and D. On a touch screen, drag on the left half to move. Drop, Cover, Hold On: look around with the mouse, or by dragging on the right half. Open this again with the How it works button at the top.",
-  "HI.3.bold": "Each card opens a game",
+  "HI.3.short": "Move with the arrow keys or W, A, S and D, or by dragging on the left half of a touch screen. Drop, Cover, Hold On: look around with the mouse, or by dragging on the right half.",
+  "HI.3.bold": "",
   "HI.btn.next": "Next",
   "HI.btn.back": "Back",
   "HI.btn.skip": "Skip",
@@ -460,12 +498,22 @@ function introRender() {
     $('intro-tt').textContent = C[id + '.title']
     // The step's one bold phrase, found as a substring rather than by position, so a revised row that
     // drops it loses the bold instead of bolding the wrong words.
-    const p = $('intro-p'), body = C[id + '.body'], bold = C[id + '.bold'], at = bold ? body.indexOf(bold) : -1
+    const p = $('intro-p'), body = C[id + '.short'] || C[id + '.body'], bold = C[id + '.bold'], at = bold ? body.indexOf(bold) : -1
     if (at < 0) p.textContent = body
     else {
       const b = document.createElement('b'); b.textContent = bold
       p.textContent = ''; p.append(body.slice(0, at), b, body.slice(at + bold.length))
     }
+    const full = C[id + '.short'] ? C[id + '.body'] : ''
+    const f = $('intro-full'), fat = bold ? full.indexOf(bold) : -1
+    if (fat < 0) f.textContent = full
+    else {
+      const fb = document.createElement('b'); fb.textContent = bold
+      f.textContent = ''; f.append(full.slice(0, fat), fb, full.slice(fat + bold.length))
+    }
+    $('intro-more').hidden = !full
+    foldSet($('intro-more'), false)
+    introDesc()
     for (let i = 0; i < INTRO_STEPS.length; i++) $('introart' + i).hidden = i !== introStep
     document.querySelectorAll('.introdots i').forEach((d, i) => d.classList.toggle('on', i === introStep))
     const back = $('intro-back'), skip = $('intro-skip'), next = $('intro-next')
@@ -482,6 +530,9 @@ function introRender() {
   // already has focus: no focus event fires, and a screen reader may not read out the new step.
   const t = $('intro-t'); t.blur(); t.focus()
   return true
+}
+function introDesc() {
+  $('intro').setAttribute('aria-describedby', $('intro-more').getAttribute('aria-expanded') === 'true' ? 'intro-full' : 'intro-p')
 }
 function introGo(d) {
   const n = introStep + d
@@ -503,6 +554,7 @@ $('intro-next').onclick = () => { if (introStep < INTRO_STEPS.length - 1) introG
 $('intro-back').onclick = () => introGo(-1)
 $('intro-skip').onclick = () => { if (!introMandatory) introClose(false) }
 $('intro-open').onclick = () => introOpen(false)
+$('intro-more').onclick = () => { foldToggle($('intro-more')); introDesc() }
 $('intro-open').textContent = INTRO_COPY['HI.open']
 if (INTRO_COPY['HI.new']) $('intro-new').textContent = INTRO_COPY['HI.new']
 else $('intro-new').hidden = true

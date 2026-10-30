@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ten Seconds Indoors — Prepare, Shake, After</title>
 <link rel="icon" href="data:,">
-  <script type="module" crossorigin src="./assets/index-B7Zbyg-T.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-B7_qcneW.css">
+  <script type="module" crossorigin src="./assets/index-BMV6WNPU.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-Wk3yxeN8.css">
 </head>
-<body>
+<body class="atstart">
 
 <div id="boot"><div id="bar"><i></i></div><p id="boot-msg">Loading environment, materials and models…</p></div>
 <div id="err"></div>
@@ -42,6 +42,8 @@
   <div id="s-reveal">
     <div class="rev"><b id="s-verdict"></b><span class="tagline" id="s-source"></span></div>
     <p id="s-why"></p>
+    <div class="fold-b" id="s-full" hidden><span class="tagline" id="s-fsource"></span><p id="s-whyfull"></p></div>
+    <div class="fold" id="s-fold" hidden><button type="button" class="fold-t" id="s-more" aria-expanded="false" aria-controls="s-full" data-short="s-why"><span aria-hidden="true">&#9656;</span> More</button></div>
     <button class="btn" id="s-next">Next</button>
   </div>
 </div></div>
@@ -49,14 +51,15 @@
 <!-- the brief: shown once, before the run starts -->
 <div id="brief"><div class="card">
   <h3>Four acts, one run</h3>
-  <div class="sub">You go through this once, from the days before to the minutes after. There is no settings screen in between.</div>
+  <div class="sub" id="brief-sub" hidden>You go through this once, from the days before to the minutes after. There is no settings screen in between.</div>
   <div class="steps">
-    <div class="step"><b>0 · Signs</b><p>Six things people take for warnings. Decide what each one is actually worth. <b>You are not being asked to predict.</b></p></div>
-    <div class="step"><b>1 · Prepare <i>15s</i></b><p>Walk the room and fix things with <span class="kbd">E</span>. <b>The earthquake arrives whether or not you finish.</b></p></div>
-    <div class="step"><b>2 · Shaking <i>10s</i></b><p>Move your body to a safe place. Whatever you left undone is what falls here.</p></div>
-    <div class="step"><b>3 · After <i>30s</i></b><p>Do what has to be done and get out before the aftershock. What fell is still on the floor.</p></div>
+    <div class="step"><b>0 · Signs</b><p id="brief-p0" hidden>Six things people take for warnings. Decide what each one is actually worth. <b>You are not being asked to predict.</b></p></div>
+    <div class="step"><b>1 · Prepare <i>15s</i></b><p id="brief-p1" hidden>Walk the room and fix things with <span class="kbd">E</span>. <b>The earthquake arrives whether or not you finish.</b></p></div>
+    <div class="step"><b>2 · Shaking <i>10s</i></b><p id="brief-p2" hidden>Move your body to a safe place. Whatever you left undone is what falls here.</p></div>
+    <div class="step"><b>3 · After <i>30s</i></b><p id="brief-p3" hidden>Do what has to be done and get out before the aftershock. What fell is still on the floor.</p></div>
   </div>
-  <p class="foot">Every verdict is read from <b>what you actually did</b>. You are asked before anything is revealed.</p>
+  <p class="foot" id="brief-foot" hidden>Every verdict is read from <b>what you actually did</b>. You are asked before anything is revealed.</p>
+  <button type="button" class="fold-t" id="brief-more" aria-expanded="false" aria-controls="brief-sub brief-p0 brief-p1 brief-p2 brief-p3 brief-foot"><span aria-hidden="true">&#9656;</span> More</button>
   <button class="btn" id="begin">Begin</button>
 </div></div>
 
