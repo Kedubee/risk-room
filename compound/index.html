@@ -1762,6 +1762,21 @@
   #hpwrap{border-radius:0;border-image:var(--u5tube) 3 9 fill / 3px 9px / 3px 9px stretch;image-rendering:pixelated}
   #hpbar{background-color:#df7126;background-image:var(--u5fill);background-repeat:repeat-x;background-position:0 0;background-size:7px 16px;image-rendering:pixelated}
   #xpbar{background-image:var(--u5fill);background-repeat:repeat-x;background-position:0 -12px;background-size:7px 16px;image-rendering:pixelated}
+  /* TXT-A3 2026-10-30: ADJUDICATION_TXT_A section 4 S-3 - the place card's strip, tier line, blurb and tags now sit in div.take (offerPlaces). At 1,200 px and wider on a window that is not SMALL the card is a two-column grid whose rows were set on those four parts as the card's own children (PT3-P11: the strip row 1, the tier row 2, the tags row 3 in column 2, the blurb row 4); here .take carries the same grid, so the existing descendant rules place the four parts as before. `.take > *` spans both columns, at a lower specificity than the tags' grid-column:2 rule, as `.card.place > *` was; `.take > div` takes the zero side margins and no max-width that `.card.place > div` gave the strip, the tier line and the tags (build_TXT_A_2026-10-30) */
+  @media (min-width:1200px){
+    body:not(.small) #start #startwrap .card.place .take{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;align-items:center;justify-items:stretch}
+    body:not(.small) #start #startwrap .take > *{grid-column:1 / -1}
+    body:not(.small) #start #startwrap .card.place .take > div{max-width:none;margin-left:0;margin-right:0}
+  }
+  /* TXT-A4 2026-10-30: ADJUDICATION_TXT_A section 4 S-4 - the switches' "More" row spans both columns of the switches' block, as the Details switch does; a hidden note stays hidden whatever display a later rule gives it. At 1,200 px and wider on a window that is not SMALL the left column (#startside) is a flex column whose blocks keep their content's width (align-items:start, from the PT-P5 rule): the notes' text had made the switches' block as wide as the column, so without them it would shrink; align-self:stretch keeps it at the column's width, as before (build_TXT_A_2026-10-30) */
+  #start div.sbsw.sbmore{grid-column:1 / -1;margin:0}
+  #start div.sbsw > div[hidden]{display:none}
+  @media (min-width:1200px){
+    body:not(.small) #start div.sblk.sbswitch{align-self:stretch}
+  }
+  /* TXT-A6 2026-10-30: ADJUDICATION_TXT_A section 4 S-6 - a report row with a "More" (rowMore): "#over p" gives every report paragraph a 20 px bottom margin, the gap under a row; in such a row the gap goes under the fold instead, so the toggle sits under its row text and the row ends 20 px below the toggle (or below the opened text) as other rows end below their text (build_TXT_A_2026-10-30) */
+  #over .rrow .rcol > p, #over .rrow .rfold .fold-b > p{margin-bottom:0}
+  #over .rrow .rfold{margin-bottom:20px}
 </style>
 </head>
 <body>
@@ -1814,7 +1829,8 @@
   <h1>Compound</h1>
   <button id="howbtn" class="dbtn howbtn" type="button">How to play</button>
   <!-- P16a-T 2026-10-22: S1-01 (strings_P16a.md) (build_P16a_2026-10-22) -->
-  <p>You are a place that hazards keep arriving at. You cannot stop them coming — you can only decide what you build, and how fast. Aiming and firing are automatic.
+  <!-- TXT-A8 2026-10-30: ADJUDICATION_TXT_A section 6 B2 (strings_TXT_A2.md B2, the alternative; A1-07) - the paragraph's first text, two sentences; the key caps, "to move", "to evacuate" and "Risk is local." are unchanged; was `You are a place that hazards keep arriving at. You cannot stop them coming &#8212; you can only decide what you build, and how fast. Aiming and firing are automatic.` (the dash, written here as its entity, is the literal U+2014 in the line) (build_TXT_A_2026-10-30) -->
+  <p>You are a place that hazards keep arriving at, and aiming and firing are automatic. You cannot stop them coming — you can only decide what you build, and how fast.
     <span class="keys" id="ctrlkeys"><i class="kbd">W</i><i class="kbd">A</i><i class="kbd">S</i><i class="kbd">D</i></span><span id="ctrltouch"></span>
     to move, <span class="keys" id="ctrlspace"><i class="kbd">SPACE</i></span><span id="ctrlevac"></span>
     to evacuate.<br><br>
@@ -1832,22 +1848,25 @@
   <div class="sbsw"><!-- PT2-P9 2026-10-19 (build_PT2_2026-10-19) -->
   <!-- DL-M2 / DL-M3 2026-10-14: the growth-pressure row (#presswrap, #pressnote) replaced by the plain-language switch and its note, filled by offerPlain() (build_DIAL_2026-10-14) -->
   <div id="plainwrap"></div>
-  <div id="plainnote"></div>
+  <!-- TXT-A4 2026-10-30: ADJUDICATION_TXT_A section 4 S-4 (PLAN_TXT section 7, the switch notes behind one fold) - the five switch notes (#plainnote, #srcnote, #zoomnote, #fxnote, #dtnote) start hidden (the hidden attribute; their writers set only their text, as before); one button, "More" (#swmore, after the last switch, in its own div.sbsw spanning both columns), shows or hides all five together (aria-expanded; aria-controls names the five). The switch buttons, their names and states are untouched; #diffnote (the dial's note) is not one of them. Each changed line was the same div without hidden, e.g. was `<div id="plainnote"></div>` (build_TXT_A_2026-10-30) -->
+  <div id="plainnote" hidden></div>
   </div><div class="sbsw"><!-- PT2-P9 2026-10-19 (build_PT2_2026-10-19) -->
   <!-- PL-S3 2026-10-15: P6 - the Sources switch and its note, filled by offerSrc(); the same switch state as the card bar's Sources button (build_POLISH_2026-10-15) -->
   <div id="srcwrap"></div>
-  <div id="srcnote"></div>
+  <div id="srcnote" hidden></div>
   </div><div class="sbsw"><!-- PT2-P9 2026-10-19 (build_PT2_2026-10-19) -->
   <!-- ZOOMTOG 2026-10-18: T3 - the Zoom switch and its note, filled by offerZoom(); the same state as the card bar's Zoom button (build_ZOOMTOG_2026-10-18) -->
   <div id="zoomwrap"></div>
-  <div id="zoomnote"></div>
+  <div id="zoomnote" hidden></div>
   </div><div class="sbsw"><!-- PT2-P9 2026-10-19 (build_PT2_2026-10-19) -->
   <!-- PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch and its note, filled by offerFx(), under the Zoom switch (build_PT_2026-10-19) -->
   <div id="fxwrap"></div>
-  <div id="fxnote"></div>
+  <div id="fxnote" hidden></div>
   </div><div class="sbsw sbdt"><!-- R4-DT 2026-10-25: the fifth switch, Details, and its note, filled by offerDt(); the same state as the level-up row's Details button; the switch spans both columns of the block (CSS) (build_R4_2026-10-25) -->
   <div id="dtwrap"></div>
-  <div id="dtnote"></div>
+  <div id="dtnote" hidden></div>
+  </div><div class="sbsw sbmore"><!-- TXT-A4 2026-10-30: the switches' "More" (see the TXT-A4 comment above #plainnote); this line and the button are added: the line's `</div>` closes the Details switch's div.sbsw, and the unchanged `</div></div>` line below now closes this div and the switches' block (build_TXT_A_2026-10-30) -->
+  <button type="button" id="swmore" class="fold-t" aria-expanded="false" aria-controls="plainnote srcnote zoomnote fxnote dtnote"><span aria-hidden="true">&#9656;</span> More</button>
   </div></div><!-- PT2-P9 2026-10-19: end of the last switch and of the switches' block (build_PT2_2026-10-19) -->
   </div><!-- PT-P5 2026-10-19: end of #startside (build_PT_2026-10-19) -->
   <div id="startmain"><!-- PT-P5 2026-10-19 (build_PT_2026-10-19) -->
@@ -5075,7 +5094,8 @@ function srcSave(on) { try { localStorage.setItem(SRC_KEY, JSON.stringify({ show
 const DT_KEY = 'compoundDetailsV1'
 // R4-F2 2026-10-25: ADJUDICATION_R4 final list, R4-DT (strings_R4_D7.md D7a-1, D7a-2, D7b) - the switch's three texts in place of the phase-1 placeholders; was `const DT_TEXT = { label: '<P> DT label', note: '<P> DT note', button: '<P> DT button' }`, where <P> is the six-letter placeholder tag, left out of this quote so the file holds none (build_R4_2026-10-25)
 const DT_TEXT = { label: 'Card details', note: 'Level-up cards show their details from the start. Off, you open each one yourself.', button: 'Card details' }
-function dtStore() { try { const v = JSON.parse(localStorage.getItem(DT_KEY) || '{}').open; return typeof v === 'boolean' ? v : true } catch (e) { return true } }
+// TXT-A1 2026-10-30: ADJUDICATION_TXT_A section 4 S-1 (PLAN_TXT section 7, "Card details" closed by default) - with no stored choice (no key, a value that does not parse, an `open` that is not true or false, or a store that throws) the Details switch is off and the level-up cards' Details folds start closed; a stored true or false still wins (the R4-DT comment above, "gives true (open)", now reads false (closed)); was `function dtStore() { try { const v = JSON.parse(localStorage.getItem(DT_KEY) || '{}').open; return typeof v === 'boolean' ? v : true } catch (e) { return true } }` (build_TXT_A_2026-10-30)
+function dtStore() { try { const v = JSON.parse(localStorage.getItem(DT_KEY) || '{}').open; return typeof v === 'boolean' ? v : false } catch (e) { return false } }
 function dtSave(on) { try { localStorage.setItem(DT_KEY, JSON.stringify({ open: on })) } catch (e) {} }
 let dtOpen = dtStore()
 let srcShown = srcStore()                 // Sources switch on the card bar: true shows every card's source line
@@ -5241,6 +5261,8 @@ const HAZARDS = {
   // D2 2026-09-22: body colours read from the palette (theirs, warm): the storm was grey-blue and the flood blue, both in the band that is now yours; the flood and the tsunami share a khaki, the storm is ochre, the other three are unchanged; the particle ramps they had are kept in RAMP_FOR (build_D_2026-09-22)
   quake: { name: 'Earthquake', col: PAL.theirs.body.quake, behaviour: 'chase', at: 0,
            r: 12, hp: 8, spd: 74, dmg: 9, xp: 2, burst: true,
+           // TXT-A9 2026-10-30: ADJUDICATION_TXT_A section 6 B3 (strings_TXT_A2.md B3; A2-01/A2-02) - the first-seen flash's line (the S-5 field, read by makeHazard); no PLAIN key, so say() returns this line with Plain English on too; src below is unchanged and still feeds the report's hazard row; was no first field (build_TXT_A_2026-10-30)
+           first: 'Earthquakes often come in groups. They go after you or a lifeline.',
            src: 'Sudden, little warning, and over in seconds — which is why the only thing that works is what was already in place.' },
   storm: { name: 'Storm',      col: PAL.theirs.body.storm, behaviour: 'orbit', at: 30,
            r: 9,  hp: 6, spd: 150, dmg: 7, xp: 2,
@@ -5253,12 +5275,16 @@ const HAZARDS = {
            src: 'A front, not an event. It arrives from one direction and keeps arriving.' },
   heat:  { name: 'Heatwave',   col: PAL.theirs.body.heat, behaviour: 'zone', at: 115,
            r: 78, hp: 1, spd: 0, dmg: 13, xp: 4, life: 11,
+           // TXT-A5 2026-10-30: ADJUDICATION_TXT_A section 4 S-5, strings_TXT_A.md A2-03 - a new field, first: the line of the hazard's first-seen flash (makeHazard reads it, through say() as HAZ.heat.first); src below is unchanged and still feeds the report's hazard row (build_TXT_A_2026-10-30)
+           first: 'It stays in one place, and your shots leave it alone.',
            src: 'It does not come to you. It settles over a place and stays, which is why it kills more people than it looks like it should.' },
   fire:  { name: 'Wildfire',   col: PAL.theirs.body.fire, behaviour: 'chase', at: 160,
            r: 10, hp: 12, spd: 92, dmg: 10, xp: 3, spread: 0.45,
            // Spotting: embers thrown ahead of the front, which is how a fire crosses ground
            // that nothing was burning on. An ember that lands can start its own.
            shoot: { every: 3.7, n: 1, spread: 0, spd: 170, dmg: 6, range: 380, r: 5.5, life: 2.6, ember: 0.18 },
+           // TXT-A10 2026-10-30: ADJUDICATION_TXT_A section 6 B4 (strings_TXT_A2.md B4; A2-05/A2-06) - the first-seen flash's line (the S-5 field, read by makeHazard); no PLAIN key, so say() returns this line with Plain English on too; src below is unchanged and still feeds the report's hazard row; was no first field (build_TXT_A_2026-10-30)
+           first: 'Some Wildfires throw embers. An ember that lands can start a new fire.',
            src: 'It multiplies. Some fires throw embers ahead of themselves onto ground that was not burning, and every one of those fires you leave standing is the source of the next.' },   // PT6-T1 2026-10-21: PLAN_PT6 T1 - FR1, the text from strings_PT6_final.md + R4 (build_PT6_2026-10-21)
 }
 const HAZARD_IDS = Object.keys(HAZARDS)
@@ -5892,6 +5918,7 @@ function cardFace(kind, id, l, text, steady, plain) {
   return `<p class="face">${F}</p>` + (same(steady) && same(plain) ? '' : `<p class="ctext">${text}</p>`)
 }
 let foldN = 0
+let pfoldN = 0   // TXT-A3 2026-10-30: the ids of the place cards' "More" folds (offerPlaces): a counter of their own that only grows, so foldN and the level-up folds' ids are as before (build_TXT_A_2026-10-30)
 // P16a-F 2026-10-22: a level-up card's take region and Details fold. The card's children from the first through the face (the colour mark, the tier line, the combination row, the title, the face) go into div.take, the card's button for the keys and a screen reader (cardKeyable); a click or tap anywhere on the card still takes it, except on the Details toggle or inside the fold (the card's own click handler, wrapped here, returns for those); the card text (p.ctext), the cost line, the source line and the word explanations go into the fold (div.fold: the toggle, then div.fold-b, closed), right after the take region; a card with none of them gets no fold; a fold holding only the source line, or it and a word box that goes with it, is marked srconly (hidden by the CSS while Sources is off) (build_P16a_2026-10-22)
 function cardFold(el) {
   const face = el.querySelector('p.face')
@@ -5929,6 +5956,7 @@ function cardFold(el) {
   w.appendChild(b)
   w.appendChild(body)
   el.insertBefore(w, take.nextSibling)
+  // TXT-A1 2026-10-30: the R4-DT comment on the next line no longer holds in its "(the default)": since S-1 the switch is off by default (dtStore), so the fold starts closed unless the player has turned the switch on; the line itself is unchanged (build_TXT_A_2026-10-30)
   if (dtOpen) foldToggle(b)   // R4-DT 2026-10-25: with the Details switch on (the default) the fold starts open; its own Details button still opens or closes it (build_R4_2026-10-25)
 }
 // P16a-F 2026-10-22: a Details toggle opens or closes its fold (aria-expanded, the arrow); on a level-up card the card's description follows (build_P16a_2026-10-22)
@@ -6083,6 +6111,8 @@ const PLAIN = {
   'HAZ.quake.src': 'It is sudden, with little warning, and over in seconds. That is why the only thing that works is what was already in place.',
   'HAZ.flood.src': 'A front, not an event. It comes from one direction and keeps coming.',
   'HAZ.heat.src': 'It does not come to you. It settles over a place and stays. That is why it kills more people than it looks like it should.',
+  // TXT-A5 2026-10-30: ADJUDICATION_TXT_A section 4 S-5, strings_TXT_A.md A2-04 - the plain twin of HAZARDS.heat.first, a new key; HAZ.heat.src above is kept, since the report's hazard row reads it (verify_TXT_A F05: no PLAIN entry removed) (build_TXT_A_2026-10-30)
+  'HAZ.heat.first': 'It stays in one place, and your shots leave it alone.',
   'HAZ.fire.src': 'It multiplies. Some fires throw embers ahead of themselves, onto ground that was not burning. Every one of those fires you leave standing starts the next.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - FR2, the text from strings_PT6_final.md + R4 (build_PT6_2026-10-21)
   // R4-F1 2026-10-25: ADJUDICATION_R4 final list - the Learning twins of the new elites' lines, which r4First reads through say() as ELT.<id>.first and ELT.<id>.src; the list gives none for E3 (first and src) or for E9's src, so those show their Steady text in both modes (build_R4_2026-10-25)
   'ELT.E1.first': 'When you destroy it, circles fill, then hit. Do it far from you and your lifelines.',
@@ -6091,18 +6121,22 @@ const PLAIN = {
   'ELT.E5.src': 'NSSL (US): flash floods can happen within minutes of the rain. That leaves less time to warn people.',
   'ELT.E9.first': 'It shows a lane, then runs down it fast, leaving fire. Get off the lane.',
   // R5-FX 2026-10-26: ADJUDICATION_R5 K1 (strings_R5_final.md) - the Learning twins of the R5 carry lines and of the Backup power site's gain line, read through say() as CRY.<id>.<slot> (r5Start: name, banner, src; r5End: name, done, fail; r5Pick: name, pick; r5Arrived: CRY.M3.next) and WRK.backup.gain (the works built flash); rows with no Learning line (every name, M1 banner, M1 done, M4 count, backup note) show their Steady text in both modes (build_R5_2026-10-26 fix round)
-  'CRY.M1.pick': 'You have the generator. Take it to the hospital. EVAC drops it.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-25 (ADJUDICATION_TXT_A section 3, applied); was `'CRY.M1.pick': 'You have the generator. Take it to the hospital. EVAC drops it.',` (build_TXT_A_2026-10-30)
+  'CRY.M1.pick': 'You have the generator: take it to the hospital. EVAC drops it.',
   'CRY.M1.fail': 'The generator did not get there in time. The hospital loses health.',
   'CRY.M1.src': 'A WHO and PAHO guide helps check how safe hospitals are. Backup power that can only be started by hand is rated Low.',
   'CRY.M2.banner': 'Get the river reading from the gauge. Take it to the siren.',
-  'CRY.M2.pick': 'You have the reading. Take it to the siren. EVAC drops it.',
-  'CRY.M2.done': 'Warning issued. Floods move slower. The next flood front comes later.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-26 and A2-27 (ADJUDICATION_TXT_A section 3, applied); was `'CRY.M2.pick': 'You have the reading. Take it to the siren. EVAC drops it.',` and `'CRY.M2.done': 'Warning issued. Floods move slower. The next flood front comes later.',` (build_TXT_A_2026-10-30)
+  'CRY.M2.pick': 'You have the reading: take it to the siren. EVAC drops it.',
+  'CRY.M2.done': 'Warning issued: floods move slower. The next flood front comes later.',
   'CRY.M2.fail': 'The warning did not go out. The next flood front is wider.',
   'CRY.M2.src': 'UNDRR: an early warning system has linked parts. If one part fails, the whole system could fail.',
   'CRY.M3.banner': 'Carry the storm warning from the radio mast to three homes. Go one home at a time.',
-  'CRY.M3.pick': 'You have the warning. Take it to the marked home. EVAC drops it.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-28 (ADJUDICATION_TXT_A section 3, applied); was `'CRY.M3.pick': 'You have the warning. Take it to the marked home. EVAC drops it.',` (build_TXT_A_2026-10-30)
+  'CRY.M3.pick': 'You have the warning: take it to the marked home. EVAC drops it.',
   'CRY.M3.next': 'This home has the warning. Go back to the mast for the next home.',
-  'CRY.M3.done': 'All three homes have the warning. You get XP. Hits hurt you less for a few seconds.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-29 (ADJUDICATION_TXT_A section 3, applied); was `'CRY.M3.done': 'All three homes have the warning. You get XP. Hits hurt you less for a few seconds.',` (build_TXT_A_2026-10-30)
+  'CRY.M3.done': 'All three homes have the warning. You get XP, and hits hurt less for a few seconds.',
   'CRY.M3.fail': 'Some homes did not get the warning. One more ring of storms is coming.',
   'CRY.M3.src': 'In Bangladesh, volunteers take cyclone warnings around their area. One survey found many people got them door to door.',
   'CRY.M4.banner': 'People are in a damaged building. Lead them out, away from all buildings.',
@@ -6111,8 +6145,9 @@ const PLAIN = {
   'CRY.M4.fail': 'They walk to open ground by themselves. You get no reward.',
   'CRY.M4.src': 'Ready.gov (US): if you are in a damaged building, get out and move away fast. Do not go back in.',
   'CRY.M6.banner': 'Dry plants are around the house. Carry them past the firebreak line.',
-  'CRY.M6.pick': 'You have the brush. Take it past the firebreak line. EVAC drops it.',
-  'CRY.M6.done': 'The ring is clear. For 30s, fire spreads into it at half its rate. It can still burn.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-30 and A2-31 (ADJUDICATION_TXT_A section 3, applied); was `'CRY.M6.pick': 'You have the brush. Take it past the firebreak line. EVAC drops it.',` and `'CRY.M6.done': 'The ring is clear. For 30s, fire spreads into it at half its rate. It can still burn.',` (build_TXT_A_2026-10-30)
+  'CRY.M6.pick': 'You have the brush: take it past the firebreak line. EVAC drops it.',
+  'CRY.M6.done': 'The ring is clear: for 30s, fire spreads into it at half its rate. It can still burn.',
   'CRY.M6.fail': 'The dry plants stayed. Small new fires start.',
   'CRY.M6.src': 'UNEP: clearing plants around buildings can cut fire risk. But it does not necessarily stop fires.',
   'WRK.backup.gain': 'If power is lost, the hospital\'s backup power starts by itself. You do not carry a generator.',
@@ -6121,10 +6156,12 @@ const PLAIN = {
   'LL.hospital.gain': 'Your capacity comes back slowly while it stands.',
   'LL.school.cost': 'And 15% less than normal once it is gone.',
   // P16a-T 2026-10-22: S2-19 (strings_P16a.md) (build_P16a_2026-10-22)
-  'LL.power.cost': 'And 12% slower after. The other lifelines also fail faster.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-15 (ADJUDICATION_TXT_A section 3, applied); was `'LL.power.cost': 'And 12% slower after. The other lifelines also fail faster.',` (build_TXT_A_2026-10-30)
+  'LL.power.cost': 'And 12% slower after, and the other lifelines now fail faster.',
   'LL.water.gain': 'Heat hurts you 40% less.',
   // P16a-T 2026-10-22: S2-21 (strings_P16a.md) (build_P16a_2026-10-22)
-  'LL.road.cost': 'And 10% slower after. Works take longer.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-16 (ADJUDICATION_TXT_A section 3, applied); was `'LL.road.cost': 'And 10% slower after. Works take longer.',` (build_TXT_A_2026-10-30)
+  'LL.road.cost': 'And 10% slower after, and works take longer.',
   // P16a-T 2026-10-22: S2-37 (strings_P16a.md) (build_P16a_2026-10-22)
   'SVC.hospital.line': 'Casualties clear. You get 30% back now, and more for 8s.',
   // P16a-T 2026-10-22: S2-38 (strings_P16a.md) (build_P16a_2026-10-22)
@@ -6145,7 +6182,8 @@ const PLAIN = {
   'SEA.storm.note': 'A hazard you can be warned about ahead of time.',
   'SEA.wet.note': 'It comes as a front, and it keeps coming.',
   'SEA.swarm.note': 'Compound. All of it, and none of it waits.',
-  'SEA.quiet.note': 'Little is arriving. But nothing has stopped. Go and get ready.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-10 (ADJUDICATION_TXT_A section 3, applied); was `'SEA.quiet.note': 'Little is arriving. But nothing has stopped. Go and get ready.',` (build_TXT_A_2026-10-30)
+  'SEA.quiet.note': 'Little is arriving, but nothing has stopped. Go and get ready.',
   'BAN.line': 'Not paid for in this place, this run. A risk plan also includes what you decide not to pay for.',
   // ADDED 2026-09-23: Learning plain versions of the D2/D3 strings, drafted from their corrected text; UPG.field/pulse/wave/ring.src, UPG.speed.desc0 and HAZ.storm.src are kept as is, so have no entry (section C, section_C_2026-09-22)
   'UPG.magnet.src': 'UNDRR asks countries to record, analyse and share data on what disasters do. This means data on the people affected, broken down by group. It also means a full accounting of losses.',
@@ -6168,20 +6206,26 @@ const PLAIN = {
   'TRD.levee.src': 'In this game, hard defences cut every hit by 40%. But a flood sitting on a lifeline wears it down twice as fast. Mallea writes that after the 1993 Midwest floods, some communities were moved off the floodplain. Mallea also writes that this trend quickly reversed. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis.)',   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   'BOSS.passes.line': 'It was not absorbed this time. You lasted until it passed.',
   // BS-M3 2026-09-30: the true boss's Learning lines, strings_BS.md S-B1 (c)-(g) verbatim; its warning and the "still on the field" row have no Learning variant (the same text) (build_BS_2026-09-30)
-  'BOSS.true.arrive': 'Several hazards, arriving together. This is the boss. Beat it, or last until it passes.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-17 (ADJUDICATION_TXT_A section 3, applied); was `'BOSS.true.arrive': 'Several hazards, arriving together. This is the boss. Beat it, or last until it passes.',` (build_TXT_A_2026-10-30)
+  'BOSS.true.arrive': 'Several hazards, arriving together: this is the boss. Beat it, or last until it passes.',
   'BOSS.true.phase1': 'The boss called them in. Now it also shoots in a ring around itself.',
-  'BOSS.true.phase2': 'The boss called them in. Now it also sweeps a lane across the ground. Stay out of it.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-18 (ADJUDICATION_TXT_A section 3, applied); was `'BOSS.true.phase2': 'The boss called them in. Now it also sweeps a lane across the ground. Stay out of it.',` (build_TXT_A_2026-10-30)
+  'BOSS.true.phase2': 'The boss called them in, and now it also sweeps a lane across the ground. Stay out of it.',
   // UXBS-FIX 2026-09-30: F3 - 'BOSS.true.down', 'BOSS.true.rep.down' and (the same claim, swept) 'BOSS.true.rep.passed' say the boss makes the recovery budget bigger - its SIZE, runFunds in die() - not that you got it; right answers release it. Were: "You beat it. You get all your capacity back, a lot of XP and extra recovery budget." / "You beat it. You got all your capacity back, a lot of XP and <b>${bonus}</b> more recovery budget." / "You did not beat it, but you lasted until it passed. Beating it gives all your capacity back, a lot of XP and extra recovery budget." (fix_record_UXBS.md F3) (build_BS_2026-09-30 fix round)
-  'BOSS.true.down': 'You beat it. You get all your capacity back and a lot of XP. Your recovery budget gets bigger.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-19 (ADJUDICATION_TXT_A section 3, applied); was `'BOSS.true.down': 'You beat it. You get all your capacity back and a lot of XP. Your recovery budget gets bigger.',` (build_TXT_A_2026-10-30)
+  'BOSS.true.down': 'You beat it: you get all your capacity back and a lot of XP. Your recovery budget gets bigger.',
   'BOSS.true.passes': 'You did not beat it, but you lasted until it passed. It will not come back this run.',
-  'BOSS.true.rep.down': bonus => `You beat it. You got all your capacity back and a lot of XP. It added <b>${bonus}</b> to the size of your recovery budget.`,
+  // TXT-A7 2026-10-30: strings_TXT_A.md A4-05 (ADJUDICATION_TXT_A section 3, applied); was `'BOSS.true.rep.down': bonus => \`You beat it. You got all your capacity back and a lot of XP. It added <b>${bonus}</b> to the size of your recovery budget.\`,` (build_TXT_A_2026-10-30)
+  'BOSS.true.rep.down': bonus => `You beat it: you got all your capacity back and a lot of XP. It added <b>${bonus}</b> to the size of your recovery budget.`,
   // G-M6 2026-10-13: N6 (verify_UXBS_fix.md N6) - the budget clause back inside its condition, strings_G.md S-G6a verbatim (RG13); was "... Your recovery budget also gets bigger." (build_G_2026-10-01)
-  'BOSS.true.rep.passed': 'You did not beat it, but you lasted until it passed. Beating it gives all your capacity back and a lot of XP. Beating it also makes your recovery budget bigger.',
+  // TXT-A12 2026-10-30: ADJUDICATION_TXT_A section 6 B5 (strings_TXT_A2.md B5; A4-06) - the plain twin; was `'BOSS.true.rep.passed': 'You did not beat it, but you lasted until it passed. Beating it gives all your capacity back and a lot of XP. Beating it also makes your recovery budget bigger.',` (build_TXT_A_2026-10-30)
+  'BOSS.true.rep.passed': 'You did not beat it, but you lasted until it passed. Beating it gives all your capacity back and a lot of XP, and also makes your recovery budget bigger.',
   // BS-M2 2026-09-30: the first-elite line, strings_BS.md S-B3 (b) verbatim (build_BS_2026-09-30)
   // P16a-T 2026-10-22: S2-71 (strings_P16a.md) (build_P16a_2026-10-22)
   'ELITE.first': 'Crowned hazards are bigger and harder to stop. They hit harder and give more XP.',
   // BS-M4 2026-09-30: the secured line with a real save's repair, strings_BS_hp.md S-H2 (a) verbatim (ruling RH2) (build_BS_2026-09-30)
-  'LL.secured': 'You get 30% of your capacity back. It leaves the map for 15s and comes back somewhere new. Its bonus stays.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-12 (ADJUDICATION_TXT_A section 3, applied); was `'LL.secured': 'You get 30% of your capacity back. It leaves the map for 15s and comes back somewhere new. Its bonus stays.',` (build_TXT_A_2026-10-30)
+  'LL.secured': 'You get 30% of your capacity back. It leaves the map for 15s, keeps its bonus, and comes back somewhere new.',
   // LL-M2 2026-09-25: the rebuild card's cost, S-L2's Learning text verbatim (strings_LL.md); TRD.rebuild.desc is absent on purpose - the desc falls through to the Steady line (build_LL_2026-09-25)
   'TRD.rebuild.cost': 'You lose 15% of the capacity you have now. The most capacity you can have does not change.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - RB2, the text from strings_PT6_final.md (build_PT6_2026-10-21)
 }
@@ -6218,7 +6262,8 @@ const GLOSS = {
   'S7.B5': "Being able to resist, absorb, adjust to and adapt to a hazard's effects. And to transform and recover from them.",
   'S7.B8': 'Moving people and property to safer places for a time. It is done before, during or after a hazard happens.',
   'S7.B10c': 'A chain reaction. One hazard or failure sets off linked impacts that may spread across systems and sectors.',
-  'S7.LL': 'Services that help you: three at random from hospital, school, power, water, road. One place has four. Losing one hurts.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A3-39 (ADJUDICATION_TXT_A section 3, applied); was `'S7.LL': 'Services that help you: three at random from hospital, school, power, water, road. One place has four. Losing one hurts.',` (build_TXT_A_2026-10-30)
+  'S7.LL': 'Services that help you: three at random from hospital, school, power, water, road. One place has four, and losing one hurts.',
 }
 const GLOSS_MEASURE = { field: 'S7.A1', pulse: 'S7.A2', wave: 'S7.A3', ring: 'S7.A4', armour: 'S7.A5',
                         magnet: 'S7.A6', hp: 'S7.A7', speed: 'S7.A8', rate: 'S7.A9' }
@@ -6262,7 +6307,8 @@ const HOSPITAL_LOST = {
   'S5.7.32e': 'Help arrives each time you level up: 9% of capacity back.',
   'S5.7.32f': 'Repair 4.5% of capacity, and raise its ceiling by 8.',
   // BS-M4 2026-09-30: the secured line after a Hospital loss - a real save's 30% x healMul 0.3 = 9% (strings_BS_hp.md S-H2 (a); ruling RH2) (build_BS_2026-09-30)
-  'S5.7.32g': '9% of capacity back. It leaves the map for 15s and comes back somewhere new. Its bonus stays.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-13 (ADJUDICATION_TXT_A section 3, applied); was `'S5.7.32g': '9% of capacity back. It leaves the map for 15s and comes back somewhere new. Its bonus stays.',` (build_TXT_A_2026-10-30)
+  'S5.7.32g': '9% of capacity back. It leaves the map for 15s, keeps its bonus, and comes back somewhere new.',
 }
 const healLine = (row, cur) => (P && P.healMul === 0.3) ? HOSPITAL_LOST[row] : cur
 
@@ -6393,11 +6439,21 @@ function offerMeta() {
   // their choice holds for the session.", the line const canBuy = META.some(m => (st.lv[m.id] || 0) < m.max && st.funds >= m.cost(st.lv[m.id] || 0)),
   // its comment "Re-evaluated on EVERY render while metaFold is null ... would hide the reward it just paid." and the line
   // const folded = metaFold === null ? !canBuy : metaFold (build_PT_2026-10-19)
-  const folded = metaFold === null ? false : metaFold
+  // TXT-A2 2026-10-30: ADJUDICATION_TXT_A section 4 S-2 (PLAN_TXT section 7, the capacity block folded) - with no hand choice (metaFold null) the section is folded: only the heading shows; a click or tap on the heading opens it as before, and the two places that reset metaFold to null ("Somewhere else" and the door) now fold it again. The PT-P4 comment above ("with no hand choice (metaFold null) it is unfolded") no longer holds; was `const folded = metaFold === null ? false : metaFold` (build_TXT_A_2026-10-30)
+  const folded = metaFold === null ? true : metaFold
   const head = $('metahead')
   head.classList.toggle('folded', folded)
   head.textContent = `${folded ? '▸' : '▾'} Institutional capacity — recovery budget: ${st.funds}`
   head.onclick = () => { metaFold = !folded; offerMeta() }
+  // TXT-A2 2026-10-30: the heading as a keyboard toggle - now that the nodes start hidden, a keyboard player must be able to open them: the div (kept, since the start screen's CSS names div#metahead) gets role button, tabindex 0 and aria-expanded (true while unfolded); Enter or Space on it does what a click does, once per press (a repeat keydown does nothing), and the key stops here, as cardKeys does for a place card. No visible word changes (build_TXT_A_2026-10-30)
+  head.setAttribute('role', 'button')
+  head.setAttribute('tabindex', '0')
+  head.setAttribute('aria-expanded', folded ? 'false' : 'true')
+  head.onkeydown = e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return
+    e.preventDefault(); e.stopPropagation()
+    if (!e.repeat) head.onclick()
+  }
   const wrap = $('metawrap'); wrap.innerHTML = ''
   for (const m of META) {
     const l = st.lv[m.id] || 0
@@ -6714,7 +6770,8 @@ const SEASONS = {
            col: PAL.place.season, rate: 1.15, bias: { quake: 3.4, fire: 1.4 } },
   swarm: { name: 'Everything at once', note: 'Compound. All of it, none of it waiting.',
            col: PAL.place.season, rate: 1.22, bias: {} },
-  quiet: { name: 'A quiet stretch', note: 'Little is arriving. Nothing has stopped. Go and prepare.',
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-09 (ADJUDICATION_TXT_A section 3, applied) - the note only; was `note: 'Little is arriving. Nothing has stopped. Go and prepare.',` (build_TXT_A_2026-10-30)
+  quiet: { name: 'A quiet stretch', note: 'Little is arriving, but nothing has stopped. Go and prepare.',
            col: PAL.place.season, rate: 0.45, len: 0.65, prep: true, bias: {} },
 }
 
@@ -6765,7 +6822,8 @@ const LIFELINES = {
               // P16a-T 2026-10-22: S2-11 (strings_P16a.md) (build_P16a_2026-10-22)
               gain: 'Aimed shots, the wide sweep, Drills and Codes fire 12% faster.',
               // P16a-T 2026-10-22: S2-12 (strings_P16a.md) (build_P16a_2026-10-22)
-              cost: 'And 12% slower after. The other lifelines now fail faster.',
+              // TXT-A7 2026-10-30: strings_TXT_A.md A2-14 (ADJUDICATION_TXT_A section 3, applied); was `cost: 'And 12% slower after. The other lifelines now fail faster.',` (build_TXT_A_2026-10-30)
+              cost: 'And 12% slower after, and the other lifelines now fail faster.',
               on: P => { P.rateMul *= 1.12 }, off: P => { P.rateMul /= 1.12 },
               lost: P => { P.rateMul *= 0.88; P.cascade = true },
               // R5-FX 2026-10-26: ADJUDICATION_R5 F5 (K3) - c3 of strings_R5_final.md: true with and without a Backup power site or a delivered generator; was `note: 'Nothing else on this list works without it — warning systems and hospitals first.',` (build_R5_2026-10-26 fix round)
@@ -7924,7 +7982,8 @@ function startHold() {
   const el = $('season')
   el.firstElementChild.textContent = 'Hazards stop'
   el.firstElementChild.style.color = HOLD_COL
-  el.lastElementChild.textContent = 'For 3s, they cannot move or attack. Marked events still come. All your capacity back.'   // BS-M4 2026-09-30: the last sentence added, strings_BS_hp.md S-H2 (b) verbatim (llSecure fills capacity as the hold starts; ruling RH3) (build_BS_2026-09-30)
+  // TXT-A13 2026-10-30: ADJUDICATION_TXT_A section 6 B6 (strings_TXT_A2.md B6; the "Hazards stop" banner) - sentences 1 and 2 joined with ", but"; the BS-M4 sentence "All your capacity back." stays last and whole, and the BS-M4 comment on the line is kept; was `'For 3s, they cannot move or attack. Marked events still come. All your capacity back.'` (build_TXT_A_2026-10-30)
+  el.lastElementChild.textContent = 'For 3s, they cannot move or attack, but marked events still come. All your capacity back.'   // BS-M4 2026-09-30: the last sentence added, strings_BS_hp.md S-H2 (b) verbatim (llSecure fills capacity as the hold starts; ruling RH3) (build_BS_2026-09-30)
   el.classList.add('show')
   AU.play('evolve')
   bannerT = T.holdT
@@ -8084,7 +8143,8 @@ function llSecure(L) {
   // BS-M4 2026-09-30: a real save repairs T.saveHeal of capacity (PLAN_BS H2) - through heal(), so 9% after a Hospital loss; before the line below states it, and before startHold() (ruling RH5). Its line: strings_BS_hp.md S-H2 (a) verbatim - the new sentence first, the Learning line under PLAIN 'LL.secured', the Hospital-lost line HOSPITAL_LOST 'S5.7.32g', wrapped as the relief pickup's is (healLine over say(), ruling RH2) (build_BS_2026-09-30)
   heal(P.max * T.saveHeal)
   // LL-FIX1 2026-09-25: shown at once, with the priority the flash queue gives event warnings ({ now: true }, BF1 and D12 above flash()), so the queue can no longer drop it: it is the only on-screen explanation of a lifeline leaving the map; the line it displaces waits once or is dropped, as for those two, and the service line raised just before it waits (verify_LL F1) (build_LL_2026-09-25)
-  flash(`${K.name} secured`, healLine('S5.7.32g', say('LL.secured', '30% of capacity back. It leaves the map for 15s and comes back somewhere new. Its bonus stays.')), K.col, { now: true })
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-11 (ADJUDICATION_TXT_A section 3, applied) - the Steady fallback only; was `say('LL.secured', '30% of capacity back. It leaves the map for 15s and comes back somewhere new. Its bonus stays.')` (build_TXT_A_2026-10-30)
+  flash(`${K.name} secured`, healLine('S5.7.32g', say('LL.secured', '30% of capacity back. It leaves the map for 15s, keeps its bonus, and comes back somewhere new.')), K.col, { now: true })
   // SY-M1 2026-09-29: a save counts here, where a lifeline is secured after a real save, whether or not its service fired (ruling RS1) - never at a top-up, a Power service top-up (it never calls this) or a rebuild. The first one raises hint S4.7 (ruling RS8; once per browser, as every hint). The T.holdAt-th starts the hold and the count begins again at 0 (build_SY_2026-09-29)
   secCount++
   secSeen = true   // SY-FIX 2026-09-29: the counter row shows from here, the run's first save (F11) (build_SY_2026-09-29 fix round)
@@ -8237,7 +8297,8 @@ function makeHazard(id, x, y, extra) {
   const k = HAZARDS[id]
   // Worked example before any question: the first arrival of each kind this run introduces
   // itself in its own words (guidance-then-struggle — novices get told, then asked).
-  if (!introSeen[id]) { introSeen[id] = true; flash(k.name + ' arrives', say('HAZ.' + id + '.src', k.src), k.col) }
+  // TXT-A5 2026-10-30: ADJUDICATION_TXT_A section 4 S-5 - the flash reads the hazard's first field (through say() as HAZ.<id>.first) where the table has one, else its src line as before; heat, quake and fire have one (TXT-A9 and TXT-A10 added the last two; no PLAIN key for them, so say() returns the field in both modes), storm and flood do not; the report's hazard row still reads src; was `if (!introSeen[id]) { introSeen[id] = true; flash(k.name + ' arrives', say('HAZ.' + id + '.src', k.src), k.col) }` (build_TXT_A_2026-10-30)
+  if (!introSeen[id]) { introSeen[id] = true; flash(k.name + ' arrives', k.first ? say('HAZ.' + id + '.first', k.first) : say('HAZ.' + id + '.src', k.src), k.col) }
   const rt = rampTime()
   // PT5-R1c 2026-10-20: PLAN_PT5 R1-c - health through hpRampNow() (was `(1 + rt / T.hpRamp)`); rt above still sets the speed (build_PT5_2026-10-20)
   const hpS = hpRampNow() * (PLACE.bite.hpMul || 1)
@@ -8948,11 +9009,12 @@ function r4Heavy() {
 // ---------------------------------------------------------------- R5: carry tasks - the framework, M1 Backup power, M2, M3, M4, M6
 // R5-T 2026-10-26: PLAN_R5 item 3 - the text slots of the five carry tasks, per id: name (the banner's title, and the title of the task's short flashes), banner (the banner's one line), pick, done and fail (the short flashes' lines), src (the teaching line: a second banner line, only while the Sources switch is on, srcShown, as R4's first-seen line), and for M4 count (the escort counter; {n} is the number). Every slot reaches the screen through say() as CRY.<id>.<slot>, so a Learning twin can follow. Phase-1 placeholders (build_R5_2026-10-26)   // R5-FX 2026-10-26: K1 / K2 - the placeholders replaced by the Steady lines of strings_R5_final.md, byte for byte; the Learning twins sit in PLAIN under CRY.<id>.<slot> (build_R5_2026-10-26 fix round)
 const CARRY = {
-  M1: { name: 'Hospital generator', banner: 'The power is out. Carry the generator to the hospital.', pick: 'Take it to the hospital. EVAC drops it.', done: 'The generator is on. The hospital keeps working. A Backup power site starts one by itself.', fail: 'Too late. The hospital loses health.', src: 'WHO/PAHO hospital guide: backup you can only start by hand is rated Low.' },
-  M2: { name: 'Flood gauge', banner: 'Take the gauge reading to the warning siren.', pick: 'Reading taken. Get it to the siren. EVAC drops it.', done: 'Warning issued. Floods slow, and the next front comes later.', fail: 'No warning went out. The next front comes in wider.', src: 'UNDRR: if one part of an early warning system fails, the whole system could fail.' },
-  M3: { name: 'Warning round', banner: 'Take the warning from the mast to three homes, one at a time.', pick: 'Warning in hand. Take it to the marked home. EVAC drops it.', done: 'All three homes warned. You get XP, and armour for a few seconds.', fail: 'Not every home was warned. One more ring of storms comes in.', src: 'Studies in Bangladesh: volunteers spread cyclone warnings with megaphones. In one survey, many got them door to door.', next: 'Home warned. Back to the mast for the next home.' },   // R5-T phase 2a: next - after homes 1 and 2, back to the mast (CRY.M3.next)
+  // TXT-A7 2026-10-30: strings_TXT_A.md A2-20 to A2-24 (ADJUDICATION_TXT_A section 3, applied), on the four lines below: M1 done, M2 pick, M3 pick, M6 pick and done; was `done: 'The generator is on. The hospital keeps working. A Backup power site starts one by itself.'`, `pick: 'Reading taken. Get it to the siren. EVAC drops it.'`, `pick: 'Warning in hand. Take it to the marked home. EVAC drops it.'`, `pick: 'Brush picked up. Get it past the firebreak. EVAC drops it.'` and `done: 'Ring cleared. For 30s, fire spreads into it at half its rate. It is not stopped.'` (build_TXT_A_2026-10-30)
+  M1: { name: 'Hospital generator', banner: 'The power is out. Carry the generator to the hospital.', pick: 'Take it to the hospital. EVAC drops it.', done: 'The generator is on, and the hospital keeps working. A Backup power site starts one by itself.', fail: 'Too late. The hospital loses health.', src: 'WHO/PAHO hospital guide: backup you can only start by hand is rated Low.' },
+  M2: { name: 'Flood gauge', banner: 'Take the gauge reading to the warning siren.', pick: 'Reading taken: get it to the siren. EVAC drops it.', done: 'Warning issued. Floods slow, and the next front comes later.', fail: 'No warning went out. The next front comes in wider.', src: 'UNDRR: if one part of an early warning system fails, the whole system could fail.' },
+  M3: { name: 'Warning round', banner: 'Take the warning from the mast to three homes, one at a time.', pick: 'Warning in hand: take it to the marked home. EVAC drops it.', done: 'All three homes warned. You get XP, and armour for a few seconds.', fail: 'Not every home was warned. One more ring of storms comes in.', src: 'Studies in Bangladesh: volunteers spread cyclone warnings with megaphones. In one survey, many got them door to door.', next: 'Home warned. Back to the mast for the next home.' },   // R5-T phase 2a: next - after homes 1 and 2, back to the mast (CRY.M3.next)
   M4: { name: 'Lead them out', banner: 'Lead them out of the damaged building, away from all buildings.', pick: 'They are following you. Keep away from buildings.', done: 'Clear of the buildings. You get XP and capacity.', fail: 'They walk to open ground on their own. No reward.', src: 'Ready.gov (US): in a damaged building, go outside and quickly move away. Do not enter damaged buildings.', count: '{n} reached open ground' },
-  M6: { name: 'Brush clearing', banner: 'Carry the brush from around the house past the firebreak.', pick: 'Brush picked up. Get it past the firebreak. EVAC drops it.', done: 'Ring cleared. For 30s, fire spreads into it at half its rate. It is not stopped.', fail: 'The brush stayed. Spot fires start.', src: 'UNEP: managing plants around buildings is one way to cut fire risk. Fuel treatments do not necessarily stop fires.' },
+  M6: { name: 'Brush clearing', banner: 'Carry the brush from around the house past the firebreak.', pick: 'Brush picked up: get it past the firebreak. EVAC drops it.', done: 'Ring cleared: for 30s, fire spreads into it at half its rate. It is not stopped.', fail: 'The brush stayed. Spot fires start.', src: 'UNEP: managing plants around buildings is one way to cut fire risk. Fuel treatments do not necessarily stop fires.' },
 }
 // R5-F 2026-10-26: PLAN_R5's table (DESIGN_long_runs.md 8.3) - per place, carry A (from T.r5From) and carry B (from T.r5FromB); null where carry B is M5, which is out of R5. M1 is in every place, on its own trigger (r5M1Watch) (build_R5_2026-10-26)
 const R5PLAN = { delta: ['M3', 'M2'], fault: ['M4', 'M6'], wui: ['M6', null], basin: ['M2', 'M3'], metro: ['M4', null], alpine: ['M2', 'M3'] }
@@ -11715,12 +11777,20 @@ function die() {
 
 // The run report. Same shape as the other prototype's: what you actually invested in, with
 // the source line beside it, and what you never got to. Built after the debrief.
+let rMoreN = 0   // TXT-A6 2026-10-30: the ids of the report rows' "More" folds (rowMore in renderReport): a counter that only grows, so no id repeats (build_TXT_A_2026-10-30)
 function renderReport() {
   const owned = Object.keys(UPGRADES).filter(k => lv[k] > 0)
   const missed = Object.keys(UPGRADES).filter(k => lv[k] === 0)
   const gotSyn = SYNERGIES.filter(sy => syn[sy.id])
   const row = (col, name, text) =>
     `<div class="rrow"><i style="background:${col}"></i><b>${name}</b><p>${text}</p></div>`
+  // TXT-A6 2026-10-30: ADJUDICATION_TXT_A section 4 S-6 (verify_TXT_A F19) - a row with a closed "More": the row's text in its <p> as row() prints it, then, outside that <p> (a block inside a <p> would be closed out of it by the HTML parser), a fold: a button (.fold-t, the Details toggle's look; aria-expanded false, aria-controls its body) and its body, hidden, holding `more` in a <p>. The <p> and the fold sit in one div (.rcol), so the fold stays in the text's column of the row's flex line. foldToggle opens and closes it; the handlers are set after the report's markup is in the page (end of renderReport). Used by the two highlight rows A4-01 and A4-02 (build_TXT_A_2026-10-30)
+  const rowMore = (col, name, text, more) => {
+    const n = ++rMoreN
+    return `<div class="rrow"><i style="background:${col}"></i><b>${name}</b><div class="rcol"><p>${text}</p>` +
+      `<div class="fold rfold"><button type="button" class="fold-t rmore" id="rmore-t-${n}" aria-expanded="false" aria-controls="rmore-${n}"><span aria-hidden="true">&#9656;</span> More</button>` +
+      `<div class="fold-b" id="rmore-${n}" hidden><p>${more}</p></div></div></div></div>`
+  }
 
   // The numbers first, then at most three lines about what mattered, then everything else
   // folded. The report is the run's whole educational payload, and the first human
@@ -11749,15 +11819,18 @@ function renderReport() {
   // What mattered, most consequential first. Three at most — the folds hold the rest.
   const hls = []
   if (lifelinesLost.length)
-    hls.push(row('#ff9d9d', lifelinesLost.map(k => LIFELINES[k].name).join(' · ') + ' LOST',
+    // TXT-A6 2026-10-30: ADJUDICATION_TXT_A section 4 S-6, strings_TXT_A.md A4-01 - the row shows the cost lines only; the tail sentence (the last line below, unchanged) is the row's closed "More" (rowMore); was `hls.push(row('#ff9d9d', ...` and, on the cost line, `.join(' ') +` (build_TXT_A_2026-10-30)
+    hls.push(rowMore('#ff9d9d', lifelinesLost.map(k => LIFELINES[k].name).join(' · ') + ' LOST',
       // R5-FX 2026-10-26: K4 (ii) - r5BkNote() after the power lifeline's cost; was `lifelinesLost.map(k => LIFELINES[k].cost).join(' ') +` (build_R5_2026-10-26 fix round)
-      lifelinesLost.map(k => LIFELINES[k].cost + (k === 'power' ? r5BkNote() : '')).join(' ') +
+      lifelinesLost.map(k => LIFELINES[k].cost + (k === 'power' ? r5BkNote() : '')).join(' '),
       ' The cost lands after the event, on the recovery — the part a run does not show you.'))
   else if (lifelines.length && standing.length === lifelines.length)
-    hls.push(row('#7ee787', 'Every service still running',
+    // TXT-A6 2026-10-30: ADJUDICATION_TXT_A section 4 S-6, strings_TXT_A.md A4-02 - the row shows the new text (the line after the LL-M2 comment below); the old text, whole and unchanged (the last line), is the row's closed "More" (rowMore); was `hls.push(row('#7ee787', 'Every service still running',` (build_TXT_A_2026-10-30)
+    hls.push(rowMore('#7ee787', 'Every service still running',
       // CORRECTED 2026-09-16: "asks for" modality dropped; scoring rule stated as the game's; target object in plain words (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
       // CORRECTED 2026-09-22: was "+15% to everything"; svc() feeds eff(), which multiplies damage and fire rate only (sweep 3, sweep3_2026-09-22/source_verification.md n/a, code; Lead F7)
       // LL-M2 2026-09-25: S-L4 R-1 (ruling RL2) - after a rebuild the bonus stopped while a lifeline was down, so "held all run" reads "held since your last rebuild" in a run with one; a run with none prints exactly as before (build_LL_2026-09-25)
+      `+${Math.round((T.svcBonus - 1) * 100)}% damage and fire rate, ${llRebuilds ? 'held since your last rebuild' : 'held all run'}. Paid only while every service is up, not most of them.`,
       `+${Math.round((T.svcBonus - 1) * 100)}% damage and fire rate, ${llRebuilds ? 'held since your last rebuild' : 'held all run'}. Paid only while every service is up, not most of them — the disruption of basic services is what Target D sets out to reduce.`))
   // UXBS-FIX 2026-09-30: F5 - the true boss's row still shows here, right after the lifeline row, but it is added below the first / best run rows (hls.splice at hlBoss), and only when the rows that come unconditionally leave a slot (hls.length < 3), so the block is never more than three rows (verify_UXBS F5); where it shows, the order on screen is as before (build_BS_2026-09-30 fix round)
   const hlBoss = hls.length
@@ -11794,9 +11867,11 @@ function renderReport() {
   if (hls.length < 3 && tbossState)
     hls.splice(hlBoss, 0, row(TBOSS_COL, `Boss — ${TBOSS_NAMES[PLACE.id] || TBOSS_NAMES.delta}`,
       // UXBS-FIX 2026-09-30: F3 - the two lines below say the boss adds to the SIZE of the recovery budget (as the budget row in the folds says: "... set the SIZE of it"), not that you got it; were "Absorbed. It paid all capacity back, a burst of XP and <b>${tbossBonus}</b> more recovery budget." / "Not absorbed, but outlasted. Absorbing it pays all capacity back, a burst of XP and more recovery budget." (fix_record_UXBS.md F3) (build_BS_2026-09-30 fix round)
-      tbossState === 'absorbed' ? say('BOSS.true.rep.down', `Absorbed. It paid all capacity back and a burst of XP. It also added <b>${tbossBonus}</b> to the size of your recovery budget.`, tbossBonus)
+      // TXT-A7 2026-10-30: strings_TXT_A.md A4-03 (ADJUDICATION_TXT_A section 3, applied) - the Steady line; was `\`Absorbed. It paid all capacity back and a burst of XP. It also added <b>${tbossBonus}</b> to the size of your recovery budget.\`` (build_TXT_A_2026-10-30)
+      tbossState === 'absorbed' ? say('BOSS.true.rep.down', `Absorbed: it paid all capacity back and a burst of XP. It also added <b>${tbossBonus}</b> to the size of your recovery budget.`, tbossBonus)
       // G-M6 2026-10-13: N6 - strings_G.md S-G6a verbatim (RG13); was "... It also makes your recovery budget bigger." (build_G_2026-10-01)
-      : tbossState === 'passed' ? say('BOSS.true.rep.passed', 'Not absorbed, but outlasted. Absorbing it pays all capacity back and a burst of XP. Absorbing it also makes your recovery budget bigger.')
+      // TXT-A11 2026-10-30: ADJUDICATION_TXT_A section 6 B5 (strings_TXT_A2.md B5; A4-04) - the Steady line; was `'Not absorbed, but outlasted. Absorbing it pays all capacity back and a burst of XP. Absorbing it also makes your recovery budget bigger.'` (build_TXT_A_2026-10-30)
+      : tbossState === 'passed' ? say('BOSS.true.rep.passed', 'Not absorbed, but outlasted. Absorbing it pays all capacity back and a burst of XP, and makes your recovery budget bigger.')
       : 'It was still on the field when the run ended.'))
   // FX3 2026-09-23: the F3d line below made true (review F-07) - it said the highlight is "the fold row's title"; the fold row's title adds a difficulty suffix whenever DIFF.pay is set and not 1, and the highlight's title has none (build_F_2026-09-23 fix round)
   // F3d 2026-09-23: the recovery budget said out loud (part 4 N4) - one highlight: the fold row's title without its difficulty suffix (DIFF.name and DIFF.pay, added when DIFF.pay is set and not 1) and one sentence, the C8 strings verbatim (section_C_2026-09-22/drafter_record.md section 7, restated in drafter_record_r2.md section 6), gated on runFunds > 0 as the stat tile and the fold row are, and on the three-highlight gate like every row here. It sits below the unconditional rows and above every slot-gated one, so the "Run N" row after it no longer hangs off the else chain: its condition is written out (not first, not best), which is exactly what the else chain gave it. The fold row further down is untouched (build_F_2026-09-23)
@@ -11997,6 +12072,11 @@ function renderReport() {
 
   const rb = $('repbody')
   rb.innerHTML = html
+  // TXT-A6 2026-10-30: ADJUDICATION_TXT_A section 4 S-6 - each row "More" (rowMore) opens and closes its body through foldToggle (aria-expanded, the arrow); Enter is the browser's own click on a <button>; Space is pressed here once (a repeat keydown does not press again), as the debrief's spaceClicks does, since the game's first keydown listener cancels Space page-wide (build_TXT_A_2026-10-30)
+  for (const b of rb.querySelectorAll('.rmore')) {
+    b.onclick = () => foldToggle(b)
+    b.addEventListener('keydown', e => { if (e.key === ' ') { e.preventDefault(); if (!e.repeat) b.click() } })
+  }
   rb.style.display = ''
 }
 
@@ -14190,6 +14270,14 @@ function offerDt() {
   b.setAttribute('aria-pressed', dtOpen ? 'true' : 'false')
   $('dtnote').textContent = DT_TEXT.note
 }
+// TXT-A4 2026-10-30: ADJUDICATION_TXT_A section 4 S-4 - the switches' "More" (#swmore, in the markup after the Details switch): a press shows or hides the five switch notes together (their hidden attribute), turns aria-expanded over and swaps the arrow, as foldToggle does for a Details toggle. Enter is the browser's click on the button; Space is the #start listener's single press. The notes start hidden at page load (the markup) and stay as the player left them while the page is open; the switches' own writers (offerPlain ... offerDt) set only the notes' text (build_TXT_A_2026-10-30)
+const SW_NOTES = ['plainnote', 'srcnote', 'zoomnote', 'fxnote', 'dtnote']
+if ($('swmore')) $('swmore').onclick = () => {
+  const b = $('swmore'), open = b.getAttribute('aria-expanded') !== 'true'
+  b.setAttribute('aria-expanded', open ? 'true' : 'false')
+  b.firstElementChild.innerHTML = open ? '&#9662;' : '&#9656;'
+  for (const id of SW_NOTES) { const n = $(id); if (n) n.hidden = !open }
+}
 
 // The difficulty row sits above the places, because it changes what choosing a place means.
 // DL-FIX2 2026-10-15: FX10 (review_DIAL.md F2) - the four buttons are made once (the first call) and afterwards updated in place, as offerPlain() above does, so a pressed button stays in the page and keeps keyboard focus; each carries aria-pressed true / false; class and colour styles as before, so the look does not change; the note is rewritten only when its text changes, so the live region (#diffnote, aria-live polite) speaks only on a real change (build_DIAL_2026-10-14 fix round 2)
@@ -14252,18 +14340,24 @@ function offerPlaces(keep) {
     el.className = 'card place'
     // P6-B9 2026-09-25: R-S3 cascade - the history line at the end of this card is S-B3b 4 verbatim: the stored best `kills` now reads "hazards killed" (singular at 1); it read "best <b>${hist.kills}</b> absorbed" (build_P6_2026-09-25)
     // P16B-1 2026-10-29: PLAN_P16B design 1 - the place strip (an i.p16s over the old preview, which groundPreview still makes with its one random draw) and the place name (h3) moved into .prev, on a dark gradient (CSS); the colour mark span stays; was `<div class="prev" style="background-image:url(${groundPreview(id, 240, 78)})">` / `<span style="background:${pl.col}"></span></div>` / `<div class="tier">Where you are</div>` / `<h3>${pl.name}</h3><p>${pl.blurb}</p>` (build_P16B_2026-10-28)
-    el.innerHTML = `<div class="prev" style="background-image:url(${groundPreview(id, 240, 78)})">${uiImg('p16s', 'pl_' + id)}
+    // TXT-A3 2026-10-30: ADJUDICATION_TXT_A section 4 S-3 (PLAN_TXT section 7, the place card's "+" and "-" lines behind a closed "More") - the card's parts in the same order, regrouped: the strip, the tier line, the blurb and the hazard tags in div.take (the card's button for the keys and a screen reader: cardKeyable puts role button and tabindex 0 on .take when a card has one, as on a level-up card since P16a-F); then div.fold.pfold: a <button> "More" (.fold-t, the Details toggle's look; aria-expanded false; aria-controls its body) and the body (.fold-b, hidden) holding div.edge unchanged; then the history line. So no control sits inside another: the More button is a sibling of the take region, not inside it. Its id counter (pfoldN) is its own, so the level-up folds' ids are as before. A click or tap anywhere on the card still chooses the place (el.onclick, unchanged), except on More, whose click stops there (stopPropagation) and only opens or closes the body (foldToggle), then refreshes the take region's description (cardDescribe: a closed body's lines are left out). Enter is the browser's click on the button; Space is the #start listener's single press on a focused button. The six parts were direct children of the card; the changed template lines were `el.innerHTML = \`<div class="prev" style="background-image:url(${groundPreview(id, 240, 78)})">${uiImg('p16s', 'pl_' + id)}`, `<div class="roster">${roster}</div>` and `</div>` (the edge's close) (build_TXT_A_2026-10-30)
+    const pf = ++pfoldN
+    el.innerHTML = `<div class="take"><div class="prev" style="background-image:url(${groundPreview(id, 240, 78)})">${uiImg('p16s', 'pl_' + id)}
         <span style="background:${pl.col}"></span><h3>${pl.name}</h3></div>
       <div class="tier">Where you are</div>
       <p>${pl.blurb}</p>
-      <div class="roster">${roster}</div>
+      <div class="roster">${roster}</div></div>
+      <div class="fold pfold"><button type="button" class="fold-t" id="pfold-t-${pf}" aria-expanded="false" aria-controls="pfold-${pf}"><span aria-hidden="true">&#9656;</span> More</button><div class="fold-b" id="pfold-${pf}" hidden>
       <div class="edge">
         <div class="up"><em>+</em><span>${pl.boon.text}</span></div>
         <div class="dn"><em>−</em><span>${pl.bite.text}</span></div>
-      </div>
+      </div></div></div>
       <div class="phist">${hist ? `${hist.n} run${hist.n > 1 ? 's' : ''} here · best <b>${hist.kills}</b> hazard${hist.kills === 1 ? '' : 's'} killed · <b>lv ${hist.lv}</b>` : 'no runs here yet'}</div>`
     el.onclick = () => { AU.start(id); $('start').classList.add('gone'); reset(id); last = 0 }
     cardKeyable(el)   // SX-FIX 2026-10-17: FX-1 (PLAN_SIX D7, D8) - the place card made reachable by Tab and named (build_SIX_2026-10-17 fix round)
+    // TXT-A3 2026-10-30: the More toggle (see the TXT-A3 comment above el.innerHTML); cardKeyable, just above, already names it by itself and the place's h3 ("More <place>"; its K7 line takes the card's first .fold-t that has an id) (build_TXT_A_2026-10-30)
+    const pt = el.querySelector('.pfold .fold-t')
+    pt.onclick = e => { if (e) e.stopPropagation(); foldToggle(pt); cardDescribe(el) }
     wrap.appendChild(el)
   }
 }
