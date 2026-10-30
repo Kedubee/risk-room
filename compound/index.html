@@ -3687,20 +3687,23 @@ const POOL_Q = {
            'The storm’s size on the satellite picture',
            'The rainfall total where the eye makes landfall'],
     correct: 1,
+    whyShort: 'Evacuation planning is zone-based, not category-based. The category measures wind — one hazard of five. (NOAA NWS / NHC)',   // TXT-B1 2026-10-30: P-delta-Q1-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Evacuation planning is zone-based, not category-based: NWS guidance starts with “find out if you live in a hurricane evacuation zone”, and a well-built home outside the zone can be the safest place to stay. The category measures wind — one hazard of five. (NOAA NWS / NHC)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q2', form: 'misconception', q: 'A surge warning is up. You live inland of the surge zone in a solid building. Best move?',
+  { id: 'Q2', form: 'misconception', q: 'A surge warning is up. You live inland of the surge zone in a solid building — best move?',   // TXT-B4 2026-10-30: P-delta-Q2-q (list_TXT_B_final.tsv); was `'A surge warning is up. You live inland of the surge zone in a solid building. Best move?'` (build_TXT_B_2026-10-30)
     opts: ['Drive 300 km inland — farther is always safer',
            'Go to the coast to help watch the water',
-           'Shelter where you are — you are outside the zone the warning is for',
+           'Shelter where you are',   // TXT-B4 2026-10-30: P-delta-Q2-opt2 (list_TXT_B_final.tsv); was `'Shelter where you are — you are outside the zone the warning is for'` (build_TXT_B_2026-10-30)
            'Move into the basement for the duration'],
     correct: 2,
+    whyShort: 'Surge evacuation is for the mapped zone. NWS: a well-built home outside the zone may be the safest place. (NOAA NWS)',   // TXT-B1 2026-10-30: P-delta-Q2-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Run from the water, hide from the wind: surge evacuation is for the mapped zone. NWS: you do not need to travel hundreds of miles, and a well-built home outside the zone may be the safest place. Long shadow evacuations clog the roads the zone’s residents need. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q3', form: 'judgment', q: 'Landfall is forecast for tomorrow evening. Your only road out crosses a low causeway. When do you leave?',
+  { id: 'Q3', form: 'judgment', q: 'Your only road out crosses a low causeway, and landfall is forecast for tomorrow evening. When do you leave?',   // TXT-B4 2026-10-30: P-delta-Q3-q (list_TXT_B_final.tsv); was `'Landfall is forecast for tomorrow evening. Your only road out crosses a low causeway. When do you leave?'` (build_TXT_B_2026-10-30)
     opts: ['Tomorrow afternoon, once the track is certain',
-           'Tonight — the water can close the road a day before the storm arrives',
+           'Tonight — the water can close the road',   // TXT-B4 2026-10-30: P-delta-Q3-opt1 (list_TXT_B_final.tsv); was `'Tonight — the water can close the road a day before the storm arrives'` (build_TXT_B_2026-10-30)
            'When you can see the surge coming',
            'After the eye passes, in the calm'],
     correct: 1,
+    whyShort: 'In Hurricane Ike (2008), water rose about 24 hours before landfall and cut evacuation routes. The deadline is set by the water, not by landfall time. (NHC Tropical Cyclone Report)',   // TXT-B1 2026-10-30: P-delta-Q3-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'In Hurricane Ike (2008), coastal water rose rapidly about 24 hours before landfall and cut evacuation routes off the Bolivar Peninsula — people who waited for certainty could no longer leave, and some of them died there. The deadline is set by the water, not by landfall time. (NHC Tropical Cyclone Report)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q4', form: 'warning-literacy', q: 'A hurricane watch just went up. What is that 48-hour clock actually counting down to?',
     opts: ['Landfall of the eye',
@@ -3708,41 +3711,47 @@ const POOL_Q = {
            'The all-clear',
            'The arrival of conditions that end outdoor preparation'],
     correct: 3,
+    whyShort: 'Watches are issued about 48 hours before hazardous conditions are possible. The clock is your work window, not a countdown to the eye. (NOAA)',   // TXT-B1 2026-10-30: P-delta-Q4-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Watches are issued about 48 hours before hazardous conditions are possible, warnings about 36 — explicitly because it may not be safe to prepare once the storm is close. The clock is your work window, not a countdown to the eye. (NOAA)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q5', form: 'warning-literacy', q: 'Two days out, the storm is “only” a Category 1 over very warm water. What do you prepare for?',
     opts: ['A Category 1 — the current strength is the forecast',
-           'Something possibly much stronger — storms can gain 30 knots of wind in a day',
+           'Possibly much stronger — storms can gain 30 knots of wind in a day',   // TXT-B4 2026-10-30: P-delta-Q5-opt1 (list_TXT_B_final.tsv); was `'Something possibly much stronger — storms can gain 30 knots of wind in a day'` (build_TXT_B_2026-10-30)
            'Nothing yet — preparation starts at Category 3',
            'Rain only — weak storms carry no surge'],
     correct: 1,
+    whyShort: 'Rapid intensification means at least 30 knots more sustained wind within 24 hours. Decisions keyed to today’s category systematically lag the real threat. (NHC glossary)',   // TXT-B1 2026-10-30: P-delta-Q5-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Rapid intensification is a defined phenomenon: a gain of at least 30 knots of sustained wind within 24 hours. Decisions keyed to today’s category systematically lag the real threat — plan for the envelope, not the snapshot. (NHC glossary)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q6', form: 'judgment', q: 'At the shore, the ground shakes hard for half a minute; the tide then races out absurdly far. Your phone is silent. Next move?',
+  { id: 'Q6', form: 'judgment', q: 'The ground shakes hard for half a minute; then the tide races far out. Your phone is silent — next move?',   // TXT-B4 2026-10-30: P-delta-Q6-q (list_TXT_B_final.tsv); was `'At the shore, the ground shakes hard for half a minute; the tide then races out absurdly far. Your phone is silent. Next move?'` (build_TXT_B_2026-10-30)
     opts: ['Walk out on the exposed seabed to look',
            'Wait — no siren means no tsunami',
-           'Move immediately to high ground or inland: what you just felt WAS the warning',
+           'Move immediately to high ground or inland',   // TXT-B4 2026-10-30: P-delta-Q6-opt2 (list_TXT_B_final.tsv); was `'Move immediately to high ground or inland: what you just felt WAS the warning'` (build_TXT_B_2026-10-30)
            'Film it and check the news'],
     correct: 2,
+    whyShort: 'A strong or long quake is a natural tsunami warning. The wave can arrive within minutes, before any official message. (NOAA NWS)',   // TXT-B1 2026-10-30: P-delta-Q6-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'A strong or long quake, the sea acting strange, or a loud ocean roar are natural tsunami warnings — the wave can arrive within minutes, before any official message. NWS: do not wait for an official warning to act on them. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q7', form: 'misconception', q: 'The first tsunami wave hit and drained back. The shore looks calm and your house is right there. Do you go?',
+  { id: 'Q7', form: 'misconception', q: 'The first tsunami wave hit and drained back, and the shore looks calm. Do you go home?',   // TXT-B4 2026-10-30: P-delta-Q7-q (list_TXT_B_final.tsv); was `'The first tsunami wave hit and drained back. The shore looks calm and your house is right there. Do you go?'` (build_TXT_B_2026-10-30)
     opts: ['Yes — the tsunami has passed',
-           'No — waves can keep arriving from five minutes to two hours apart, and the first is often not the largest',
+           'No — waves can keep arriving',   // TXT-B4 2026-10-30: P-delta-Q7-opt1 (list_TXT_B_final.tsv); was `'No — waves can keep arriving from five minutes to two hours apart, and the first is often not the largest'` (build_TXT_B_2026-10-30)
            'Yes, but only for ten minutes',
            'Only if the water looks clear'],
     correct: 1,
+    whyShort: 'A tsunami is a series of waves that flood, drain and reflood for hours. The first to arrive may not be the largest. (NOAA NWS)',   // TXT-B1 2026-10-30: P-delta-Q7-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'A tsunami is a series of waves that flood, drain and reflood for hours. The gap between waves ranges from five minutes to two hours, and the first to arrive may not be the largest. Returning after wave one is the classic fatal move — stay out until the official all-clear. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q8', form: 'judgment', q: 'The shaking stops on the delta shore. The official guidance for the next sixty seconds is:',
     opts: ['Check social media for confirmation first',
-           'Go as high and as far inland as you can, without waiting for an order',
+           'Go as high and as far inland as you can',   // TXT-B4 2026-10-30: P-delta-Q8-opt1 (list_TXT_B_final.tsv); was `'Go as high and as far inland as you can, without waiting for an order'` (build_TXT_B_2026-10-30)
            'Get in the car and drive along the coast road',
            'Return home for documents, then leave'],
     correct: 1,
+    whyShort: 'For a near-source tsunami, move at once as high and as far inland as possible. Do not wait for official warnings or evacuation orders. (FEMA / Ready.gov)',   // TXT-B1 2026-10-30: P-delta-Q8-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'For a near-source tsunami the protocol is: survive the quake first, then move immediately to a safe place as high and as far inland as possible — explicitly without waiting for official warnings or evacuation orders. Preparedness guidance points at shelter sites 30 metres up or well inland. (FEMA / Ready.gov)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q9', form: 'recovery', q: 'The wind has stopped and the sky is blue. When does this disaster stop killing people?',
     opts: ['It already has — danger ends with the weather',
            'Within 24 hours of landfall',
-           'Not for days or weeks: cleanup, power loss and generators keep taking people after the storm',
+           'Not for days or weeks',   // TXT-B4 2026-10-30: P-delta-Q9-opt2 (list_TXT_B_final.tsv); was `'Not for days or weeks: cleanup, power loss and generators keep taking people after the storm'` (build_TXT_B_2026-10-30)
            'Only if a second storm follows'],
     correct: 2,
+    whyShort: 'Indirect deaths arrive days, weeks, even months after a storm. Surviving the storm is not yet surviving the disaster. (NOAA)',   // TXT-B1 2026-10-30: P-delta-Q9-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Indirect deaths arrive days, weeks, even months after a storm: generator accidents — carbon monoxide, shock, fire are the most common hazards — overexertion during cleanup, and crashes. Surviving the storm is not yet surviving the disaster. (NOAA)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q55', form: 'warning-literacy', q: 'The forecast cone does not reach your town. What has the map actually told you?',
     opts: ['You are outside the storm’s reach — the cone is the danger area',
@@ -3750,130 +3759,148 @@ const POOL_Q = {
            'That the storm has a two-thirds chance of missing you entirely',
            'That the track is still too uncertain to plan against'],
     correct: 1,
+    whyShort: 'The cone is the probable track of the CENTRE. It carries no information at all about how wide the storm is. (NOAA National Hurricane Center)',   // TXT-B1 2026-10-30: P-delta-Q55-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The cone is the probable track of the CENTRE, drawn so that two-thirds of past official forecast errors fall inside it — a third of the time the error is bigger than the cone allows for. It carries no information at all about how wide the storm is. The forecasters’ own note is that tropical cyclones are not a point, their effects can span many hundreds of miles from the centre, and hurricane- and tropical-storm-force winds can extend well beyond the cone. (NOAA National Hurricane Center)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
   basin: [
   { id: 'Q11', form: 'misconception', q: 'Your town had its “100-year flood” last spring. What is this year’s chance of an equal one?',
-    opts: ['About 1% — the same as every year; the clock never resets',
+    opts: ['About 1% — the clock never resets',   // TXT-B4 2026-10-30: P-basin-Q11-opt0 (list_TXT_B_final.tsv); was `'About 1% — the same as every year; the clock never resets'` (build_TXT_B_2026-10-30)
            'Zero for roughly a century',
            'Half the usual chance',
            '100%, because the cycle has started'],
     correct: 0,
+    whyShort: 'A “100-year flood” means a 1-percent chance in ANY year. USGS: such floods can happen two years in a row. (USGS)',   // TXT-B1 2026-10-30: P-basin-Q11-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'A “100-year flood” means a 1-percent chance in ANY year — USGS states plainly that such floods can happen two years in a row, and that a rare flood does not reduce the chances of another within a short period. Last year bought you nothing. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q12', form: 'judgment', q: 'Water covers the road ahead. It looks shallow and your SUV is heavy. The rule is:',
     opts: ['Cross slowly in low gear',
            'Cross fast to carry momentum',
            'Follow the car in front through',
-           'Turn around — a foot of moving water carries most cars, and the road under it may be gone'],
+           'Turn around — a foot of moving water carries most cars'],   // TXT-B4 2026-10-30: P-basin-Q12-opt3 (list_TXT_B_final.tsv); was `'Turn around — a foot of moving water carries most cars, and the road under it may be gone'` (build_TXT_B_2026-10-30)
     correct: 3,
+    whyShort: 'Twelve inches of fast-moving water carries away most cars; two feet takes SUVs and trucks. Turn Around Don’t Drown is the whole rule. (NOAA NWS)',   // TXT-B1 2026-10-30: P-basin-Q12-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Six inches of fast-moving water can knock over an adult; twelve inches carries away most cars; two feet takes SUVs and trucks — and the roadbed itself may have collapsed where you cannot see it. Turn Around Don’t Drown is the whole rule. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q13', form: 'judgment', q: 'A flash flood warning lands at 11 pm. You are driving a familiar road with dips in it. What changes?',
+  { id: 'Q13', form: 'judgment', q: 'Driving a familiar road with dips at 11 pm, you get a flash flood warning. What changes?',   // TXT-B4 2026-10-30: P-basin-Q13-q (list_TXT_B_final.tsv); was `'A flash flood warning lands at 11 pm. You are driving a familiar road with dips in it. What changes?'` (build_TXT_B_2026-10-30)
     opts: ['Nothing — familiarity substitutes for visibility',
-           'Everything: at night you cannot read depth or missing road, and vehicles are where nearly half of flash-flood deaths happen',
+           'Everything: at night you cannot read depth',   // TXT-B4 2026-10-30: P-basin-Q13-opt1 (list_TXT_B_final.tsv); was `'Everything: at night you cannot read depth or missing road, and vehicles are where nearly half of flash-flood deaths happen'` (build_TXT_B_2026-10-30)
            'Only your speed — slow down and continue',
            'Use high beams and follow the tail lights ahead'],
     correct: 1,
+    whyShort: 'Nearly half of flash-flood fatalities are vehicle-related. NWS singles out night as dangerous, because flood dangers are harder to recognize. (NOAA NWS)',   // TXT-B1 2026-10-30: P-basin-Q13-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Nearly half of flash-flood fatalities are vehicle-related, and NWS singles out night as the dangerous time because flood dangers are harder to recognize. The same warning demands a stricter answer after dark: stop somewhere high and wait. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q14', form: 'mechanism', q: 'Sunny afternoon in a narrow gorge. The creek turns muddy and starts rising with sticks in it. What is happening?',
+  { id: 'Q14', form: 'mechanism', q: 'Sunny afternoon in a narrow gorge: the creek turns muddy and rises with sticks. What is happening?',   // TXT-B4 2026-10-30: P-basin-Q14-q (list_TXT_B_final.tsv); was `'Sunny afternoon in a narrow gorge. The creek turns muddy and starts rising with sticks in it. What is happening?'` (build_TXT_B_2026-10-30)
     opts: ['Nothing — no rain here means no flood here',
            'The tide is coming in',
-           'Rain far upstream is arriving where you stand — your position in the drainage sets your risk, not the sky above you',
+           'Rain far upstream is arriving',   // TXT-B4 2026-10-30: P-basin-Q14-opt2 (list_TXT_B_final.tsv); was `'Rain far upstream is arriving where you stand — your position in the drainage sets your risk, not the sky above you'` (build_TXT_B_2026-10-30)
            'A dam is being tested'],
     correct: 2,
+    whyShort: 'NWS warns a flash flood can strike areas not immediately receiving rain. The catchment above you collects it and the channel delivers it. (NOAA NWS)',   // TXT-B1 2026-10-30: P-basin-Q14-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'NWS warns that a flash flood can strike areas not immediately receiving rain — the catchment above you collects it and the channel delivers it. Rising, muddying water with debris is the river announcing it. Move up the walls, not downstream. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q15', form: 'warning-literacy', q: 'A flood WATCH is issued for your valley for tomorrow. Tonight you should:',
-    opts: ['Ready the kit, plan the route, move what matters up a floor — the watch is your preparation window',
+    opts: ['Ready the kit, plan the route',   // TXT-B4 2026-10-30: P-basin-Q15-opt0 (list_TXT_B_final.tsv); was `'Ready the kit, plan the route, move what matters up a floor — the watch is your preparation window'` (build_TXT_B_2026-10-30)
            'Evacuate immediately',
            'Nothing — a watch is just weather talk',
            'Drive to the river to judge it yourself'],
     correct: 0,
+    whyShort: 'Watch means conditions are favorable — be prepared. Warning means it is imminent or occurring — take action. (NOAA NWS)',   // TXT-B1 2026-10-30: P-basin-Q15-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Watch means conditions are favorable — be prepared; warning means it is imminent or occurring — take action. Treating them as synonyms either wastes the free hours the watch gives you or delays the action the warning demands. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q16', form: 'mechanism', q: 'A moderate storm — the kind that never flooded your valley — is forecast. Last summer a fire burned the slopes upstream. Today’s risk is:',
     opts: ['The same as always — the flood threshold is a fact about the river',
            'Lower — the fire cleared out the debris',
            'Zero — fires and floods are unrelated hazards',
-           'Much higher: burned basins flood on far less rain, for a season or two'],
+           'Much higher: burned basins flood on far less rain'],   // TXT-B4 2026-10-30: P-basin-Q16-opt3 (list_TXT_B_final.tsv); was `'Much higher: burned basins flood on far less rain, for a season or two'` (build_TXT_B_2026-10-30)
     correct: 3,
+    whyShort: 'It takes much less rainfall to trigger floods and debris flows from burned basins. The elevated risk runs on the order of two rainy seasons. (USGS)',   // TXT-B1 2026-10-30: P-basin-Q16-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'It takes much less rainfall to trigger floods and debris flows from burned basins — USGS records southern California flows triggered by as little as 7 mm of rain in 30 minutes — and the elevated risk runs on the order of two rainy seasons. The catchment’s state, not custom, sets the threshold. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q17', form: 'recovery', q: 'The river dropped overnight and your street is mud. First correct move at the house?',
     opts: ['Power on, to check the fridge',
-           'Wait for the all-clear, then enter carefully with the power OFF — the dangers left behind are the ones you cannot see',
+           'Wait for the all-clear',   // TXT-B4 2026-10-30: P-basin-Q17-opt1 (list_TXT_B_final.tsv); was `'Wait for the all-clear, then enter carefully with the power OFF — the dangers left behind are the ones you cannot see'` (build_TXT_B_2026-10-30)
            'Wade into the basement to salvage first',
            'Hose everything down barefoot while it is soft'],
     correct: 1,
+    whyShort: 'Floodwater leaves contamination, gas leaks and live wiring that are not obvious at a glance. NWS: wait for the all-clear, and make sure the electrical system is off. (NOAA NWS)',   // TXT-B1 2026-10-30: P-basin-Q17-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Floodwater leaves contamination, gas leaks and live wiring that are not obvious at a glance; NWS says do not enter until authorities give the all-clear, make sure the electrical system is off, and never run a generator indoors — carbon monoxide is a leading killer after storms. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q18', form: 'mechanism', q: 'The same storm falls on a forested valley and on a paved district. Where does the water rise faster, and why?',
     opts: ['The forest — trees funnel water to the ground',
            'Equal — the same rain is the same flood',
-           'The paved district: sealed ground cannot drink, so the storm runs straight to the stream',
+           'The paved district: sealed ground cannot drink',   // TXT-B4 2026-10-30: P-basin-Q18-opt2 (list_TXT_B_final.tsv); was `'The paved district: sealed ground cannot drink, so the storm runs straight to the stream'` (build_TXT_B_2026-10-30)
            'Neither — floods come only from rivers overflowing'],
     correct: 2,
+    whyShort: 'In a forested watershed, much of the storm soaks in and drains out slowly. Pavement and roofs make more stormwater run off faster. (USGS)',   // TXT-B1 2026-10-30: P-basin-Q18-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'In a forested watershed much of the storm soaks in and drains out slowly; urbanization replaces that surface with pavement and roofs, so more stormwater runs off faster — USGS ties impervious cover to more frequent and more severe flooding. The city manufactures its own flash floods. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q19', form: 'compound', q: 'A hurricane’s REMNANT — no longer even a hurricane — crosses a megacity a thousand kilometres from landfall. How dangerous is that?',
+  { id: 'Q19', form: 'compound', q: 'A hurricane’s REMNANT crosses a megacity a thousand kilometres from landfall. How dangerous is that?',   // TXT-B4 2026-10-30: P-basin-Q19-q (list_TXT_B_final.tsv); was `'A hurricane’s REMNANT — no longer even a hurricane — crosses a megacity a thousand kilometres from landfall. How dangerous is that?'` (build_TXT_B_2026-10-30)
     opts: ['Barely — the label downgrade means the danger has passed',
-           'Deadly: record-rate rain on a drained-by-design city killed dozens in Ida’s remnants, most far from the coast',
+           'Deadly: record-rate rain killed dozens in Ida’s remnants',   // TXT-B4 2026-10-30: P-basin-Q19-opt1 (list_TXT_B_final.tsv); was `'Deadly: record-rate rain on a drained-by-design city killed dozens in Ida’s remnants, most far from the coast'` (build_TXT_B_2026-10-30)
            'Dangerous only on the coast',
            'Dangerous only if the eye reforms'],
     correct: 1,
+    whyShort: 'Ida’s post-tropical remnants dropped rain at three-plus inches per hour. The flash flooding killed 49 people across the Northeast, 13 in New York City. (NWS Service Assessment)',   // TXT-B1 2026-10-30: P-basin-Q19-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Ida’s post-tropical remnants dropped rain at three-plus inches per hour — Central Park logged 3.15 inches in a single hour — and the flash flooding killed 49 people across the Northeast, 13 of them in New York City. Drainage has a design ceiling; a record rate finds it. (NWS Service Assessment)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q56', form: 'misconception', q: 'Your street is just outside the 100-year flood zone on the map. What does that line mean?',
     opts: ['Flooding there happens roughly once a century',
-           'You are outside the 1%-a-year zone — and the map keeps going past it',
+           'You are outside the 1%-a-year zone',   // TXT-B4 2026-10-30: P-basin-Q56-opt1 (list_TXT_B_final.tsv); was `'You are outside the 1%-a-year zone — and the map keeps going past it'` (build_TXT_B_2026-10-30)
            'The ground cannot flood; that is what the line is drawn for',
            'The zone is redrawn after every flood, so it is current'],
     correct: 1,
+    whyShort: '100-year flood: 1 per cent chance of being equalled or exceeded IN ANY GIVEN YEAR. That is not once a century, and past it the map keeps going. (FEMA, flood zones)',   // TXT-B1 2026-10-30: P-basin-Q56-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The 100-year flood is the flood with a 1 per cent chance of being equalled or exceeded IN ANY GIVEN YEAR, which is a different statement from once a century. Past it the map keeps going: a further band is mapped between the base flood and the 0.2-per-cent-annual-chance (500-year) flood, and only beyond THAT is an area labelled minimal hazard. The edge is a probability contour, not a border between ground that floods and ground that does not. (FEMA, flood zones)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q57', form: 'mechanism', q: 'A levee now runs along your reach of the river. What has changed about the risk to you?',
     opts: ['It is gone — that is what the levee was built to do',
-           'Reduced, not removed — and if it is overtopped the damage can be worse than with no levee',
+           'Reduced, not removed — if overtopped, damage can be worse',   // TXT-B4 2026-10-30: P-basin-Q57-opt1 (list_TXT_B_final.tsv); was `'Reduced, not removed — and if it is overtopped the damage can be worse than with no levee'` (build_TXT_B_2026-10-30)
            'Nothing: a levee only moves the water downstream',
            'Reduced permanently, and it needs no upkeep to stay that way'],
     correct: 1,
     // CORRECTED 2026-09-16: FEMA hedge "can help reduce" restored; causal join + development sentence dropped (option A); read date 2026-09-15 (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+    whyShort: 'Levees can help reduce the risk of flooding, but they do not eliminate it. If one fails or is overtopped, the damage can be worse than with no levee. (FEMA, Living With Levees)',   // TXT-B1 2026-10-30: P-basin-Q57-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The agency that draws the flood maps says it plainly: levees can help reduce the risk of flooding, but they do not eliminate it. They deteriorate over time and must be maintained to keep working. When one fails or is overtopped, the damage can be greater than if it had never been built. (FEMA, Living With Levees)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
   metro: [
-  { id: 'Q20', form: 'mechanism', q: 'Two heatwaves peak at the same daytime temperature, but in the city the nights stay hot. Why does that matter?',
+  { id: 'Q20', form: 'mechanism', q: 'Two heatwaves peak at the same daytime temperature, but the city’s nights stay hot. Why does that matter?',   // TXT-B4 2026-10-30: P-metro-Q20-q (list_TXT_B_final.tsv); was `'Two heatwaves peak at the same daytime temperature, but in the city the nights stay hot. Why does that matter?'` (build_TXT_B_2026-10-30)
     opts: ['It does not — the daytime high is the danger number',
            'Hot nights are safer — people are asleep',
-           'The city’s built surfaces hold heat into the night, and the cool-down hours are where homes and bodies were supposed to recover',
+           'Homes and bodies were supposed to recover at night',   // TXT-B4 2026-10-30: P-metro-Q20-opt2 (list_TXT_B_final.tsv); was `'The city’s built surfaces hold heat into the night, and the cool-down hours are where homes and bodies were supposed to recover'` (build_TXT_B_2026-10-30)
            'Night heat only matters for crops'],
     correct: 2,
+    whyShort: 'The urban heat island keeps city nights roughly 2–5°F warmer than the surroundings (EPA). A hot night takes away the cooler air WHO advises for cooling a home. (EPA / WHO)',   // TXT-B1 2026-10-30: P-metro-Q20-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The urban heat island keeps city nights roughly 2–5°F warmer than the surroundings (EPA), and the standard advice for cooling a home is to use the cooler night air (WHO) — a night that stays hot takes that recovery away, day after day. (EPA / WHO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q21', form: 'mechanism', q: 'Same thermometer reading in two districts — one dry, one very humid. Where is heat illness likelier, and why?',
-    opts: ['The humid one: near body temperature, sweating is the only cooling left, and humid air blocks the evaporation it depends on',
+    opts: ['The humid one: humid air blocks evaporation',   // TXT-B4 2026-10-30: P-metro-Q21-opt0 (list_TXT_B_final.tsv); was `'The humid one: near body temperature, sweating is the only cooling left, and humid air blocks the evaporation it depends on'` (build_TXT_B_2026-10-30)
            'The dry one: dry air pulls water out of you',
            'Equal: temperature is temperature',
            'Neither, if you stay in the shade'],
     correct: 0,
+    whyShort: 'Once air temperature reaches about 95°F (35°C), sweating becomes all-important. But sweat only cools when it evaporates, and high humidity slows that to a crawl. (NOAA JetStream)',   // TXT-B1 2026-10-30: P-metro-Q21-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Once air temperature reaches about 95°F (35°C), heat loss by radiation and convection essentially stops and sweating becomes all-important — but sweat only cools when it evaporates, and high humidity slows that to a crawl. That is the entire reason the heat index exists. (NOAA JetStream)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q22', form: 'misconception', q: 'Power is strained, your flat is at 36°C, and the fan is your only cooling. What is true?',
     opts: ['More airflow is always safer in heat',
-           'Past roughly the high 90s °F / 40 °C, a fan blows heat INTO you — water on the skin and a cooler place beat a bigger fan',
+           'Past roughly the high 90s °F / 40 °C, a fan blows heat INTO you',   // TXT-B4 2026-10-30: P-metro-Q22-opt1 (list_TXT_B_final.tsv); was `'Past roughly the high 90s °F / 40 °C, a fan blows heat INTO you — water on the skin and a cooler place beat a bigger fan'` (build_TXT_B_2026-10-30)
            'Fans work best pointed at the ceiling',
            'A fan plus coffee keeps you alert and safe'],
     correct: 1,
+    whyShort: 'NWS and WHO cap fans at roughly the high-90s °F heat index (WHO: above 40°C). Above it, moving hot air adds heat to the body instead of removing it. (NOAA NWS / WHO)',   // TXT-B1 2026-10-30: P-metro-Q22-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Both NWS and WHO put a ceiling on fans: above roughly the high-90s °F heat index (WHO says above 40°C), moving hot air adds heat to the body instead of removing it. The escalation is a cool shower, wet cloth, or a cooler room — not more airflow. (NOAA NWS / WHO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q23', form: 'judgment', q: 'A brutal heat week is forecast. Which single action most reduces deaths on your street?',
     opts: ['Handing out sunscreen at the park',
            'Warning the joggers',
            'Stocking the freezer with ice',
-           'Checking twice a day on the older neighbours who live alone — they are who heat kills, often unnoticed'],
+           'Checking on older neighbours living alone'],   // TXT-B4 2026-10-30: P-metro-Q23-opt3 (list_TXT_B_final.tsv); was `'Checking twice a day on the older neighbours who live alone — they are who heat kills, often unnoticed'` (build_TXT_B_2026-10-30)
     correct: 3,
+    whyShort: 'Heat concentrates its deaths among the isolated, who may not notice their own warning signs. The Red Cross: check twice a day on those who are older, ill or alone. (Red Cross / NOAA NWS)',   // TXT-B1 2026-10-30: P-metro-Q23-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Heat concentrates its deaths among the isolated: older people, the chronically ill, those alone without cooling, who may not notice their own warning signs. The Red Cross names the counter-practice: check in twice a day on those who are older, have health problems, or live alone. (Red Cross / NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q24', form: 'judgment', q: 'Your workmate was sweating heavily; now he is confused and his skin is hot. He says he feels “better, drier”. This is:',
     opts: ['Recovery — the sweating did its job',
-           'Heat stroke — a medical emergency: call for help, cool him aggressively, and do not give him fluids',
+           'Heat stroke — a medical emergency',   // TXT-B4 2026-10-30: P-metro-Q24-opt1 (list_TXT_B_final.tsv); was `'Heat stroke — a medical emergency: call for help, cool him aggressively, and do not give him fluids'` (build_TXT_B_2026-10-30)
            'Ordinary tiredness — walk him home',
            'Heat cramps — massage and continue'],
     correct: 1,
+    whyShort: 'Confusion with hot skin — dry or damp — is heat stroke, a severe medical emergency. NWS first aid: emergency call, aggressive cooling, and do NOT give fluids to someone confused. (NOAA NWS)',   // TXT-B1 2026-10-30: P-metro-Q24-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Heavy sweating with cool clammy skin is heat exhaustion; confusion with hot skin — dry or damp — is heat stroke, a severe medical emergency where delay can be fatal. NWS first aid: emergency call, aggressive cooling, and do NOT give fluids to someone with altered consciousness. The “drying out” is deterioration wearing recovery’s face. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q25', form: 'compound', q: 'Why is a blackout DURING a heatwave worse than a blackout plus a heatwave on separate weeks?',
+  { id: 'Q25', form: 'compound', q: 'Why is a blackout DURING a heatwave worse than the two in separate weeks?',   // TXT-B4 2026-10-30: P-metro-Q25-q (list_TXT_B_final.tsv); was `'Why is a blackout DURING a heatwave worse than a blackout plus a heatwave on separate weeks?'` (build_TXT_B_2026-10-30)
     opts: ['It is not — risks simply add',
-           'Because the same hours that make cooling a matter of life also strip the power that cooling, hospitals and water systems run on',
+           'Because the power fails when cooling is vital',   // TXT-B4 2026-10-30: P-metro-Q25-opt1 (list_TXT_B_final.tsv); was `'Because the same hours that make cooling a matter of life also strip the power that cooling, hospitals and water systems run on'` (build_TXT_B_2026-10-30)
            'Because blackouts make the air hotter',
            'Because heatwaves only matter when the news covers them'],
     correct: 1,
+    whyShort: 'WHO: power shortages that accompany heatwaves disrupt health facilities, transport and water infrastructure. The failure lands at the hour of maximum need. (WHO)',   // TXT-B1 2026-10-30: P-metro-Q25-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'WHO names the compound directly: power shortages that accompany heatwaves disrupt health facilities, transport and water infrastructure — the failure lands at the hour of maximum need. Correlated hazards multiply; the game is named after this. (WHO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q26', form: 'judgment', q: 'A violent cloudburst catches you on a city street. Which refuge is WRONG?',
     opts: ['The subway concourse below the street',
@@ -3881,20 +3908,23 @@ const POOL_Q = {
            'A concrete office lobby on ground level, doors shut',
            'A pedestrian bridge over the avenue'],
     correct: 0,
+    whyShort: 'Japan’s ministry lists underground facilities among the most water-vulnerable in a cloudburst. Down is for wind, never for water.',   // TXT-B1 2026-10-30: P-metro-Q26-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Sheltering has a direction, and for water it is UP: Japan’s urban-flood record runs through inundated underground malls (Fukuoka 1999), and its ministry lists underground facilities among the most water-vulnerable in a cloudburst; NWS pairs that with basement electrical danger. Down is for wind, never for water. (MLIT / NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q27', form: 'judgment', q: 'The met office gives the city three days’ notice of extreme heat. There is nowhere to evacuate a heatwave to. What are the three days FOR?',
+  { id: 'Q27', form: 'judgment', q: 'The city has three days’ notice of extreme heat, with nowhere to evacuate to. What are the three days FOR?',   // TXT-B4 2026-10-30: P-metro-Q27-q (list_TXT_B_final.tsv); was `'The met office gives the city three days’ notice of extreme heat. There is nowhere to evacuate a heatwave to. What are the three days FOR?'` (build_TXT_B_2026-10-30)
     opts: ['Nothing — un-evacuatable means un-preparable',
            'Repainting the roofs white in time',
-           'Activating the heat plan: cooling centres open, check-in lists running, hospitals staffed before the peak',
+           'Activating the heat plan',   // TXT-B4 2026-10-30: P-metro-Q27-opt2 (list_TXT_B_final.tsv); was `'Activating the heat plan: cooling centres open, check-in lists running, hospitals staffed before the peak'` (build_TXT_B_2026-10-30)
            'Moving the city’s servers out of town'],
     correct: 2,
+    whyShort: 'WHO’s heat-health machinery is action plans wired to early warnings. The measure is the plan the warning triggers. (WHO)',   // TXT-B1 2026-10-30: P-metro-Q27-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'For heat, warning lead time buys social pre-positioning, not movement: WHO’s heat-health machinery is action plans wired to early warnings — mapped vulnerable people, response capacity stood up in advance. The measure is the plan the warning triggers. (WHO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q28', form: 'mechanism', q: 'A tsunami warning reaches a coastal city. What do most people actually do FIRST?',
     opts: ['Evacuate immediately and in good order',
            'Panic and stampede',
            'Ignore it entirely',
-           'Check another channel and ask people nearby whether it is real'],
+           'Check whether it is real'],   // TXT-B4 2026-10-30: P-metro-Q28-opt3 (list_TXT_B_final.tsv); was `'Check another channel and ask people nearby whether it is real'` (build_TXT_B_2026-10-30)
     correct: 3,
+    whyShort: 'Warning research calls it milling: before acting, people seek confirmation. That lag spends the very minutes the warning bought. (US National Academies)',   // TXT-B1 2026-10-30: P-metro-Q28-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Warning research calls it milling: before acting, people seek confirmation — another source, a neighbour, a call — regardless of hazard or technology, and that lag spends the very minutes the warning bought. It is also why drills and specific wording matter: they shorten the confirmation. (US National Academies)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q58', form: 'compound', q: 'A cold wave takes the power grid down for days. What is the next system to go?',
     opts: ['Nothing else — the grid fails alone and comes back on its own timetable',
@@ -3902,36 +3932,41 @@ const POOL_Q = {
            'Only heating, since that is what the electricity was doing',
            'The mobile network, and nothing past it'],
     correct: 1,
+    whyShort: 'In the Texas cold wave of February 2021, the hazard was only the trigger. After the grid dropped, treatment plants released untreated sewage, supply pumps failed and pipes burst. (UNDRR feature, The Texas coldwave disaster)',   // TXT-B1 2026-10-30: P-metro-Q58-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'In the Texas cold wave of February 2021 the hazard was only the trigger. An un-winterised grid running unconnected to its neighbours and without reserve dropped about 4.5 million homes and businesses — and then treatment plants released untreated sewage, supply pumps failed and pipes burst, boil-water notices reached people who could not run a tap at all, food spoiled as distribution broke, and emergency, social and pandemic-response services stuttered and stopped. The toll was first put at 58 and later revised to at least 264. (UNDRR feature, The Texas coldwave disaster)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
   fault: [
   { id: 'Q29', form: 'recovery', q: 'The shaking has stopped. Your block has visible cracks and your documents are inside. The rule is:',
-    opts: ['Quick retrieval now, while it is calm',
-           'Stay out: aftershocks can run for weeks to years, and they finish what the mainshock started in damaged buildings',
+    opts: ['Quick retrieval now, while it is calm and safe',   // TXT-B4 2026-10-30: P-fault-Q29-opt0 (list_TXT_B_final.tsv); was `'Quick retrieval now, while it is calm'` (build_TXT_B_2026-10-30)
+           'Stay out: aftershocks can last weeks to years',   // TXT-B4 2026-10-30: P-fault-Q29-opt1 (list_TXT_B_final.tsv); was `'Stay out: aftershocks can run for weeks to years, and they finish what the mainshock started in damaged buildings'` (build_TXT_B_2026-10-30)
            'Wait exactly one hour, then enter',
            'Enter, but stay near the doorway'],
     correct: 1,
+    whyShort: 'Aftershocks continue for days, weeks, months or even years after a large mainshock. Official guidance: do not enter damaged buildings. (USGS / Ready.gov)',   // TXT-B1 2026-10-30: P-fault-Q29-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Aftershocks continue for days, weeks, months or even years after a large mainshock, in the same area — and official guidance is blunt: do not enter damaged buildings. The calm between shocks is not safety; it is the interval. (USGS / Ready.gov)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q30', form: 'warning-literacy', q: 'The day after a major quake, which statement can seismologists honestly issue?',
     opts: ['“The next quake arrives Tuesday, magnitude 6”',
            '“No further shaking will occur”',
-           '“Aftershock probabilities are elevated in this area and will decay over time”',
+           '“Aftershock probabilities are elevated”',   // TXT-B4 2026-10-30: P-fault-Q30-opt2 (list_TXT_B_final.tsv); was `'“Aftershock probabilities are elevated in this area and will decay over time”'` (build_TXT_B_2026-10-30)
            '“Animal behaviour will signal the next shock”'],
     correct: 2,
+    whyShort: 'What exists is aftershock FORECASTING — statistical probabilities. What does not exist is prediction of a specific future earthquake. (USGS)',   // TXT-B1 2026-10-30: P-fault-Q30-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'What exists is aftershock FORECASTING — statistical probabilities that aid response and recovery decisions, issued by several countries. What does not exist is prediction of a specific future earthquake. Knowing the difference is knowing what science can actually give you. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q31', form: 'mechanism', q: 'Two identical, code-compliant buildings ride the same quake — one on rock, one on saturated sandy fill. Why can only one fall over?',
+  { id: 'Q31', form: 'mechanism', q: 'Two identical, code-compliant buildings: one on rock, one on saturated sandy fill. Why can only one fall over in the same quake?',   // TXT-B4 2026-10-30: P-fault-Q31-q (list_TXT_B_final.tsv); was `'Two identical, code-compliant buildings ride the same quake — one on rock, one on saturated sandy fill. Why can only one fall over?'` (build_TXT_B_2026-10-30)
     opts: ['Inspection quality varies block to block',
-           'The fill can liquefy — the ground itself briefly becomes a fluid and stops holding the foundation up',
+           'The fill can briefly liquefy',   // TXT-B4 2026-10-30: P-fault-Q31-opt1 (list_TXT_B_final.tsv); was `'The fill can liquefy — the ground itself briefly becomes a fluid and stops holding the foundation up'` (build_TXT_B_2026-10-30)
            'Distance to the epicentre decides everything',
            'Taller buildings attract stronger shaking'],
     correct: 1,
+    whyShort: 'Strong shaking can make saturated loose sands and silts briefly behave as fluids. Buildings settle and tip, as at Niigata in 1964. (USGS)',   // TXT-B1 2026-10-30: P-fault-Q31-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'In strong shaking, saturated loose sands and silts can temporarily lose strength and behave as viscous fluids — buildings settle and tip, as at Niigata in 1964. The younger, looser and wetter the ground, the more susceptible: WHERE you build can matter as much as HOW. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q32', form: 'judgment', q: 'A hospital rides out the quake structurally intact — and still ends the day with injured staff and dead equipment. The likeliest reason:',
+  { id: 'Q32', form: 'judgment', q: 'A hospital rides out the quake structurally intact, but staff are injured and equipment dead. The likeliest reason:',   // TXT-B4 2026-10-30: P-fault-Q32-q (list_TXT_B_final.tsv); was `'A hospital rides out the quake structurally intact — and still ends the day with injured staff and dead equipment. The likeliest reason:'` (build_TXT_B_2026-10-30)
     opts: ['The foundation quietly failed',
            'Nothing that stands can be hurt',
-           'The contents were never anchored — shelving, equipment and fixtures became the hazard the building was not',
+           'The contents were not anchored',   // TXT-B4 2026-10-30: P-fault-Q32-opt2 (list_TXT_B_final.tsv); was `'The contents were never anchored — shelving, equipment and fixtures became the hazard the building was not'` (build_TXT_B_2026-10-30)
            'Aftershocks are always to blame'],
     correct: 2,
+    whyShort: 'Preparedness guidance: secure the heavy items and keep heavy objects low. A structure can pass the test while its unanchored contents fail it. (FEMA / Ready.gov)',   // TXT-B1 2026-10-30: P-fault-Q32-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Preparedness guidance is explicit about the inside of buildings: secure the heavy items — bookcases, refrigerators, water heaters, what hangs on walls — and keep heavy objects low. A structure can pass the test while its unanchored contents fail it. Anchoring is among the cheapest measures that exist. (FEMA / Ready.gov)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q33', form: 'recovery', q: 'After the shaking, the quiet dangers begin. Which pair kills without announcing itself?',
     opts: ['Leaking gas lines and downed power lines',
@@ -3939,13 +3974,15 @@ const POOL_Q = {
            'Aftershock sirens and dust',
            'Neither — a stopped quake is a finished quake'],
     correct: 0,
+    whyShort: 'The official post-quake hazard list starts with what you cannot see working. Leaking gas and water lines and downed power lines are on it. (FEMA / Ready.gov)',   // TXT-B1 2026-10-30: P-fault-Q33-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The official post-quake hazard list starts with what you cannot see working: damage to the building, leaking gas and water lines, downed power lines — with aftershocks still coming. The response is to get out, stay out of damaged buildings, and treat utilities as suspect. (FEMA / Ready.gov)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q34', form: 'judgment', q: 'Twelfth floor, shaking over, evacuation advised. The fastest SAFE way down is:',
     opts: ['The elevator — speed matters',
-           'The stairs, watching for debris: shafts, power and controls are all unverified after a quake',
+           'The stairs, watching for debris',   // TXT-B4 2026-10-30: P-fault-Q34-opt1 (list_TXT_B_final.tsv); was `'The stairs, watching for debris: shafts, power and controls are all unverified after a quake'` (build_TXT_B_2026-10-30)
            'Wait in the elevator lobby for rescue',
            'The roof, for the helicopter'],
     correct: 1,
+    whyShort: 'After shaking, an elevator is of unknown condition, and power may fail in an aftershock. Stairs put every step under your own control. (FEMA / Ready.gov basis)',   // TXT-B1 2026-10-30: P-fault-Q34-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'After shaking, an elevator is a machine of unknown condition in a shaft of unknown condition, on power that may fail in an aftershock. Stairs put every step under your own control. (Modern early-warning systems park elevators at the nearest floor for exactly this reason.) (FEMA / Ready.gov basis)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q35', form: 'judgment', q: 'The first jolt hits while you are in a classroom. The move that reduces injury, per every official preparedness body:',
     opts: ['Sprint for the exit before it gets worse',
@@ -3953,160 +3990,182 @@ const POOL_Q = {
            'Drop, get under the desk, hold on until it stops',
            'Crowd to the windows to see what is happening'],
     correct: 2,
+    whyShort: 'Running outside puts you under falling debris and glass. Drop, Cover, and Hold On is the agreed answer of the official preparedness bodies. (ShakeOut)',   // TXT-B1 2026-10-30: P-fault-Q35-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Strong shaking can be violent enough that you cannot run or crawl — you will likely be knocked to the ground where you are, and running outside puts you under falling debris and glass. Drop, Cover, and Hold On is the agreed answer of the official preparedness bodies. (ShakeOut)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q36', form: 'misconception', q: 'Italy’s civil protection lists the load-bearing doorway as a shelter; US guidance says modern doorways are no safer than any other spot. Who is wrong?',
     opts: ['Italy — the doorway advice is folklore',
            'The US — doorways are universally strong',
            'Both — shelter advice is arbitrary',
-           'Neither: each is tuned to its own building stock, and both agree on the core — protect yourself where you are, under something sturdy, and do not run outside'],
+           'Neither: each fits its own buildings'],   // TXT-B4 2026-10-30: P-fault-Q36-opt3 (list_TXT_B_final.tsv); was `'Neither: each is tuned to its own building stock, and both agree on the core — protect yourself where you are, under something sturdy, and do not run outside'` (build_TXT_B_2026-10-30)
     correct: 3,
+    whyShort: 'Italy’s DPC names the doorway IN A LOAD-BEARING WALL. ShakeOut says modern (light-frame) doorways are no safer; both say take cover where you are. (Protezione Civile / ShakeOut)',   // TXT-B1 2026-10-30: P-fault-Q36-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Italy’s DPC names the doorway IN A LOAD-BEARING WALL, a load-bearing wall, a beam, or a sturdy table — masonry logic; ShakeOut says modern (light-frame) doorways are no safer and points to the table. Both say: do not rush outside, take cover where you are. Good guidance is context-tuned, not universal. (Protezione Civile / ShakeOut)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q37', form: 'warning-literacy', q: 'An earthquake early-warning alert sounds on your phone. What is it telling you?',
     opts: ['A quake is predicted for today — stay alert',
-           'A quake has ALREADY begun — shaking may reach you in seconds; act now',
+           'A quake has ALREADY begun',   // TXT-B4 2026-10-30: P-fault-Q37-opt1 (list_TXT_B_final.tsv); was `'A quake has ALREADY begun — shaking may reach you in seconds; act now'` (build_TXT_B_2026-10-30)
            'The danger has passed',
            'A quake might happen this week somewhere in the region'],
     correct: 1,
+    whyShort: 'ShakeAlert is not earthquake prediction — USGS says so in exactly those words. Sensors detect a quake already underway and race the shaking. (USGS)',   // TXT-B1 2026-10-30: P-fault-Q37-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'ShakeAlert is not earthquake prediction — USGS says so in exactly those words. Sensors detect a quake already underway and race the shaking with an estimate; the seconds you get scale with your distance. Detection buys you the telegraph; nothing buys you the future. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q38', form: 'mechanism', q: 'A city adopted a modern seismic code ten years ago. Which buildings did that decision protect?',
     opts: ['All of them — codes apply retroactively',
            'None — codes are paperwork',
-           'Mainly what was built or substantially renovated since: the older stock waits for retrofitting, which is a separate act',
+           'Mainly what was built since',   // TXT-B4 2026-10-30: P-fault-Q38-opt2 (list_TXT_B_final.tsv); was `'Mainly what was built or substantially renovated since: the older stock waits for retrofitting, which is a separate act'` (build_TXT_B_2026-10-30)
            'Only government buildings'],
     correct: 2,
     // CORRECTED 2026-09-16: placeholder tag became a FEMA source note; explanation rewritten to carry FEMA's exception (renovation / alteration / change of use, as examples) and enforcement; Lead terminal fix restored the hedge (sweep 2, sweep2_2026-09-15/ADJUDICATION_predeploy_2026-09-16.md, F1 resolution)
+    whyShort: 'A code protects what is built after the city adopts and enforces it. A standing building keeps its old code unless, for example, it is significantly renovated. (FEMA, Seismic Building Codes)',   // TXT-B1 2026-10-30: P-fault-Q38-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'A code protects what is built after the city adopts and enforces it; a building already standing keeps the code it was designed and built under, unless, for example, it is significantly renovated or altered or changes its use. That is why codes and retrofitting are two different measures in this game — one governs the future stock, one reaches the existing. (FEMA, Seismic Building Codes)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q39', form: 'mechanism', q: 'Two schools teach identical earthquake safety. One also physically drills each term. In a real quake, why does the drilling school fare better?',
+  { id: 'Q39', form: 'mechanism', q: 'Two schools teach the same earthquake safety, but one also drills each term. In a real quake, why does the drilling school fare better?',   // TXT-B4 2026-10-30: P-fault-Q39-q (list_TXT_B_final.tsv); was `'Two schools teach identical earthquake safety. One also physically drills each term. In a real quake, why does the drilling school fare better?'` (build_TXT_B_2026-10-30)
     opts: ['Drills scare students into caution',
            'It does not — knowing and doing are the same thing',
            'Drills are mostly for the teachers',
-           'Because the practiced action fires immediately when shaking starts — that is the entire purpose ShakeOut gives its annual drill'],
+           'The practiced action fires immediately'],   // TXT-B4 2026-10-30: P-fault-Q39-opt3 (list_TXT_B_final.tsv); was `'Because the practiced action fires immediately when shaking starts — that is the entire purpose ShakeOut gives its annual drill'` (build_TXT_B_2026-10-30)
     correct: 3,
+    whyShort: 'ShakeOut: practice Drop, Cover, and Hold On at least once a year. You must be ready to protect yourself IMMEDIATELY when the ground begins to shake. (ShakeOut)',   // TXT-B1 2026-10-30: P-fault-Q39-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'ShakeOut’s premise, in its own words: practice Drop, Cover, and Hold On at least once a year, because you must be ready to protect yourself IMMEDIATELY when the ground begins to shake. Reading prepares the mind; rehearsal prepares the seconds. (ShakeOut)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
   wui: [
   { id: 'Q40', form: 'misconception', q: 'The fire front is forecast to pass a kilometre from your street. The main threat to your house is:',
     opts: ['Radiant heat at that distance',
-           'Wind-blown embers — the ignition source for a majority of structures lost in past WUI fires, arriving miles ahead of any flame',
+           'Wind-blown embers, arriving miles ahead of any flame',   // TXT-B4 2026-10-30: P-wui-Q40-opt1 (list_TXT_B_final.tsv); was `'Wind-blown embers — the ignition source for a majority of structures lost in past WUI fires, arriving miles ahead of any flame'` (build_TXT_B_2026-10-30)
            'Nothing — a miss is a miss',
            'Ash weight on the roof'],
     correct: 1,
+    whyShort: 'NIST: past WUI fires show a majority of structures are ignited by embers. Embers travel miles ahead of the front. (NIST)',   // TXT-B1 2026-10-30: P-wui-Q40-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'NIST’s hardening guidance rests on this: research and experience from past WUI fires show a majority of structures are ignited by embers, which travel miles ahead of the front and shower unpredictably — which is why every structure needs ember hardening, not just the ones the flames reach. (NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q41', form: 'misconception', q: 'The front passed your neighbourhood two hours ago and the sky is clearing. Why can houses still be lost NOW?',
     opts: ['They cannot — danger ends with the front',
            'Only lightning restarts fires',
-           'Embers lodged on and around structures keep working — ignitions can come hours after the front has passed',
+           'Embers lodged on and around structures',   // TXT-B4 2026-10-30: P-wui-Q41-opt2 (list_TXT_B_final.tsv); was `'Embers lodged on and around structures keep working — ignitions can come hours after the front has passed'` (build_TXT_B_2026-10-30)
            'Heat radiating from the burned ground'],
     correct: 2,
+    whyShort: 'NIST: ember ignitions may occur hours after the flame front has passed. The fire is not over when the front is. (NIST)',   // TXT-B1 2026-10-30: P-wui-Q41-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'NIST states it flatly: ember ignitions may occur hours after the flame front has passed — material lodged in decks, vehicles, sheds and structures smolders toward ignition long after the visible danger moves on. The fire is not over when the front is. (NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q42', form: 'mechanism', q: 'A homeowner clears perfect defensible space — and does nothing to the building. What did the vegetation work not buy?',
     opts: ['Anything at all — clearing is wasted effort',
            'Protection from the flame front, which is all that matters',
-           'The ember problem: exposure cannot be eliminated, so the structure itself must be hardened too',
+           'The ember problem: exposure cannot be eliminated',   // TXT-B4 2026-10-30: P-wui-Q42-opt2 (list_TXT_B_final.tsv); was `'The ember problem: exposure cannot be eliminated, so the structure itself must be hardened too'` (build_TXT_B_2026-10-30)
            'Insurance discounts'],
     correct: 2,
+    whyShort: 'NIST: ALL structures must be hardened for ember exposures. Ember arrival cannot be eliminated or reliably reduced by anything around the house. (NIST)',   // TXT-B1 2026-10-30: P-wui-Q42-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'NIST’s rule is unconditional: ALL structures must be hardened for ember exposures, because ember arrival cannot be eliminated or reliably reduced by anything around the house. Vegetation work and structure hardening are complements — the pair, not either alone. (NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q43', form: 'judgment', q: 'Catastrophic fire danger is forecast for tomorrow. No fire exists anywhere near you tonight. “Leave early” means:',
     opts: ['Leave when you smell smoke',
            'Leave when you see flames on the ridge',
            'Leave when a fire truck comes through',
-           'Leave tonight or at first light — before any fire exists, on the forecast alone'],
+           'Leave tonight or at first light'],   // TXT-B4 2026-10-30: P-wui-Q43-opt3 (list_TXT_B_final.tsv); was `'Leave tonight or at first light — before any fire exists, on the forecast alone'` (build_TXT_B_2026-10-30)
     correct: 3,
+    whyShort: 'CFA: leaving early means leaving before a fire starts. On a Catastrophic day, that means the night before or early morning. (CFA Victoria)',   // TXT-B1 2026-10-30: P-wui-Q43-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'CFA’s definition is exact: leaving early means leaving before a fire starts — not when you can see flames or smell smoke — and on a Catastrophic day that means the night before or early morning. Do not rely on an official warning: fires can threaten lives within minutes of starting. (CFA Victoria)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q44', form: 'judgment', q: 'Black Saturday, 2009: about 400 fires in one Victorian day, 78 communities hit, 173 people dead. What does a day like that say your trigger to leave must be?',
-    opts: ['The forecast rating — because once fires start, there are too many, too fast, for warnings to reach everyone in time',
+  { id: 'Q44', form: 'judgment', q: 'Black Saturday, 2009: about 400 fires in one Victorian day, 78 communities hit, 173 dead. What must your trigger to leave be?',   // TXT-B4 2026-10-30: P-wui-Q44-q (list_TXT_B_final.tsv); was `'Black Saturday, 2009: about 400 fires in one Victorian day, 78 communities hit, 173 people dead. What does a day like that say your trigger to leave must be?'` (build_TXT_B_2026-10-30)
+    opts: ['The forecast rating',   // TXT-B4 2026-10-30: P-wui-Q44-opt0 (list_TXT_B_final.tsv); was `'The forecast rating — because once fires start, there are too many, too fast, for warnings to reach everyone in time'` (build_TXT_B_2026-10-30)
            'The first official evacuation order',
            'Visible flames on your own ridge',
            'The neighbours leaving first'],
     correct: 0,
+    whyShort: 'When four hundred fires ignite in one day, per-fire warning cannot cover everyone. That is why the forecast rating itself is the trigger. (AIDR / CFA Victoria)',   // TXT-B1 2026-10-30: P-wui-Q44-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'When four hundred fires ignite across one forecast-catastrophic day, per-fire warning simply cannot cover everyone — which is why the rating itself is the trigger. The record: 173 lives and over two thousand homes in a single day. (AIDR / CFA Victoria)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q45', form: 'judgment', q: 'Worst case: you are caught on a road as the front approaches. The least-bad option is:',
     opts: ['Drive fast through the smoke',
            'Abandon the car and run',
-           'Park in the most open ground available, face the fire, stay in with windows shut, and get below window level under wool',
+           'Park in open ground, stay in with windows shut',   // TXT-B4 2026-10-30: P-wui-Q45-opt2 (list_TXT_B_final.tsv); was `'Park in the most open ground available, face the fire, stay in with windows shut, and get below window level under wool'` (build_TXT_B_2026-10-30)
            'Stand behind the car and watch for a gap'],
     correct: 2,
+    whyShort: 'CFA: park in a clearing facing the front, then stay in with windows shut. Get below window level under woollen blankets. (CFA Victoria)',   // TXT-B1 2026-10-30: P-wui-Q45-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'CFA’s in-car protocol: park away from dense bush in a clearing, ideally behind a barrier, facing the oncoming front, hazard lights on — then stay inside, windows and vents shut, engine off, below window level under woollen blankets. And its framing is honest: plan to leave early so this moment never exists. (CFA Victoria)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q46', form: 'judgment', q: 'The fire is 40 km away; the sky is orange and the air is acrid. For unavoidable time outdoors, what actually protects your lungs?',
     opts: ['A bandana over the mouth',
            'Distance — 40 km means safe air',
            'Breathing through the nose only',
-           'A properly fitted, NIOSH-certified N95 or P100 respirator — certification and seal are the whole point'],
+           'A fitted, certified N95 or P100'],   // TXT-B4 2026-10-30: P-wui-Q46-opt3 (list_TXT_B_final.tsv); was `'A properly fitted, NIOSH-certified N95 or P100 respirator — certification and seal are the whole point'` (build_TXT_B_2026-10-30)
     correct: 3,
+    whyShort: 'EPA: worn with a tight seal, NIOSH-approved N95/P100 respirators significantly reduce smoke-particle exposure. The hazard is the fine particles. (EPA)',   // TXT-B1 2026-10-30: P-wui-Q46-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'EPA: worn according to instructions — gaps minimized, tight seal — NIOSH-approved N95/P100 respirators significantly reduce smoke-particle exposure; the guidance is specific about certification marks, two straps and fit. The hazard is the fine particles, and they outrange the flames by far. (EPA)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q47', form: 'warning-literacy', q: 'Which day is the dangerous fire day?',
-    opts: ['The windy, bone-dry, warm day after a rainless fortnight',
+    opts: ['The windy, bone-dry, warm day',   // TXT-B4 2026-10-30: P-wui-Q47-opt0 (list_TXT_B_final.tsv); was `'The windy, bone-dry, warm day after a rainless fortnight'` (build_TXT_B_2026-10-30)
            'The hottest still, humid day of the year',
            'A cold windy day after rain',
            'Any day above 30°C'],
     correct: 0,
+    whyShort: 'Red Flag days COMBINE dry fuels, low humidity, warmth, sustained wind of 15 mph or more. Wind and dryness — not the peak temperature — turn an ignition into a catastrophe. (NOAA NWS glossary)',   // TXT-B1 2026-10-30: P-wui-Q47-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'A Red Flag day is a COMBINATION: a dry spell has cured the fuels, and the forecast stacks sustained wind of 15 mph or more onto relative humidity of 25% or less with warmth on top. Wind and dryness — not the peak temperature — turn an ignition into a catastrophe. (NOAA NWS glossary)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q59', form: 'judgment', q: 'You have one weekend to cut fuel around the house. Where do you start?',
     opts: ['At the property line, working inward',
-           'In the first five feet against the walls, working outward',
+           'In the first five feet against the walls',   // TXT-B4 2026-10-30: P-wui-Q59-opt1 (list_TXT_B_final.tsv); was `'In the first five feet against the walls, working outward'` (build_TXT_B_2026-10-30)
            'Evenly everywhere, so nothing is left out',
            'On the side the fire is expected to arrive from'],
     correct: 1,
+    whyShort: 'Defensible space is ordered from the building outward. The first five feet are Zone 0, where fuel reduction is most intense. (CAL FIRE, Ready for Wildfire)',   // TXT-B1 2026-10-30: P-wui-Q59-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Defensible space is ordered from the building outward, and the work gets more intense the closer it comes to the house: the guidance is to start at the house and reach out to 100 feet or the property line. The first five feet are Zone 0, the ember-resistant zone, where fuel reduction is most intense because that is where an ember attack lands. Zones 1 and 2 carry the rest and are required by law. Clearing the far edge first leaves the trap against your own walls intact. (CAL FIRE, Ready for Wildfire)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q60', form: 'mechanism', q: 'A fire starts at the bottom of a steep slope and your house is above it. How much time does the slope buy you?',
+  { id: 'Q60', form: 'mechanism', q: 'A fire starts at the foot of a steep slope, below your house. How much time does the slope buy you?',   // TXT-B4 2026-10-30: P-wui-Q60-q (list_TXT_B_final.tsv); was `'A fire starts at the bottom of a steep slope and your house is above it. How much time does the slope buy you?'` (build_TXT_B_2026-10-30)
     opts: ['More than on flat ground — the fire has to climb',
            'Less — fire runs faster uphill, preheating the fuel above it',
            'The same; slope only changes where the smoke goes',
            'It depends on the wind and on nothing else'],
     correct: 1,
+    whyShort: 'Fire typically moves more quickly uphill than downhill or across flat ground. The rising hot air preheats fuel the fire has not reached yet. (US National Park Service, Wildland Fire Behavior)',   // TXT-B1 2026-10-30: P-wui-Q60-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Fire typically moves more quickly uphill than downhill or across flat ground. A fire igniting at the foot of a steep slope spreads much faster upward, because the rising hot air preheats fuel it has not reached yet and the upward draft makes spot fires ahead of the front more likely. Slope sits in the fire behaviour triangle beside fuels and weather — not a detail of the terrain, one of the three things that set how a fire moves. (US National Park Service, Wildland Fire Behavior)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
   any: [
   { id: 'Q48', form: 'mechanism', q: 'A country runs world-class sensors and forecast models, yet people keep dying unwarned. Which link most likely failed?',
     opts: ['The sensor count',
            'The forecast mathematics',
-           'The last two pillars — the warning never reached people, or reached people unprepared to act on it',
+           'The warning never reached people, or found them unprepared',   // TXT-B4 2026-10-30: P-any-Q48-opt2 (list_TXT_B_final.tsv); was `'The last two pillars — the warning never reached people, or reached people unprepared to act on it'` (build_TXT_B_2026-10-30)
            'The hazards were simply too rare'],
     correct: 2,
+    whyShort: 'The UN’s Early Warnings for All has four pillars, ending with communication and preparedness. A perfect forecast that reaches no one, or someone who cannot act, saves no one. (WMO)',   // TXT-B1 2026-10-30: P-any-Q48-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The UN’s Early Warnings for All architecture has four pillars: risk knowledge; detection and forecasting; dissemination and communication; preparedness and response capability. A system is only as good as its weakest pillar — a perfect forecast that reaches no one, or someone who cannot act, saves no one. (WMO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q49', form: 'warning-literacy', q: 'How does the world’s own DRR framework define success?',
     opts: ['Zero earthquakes and storms by 2030',
-           'Substantially fewer deaths, fewer affected, smaller losses, less infrastructure disruption — and more countries with strategies, cooperation and early warning access',
+           'Substantially fewer deaths and smaller losses',   // TXT-B4 2026-10-30: P-any-Q49-opt1 (list_TXT_B_final.tsv); was `'Substantially fewer deaths, fewer affected, smaller losses, less infrastructure disruption — and more countries with strategies, cooperation and early warning access'` (build_TXT_B_2026-10-30)
            'Bigger response budgets every year',
            'Moving everyone out of hazard zones'],
     correct: 1,
+    whyShort: 'The Sendai Framework’s seven global targets reduce mortality, affected people, economic loss and infrastructure/service disruption. They also increase strategies, cooperation and early-warning access. (Sendai Framework ¶18)',   // TXT-B1 2026-10-30: P-any-Q49-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The Sendai Framework’s seven global targets reduce mortality, affected people, economic loss and infrastructure/service disruption, and increase strategies, cooperation and early-warning access. Success is measured in reduced losses and increased capability — never in hazards prevented, which no one can promise. (Sendai Framework ¶18)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q50', form: 'recovery', q: 'A flood levelled the riverside district. Which reconstruction follows the framework the world actually signed?',
     opts: ['Fastest identical rebuild — restore normal above all',
            'No rebuild for a decade, pending perfect data',
-           'Rebuild with reduced risk designed in — the recovery phase is named in the framework as the moment to prevent the next disaster',
+           'Rebuild with reduced risk designed in',   // TXT-B4 2026-10-30: P-any-Q50-opt2 (list_TXT_B_final.tsv); was `'Rebuild with reduced risk designed in — the recovery phase is named in the framework as the moment to prevent the next disaster'` (build_TXT_B_2026-10-30)
            'Rebuild elsewhere without asking the residents'],
     correct: 2,
+    whyShort: 'In reconstruction, the Sendai Framework says, it is critical to prevent new risk. Building Back Better is a way to do that. (Sendai Framework ¶19(k))',   // TXT-B1 2026-10-30: P-any-Q50-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The Sendai Framework puts it in the recovery clause itself: in reconstruction it is critical to prevent the creation of new risk by Building Back Better — the phrase sits inside Priority 4. Rebuilding identically reconstructs the next disaster on schedule. (Sendai Framework ¶19(k))' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q51', form: 'mechanism', q: 'Two identical magnitude-7 quakes strike two cities. One suffers catastrophe, the other disruption. The framework’s explanation:',
     opts: ['Luck, mostly',
            'One quake was secretly stronger',
            'Fate follows geology and nothing else',
-           'Risk is not the hazard alone — exposure and vulnerability differed, and those are exactly the dimensions communities can change'],
+           'Risk is not the hazard alone'],   // TXT-B4 2026-10-30: P-any-Q51-opt3 (list_TXT_B_final.tsv); was `'Risk is not the hazard alone — exposure and vulnerability differed, and those are exactly the dimensions communities can change'` (build_TXT_B_2026-10-30)
     correct: 3,
+    whyShort: 'The Sendai Framework treats disaster risk in its dimensions of exposure, vulnerability and hazard characteristics. It aims policy at the first two. (Sendai Framework)',   // TXT-B1 2026-10-30: P-any-Q51-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The Sendai Framework treats disaster risk in its dimensions of exposure, vulnerability and hazard characteristics, and aims policy at the first two — which is why every measure in this game works on exposure, vulnerability or capacity, and none switches the hazard off. (Sendai Framework)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'Q52', form: 'misconception', q: 'Disaster economic losses keep rising decade over decade — US$4.3 trillion since 1970. Proof that warnings and risk reduction achieve nothing?',
     opts: ['Yes — rising losses mean failure',
-           'No: over the same half-century, mortality rates FELL — WMO credits early warnings — while losses rose because far more value now sits in harm’s way',
+           'No: mortality rates FELL',   // TXT-B4 2026-10-30: P-any-Q52-opt1 (list_TXT_B_final.tsv); was `'No: over the same half-century, mortality rates FELL — WMO credits early warnings — while losses rose because far more value now sits in harm’s way'` (build_TXT_B_2026-10-30)
            'The data must simply be wrong',
            'Yes, and hazards are angrier too'],
     correct: 1,
+    whyShort: 'WMO, 1970–2021: mortality rates fell, credited to early warnings. Economic losses climbed to US$4.3 trillion as exposure grew. (WMO)',   // TXT-B1 2026-10-30: P-any-Q52-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'WMO’s ledger for 1970–2021 holds both lines at once: two million deaths (90% in developing countries) with mortality rates falling — credited to early warnings — while economic losses climbed to US$4.3 trillion as exposure grew. Two trends, two drivers; collapsing them into one is the mistake. (WMO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
-  { id: 'Q53', form: 'compound', q: 'Twenty years after the levee went up, the district behind it has tripled in value and population. Total flood risk has:',
-    opts: ['Been eliminated — that is what levees are for',
+  { id: 'Q53', form: 'compound', q: 'Twenty years on, the district behind the levee has tripled in value and population. Total flood risk has:',   // TXT-B4 2026-10-30: P-any-Q53-q (list_TXT_B_final.tsv); was `'Twenty years after the levee went up, the district behind it has tripled in value and population. Total flood risk has:'` (build_TXT_B_2026-10-30)
+    opts: ['Been eliminated — that is what levees are for: absolute protection',   // TXT-B4 2026-10-30: P-any-Q53-opt0 (list_TXT_B_final.tsv); was `'Been eliminated — that is what levees are for'` (build_TXT_B_2026-10-30)
            'Stayed exactly the same',
-           'Changed shape: floods are rarer, but the rare overtopping now finds three times the value sitting behind a wall of confidence',
+           'Changed shape: the rare overtopping finds three times the value',   // TXT-B4 2026-10-30: P-any-Q53-opt2 (list_TXT_B_final.tsv); was `'Changed shape: floods are rarer, but the rare overtopping now finds three times the value sitting behind a wall of confidence'` (build_TXT_B_2026-10-30)
            'Become the river’s problem'],
     correct: 2,
     // CORRECTED 2026-09-15: unsourced levee mechanism removed; Galloway quote via Mallea; tag corrected (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+    whyShort: 'Floods reach the district less often, but when one gets over, it finds three times the value. An engineer who co-wrote a US government assessment of the 1993 floods warns “there’s no such thing as absolute protection”. (Quoted in Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis.)',   // TXT-B1 2026-10-30: P-any-Q53-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The risk changed shape: floods reach the district less often, but when one gets over, it finds three times the value behind the levee. An engineer who co-wrote a US government assessment of the 1993 floods warns “there’s no such thing as absolute protection”. (Quoted in Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis.)' },   // BATCH-FIX 2026-10-26: K4' (addendum 2026-10-27) - the capitalised read date deleted from this line's text
   { id: 'Q54', form: 'mechanism', q: 'Equal budgets: a response warehouse, or code enforcement plus retrofits. What can only the second one do?',
     opts: ['Look good at a ribbon-cutting',
            'Arrive quickly after the event',
            'Get spent at all',
-           'Shrink the size of the future disaster itself — response, however vital, meets losses it can no longer reduce'],
+           'Shrink the future disaster'],   // TXT-B4 2026-10-30: P-any-Q54-opt3 (list_TXT_B_final.tsv); was `'Shrink the size of the future disaster itself — response, however vital, meets losses it can no longer reduce'` (build_TXT_B_2026-10-30)
     correct: 3,
     // CORRECTED 2026-09-15: figures re-attributed to the World Bank, scoped, net benefit; tag updated (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
+    whyShort: 'Prevention is decided before the event and reduces what the event can take. Response spending is necessary and honourable, and it shrinks nothing.',   // TXT-B1 2026-10-30: P-any-Q54-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Prevention is decided before the event and reduces what the event can take — a World Bank estimate that UNDRR repeats says building resilience into infrastructure in developing countries adds only 3% to investment costs, for a net benefit of four dollars per dollar invested. Response spending is necessary and honourable, and it shrinks nothing. (World Bank estimate on UNDRR’s Earthquake Day microsite)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   ],
 }
@@ -4125,23 +4184,25 @@ const EVENT_Q = {
     // CORRECTED 2026-09-22: opt 1 "no build survives standing in one" was false to the code (armour cuts the hit); opt 0 "absorbs" -> "stops" so it stays wrong (sweep 3, sweep3_2026-09-22/source_verification.md E2-s1; Lead F8)
     opts: ['They were too low level — a maxed build stops it',
            // CORRECTED 2026-09-22: correct option was "no build survives standing in one" (armour cuts the hit in the game) (sweep 3, sweep3_2026-09-22/source_verification.md E2-s1; Lead F8)
-           'Events are not enemies. Nothing in the game stops them, and armour only cuts the hit. The answer was being out of the lane before it arrived',
+           'Events are not enemies; nothing here stops them',   // TXT-B4 2026-10-30: E-tsunami-opt1 (list_TXT_B_final.tsv); was `'Events are not enemies. Nothing in the game stops them, and armour only cuts the hit. The answer was being out of the lane before it arrived'` (build_TXT_B_2026-10-30)
            'The green belt was facing the wrong way',
            'It only stops if every lifeline is standing'],
     correct: 1,
     // CORRECTED 2026-09-22: was an absolute for all five events ("no build that survives them"); game and world now separated, NWS route and hedge added (sweep 3, sweep3_2026-09-22/source_verification.md E2-s1 E2-s2 E1b E3c E5b; round 2: F3, NWS route to vertical evacuation (ask the local emergency office ahead of time) and its fallback status added, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     // CORRECTED 2026-09-23: comment made true - the word counts in the next line leave out the four-word source tag (section C round 2, section_C_2026-09-22)
     // CORRECTED 2026-09-23: shortened 110 -> 94 words, not counting the four-word source tag (114 -> 98 with it) (sweep 3 R4): the game part condensed; the NWS part, its hedge, the ask-ahead step and the tag unchanged (section C, section_C_2026-09-22)
+    whyShort: 'In the game, no measure stops an event. In real life, reach high ground or go inland before the wave arrives. (NOAA NWS)',   // TXT-B1 2026-10-30: E-tsunami-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'In the game, no measure stops an event. Armour only cuts the damage, and Early warning gives you more time to get out of the lane. In real life, the plan is to reach high ground, or to go inland away from the water, before the wave arrives. If you worry that you will not reach a safe place in time, plan ahead. Ask your local emergency office about going up high in a building instead. Some strong, tall buildings may be able to provide protection, but that is a fallback, not the plan. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   debris: {
     q: 'The debris flow came down the channel and through the village. Why did none of your measures stop it?',
     opts: ['The channel was built too narrow for it',
            // CORRECTED 2026-09-22: correct option was "Retention only ever buys a volume: once it is full what follows goes over the top" (USGS: basins can be built to contain flow, should be sized for the largest flows, and overflow if not emptied) (sweep 3 round 2: F1, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-           'Nothing in the game stops it. In real life, a basin that is big enough and emptied regularly can hold it, but here the answer is still not being in the channel',
+           'Nothing in the game stops it',   // TXT-B4 2026-10-30: E-debris-opt1 (list_TXT_B_final.tsv); was `'Nothing in the game stops it. In real life, a basin that is big enough and emptied regularly can hold it, but here the answer is still not being in the channel'` (build_TXT_B_2026-10-30)
            'Green defences were facing the wrong way',
            'It stops once Maintenance is high enough'],
     correct: 1,
     // CORRECTED 2026-09-22: was "not a landslide" (it is a type of landslide), "a delay" (no source), "The measure" (USGS names evacuation/avoidance/relocation as best) (sweep 3, sweep3_2026-09-22/source_verification.md E3a E3c E3c-Qwhy; round 2: F1, basin scope as USGS pp.17, 111, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
+    whyShort: 'In the game, a debris flow has no health bar to shoot at. In real life, leaving, staying away and moving homes protect people best. (USGS)',   // TXT-B1 2026-10-30: E-debris-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'A debris flow is a fast type of landslide: soil, rock and water mixed into one moving mass. Like every event in the game, it has no health bar to shoot at, and the warning is what gets you out of the lane. In real life, basins can be built to hold a debris flow, and they should be big enough for the largest flows in the area. Over time they fill up and must be emptied regularly, or they will overflow. Leaving, staying away and moving homes out of its path are the best ways to protect people. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   rockfall: {
     q: 'A rockfall just landed. What decided whether it caught you?',
@@ -4154,28 +4215,31 @@ const EVENT_Q = {
     correct: 1,
     // CORRECTED 2026-09-22: was "cannot be absorbed, only avoided" (USGS names rockfall measures that lessen the hazard; armour cuts the hit in the game) (sweep 3, sweep3_2026-09-22/source_verification.md E1b E1b-Q; round 2: F6, standing in a circle is necessary for a hit, not the only decider (P.inv grace), sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     // CORRECTED 2026-09-23: was "inside its circle when it lands" - a circle hurts while it is drawn filled, from its rock landing for ROCK_LIVE (0.35 s) (B3); USGS sentence and tag unchanged (section C, section_C_2026-09-22)
+    whyShort: 'In the game, a rock can only catch you inside its filled circle. In real life, nets and walls can reduce risk but do not stop every rock. (USGS)',   // TXT-B1 2026-10-30: E-rockfall-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The warning circles were drawn before anything fell, and the fall landed exactly there. Each circle fills when its rock lands and stays filled for a moment. In the game, armour can cut the hit, but a rock can only catch you if you are inside its circle while it is filled. The warning is what makes that fair, and Early warning makes it longer. In real life, rock nets, rock anchors, walls and covers over roads can reduce the risk from falling rock, but they do not stop every rock. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   landslide: {
     // CORRECTED 2026-09-22: q was "What was the only way through it?" (opt 0 "Absorbing it with enough capacity" was also true in the game: one impact, then P.inv grace) (sweep 3 round 2: F2, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     q: 'The landslide crossed the map in one straight lane. How could you avoid being hit by it?',
     opts: ['Absorbing it with enough capacity',
            'Shooting the leading edge',
-           'Moving out of the lane after the warning — its origin was fixed the moment it was announced',
+           'Moving out after the warning',   // TXT-B4 2026-10-30: E-landslide-opt2 (list_TXT_B_final.tsv); was `'Moving out of the lane after the warning — its origin was fixed the moment it was announced'` (build_TXT_B_2026-10-30)
            'Standing behind a lifeline'],
     correct: 2,
     // CORRECTED 2026-09-22: "moving out of the way IS the measure" scoped to the game; hedged runout fact added (sweep 3, sweep3_2026-09-22/source_verification.md E4b; round 2: F11 USGS scope "in steep terrain" restored, F2 "how you get through" now "how you avoid being hit", sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
+    whyShort: 'In the game, the lane was fixed at the warning and never followed you. In real life, some landslides in steep terrain can travel kilometres from where they start. (USGS)',   // TXT-B1 2026-10-30: E-landslide-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'The lane was fixed at the moment of the warning and never turned to follow you. In the game, a warning you can outrun is the whole mechanic. Moving out of the way is how you avoid being hit, and that is why evacuation has its own control. In real life, in steep terrain, some kinds of landslide, like debris flows, can travel kilometres from where they start. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   fissure: {
     // CORRECTED 2026-09-22: q was false to the code ("your armour did not help"; armour cuts event damage) (sweep 3, sweep3_2026-09-22/source_verification.md E5b; Lead F8)
     q: 'Ground failure opened under the district. Why can armour not make it safe to stand on?',
     opts: ['Ground failure ignores armour only past level 10',
            // CORRECTED 2026-09-22: opt 1 was "strengthening ... does nothing" (unverifiable); opt 3 became partly true and is made clearly wrong (sweep 3, sweep3_2026-09-22/source_verification.md E5b E5-Qopt; round 2: F6, the damage pauses during the P.inv grace, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-           'Armour only makes each second hurt less, and the ground keeps hurting you while you stand on it; you get off it',
+           'Armour only makes each second hurt less',   // TXT-B4 2026-10-30: E-fissure-opt1 (list_TXT_B_final.tsv); was `'Armour only makes each second hurt less, and the ground keeps hurting you while you stand on it; you get off it'` (build_TXT_B_2026-10-30)
            'It only respects the road lifeline',
            // CORRECTED 2026-09-22: wrong option was "Armour works, it just looks like it does not", now partly true; replaced by a clearly false one (sweep 3, sweep3_2026-09-22/source_verification.md E5-Qopt; Lead F8)
            'Armour makes you immune once it is high enough'],
     correct: 1,
     // CORRECTED 2026-09-22: was "Strengthening ... changes nothing" (unverifiable) and land-use planning as THE measure (one of several for liquefaction) (sweep 3, sweep3_2026-09-22/source_verification.md E5a E5b E5-Qwhy; round 2: F6 P.inv grace, F7 surface-rupture sentence dropped (no capture explains surface rupture or active faults in plain words), sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
+    whyShort: 'In the game, armour cuts the damage but never to zero. In real life, packing, draining or not building on soaked ground can cut the risk. (USGS / NIST)',   // TXT-B1 2026-10-30: E-fissure-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'In the game, armour cuts the damage but never to zero, and ground failure keeps hurting you while you stand on it. In real life, liquefaction is loose, water-soaked ground near the surface losing its strength for a while in strong shaking. Packing the ground tighter, draining it or not building on it can reduce the risk. (USGS / NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
 }
 
@@ -4561,6 +4625,7 @@ const PLACE_Q = {
                     'Whether the valley had already decided to climb rather than drive',
                     'How fast help can get up the valley once the siren sounds'],
              correct: 2,
+             whyShort: 'After the Big Thompson Canyon flood, studies found those who climbed had the best chance. Minutes are only enough for an action that was decided before.',   // TXT-B1 2026-10-30: L-act-alpine-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'After the Big Thompson Canyon flood, studies found that people who climbed to higher ground had the greatest chance of surviving. They also found that those who tried to drive out through the canyon were at the highest risk. The road followed the river. Minutes are only enough for an action that was chosen beforehand. Choosing it is the whole job of the drill.' },
     basin: { q: 'The gauge upstream gives the town four hours. What decides whether four hours is enough?',
              opts: ['How accurate the gauge reading and the forecast are',
@@ -4590,6 +4655,7 @@ const PLACE_Q = {
                     'Predict the aftershocks'],
              correct: 1,
              // CORRECTED 2026-09-16: drill purpose in UNDRR's own hedge ("tends to"), scoped to earthquakes; "exactly that" dropped (sweep 2, sweep2_2026-09-15/ADJUDICATION_copy_final_2026-09-16.md)
+             whyShort: 'With no forecast, the only rehearsal that helps is of the response itself. UNDRR: under stress, thinking tends to slow or shut down.',   // TXT-B1 2026-10-30: L-act-fault-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'With no forecast, the only rehearsal that helps is of the response itself. UNDRR gives the reason for its earthquake micro-drill: under stress, thinking tends to slow or shut down, so the trained reflex has to bypass it.' },
     wui:   { q: 'A fire warning goes out and the road out of the valley jams. What did the drill need to have settled?',
              opts: ['Which way to go, and when it is already too late',
@@ -4606,6 +4672,7 @@ const PLACE_Q = {
                     'Only farm buildings and sheds',
                     'Only what was granted an exception'],
              correct: 1,
+             whyShort: 'The ban is on new building, so what was there stays in the runout. What guards it at the building itself is object protection \u2014 deflectors, reinforced walls.',   // TXT-B1 2026-10-30: L-stock-alpine-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'The ban is on new building. What already stands remains. It may not be expanded or changed in use, but it stays in the runout. What protects it at the building itself is object protection \u2014 deflectors, reinforced walls. That is retrofitting under a mountain name. Galt\u00fcr is endangered by 26 avalanche tracks, with 111 buildings counted in their runout zones in 2000.' },
     delta: { q: 'New coastal housing is raised and built to standard. What is still at sea level?',
              opts: ['Nothing — the standard covers the whole district, old and new',
@@ -4635,7 +4702,7 @@ const PLACE_Q = {
                     'Because new buildings are the most dangerous in the city'],
              correct: 1,
              why: 'Enforcement fixes what goes up next. Everything already standing is only reached by retrofitting, which is why UNDRR names existing assets separately.' },
-    metro: { q: 'The new towers meet the code. The disaster still happens in the old blocks. Why?',
+    metro: { q: 'The new towers meet the code, but the disaster still happens in the old blocks. Why?',   // TXT-B4 2026-10-30: L-stock-metro-q (list_TXT_B_final.tsv); was `'The new towers meet the code. The disaster still happens in the old blocks. Why?'` (build_TXT_B_2026-10-30)
              opts: ['Old buildings are always beyond saving, whatever the code says',
                     'The code governs new construction',
                     'The towers shelter the old blocks',
@@ -4650,6 +4717,7 @@ const PLACE_Q = {
                     'That the forest above it is holding',
                     'Very little \u2014 these events also emerge where there is no record'],
              correct: 3,
+             whyShort: 'No record does not mean no hazard. It only means nothing was measured.',   // TXT-B1 2026-10-30: L-see-alpine-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'The IPCC states it for mountains: as glaciers retreat and permafrost thaws, the resulting landslides, floods and cascading events \u201cwill also emerge where there is no record of previous events\u201d (high confidence). At Bondo in 2017 the village had a warning because the slope had been fitted with instruments for years. The slope\u2019s movement had been measured from 2012. The rock came away at 09:31. The debris-flow alarm went off at 09:34. No record does not mean no hazard. It only means nothing was measured.' },
     delta: { q: 'Before a surge warning can mean anything, what has to exist?',
              opts: ['A siren network',
@@ -4695,6 +4763,7 @@ const PLACE_Q = {
                     'It stops working once the trees are fully mature',
                     'It has to be replanted after every hard winter'],
              correct: 0,
+             whyShort: 'The protection comes from the standing trees, not from the map. The more open a forest is, the worse it protects.',   // TXT-B1 2026-10-30: L-buffer-alpine-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'Roughly half of Swiss forest protects settlements, roads or railway lines below it. But the protection comes from the standing trees, not from the map. The more open a forest is, the worse it protects. The zone plan attacks the same problem from the other end. It sets aside strips of land that must be kept free for protection measures.' },
     fault: { q: 'What is open ground worth to a city on a fault?',
              opts: ['Nothing — earthquakes are not stopped by parks, so the land is better built on',
@@ -4739,6 +4808,7 @@ const PLACE_Q = {
                     'Draws a hazard map',
                     'Insures the buildings and leaves the slope alone'],
              correct: 2,
+             whyShort: 'With limited money, barriers could not be built in every area at risk. So passive measures came in, hazard zone maps among them.',   // TXT-B1 2026-10-30: L-concrete-alpine-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'This is where Alpine hazard zoning came from. After the extreme avalanches and debris flows of the 1950s and 1960s, the structures needed a lot of money. With limited money, they could not be built in every endangered area. So passive measures were introduced, hazard zone maps among them. Zoning is what a place does when it cannot pay for concrete.' },
     delta: { q: 'Raising the houses is agreed to be the right measure. Why is so little raised?',
              opts: ['It does not work in a real flood',
@@ -4748,8 +4818,8 @@ const PLACE_Q = {
              correct: 1,
              why: 'A measure everyone agrees with and nobody can pay for does not exist. Financing is what turns a correct answer into a raised house.' },
     wui:   { q: 'Screening a roof and vents is cheap next to the price of a house. Why is it still not done?',
-             opts: ['Owners do not believe in fire, though every one of them could easily pay for it',
-                    'Cheap is not free, and people at the edge are often there because it was what they could afford',
+             opts: ['Owners do not believe in fire, though all of them could easily pay',   // TXT-B4 2026-10-30: L-concrete-wui-opt0 (list_TXT_B_final.tsv); was `'Owners do not believe in fire, though every one of them could easily pay for it'` (build_TXT_B_2026-10-30)
+                    'Cheap is not free; people at the edge are often there because it was affordable',   // TXT-B4 2026-10-30: L-concrete-wui-opt1 (list_TXT_B_final.tsv); was `'Cheap is not free, and people at the edge are often there because it was what they could afford'` (build_TXT_B_2026-10-30)
                     'It costs nearly as much as building the whole house again',
                     'It is cheap, but it spoils the view'],
              correct: 1,
@@ -4768,7 +4838,7 @@ const PLACE_Q = {
                     'The age of the equipment'],
              correct: 1,
              why: 'Nobody opens a substation upgrade. Its success is that nothing happens, which is exactly the kind of outcome budgets are worst at buying.' },
-    fault: { q: 'The retrofit programme is designed, costed and approved. Ten years on, almost nothing is strengthened. What stopped it?',
+    fault: { q: 'The retrofit plan is designed, costed and approved; ten years on, almost nothing is strengthened. What stopped it?',   // TXT-B4 2026-10-30: L-concrete-fault-q (list_TXT_B_final.tsv); was `'The retrofit programme is designed, costed and approved. Ten years on, almost nothing is strengthened. What stopped it?'` (build_TXT_B_2026-10-30)
              opts: ['The engineering was wrong',
                     'The money',
                     'Public opposition',
@@ -4783,6 +4853,7 @@ const PLACE_Q = {
                     'The oldest residents, who could not move fast enough',
                     'Nobody \u2014 the drill did its job'],
              correct: 1,
+             whyShort: 'At Bondo, eight hikers coming down from the Sciora hut were buried. People who are only visiting are invisible to a drill.',   // TXT-B1 2026-10-30: L-who-alpine-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'At Bondo there were no deaths or injuries in the residential area. But eight hikers coming down from the Sciora hut were buried. A drill reaches the people who live there. People who are only visiting are invisible to it. Only exposure data says how many of them are up there on a given day. In Austria, hotels and hostels were found to be extraordinarily prone to mountain hazards \u2014 torrential flooding above all.' },
     delta: { q: 'Everyone in the delta has been told about the surge. Who is still lost?',
              opts: ['Nobody, if the message went out',
@@ -4803,7 +4874,7 @@ const PLACE_Q = {
              opts: ['Nobody, after enough practice',
                     'Whoever cannot climb upstairs',
                     'People without cars',
-                    'Visitors'],
+                    'People in tall buildings'],   // TXT-B5 2026-10-30: RC-02 (list_TXT_B_final.tsv); was `'Visitors'` (build_TXT_B_2026-10-30)
              correct: 1,
              why: 'The plan works for the people it can picture. Data on who is actually there — age, mobility, floor level — is what puts the rest into it.' },
     metro: { q: 'A city drills every year and the same people die every time. What is the data for?',
@@ -4828,6 +4899,7 @@ const PLACE_Q = {
                     'Nothing \u2014 outside the zone is outside the hazard',
                     'The event that goes past the line'],
              correct: 3,
+             whyShort: 'The construction requirements apply only inside the legally binding zones. At Galt\u00fcr in 1999 the snow reached areas the hazard maps had shown as safe.',   // TXT-B1 2026-10-30: L-plan-alpine-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'The construction requirements apply only inside the legally binding zones. So a building outside them can be exposed to the modelled pressures, with nothing required of it. At Galt\u00fcr in 1999 the snow reached areas the hazard maps had shown as safe. The pressure limits were changed afterwards, and the zones were to be extended when the maps were revised. The code is only ever as good as the line somebody drew.' },
     fault: { q: 'Every building in the district meets the seismic code. What can still be wrong?',
              opts: ['Nothing, if every building meets the code',
@@ -4867,12 +4939,13 @@ const PLACE_Q = {
              why: 'The two answer different questions. Together they cover the decision; separately each leaves the other half open.' },
   },
   lane: {  // land-use planning + maintenance (added 2026-09-03; the ninth pair's five cases)
-    delta: { q: 'The drainage canal to the pumping station is on every map, and the district still floods to a metre. What is wrong with the canal?',
+    delta: { q: 'The drainage canal is on every map, but the district still floods to a metre. What is wrong with the canal?',   // TXT-B4 2026-10-30: L-lane-delta-q (list_TXT_B_final.tsv); was `'The drainage canal to the pumping station is on every map, and the district still floods to a metre. What is wrong with the canal?'` (build_TXT_B_2026-10-30)
              opts: ['It was dug too narrow for the city that grew around it',
                     'It has been built on and filled with waste',
                     'The pumping station at the end of it is undersized',
                     'The tide holds the water in until the storm has passed'],
              correct: 1,
+             whyShort: 'In the Dhaka case, the canals toward the pumping station are in bad repair. They are clogged by unauthorised building on them and by solid waste.',   // TXT-B1 2026-10-30: L-lane-delta-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'In the Dhaka case, the canals that carry water toward the pumping station are in bad repair. They are clogged by unauthorised encroachment \u2014 building on them \u2014 and by solid waste. The canals drain the DND area, an embanked district. About 87 per cent of the DND area floods one to three metres deep in moderate storms. The remedy names both halves: dig the canals out again and maintain them, and protect them against encroachment. Neither works without the other.' },
     fault: { q: 'The city designates emergency routes so rescue can reach the centre. What actually keeps one passable?',
              opts: ['Signing it clearly and keeping it clear of parked cars',
@@ -4880,6 +4953,7 @@ const PLACE_Q = {
                     'The condition of the buildings along it',
                     'A second designated route running parallel to it'],
              correct: 2,
+             whyShort: 'Italy\u2019s emergency-limit-condition survey checks which buildings could fall and block the road for rescue. A road is only as clear as what stands next to it.',   // TXT-B1 2026-10-30: L-lane-fault-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'Italy\u2019s emergency-limit-condition survey counts a building as interfering with the access route when its damage or collapse could block the road for rescue vehicles. The test is geometry. A front is interfering when its height at the eaves exceeds the distance to the far edge of the road. Tokyo works the same problem from the other side. It removes utility poles and extends seismic support to buildings along its designated routes. The corridor is only as clear as what stands beside it.' },
     wui:   { q: 'The routes out of the ridge town were planned, zoned one-way and exercised. Where did people still burn?',
              opts: ['On the planned routes, stalled in traffic beside verges thick with roadside fuel',
@@ -4888,12 +4962,13 @@ const PLACE_Q = {
                     'At the assembly areas the plan sent them to'],
              correct: 0,
              why: 'The Camp Fire investigation puts the burnovers on the main roads. Those were places with significant traffic gridlock. The roadside fuel was dense: vegetation with little or no clear space between it and the road. There were few open areas to use as refuge. The town had learned from an earlier fire. It had one-way routes out and evacuation by zones. The half that was missing was the verge.' },
-    basin: { q: 'A river was given room, the flood level dropped, and vegetation has been growing in the flood plain ever since. Who holds the gain?',
+    basin: { q: 'A river was given room, and the flood level dropped. Vegetation has grown in the flood plain since \u2014 who holds the gain?',   // TXT-B4 2026-10-30: L-lane-basin-q (list_TXT_B_final.tsv); was `'A river was given room, the flood level dropped, and vegetation has been growing in the flood plain ever since. Who holds the gain?'` (build_TXT_B_2026-10-30)
              opts: ['Nobody needs to \u2014 a widened channel stays wide',
                     'The landowners, under a maintenance duty in the water law',
                     'The municipalities, each for its own stretch',
                     'The state, against a recorded roughness benchmark'],
              correct: 3,
+             whyShort: 'The Dutch state secretary for infrastructure: a maintenance duty on owners was examined and dropped. Leaving it to the state was judged sufficient.',   // TXT-B1 2026-10-30: L-lane-basin-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'The Dutch state secretary for infrastructure put it plainly. The big projects bought a drop in the water level. Vegetation growing in the river bed raises the water level. The two cannot be separated, so roughness has to be held everywhere in the bed. The tool is a vegetation register recording the maximum permitted roughness. Behind it is a duty to tolerate removal as a last resort. A maintenance duty on owners was examined and dropped. Leaving it to the state was judged sufficient, and the duty was expected to carry high social costs. The corridor is a number somebody is permanently answerable for.' },
     // FINAL-FIX 2026-10-13: F-09 - "for the road" restored, so "allowed to pay" has its object (verify_final_XLQT1 F-09; ADJUDICATION_final) (build_XP_2026-10-13 final fix)
     metro: { q: 'The city designs certain streets to carry cloudburst water away. What stops them carrying it?',
@@ -4902,6 +4977,7 @@ const PLACE_Q = {
                     'Blocked inlets and a rule about whether anyone is allowed to pay for the road',
                     'The sewer, which takes the water before the street can'],
              correct: 2,
+             whyShort: 'Waste that is not collected often clogs storm drains and manholes, the Dhaka study found. Back in 2012, Copenhagen\u2019s utilities could only pay for waste water work.',   // TXT-B1 2026-10-30: L-lane-metro-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'Copenhagen\u2019s combined sewer is the city\u2019s only system for surface runoff, and it cannot handle extreme rainfall. That is exactly why the city\u2019s cloudburst plan designates roads with high kerbstones as drainage routes. Two things then decide whether the street carries anything. The first is whether its inlets are clear. Uncollected waste often clogs storm drains and manholes, as the Dhaka study found. The second is whether the law let anyone fund the work. Back in 2012 the utilities could only pay for projects that dealt directly with waste water. So the city asked for the law to be changed.' },
     alpine: { q: 'The valley has one road in, and a retention basin above the village. Which of the two is finished?',
              opts: ['The road \u2014 it is built, and it stays open whatever the weather and snow do',
@@ -4909,16 +4985,18 @@ const PLACE_Q = {
                     'The basin \u2014 it is engineered for the design event and holds whatever comes down',
                     'Both, until an event larger than the one they were designed for arrives'],
              correct: 1,
+             whyShort: 'The road is open because a service decides it may be. At Bondo the debris flows filled the basin.',   // TXT-B1 2026-10-30: L-lane-alpine-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'On a mountain road, the standing avalanche measures are warning, closure, evacuation and artificial triggering. The road is open because a service decides it may be, based on the day\u2019s weather and snow. And a basin is storage, not a solution. At Bondo the debris flows filled the basin. Less than half of the 500,000 to 800,000 cubic metres that reached the village was captured. In a valley the corridor is a job in both directions.' },
   },
   keep: {  // resilient investment + maintenance
     // FINAL-FIX 2026-10-13: F-08 - the original words after "holding" restored, so the option is one complete sentence (verify_final_XLQT1 F-08; ADJUDICATION_final) (build_XP_2026-10-13 final fix)
     alpine: { q: 'A staircase of check dams has held the torrent above the village for a century. How does it fail?',
-             opts: ['One goes unrepaired, lets go of what it was holding, and takes the ones below it with it',
+             opts: ['One goes unrepaired, lets go, and takes the ones below with it',   // TXT-B4 2026-10-30: L-keep-alpine-opt0 (list_TXT_B_final.tsv); was `'One goes unrepaired, lets go of what it was holding, and takes the ones below it with it'` (build_TXT_B_2026-10-30)
                     'It silts up until it is full, and is then simply harmless',
                     'The concrete reaches the end of its rated life all at once',
                     'A flood arrives that is larger than anything it was designed for'],
              correct: 0,
+             whyShort: 'The staircase works only while somebody maintains it and repairs it after damage. When one dam fails, it releases what it held and can break the dams downstream.',   // TXT-B1 2026-10-30: L-keep-alpine-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'A staircase of check dams is a hundred-year programme of building and repair. Timber and stone in the nineteenth century, reinforced concrete in the twentieth. The staircase works only while somebody keeps maintaining it and repairs it after damage. When one dam fails, it releases the material stored behind it. That can start a cascade, breaking the dams downstream. The maintenance cost is a large part of what makes the decision hard.' },
     delta: { q: 'The sea wall was built to a good standard. What decides whether it holds?',
              opts: ['The standard it was built to',
@@ -5013,7 +5091,8 @@ function quizAsk(Q, target = quizTarget()) {
     }
   }
   const v = a || Q
-  return { q: v.q, opts: v.opts, correct: v.correct, why: Q.why, whyNot: v.whyNot, depth: a ? target : own, want: target }
+  // TXT-B2 2026-10-30: ADJUDICATION_TXT_B (B-2) - whyShort, the short answer line, is returned beside why and like it is always the base's; a question with no whyShort returns undefined there; was `return { q: v.q, opts: v.opts, correct: v.correct, why: Q.why, whyNot: v.whyNot, depth: a ? target : own, want: target }` (build_TXT_B_2026-10-30)
+  return { q: v.q, opts: v.opts, correct: v.correct, why: Q.why, whyShort: Q.whyShort, whyNot: v.whyNot, depth: a ? target : own, want: target }
 }
 
 // The question actually asked: this place's version if there is one, otherwise the pair's
@@ -6427,7 +6506,7 @@ function runsRecord() {
 }
 
 
-let metaFold = null   // null = open (PT-P4); true/false = the player has folded or unfolded it by hand since the start screen last opened   // PT-P4 2026-10-19: was "// null = follow affordability; true/false = the player has decided" (build_PT_2026-10-19)
+let metaFold = null   // TXT-B6 2026-10-30: null = folded (no hand choice; offerMeta, TXT-A2); false = unfolded, true = folded, by a hand press on the heading since the start screen last opened, or false as set by the spendfirst handler ("Spend your budget first"), so the block opens unfolded there; "Somewhere else" sets null (folded); was `// null = open (PT-P4); true/false = the player has folded or unfolded it by hand since the start screen last opened` (build_TXT_B_2026-10-30)   // PT-P4 2026-10-19: was "// null = follow affordability; true/false = the player has decided" (build_PT_2026-10-19)
 let metaEarn = null   // the node just bought, kept so offerMeta can re-render what it means
 function offerMeta() {
   const st = metaStore()
@@ -6533,7 +6612,7 @@ function offerLearn() {
   const st = learnStore()
   const el = $('learnhead')
   if (!st.right && !st.wrong) {
-    el.innerHTML = 'Understanding — nothing yet · the debrief after each run asks four questions, and what you answer carries into the next'
+    el.innerHTML = 'Understanding — nothing yet · four questions after each run; your answers carry into the next'   // TXT-B5 2026-10-30: D-01 (list_TXT_B_final.tsv); was `'Understanding — nothing yet · the debrief after each run asks four questions, and what you answer carries into the next'` (build_TXT_B_2026-10-30)
     return
   }
   const tier = tierFor(st.streak)
@@ -10750,13 +10829,14 @@ function buildDebrief() {
   // whyNot (QC-M3), depth (the depth shown) and want (the depth asked for). The pool record and poolAskedRun stay on the topic's id (build_Q_2026-10-13)
   if (got.length) {
     const sy = pick(got), Q = questionFor(sy)
-    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'syn',
+    // TXT-B2 2026-10-30: ADJUDICATION_TXT_B (B-2) - whyShort passed on beside why, here and in the event and field items below; was `why: Q.why, whyNot: Q.whyNot,` in each of the three (build_TXT_B_2026-10-30)
+    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyShort: Q.whyShort, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'syn',
                 tag: `Why it compounds · ${sy.name}` + (Q.themed ? ` · ${PLACE.name}` : '') })
   }
   const evs = [...new Set(eventsSeen)].filter(k => EVENT_Q[k])
   if (evs.length) {
     const k = pick(evs), Q = quizAsk(EVENT_Q[k])
-    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'event',
+    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyShort: Q.whyShort, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'event',   // TXT-B2 2026-10-30: whyShort passed on (see the TXT-B2 comment above) (build_TXT_B_2026-10-30)
                 tag: `What you could only dodge · ${EVENTS[k].name}` })
   }
   while (list.length < T.debriefN) {
@@ -10764,7 +10844,7 @@ function buildDebrief() {
     if (!c) break
     poolAskedRun[c.q.id] = true
     const Q = quizAsk(c.q)
-    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'pool', id: c.q.id,
+    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyShort: Q.whyShort, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'pool', id: c.q.id,   // TXT-B2 2026-10-30: whyShort passed on (see the TXT-B2 comment above) (build_TXT_B_2026-10-30)
                 tag: 'Field question · ' + (c.anyP ? 'every place' : PLACE.name) })
   }
   return list
@@ -10824,6 +10904,7 @@ function streakArt(S) {
 // says what it earned, and appends the next. When the list ends or the player skips, the
 // report is built (renderReport) with the debrief's results already in it.
 // P6-B4 2026-09-25: T1-3 - the next question is appended when the player presses Next ("Next question", "Finish" on the last: S-B4, R-S4), not at once, and the answered block then folds to one row (build_P6_2026-09-25)
+let wMoreN = 0   // TXT-B3 2026-10-30: the ids of the debrief answer lines' "More" folds (mountDebrief): a counter that only grows, so no id repeats (build_TXT_B_2026-10-30)
 function mountDebrief() {
   const box = $('redo-body')
   if (!box || !debrief) return
@@ -10916,11 +10997,18 @@ function mountDebrief() {
       `<div class="redo-verdict" style="display:none"></div>` +
       // P6-B5 2026-09-25: T2-2 - the payout line, S-B5's `+N budget`; shown only for a right answer whose share is above 0 (R-S5) (build_P6_2026-09-25)
       `<div class="redo-pay" style="display:none"><b>+0</b> budget</div>` +
-      `<p class="redo-why" style="display:none"></p><div class="redo-earnwrap"></div>`
+      `<p class="redo-why" style="display:none"></p>` +
+      // TXT-B3 2026-10-30: ADJUDICATION_TXT_B (B-3) - a question with a whyShort gets, after the answer line and outside its <p>, a fold as a direct child of the question's wrapper (so the answered-question collapse hides it with the rest): a closed "More" toggle (.fold-t, round A's fold look; aria-expanded false, aria-controls its body, the accessible name of list_TXT_B_final.tsv N-01) and its body, hidden, whose <p> is given the old why at the pick. The fold itself is hidden until the pick, when it shows with the answer line. A question with no whyShort gets nothing here; was `\`<p class="redo-why" style="display:none"></p><div class="redo-earnwrap"></div>\`` (build_TXT_B_2026-10-30)
+      (Q.whyShort ? `<div class="fold redo-wfold" style="display:none"><button type="button" class="fold-t redo-wmore" id="redo-wmore-t-${++wMoreN}" aria-expanded="false" aria-controls="redo-wmore-${wMoreN}" aria-label="More: the full explanation"><span aria-hidden="true">&#9656;</span> More</button>` +
+        `<div class="fold-b" id="redo-wmore-${wMoreN}" hidden><p></p></div></div>` : '') +
+      `<div class="redo-earnwrap"></div>`
     wrap.querySelector('h3').textContent = Q.q
     // QC-M4 2026-10-13: dev mode only - the depth shown on the tag ("· d3"), and the depth asked for when it fell back ("· d2 (no d3)") (build_Q_2026-10-13)
     if (dev.on) wrap.querySelector('.qpair').insertAdjacentText('beforeend', ` · d${Q.depth}` + (Q.want !== Q.depth ? ` (no d${Q.want})` : ''))
     box.appendChild(wrap)
+    // TXT-B3 2026-10-30: the answer line's "More" (see the TXT-B3 comment in the markup above): a click, a tap or Enter (the browser's own click on a <button>) opens or closes the body through foldToggle (aria-expanded, the arrow); Space presses it once, by spaceClicks, as the debrief's other buttons; the click goes no further up, so the click handler on #redo (which completes running beats) does not see it - the toggle answers, skips and advances nothing and leaves the beats and sounds as they run (build_TXT_B_2026-10-30)
+    const wmb = wrap.querySelector('.redo-wmore')
+    if (wmb) { wmb.onclick = e => { e.stopPropagation(); foldToggle(wmb) }; spaceClicks(wmb) }
     const ob = wrap.querySelector('.redo-opts')
     // Shuffled on screen, canonical in the data: the bank's answer positions are skewed and
     // the first human play-test read the position instead of the text (2026-08-27).
@@ -10971,7 +11059,10 @@ function mountDebrief() {
           wn.appendChild(document.createTextNode(Q.whyNot[oi]))
           wrap.insertBefore(wn, why)
         }
-        why.innerHTML = Q.why
+        // TXT-B3 2026-10-30: the answer line shows the question's whyShort when it has one, else its why as before; with a whyShort the fold's body is given the old why whole and the fold shows with the answer line; was `why.innerHTML = Q.why` (build_TXT_B_2026-10-30)
+        why.innerHTML = Q.whyShort || Q.why
+        const wmf = wrap.querySelector('.redo-wfold')
+        if (wmf) { wmf.querySelector('.fold-b > p').innerHTML = Q.why; wmf.style.display = '' }
         why.style.display = ''
         const earn = []
         // P6-B5 2026-09-25: T2-2 - the pill "+N recovery budget released" and its B15 note (the step per answer, so the pills summed to what is banked) left this list: that same step, `share` above, now has its own payout line, S-B5's `+N budget` (build_P6_2026-09-25)
@@ -11785,10 +11876,11 @@ function renderReport() {
   const row = (col, name, text) =>
     `<div class="rrow"><i style="background:${col}"></i><b>${name}</b><p>${text}</p></div>`
   // TXT-A6 2026-10-30: ADJUDICATION_TXT_A section 4 S-6 (verify_TXT_A F19) - a row with a closed "More": the row's text in its <p> as row() prints it, then, outside that <p> (a block inside a <p> would be closed out of it by the HTML parser), a fold: a button (.fold-t, the Details toggle's look; aria-expanded false, aria-controls its body) and its body, hidden, holding `more` in a <p>. The <p> and the fold sit in one div (.rcol), so the fold stays in the text's column of the row's flex line. foldToggle opens and closes it; the handlers are set after the report's markup is in the page (end of renderReport). Used by the two highlight rows A4-01 and A4-02 (build_TXT_A_2026-10-30)
-  const rowMore = (col, name, text, more) => {
+  // TXT-B5 2026-10-30: ADJUDICATION_TXT_B (list_TXT_B_final.tsv N-02, N-03) - a fifth argument, label, is the toggle's accessible name (aria-label on the button); the visible label stays "More"; was `const rowMore = (col, name, text, more) => {` and a button with no aria-label (build_TXT_B_2026-10-30)
+  const rowMore = (col, name, text, more, label) => {
     const n = ++rMoreN
     return `<div class="rrow"><i style="background:${col}"></i><b>${name}</b><div class="rcol"><p>${text}</p>` +
-      `<div class="fold rfold"><button type="button" class="fold-t rmore" id="rmore-t-${n}" aria-expanded="false" aria-controls="rmore-${n}"><span aria-hidden="true">&#9656;</span> More</button>` +
+      `<div class="fold rfold"><button type="button" class="fold-t rmore" id="rmore-t-${n}" aria-expanded="false" aria-controls="rmore-${n}" aria-label="${label}"><span aria-hidden="true">&#9656;</span> More</button>` +
       `<div class="fold-b" id="rmore-${n}" hidden><p>${more}</p></div></div></div></div>`
   }
 
@@ -11823,7 +11915,7 @@ function renderReport() {
     hls.push(rowMore('#ff9d9d', lifelinesLost.map(k => LIFELINES[k].name).join(' · ') + ' LOST',
       // R5-FX 2026-10-26: K4 (ii) - r5BkNote() after the power lifeline's cost; was `lifelinesLost.map(k => LIFELINES[k].cost).join(' ') +` (build_R5_2026-10-26 fix round)
       lifelinesLost.map(k => LIFELINES[k].cost + (k === 'power' ? r5BkNote() : '')).join(' '),
-      ' The cost lands after the event, on the recovery — the part a run does not show you.'))
+      ' The cost lands after the event, on the recovery — the part a run does not show you.', 'More: when the cost lands'))   // TXT-B5 2026-10-30: N-02 (list_TXT_B_final.tsv) - the toggle's accessible name, rowMore's fifth argument; was `' The cost lands after the event, on the recovery — the part a run does not show you.'))` (build_TXT_B_2026-10-30)
   else if (lifelines.length && standing.length === lifelines.length)
     // TXT-A6 2026-10-30: ADJUDICATION_TXT_A section 4 S-6, strings_TXT_A.md A4-02 - the row shows the new text (the line after the LL-M2 comment below); the old text, whole and unchanged (the last line), is the row's closed "More" (rowMore); was `hls.push(row('#7ee787', 'Every service still running',` (build_TXT_A_2026-10-30)
     hls.push(rowMore('#7ee787', 'Every service still running',
@@ -11831,7 +11923,7 @@ function renderReport() {
       // CORRECTED 2026-09-22: was "+15% to everything"; svc() feeds eff(), which multiplies damage and fire rate only (sweep 3, sweep3_2026-09-22/source_verification.md n/a, code; Lead F7)
       // LL-M2 2026-09-25: S-L4 R-1 (ruling RL2) - after a rebuild the bonus stopped while a lifeline was down, so "held all run" reads "held since your last rebuild" in a run with one; a run with none prints exactly as before (build_LL_2026-09-25)
       `+${Math.round((T.svcBonus - 1) * 100)}% damage and fire rate, ${llRebuilds ? 'held since your last rebuild' : 'held all run'}. Paid only while every service is up, not most of them.`,
-      `+${Math.round((T.svcBonus - 1) * 100)}% damage and fire rate, ${llRebuilds ? 'held since your last rebuild' : 'held all run'}. Paid only while every service is up, not most of them — the disruption of basic services is what Target D sets out to reduce.`))
+      `+${Math.round((T.svcBonus - 1) * 100)}% damage and fire rate, ${llRebuilds ? 'held since your last rebuild' : 'held all run'}. Paid only while every service is up, not most of them — the disruption of basic services is what Target D sets out to reduce.`, 'More: the Target D link'))   // TXT-B5 2026-10-30: N-03 (list_TXT_B_final.tsv) - the toggle's accessible name, rowMore's fifth argument; the line was the same up to and including the closing backtick, then `))` (build_TXT_B_2026-10-30)
   // UXBS-FIX 2026-09-30: F5 - the true boss's row still shows here, right after the lifeline row, but it is added below the first / best run rows (hls.splice at hlBoss), and only when the rows that come unconditionally leave a slot (hls.length < 3), so the block is never more than three rows (verify_UXBS F5); where it shows, the order on screen is as before (build_BS_2026-09-30 fix round)
   const hlBoss = hls.length
   // FX2 2026-09-23: shown only when every question asked was answered right - "asked" is the debrief's list, the count releaseFunds banks against (a skipped question counts as asked and not right, as the comment under debriefN in T says); it was `quizRight + quizWrong > 0 && !quizWrong`, true after one right answer and a skip (review_F.md, pre-existing). No questions: not shown, as before (build_F_2026-09-23 fix round)
@@ -14598,7 +14690,7 @@ $('again').onclick = () => { AU.start(PLACE.id); $('over').classList.remove('sho
 $('elsewhere').onclick = () => {
   $('over').classList.remove('show'); $('start').classList.remove('gone')
   // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
-  metaFold = null   // PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)
+  metaFold = null   // TXT-B6 2026-10-30: null = no hand choice, so "Somewhere else" opens the start screen with the capacity section folded (offerMeta, TXT-A2); a hand fold or unfold from the last visit is forgotten here; the code is unchanged, the comment was `// PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)` (build_TXT_B_2026-10-30)
   offerPlaces(); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
   offerFx()   // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch drawn with the others, after offerZoom() (build_PT_2026-10-19)
@@ -14610,7 +14702,7 @@ $('spendfirst').onclick = () => {
   AU.start(PLACE.id)
   $('over').classList.remove('show'); $('start').classList.remove('gone')
   // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
-  metaFold = null   // PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)
+  metaFold = false   // TXT-B6 2026-10-30: review_batch_2026-10-26/OPEN_LEDGER.md T28 (the Lead's ruling) - false = unfolded by choice, so after "Spend your budget first" the start screen opens with the capacity section unfolded (offerMeta: folded = metaFold when it is not null); a hand fold from the last visit is forgotten here; was `metaFold = null   // PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)` (build_TXT_B_2026-10-30)
   offerPlaces(PLACE.id); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
   offerFx()   // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch drawn with the others, after offerZoom() (build_PT_2026-10-19)
