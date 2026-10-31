@@ -282,6 +282,7 @@
     The Mountain valley top end. Made from: [LPC] Terrains (brown dirt).
       Changed: small 32 px tiles cut out, put together into one 256 × 256 tile, and darkened. This image is licensed under CC BY-SA 3.0: https://creativecommons.org/licenses/by-sa/3.0/
       VB-M9 2026-10-18: follow-up F-b - the two entries above added (VB_SRC.wall and VB_SRC.head) (build_VALLEY_2026-10-17)
+      PIX2 2026-10-31: the six place grounds above (the Coastal delta to the Mountain valley ground) are now also shown behind the start screen, How to play and Art credits (the top-left 128 px of each, side by side, at 2x) and behind the run report (that run's own ground, at 2x) (build_PIX_2026-10-31)
     The Assessment pickup icon. Made from: Golden UI - Bigger Than Ever edition (a grey round button and a magnifier icon).
       Changed: the magnifier put on the button, as one 14 × 14 picture; a thin light outline added around it. This image is licensed under CC BY-SA 3.0: https://creativecommons.org/licenses/by-sa/3.0/
     The Evacuation order pickup icon. Made from: Golden UI - Bigger Than Ever edition (a grey round button and a left and a right arrow).
@@ -1777,6 +1778,50 @@
   /* TXT-A6 2026-10-30: ADJUDICATION_TXT_A section 4 S-6 - a report row with a "More" (rowMore): "#over p" gives every report paragraph a 20 px bottom margin, the gap under a row; in such a row the gap goes under the fold instead, so the toggle sits under its row text and the row ends 20 px below the toggle (or below the opened text) as other rows end below their text (build_TXT_A_2026-10-30) */
   #over .rrow .rcol > p, #over .rrow .rfold .fold-b > p{margin-bottom:0}
   #over .rrow .rfold{margin-bottom:20px}
+</style>
+<style id="pix">
+/* PIX1 2026-10-31: GUARD_PIX_builder PIX-1 - direction B (the gold menu) as the base, from Designer PIX-C's block pixc_B_head.txt (mockup_record_PIXC.md). First the base layer shared by all directions: the top bar's gradient as four hard bands; square pills, buttons, chips, folds, key caps, numbers and blocks; the phone build list's own dark ground (build_PIX_2026-10-31) */
+/* PIX1 2026-10-31: the four bands sit at fifths of the bar's height, each as dark as live's gradient (.55 to clear) at the band's lower edge, so no row is darker than live: B's 12 px bands (.55, .42, .28, .14) were darker than live where the sound line (#snd) sits, and that dim line lost contrast, measured (build_PIX_2026-10-31) */
+#topbar{background:linear-gradient(180deg,rgba(0,0,0,.44) 0 20%,rgba(0,0,0,.33) 20% 40%,rgba(0,0,0,.22) 40% 60%,rgba(0,0,0,.11) 60% 80%,transparent 80%)}
+.alm,#endrun,#dodge,body.touch #dodge,#mute,#svc,#cardbar button,.fold-t,.kbd,.card .pairs span,.card .combo .chip,.card.place .roster span,.rstat,#redo,.redo-row,.redo-next,.redo-earn,.rskip,.opt,#combos,#combos .cb-st,#metaearn,.gloss,.card .cmp,.card .banx,.p16rs{border-radius:0}
+.howdots i{border-radius:0}
+#start div.sblk{border-radius:0}
+#cardbuild{background:rgba(8,10,13,.92)}
+/* PIX1 2026-10-31: B's pixel frames and buttons - the UI-05 panel frame at 2x (12 px wide, 6 px outside) on the start-screen blocks, place cards, level-up cards, capacity nodes, How-to-play panel, hint card, Combos and report panel; UI-05 slot frames on the tag chips (1x) and the report numbers (2x); the orange button for How to play and the chosen pace and setting buttons, the brown button for the other buttons; a 2 x 2 pixel screen (screen_2, drawn in code by the Designer) at 3x behind the level-up and hint cards instead of the blur; the computer's Art credits button on its own row. The Designer's own drops stay as live: the pair chips on the level-up cards and EVAC. Panel colours stay live's (B's slate #121419 is not used on cards, nodes and panels); the start-screen blocks, see-through in live (rgba(255,255,255,.045) over --ink), take that colour opaque, #16181b, so no text sits on the ground (build_PIX_2026-10-31) */
+/* PIX1 2026-10-31: no layout change from the frames: the blocks keep live's border widths (0, and 3 px on the left; B set 2 px all round) and the tag chips keep live's padding and line height (B set 5px 10px and 1.2), their slot frame drawn 2 px outside instead (build_PIX_2026-10-31) */
+#start div.sblk{border-style:solid;border-width:0 0 0 3px;border-color:transparent;background-color:#16181b;border-image:var(--u5panel) 6 / 12px / 6px stretch;image-rendering:pixelated}
+#start div.sblk.sbintro{box-shadow:inset 0 4px 0 0 #ff8a3d}
+#start div.sblk.sbdial{box-shadow:inset 0 4px 0 0 #8fe3ff}
+#start div.sblk.sbswitch{box-shadow:inset 0 4px 0 0 #7ee787}
+#start div.sblk.sbplaces{box-shadow:inset 0 4px 0 0 #c4b5ff}
+#start div.sblk.sbcap{box-shadow:inset 0 4px 0 0 #ffd166}
+#start .card.place,.card,.mbtn:not(.maxed){border-image:var(--u5panel) 6 / 12px / 6px stretch}
+#start .card.place .roster span{background:#0b0c0f;border-style:solid;border-width:0;border-color:transparent;border-image:var(--u5slot) 5 / 5px / 2px stretch;image-rendering:pixelated}
+.rstat{padding:9px 12px 8px;border-image:var(--u5slot) 5 / 10px / 0 stretch;background:#0b0c0f}
+#start .dbtn,.fold-t,#cardbar button,.rskip,body:not(.touch) #endrun{opacity:1;border-color:transparent;background:transparent;border-image:var(--u5btnb) 6 12 fill / 6px 12px / 0 stretch;image-rendering:pixelated;color:#f7f4ee}
+#start .dbtn:not(.on):not(.howbtn){opacity:.78}
+/* PIX1 2026-10-31: the dev tools door (shown only on a local copy, offerDev) on a dark plate at full opacity instead of the brown button: on the brown button its coloured words fell below live's, measured (build_PIX_2026-10-31) */
+#start .dbtn.devbtn{opacity:1;border-image:none;background-color:#16181b}
+#start .dbtn.on,#start .dbtn.howbtn{opacity:1;border-image:var(--u5btn) 6 12 fill / 6px 12px / 0 stretch;color:#0b0d10 !important}
+.howpanel{border-image:var(--u5panel) 6 / 12px / 6px stretch}
+#cards,#hint{backdrop-filter:none;image-rendering:pixelated;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAFUlEQVR42mNg4+D+xMbBfYIBRIA4AB2aA9mCb7AMAAAAAElFTkSuQmCC) 0 0/6px 6px repeat}
+#combos{border-color:transparent;border-image:var(--u5panel) 6 / 12px / 6px stretch;image-rendering:pixelated}
+.hintcard{border-image:var(--u5panel) 6 / 12px / 6px stretch}
+#over .rep{background-color:#121419;box-shadow:0 0 0 10px #0a0b0e;border-image:var(--u5panel) 6 / 12px / 16px stretch}
+@media (min-width:1200px){ body:not(.small) #start div#credwrap{margin:10px 0 0} }
+/* PIX4 2026-10-31: GUARD_PIX_builder PIX-4 - on phones END RUN and the sound button keep live's see-through ground: B's brown button above is limited to body:not(.touch) #endrun and leaves #mute out (#mute shows only on touch screens), so on phones both keep live's rgba(11,13,16,.6) ground and opacity; the base layer still squares their corners (build_PIX_2026-10-31) */
+/* PIX2 2026-10-31: GUARD_PIX_builder PIX-2 - the background is the place's own ground, not B's Mountain valley rock. Behind the start screen, and How to play and Art credits (both opened only from the start screen), a mosaic of the six places' grounds (--pix-mos, set by the PIX2 script: the top-left 128 px of each place's ground tile, 3 x 2, shown at 2x); behind the run report, that run's own ground tile at 2x (--pix-run). No wash: the tiles are the ones the game draws. Whole-number scales, pixelated. The one line of text that sat on the start screen's own background, the Understanding line (#learnhead), gets a plate; its opacity .7 moves into its colours so the plate itself is not see-through (build_PIX_2026-10-31) */
+#start,#howto,#credits{image-rendering:pixelated;backdrop-filter:none;background:var(--pix-mos,none) 0 0/768px 512px repeat,#0b0d10}
+#over{image-rendering:pixelated;backdrop-filter:none;background:var(--pix-run,none) 0 0/1024px 1024px repeat,#0b0d10}
+#start div#learnhead{opacity:1;color:rgba(247,244,238,.7);background-color:#16181b;box-shadow:4px 0 0 0 #16181b,-4px 0 0 0 #16181b,0 4px 0 0 #16181b,0 -4px 0 0 #16181b}
+#start div#learnhead b{color:rgba(255,224,138,.7)}
+#start div#learnhead i{color:rgba(126,231,135,.7)}
+/* PIX3 2026-10-31: GUARD_PIX_builder PIX-3 - a faint two-tone pixel texture inside the flat dark panels, cards and plates of PIX1 and PIX2: a 2 x 2 image drawn in code (mktex.js; the 1-in-4 order of direction C's dither_8.png), one pixel clear and three black at alpha .45, at 3x (6 px), laid over each surface's own colour. So 1 pixel in 4 keeps the surface's colour and 3 in 4 are darker: no pixel behind a line is lighter than the flat colour it replaces (build_PIX_2026-10-31) */
+:root{--pixtex:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAD0lEQVR42mNggIBiGFEMAAdCAVrYPHIZAAAAAElFTkSuQmCC)}
+#start div.sblk,#start .card.place,.card,.card:hover,.mbtn,.howpanel,.howbar,.hintcard,#combos,#over .rep,#start div#learnhead{background-image:var(--pixtex);background-size:6px 6px;background-repeat:repeat;background-position:0 0}
+/* PIX3 2026-10-31: no texture behind the capacity nodes: their dim, see-through text (below the threshold in live already, the nodes being see-through) lost contrast over the texture, darker or lighter, measured; so the nodes stay flat and their row (#metawrap) is filled with the block's own flat colour, which is what shows through them in live (build_PIX_2026-10-31) */
+#start .mbtn,#start .mbtn:hover{background-image:none}
+#start div#metawrap{background-color:#16181b}
 </style>
 </head>
 <body>
@@ -14997,6 +15042,22 @@ window.__surv = {
   DIFFS,  // and the per-difficulty dials, for the same reason - `hard` is the one that shortens a mode
   die: () => die(),
 }
+// PIX2 2026-10-31: GUARD_PIX_builder PIX-2 - the grounds behind the menus, as CSS variables on <html> for the PIX2 rules in <head>
+// (build_PIX_2026-10-31). --pix-mos: one SVG picture of six 128 x 128 crops, the top-left of each place's ground tile in ART_SRC, in
+// PLACE_IDS order, 3 x 2, each <image> drawn pixelated (no canvas). --pix-run: the ground tile of the run's place (PLACE), set now and
+// again whenever #over's class or style changes. It reads ART_SRC, PLACE_IDS and PLACE and writes only the two variables: no random
+// number, no game value. MutationObserver, which the test harness lacks, is checked before use.
+;(function pixGrounds() {
+  const root = document.documentElement
+  if (!root || !root.style || typeof root.style.setProperty !== 'function') return
+  const ids = PLACE_IDS.filter(id => ART_SRC[id])
+  const cell = (id, i) => `<svg x="${(i % 3) * 128}" y="${Math.floor(i / 3) * 128}" width="128" height="128"><image width="512" height="512" image-rendering="pixelated" href="${ART_SRC[id]}"/></svg>`
+  if (ids.length === 6) root.style.setProperty('--pix-mos', `url(data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="384" height="256">' + ids.map(cell).join('') + '</svg>')})`)
+  const runGround = () => { if (PLACE && ART_SRC[PLACE.id]) root.style.setProperty('--pix-run', `url(${ART_SRC[PLACE.id]})`) }
+  runGround()
+  const over = $('over')
+  if (over && typeof MutationObserver === 'function') new MutationObserver(runGround).observe(over, { attributes: true, attributeFilter: ['class', 'style'] })
+})()
 })()
 </script>
 </body>
