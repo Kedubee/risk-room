@@ -781,6 +781,19 @@
       Charles Sanchez (AKA CharlesGabriel)
       Manuel Riecke (AKA MrBeast)
       Daniel Armstrong (AKA HughSpectrum)
+
+  MUS5 2026-10-31: the music, two packs, the same entries as the dialog's Music section (build_MUS_2026-10-31). Data: the captured pages
+  _source/Compound_music_P17/M12-01/page.html and M12-40/page.html (title, Author, page address, "License(s):"); the files as received:
+  _source/Compound_music_P17/README.md; copied unchanged into music/ beside the page.
+  MUSIC
+    5 Chiptunes (Action) (M12-01) by SubspaceAudio
+      Page: https://opengameart.org/content/5-chiptunes-action
+      Licence: CC0, https://creativecommons.org/publicdomain/zero/1.0/
+      Used for: title screen.mp3 on the start screen; level1.mp3 and level2.mp3 in the runs, taking turns
+    8bit Action Jingle & Mini Loop (M12-40) by MintoDog
+      Page: https://opengameart.org/content/8bit-action-jingle-mini-loop
+      Licence: CC0, https://creativecommons.org/publicdomain/zero/1.0/
+      Used for: Stage Clear Short (Jingle) when you end a run; GameOver (Jingle) when a run ends any other way
 -->
 <style>
   :root{ --ink:#0b0d10; --paper:#f7f4ee; --accent:#ff7a2f; --xp:#57c7ff; --hp:#ff4d5e; }
@@ -2672,6 +2685,27 @@
       <li class="ce"><span class="cl">Manuel Riecke (AKA MrBeast)</span></li>
       <li class="ce"><span class="cl">Daniel Armstrong (AKA HughSpectrum)</span></li>
     </ul>
+    <!-- MUS5 2026-10-31: the Music section, one entry per music pack used, in the art packs' form; each pack's title, its creator (the page's
+         Author field), its page address and its licence (the page's "License(s):" field) from the captured pages
+         _source/Compound_music_P17/M12-01/page.html and M12-40/page.html; the track titles: M12-01's file names as its page links them,
+         M12-40's track list (build_MUS_2026-10-31) -->
+    <h3>Music</h3>
+    <ul class="clist">
+      <li class="ca" data-id="M12-01">
+        <h5 class="ct">5 Chiptunes (Action)</h5>
+        <p class="cl cby">by SubspaceAudio</p>
+        <p class="cl">Page: <a href="https://opengameart.org/content/5-chiptunes-action" target="_blank" rel="noopener noreferrer">https://opengameart.org/content/5-chiptunes-action</a></p>
+        <p class="cl">Licence: CC0, <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">https://creativecommons.org/publicdomain/zero/1.0/</a></p>
+        <p class="cl">Used for: title screen.mp3 on the start screen; level1.mp3 and level2.mp3 in the runs, taking turns</p>
+      </li>
+      <li class="ca" data-id="M12-40">
+        <h5 class="ct">8bit Action Jingle &amp; Mini Loop</h5>
+        <p class="cl cby">by MintoDog</p>
+        <p class="cl">Page: <a href="https://opengameart.org/content/8bit-action-jingle-mini-loop" target="_blank" rel="noopener noreferrer">https://opengameart.org/content/8bit-action-jingle-mini-loop</a></p>
+        <p class="cl">Licence: CC0, <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">https://creativecommons.org/publicdomain/zero/1.0/</a></p>
+        <p class="cl">Used for: Stage Clear Short (Jingle) when you end a run; GameOver (Jingle) when a run ends any other way</p>
+      </li>
+    </ul>
     <div class="howbar">
       <span><button id="credits-close" type="button">Close</button></span>
     </div>
@@ -3114,8 +3148,14 @@ const LONGRUN = {
 //
 // The context cannot exist before a user gesture — browsers refuse — so it is created on
 // the click that picks a place, and the whole module no-ops until then.
+// MUS4 2026-10-31: the sound switch's choice kept per browser under SND_KEY, on the FX_KEY pattern (one JSON object, try/catch on every
+// read and write); no key, a value that does not parse, an `on` that is not true or false, or a store that throws reads as on, the
+// default before this build; AU's `muted` starts from it (build_MUS_2026-10-31)
+const SND_KEY = 'compoundSoundV1'
+function sndStore() { try { const v = JSON.parse(localStorage.getItem(SND_KEY) || '{}').on; return typeof v === 'boolean' ? v : true } catch (e) { return true } }
+function sndSave(on) { try { localStorage.setItem(SND_KEY, JSON.stringify({ on })) } catch (e) {} }
 const AU = (() => {
-  let ac = null, master = null, muted = false, noise = null
+  let ac = null, master = null, muted = !sndStore(), noise = null   // MUS4 2026-10-31: was `muted = false` (build_MUS_2026-10-31)
   let voices = 0
   const last = {}
   let bedNodes = []
@@ -3134,7 +3174,7 @@ const AU = (() => {
     const AC = window.AudioContext || window.webkitAudioContext
     if (!AC) return false
     ac = new AC()
-    master = ac.createGain(); master.gain.value = 0.5
+    master = ac.createGain(); master.gain.value = muted ? 0 : 0.5   // MUS4 2026-10-31: a stored "off" stays silent once the context exists; was `master.gain.value = 0.5` (build_MUS_2026-10-31)
     const comp = ac.createDynamicsCompressor()
     comp.threshold.value = -18; comp.ratio.value = 8
     master.connect(comp); comp.connect(ac.destination)
@@ -3313,11 +3353,174 @@ const AU = (() => {
     loopTick (name) { this.play(name) },
     toggle () { muted = !muted; if (master) master.gain.value = muted ? 0 : 0.5
                 $('snd').textContent = muted ? 'SOUND OFF · M' : 'SOUND ON · M'
+                sndSave(!muted); MU.mute(muted)   // MUS4 2026-10-31: the choice stored; the music silenced or brought back with the effects (build_MUS_2026-10-31)
                 return muted },
     get muted () { return muted },
     get live () { return !!ac },
     // P6-B5 2026-09-25: seconds from `release` starting to its last note stopping: chord() starts its notes 0.055 s apart and tone() stops each 0.02 s after its d; the bare top tone ends sooner (build_P6_2026-09-25)
     get releaseLen () { return Math.max((REL.fs.length - 1) * 0.055 + REL.d, REL.upAt + REL.upD) + 0.02 },
+  }
+})()
+
+// MUS1-MUS4 2026-10-31: background music (build_MUS_2026-10-31). Five files in music/ beside the page, played by relative path, never
+// inlined. Nothing is created, requested or played before the first trusted user gesture (gesture(), bound to the window after
+// mutePaint() below). Two routes. 'wa' (Web Audio): each file's bytes by XMLHttpRequest, decodeAudioData, and a loop between the points
+// loopPts() reads from each file's LAME encoder delay and padding, so the seam has no gap. 'el': one plain <audio> element per file,
+// looping by itself, on file:// (where a page cannot read its own files) and wherever the 'wa' route fails. The music has its own
+// AudioContext: AU's is still made only by AU.start, so AU's noise buffer (random numbers) is filled where it was. No random number here.
+// The sound switch (AU.toggle) stops every music source and, turned on again, starts the loop of the screen shown; with the sound off
+// nothing is requested until it is turned on.
+const MU = (() => {
+  // frames, LAME encoder delay and padding (samples at 44,100 Hz): the frame walk in _source/Compound_music_P17/README.md
+  const FILES = {
+    title:    { src: 'music/title.mp3',    loop: true,  frames: 563,  delay: 576, pad: 1173 },
+    level1:   { src: 'music/level1.mp3',   loop: true,  frames: 3078, delay: 576, pad: 831 },
+    level2:   { src: 'music/level2.mp3',   loop: true,  frames: 3079, delay: 576, pad: 1468 },
+    clear:    { src: 'music/clear.mp3',    loop: false, frames: 127,  delay: 576, pad: 1401 },
+    gameover: { src: 'music/gameover.mp3', loop: false, frames: 185,  delay: 576, pad: 864 },
+  }
+  const RUN_LOOPS = ['level1', 'level2']   // one per run, in turn, from the first run of the visit
+  // the run's end -> its jingle, in one place: END RUN (endReason 'ended') -> clear; the player down (null) or the services gone ('services') -> gameover
+  const jingleFor = reason => reason === 'ended' ? 'clear' : 'gameover'
+  const VOL = 0.1                  // the music's level (its gain node, or the element's volume): the files peak near 0 dBFS, so the music peaks near -20 dBFS, under the effects' compressor threshold (-18)
+  const FADE = 0.4, CUT = 0.12     // seconds: a loop fading out for the next screen; the run loop cut when the run ends
+  const DEC = 529                  // samples an MP3 decoder adds before the encoder delay (LAME's gapless reading)
+  let route = null, mac = null, want = 'title', runs = 0, gen = 0   // mac: the music's own AudioContext
+  const bytes = {}, bufs = {}, els = {}, live = []
+
+  // the loop's start and end in seconds: the whole buffer when the decoder already cut the delay and padding, else past them
+  function loopPts(name, b) {
+    const F = FILES[name], full = F.frames * 1152, gap = full - F.delay - F.pad, n = b.length * 44100 / b.sampleRate
+    if (Math.abs(n - gap) < Math.abs(n - full)) return [0, b.duration]
+    const s = (F.delay + DEC) / 44100
+    return [s, s + gap / 44100]
+  }
+  function fetchBytes(name) {
+    if (!bytes[name]) {
+      bytes[name] = new Promise((res, rej) => {
+        const x = new XMLHttpRequest()
+        x.open('GET', FILES[name].src); x.responseType = 'arraybuffer'
+        x.onload = () => x.response && x.response.byteLength && (x.status === 200 || x.status === 0) ? res(x.response) : rej(new Error('music ' + x.status))
+        x.onerror = () => rej(new Error('music request'))
+        x.send()
+      })
+      bytes[name].catch(() => {})
+    }
+    return bytes[name]
+  }
+  function load(name) {
+    if (!bufs[name]) {
+      bufs[name] = fetchBytes(name).then(ab => new Promise((res, rej) => mac.decodeAudioData(ab.slice(0), res, rej)))
+      bufs[name].catch(() => {})
+    }
+    return bufs[name]
+  }
+  function startWA(name, g) {
+    load(name).then(b => {
+      if (g !== gen || route !== 'wa') return
+      const F = FILES[name], src = mac.createBufferSource(), gn = mac.createGain(), [a, z] = loopPts(name, b), t = mac.currentTime
+      src.buffer = b
+      if (F.loop) { src.loop = true; src.loopStart = a; src.loopEnd = z; gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(VOL, t + FADE) }
+      else gn.gain.value = VOL
+      src.connect(gn); gn.connect(mac.destination)
+      src.start(t, a)
+      const L = { name, src, gn }
+      live.push(L)
+      src.onended = () => { const i = live.indexOf(L); if (i >= 0) live.splice(i, 1) }
+    }, () => { if (route === 'wa') toEl() })
+  }
+  function el(name) {
+    let e = els[name]
+    if (!e) { e = els[name] = new Audio(FILES[name].src); e.preload = 'auto'; e.loop = FILES[name].loop; e.volume = VOL }
+    return e
+  }
+  function startEl(name) {
+    const e = el(name)
+    clearInterval(e.fadeT); e.volume = VOL; e.currentTime = 0
+    live.push({ name, el: e })
+    const p = e.play()
+    if (p) p.then(() => { e.ok = true }, () => {})
+  }
+  function elFade(e, sec) {
+    clearInterval(e.fadeT)
+    const v0 = e.volume, n = Math.max(1, Math.round(sec / 0.04))
+    let i = 0
+    e.fadeT = setInterval(() => { i++; if (i >= n) { clearInterval(e.fadeT); e.pause(); e.volume = VOL } else e.volume = v0 * (1 - i / n) }, 40)
+  }
+  // 'el': each element played once, muted, inside a gesture, so a later play() outside one (the jingle after a fall) is allowed
+  function unlock() {
+    for (const k in FILES) {
+      const e = el(k)
+      if (e.ok || e.trying || live.some(L => L.el === e)) continue
+      e.trying = true; e.muted = true
+      const done = ok => { e.trying = false; if (ok) e.ok = true; if (!live.some(L => L.el === e)) { e.pause(); e.currentTime = 0 } e.muted = false }
+      const p = e.play()
+      if (p) p.then(() => done(true), () => done(false)); else done(true)
+    }
+  }
+  function stopAll(sec) {
+    for (const L of live.splice(0)) {
+      if (L.el) { if (sec > 0.05) elFade(L.el, sec); else { clearInterval(L.el.fadeT); L.el.pause() } continue }
+      try {
+        const t = mac.currentTime
+        L.gn.gain.cancelScheduledValues(t); L.gn.gain.setValueAtTime(L.gn.gain.value, t); L.gn.gain.linearRampToValueAtTime(0, t + sec)
+        L.src.stop(t + sec + 0.02)
+      } catch (e) {}
+    }
+  }
+  const start = name => { if (route === 'wa') startWA(name, gen); else if (route === 'el') startEl(name) }
+  function init() {
+    const AC = window.AudioContext || window.webkitAudioContext
+    if (location.protocol !== 'file:' && AC && typeof XMLHttpRequest === 'function') {
+      route = 'wa'; mac = new AC()
+      for (const k in FILES) fetchBytes(k)
+    } else route = typeof Audio === 'function' ? 'el' : 'none'
+  }
+  // the 'wa' route failed (a file not read or not decoded): the plain elements from here on
+  function toEl() {
+    route = typeof Audio === 'function' ? 'el' : 'none'
+    try { mac.close() } catch (e) {}
+    mac = null; live.length = 0; gen++
+    if (want && !AU.muted) start(want)
+  }
+  // a screen's music: the loop to play (or null for quiet) and a jingle to play once (or null); whatever was playing fades out
+  function scene(loop, jingle) {
+    gen++; want = loop
+    stopAll(jingle ? CUT : FADE)
+    if (!route || AU.muted) return
+    if (jingle) start(jingle)
+    if (loop) start(loop)
+  }
+  // bound to pointerdown, pointerup, touchend, mousedown, keydown and click on the window (capture): the first trusted one starts the
+  // music; later ones retry what a browser refused (a context left suspended, an element not yet allowed to play)
+  function gesture(ev) {
+    if (!ev || !ev.isTrusted || AU.muted) return
+    if (!route) { init(); gen++; if (want) start(want); if (route === 'el') unlock(); return }
+    if (route === 'wa' && mac && mac.state === 'suspended') mac.resume()
+    if (route === 'el') {
+      unlock()
+      for (const L of live) if (L.el.paused && FILES[L.name].loop) { const p = L.el.play(); if (p) p.then(() => { L.el.ok = true }, () => {}) }
+    }
+  }
+  return {
+    gesture,
+    // from AU.toggle: true stops the music at once; false starts the loop of the screen shown (a click or key: a gesture)
+    mute (m) {
+      gen++
+      stopAll(0.02)
+      if (m) return
+      if (!route) { init(); if (route === 'el') unlock() }
+      if (route === 'wa' && mac.state === 'suspended') mac.resume()
+      if (want) start(want)
+    },
+    title () { scene('title', null) },
+    run () { const n = RUN_LOOPS[runs % RUN_LOOPS.length]; runs++; scene(n, null); for (const k of RUN_LOOPS) if (k !== n) delete bufs[k] },
+    end (reason) { scene(null, jingleFor(reason)) },
+    get state () {
+      return { route, want, runs, mac: mac ? mac.state : null, t: mac ? mac.currentTime : null,
+        live: live.map(L => L.el ? { name: L.name, t: L.el.currentTime, dur: L.el.duration, paused: L.el.paused, vol: L.el.volume, muted: L.el.muted, loop: L.el.loop }
+          : { name: L.name, gain: L.gn.gain.value, a: L.src.loopStart, z: L.src.loopEnd, len: L.src.buffer.length, sr: L.src.buffer.sampleRate, loop: L.src.loop }) }
+    },
   }
 })()
 
@@ -11858,6 +12061,7 @@ function die() {
   endArm(false)   // PT8-E2 2026-10-21: PLAN_PT8 E2 - the end-run button goes back to rest when a run ends, however it ends (build_PT8_2026-10-21)
   uxMergeNew.length = 0; uxMergeQ.length = 0; uxMergeCur = null   // UXBS-FIX 2026-09-30: F6 - a merge moment playing, waiting or not yet started when the run ends is cleared, as reset() clears it; step no longer runs, so it would stay drawn, frozen, under the report (verify_UXBS F6) (build_BS_2026-09-30 fix round)
   AU.play('die')
+  MU.end(endReason)   // MUS2 2026-10-31: the run loop cut, its jingle played once (MU's jingleFor), then quiet on the report (build_MUS_2026-10-31)
   burst(P.x, P.y, '#ff4d5e', 40, 380)
   // What still stood becomes the recovery budget: time held, lifelines standing, works
   // built, compound events absorbed. Banked to storage; spent on the start screen.
@@ -14491,6 +14695,7 @@ function offerPlaces(keep) {
       </div></div></div>
       <div class="phist">${hist ? `${hist.n} run${hist.n > 1 ? 's' : ''} here · best <b>${hist.kills}</b> hazard${hist.kills === 1 ? '' : 's'} killed · <b>lv ${hist.lv}</b>` : 'no runs here yet'}</div>`
     el.onclick = () => { AU.start(id); $('start').classList.add('gone'); reset(id); last = 0 }
+    el.addEventListener('click', () => MU.run())   // MUS2 2026-10-31: a run started from a place card: the start loop fades, the next run loop starts (build_MUS_2026-10-31)
     cardKeyable(el)   // SX-FIX 2026-10-17: FX-1 (PLAN_SIX D7, D8) - the place card made reachable by Tab and named (build_SIX_2026-10-17 fix round)
     // TXT-A3 2026-10-30: the More toggle (see the TXT-A3 comment above el.innerHTML); cardKeyable, just above, already names it by itself and the place's h3 ("More <place>"; its K7 line takes the card's first .fold-t that has an id) (build_TXT_A_2026-10-30)
     const pt = el.querySelector('.pfold .fold-t')
@@ -14767,6 +14972,14 @@ $('dodge').addEventListener('touchstart', e => { e.preventDefault(); doDodge() }
 function mutePaint() { const b = $('mute'); b.innerHTML = AU.muted ? '&#9834;' : '&#9835;'; b.style.opacity = AU.muted ? .45 : 1; b.setAttribute('aria-label', AU.muted ? 'Sound off' : 'Sound on') }
 $('mute').onclick = () => { AU.toggle(); mutePaint() }
 mutePaint()
+// MUS1-MUS4 2026-10-31: the first trusted gesture starts the music (MU.gesture); "Same place again" starts the next run loop; "Somewhere
+// else" and "Spend your budget first" bring the start loop back; a stored "off" shows on the HUD's sound label as a press of M would leave it
+// (the glyph and name: mutePaint, just above) (build_MUS_2026-10-31)
+for (const t of ['pointerdown', 'pointerup', 'touchend', 'mousedown', 'keydown', 'click']) addEventListener(t, MU.gesture, { capture: true, passive: true })
+$('again').addEventListener('click', () => MU.run())
+$('elsewhere').addEventListener('click', () => MU.title())
+$('spendfirst').addEventListener('click', () => MU.title())
+if (AU.muted) $('snd').textContent = 'SOUND OFF ' + String.fromCharCode(183) + ' M'   // 183: the middle dot of AU.toggle's label
 // PT8-E1 / PT8-E2 / PT8-E3 2026-10-21: PLAN_PT8 E1-E3 - the end-run button (#endrun) and Esc (build_PT8_2026-10-21).
 // endLive() is true while a run is in play: the start screen is gone and no level-up card screen, report, How to play, credits dialog or hint
 // card is up. A press - a click or tap, Enter on the focused button, or Esc - does nothing unless endLive(). The first press arms the button
