@@ -282,7 +282,7 @@
     The Mountain valley top end. Made from: [LPC] Terrains (brown dirt).
       Changed: small 32 px tiles cut out, put together into one 256 × 256 tile, and darkened. This image is licensed under CC BY-SA 3.0: https://creativecommons.org/licenses/by-sa/3.0/
       VB-M9 2026-10-18: follow-up F-b - the two entries above added (VB_SRC.wall and VB_SRC.head) (build_VALLEY_2026-10-17)
-      PIX2 2026-10-31: the six place grounds above (the Coastal delta to the Mountain valley ground) are now also shown behind the start screen, How to play and Art credits (the top-left 128 px of each, side by side, at 2x) and behind the run report (that run's own ground, at 2x) (build_PIX_2026-10-31)
+      PIX2 2026-10-31, as changed by START7 2026-11-02: the six place grounds above (the Coastal delta to the Mountain valley ground) are now also shown behind the run report (that run's own ground, at 2x); they are no longer shown behind the start screen, How to play and Art credits, which have a faint pixel checker drawn in CSS (was "are now also shown behind the start screen, How to play and Art credits (the top-left 128 px of each, side by side, at 2x) and behind the run report") (build_PIX_2026-10-31; build_START_2026-11-02)
     The Assessment pickup icon. Made from: Golden UI - Bigger Than Ever edition (a grey round button and a magnifier icon).
       Changed: the magnifier put on the button, as one 14 × 14 picture; a thin light outline added around it. This image is licensed under CC BY-SA 3.0: https://creativecommons.org/licenses/by-sa/3.0/
     The Evacuation order pickup icon. Made from: Golden UI - Bigger Than Ever edition (a grey round button and a left and a right arrow).
@@ -1144,8 +1144,7 @@
   #metahead{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
     opacity:.55;margin-top:6px;cursor:pointer;user-select:none;padding:7px 0}
   #metahead:hover{opacity:.8}
-  #metahead.folded ~ #metawrap, #metahead.folded ~ #metanote,
-  #metahead.folded ~ #metaearn{display:none}
+  /* START4 2026-11-02: the fold rule removed (the heading no longer folds); was `#metahead.folded ~ #metawrap, #metahead.folded ~ #metanote, #metahead.folded ~ #metaearn{display:none}` (build_START_2026-11-02) */
   #metawrap{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px auto 2px;
     max-width:720px}
   /* A capacity node used to be a bare pill - name, level, price - with what it DOES and
@@ -1593,7 +1592,7 @@
      At the two-column break the grid rule above (body:not(.small) #start div#metawrap{display:grid}, two ids) outranked the fold rule
      (#metahead.folded ~ #metawrap, one id on each side); this rule names three ids, so it outranks both. The fold still opens at every
      start-screen opening (offerMeta, metaFold; unchanged) (build_PT2_2026-10-19) */
-  #start div#metahead.folded ~ div#metawrap, #start div#metahead.folded ~ div#metanote, #start div#metahead.folded ~ div#metaearn{display:none}
+  /* START4 2026-11-02: the PT2-F1 fold rule removed (the heading no longer folds); was `#start div#metahead.folded ~ div#metawrap, #start div#metahead.folded ~ div#metanote, #start div#metahead.folded ~ div#metaearn{display:none}` (build_START_2026-11-02) */
   /* PT2-P9 2026-10-19: PLAN_PT2 P9 - the start screen as the user chose it: on a computer the Lead's preview S3 (S1's larger type and spacing,
      each section in a filled block with a coloured left edge), on a phone the single column of preview S2 with S3's blocks. The blocks are
      real wrappers in the markup (div.sblk: .sbintro, .sbdial, .sbswitch with a div.sbsw per switch, #capblk .sbcap, #placeblk .sbplaces);
@@ -1824,7 +1823,8 @@
 @media (min-width:1200px){ body:not(.small) #start div#credwrap{margin:10px 0 0} }
 /* PIX4 2026-10-31: GUARD_PIX_builder PIX-4 - on phones END RUN and the sound button keep live's see-through ground: B's brown button above is limited to body:not(.touch) #endrun and leaves #mute out (#mute shows only on touch screens), so on phones both keep live's rgba(11,13,16,.6) ground and opacity; the base layer still squares their corners (build_PIX_2026-10-31) */
 /* PIX2 2026-10-31: GUARD_PIX_builder PIX-2 - the background is the place's own ground, not B's Mountain valley rock. Behind the start screen, and How to play and Art credits (both opened only from the start screen), a mosaic of the six places' grounds (--pix-mos, set by the PIX2 script: the top-left 128 px of each place's ground tile, 3 x 2, shown at 2x); behind the run report, that run's own ground tile at 2x (--pix-run). No wash: the tiles are the ones the game draws. Whole-number scales, pixelated. The one line of text that sat on the start screen's own background, the Understanding line (#learnhead), gets a plate; its opacity .7 moves into its colours so the plate itself is not see-through (build_PIX_2026-10-31) */
-#start,#howto,#credits{image-rendering:pixelated;backdrop-filter:none;background:var(--pix-mos,none) 0 0/768px 512px repeat,#0b0d10}
+/* START7 2026-11-02: GUARD_START_builder START-7 - the PIX2 comment above no longer holds for these three: behind the start screen, How to play and Art credits the six-ground mosaic (--pix-mos) is replaced by round 1's background (a), a faint pixel checker drawn here (a 4 px light checker and a 24 px dark checker) on #101216; the run report's rule below is unchanged. Was `#start,#howto,#credits{image-rendering:pixelated;backdrop-filter:none;background:var(--pix-mos,none) 0 0/768px 512px repeat,#0b0d10}` (build_START_2026-11-02) */
+#start,#howto,#credits{image-rendering:pixelated;backdrop-filter:none;background:conic-gradient(rgba(255,255,255,.028) 25%,transparent 0 50%,rgba(255,255,255,.028) 0 75%,transparent 0) 0 0/4px 4px,conic-gradient(rgba(0,0,0,.10) 25%,transparent 0 50%,rgba(0,0,0,.10) 0 75%,transparent 0) 0 0/24px 24px,#101216}
 #over{image-rendering:pixelated;backdrop-filter:none;background:var(--pix-run,none) 0 0/1024px 1024px repeat,#0b0d10}
 #start div#learnhead{opacity:1;color:rgba(247,244,238,.7);background-color:#16181b;box-shadow:4px 0 0 0 #16181b,-4px 0 0 0 #16181b,0 4px 0 0 #16181b,0 -4px 0 0 #16181b}
 #start div#learnhead b{color:rgba(255,224,138,.7)}
@@ -1835,6 +1835,144 @@
 /* PIX3 2026-10-31: no texture behind the capacity nodes: their dim, see-through text (below the threshold in live already, the nodes being see-through) lost contrast over the texture, darker or lighter, measured; so the nodes stay flat and their row (#metawrap) is filled with the block's own flat colour, which is what shows through them in live (build_PIX_2026-10-31) */
 #start .mbtn,#start .mbtn:hover{background-image:none}
 #start div#metawrap{background-color:#16181b}
+</style>
+<style id="startlay">
+/* START1-START8 2026-11-02: GUARD_START_builder (round 2's V3 as the user chose it) - the start screen's layout, folded in from the
+   mockup layer (start_lay2/lay/base.css, V3) without !important. Every rule starts with "html body #start.st3" (class st3 is in the markup;
+   startPlace() adds stw for two columns, stn for one), and names a block's own id where the rule it replaces does, so each rule here
+   outranks the older start-screen rule it replaces by one element or one class, and wins by order where the weight is equal. Nothing
+   outside #start is reached: the level-up cards and the run report keep their .card and .mbtn rules. (build_START_2026-11-02) */
+html body #start.st3{text-align:left}
+/* START1: the containers */
+html body #start.st3 div.wide{display:block;max-width:1360px;width:100%;margin:0 auto;gap:0}
+html body #start.st3 div#startside, html body #start.st3 div#startmain{display:flex;flex-direction:column;gap:20px;min-width:0;max-width:none;margin:0;flex:none}
+html body #start.st3 div#startfoot, html body #start.st3 div#uphead{max-width:none;margin:0}
+/* START2: one frame per group - first every group plain, then the quiet stepped outline (a 5 x 5 pixel ring with one-step corners drawn
+   here, #454b56, shown at 2x, no fill) on the title group, the pace and the settings, and the gold UI-05 panel frame with its flat panel
+   colour on the places and the upgrades. The coloured top bars are dropped. */
+html body #start.st3 div.sblk{max-width:none;margin:0;border-style:solid;border-width:0;border-radius:0;box-shadow:none;background:transparent;
+  padding:16px 18px;order:0;align-self:stretch;
+  border-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='5' shape-rendering='crispEdges' fill='%23454b56'%3E%3Crect x='1' y='0' width='3' height='1'/%3E%3Crect x='0' y='1' width='1' height='3'/%3E%3Crect x='4' y='1' width='1' height='3'/%3E%3Crect x='1' y='4' width='3' height='1'/%3E%3C/svg%3E") 2 / 4px / 0 stretch}
+html body #start.st3 div.sblk.sbcap, html body #start.st3 div.sblk.sbplaces{border-image:var(--u5panel) 6 / 12px / 6px stretch;background-color:#16181b;
+  background-image:var(--pixtex);background-size:6px 6px;background-repeat:repeat}
+/* START3: inside the places group, each tile with a thin grey line (2 px, #454b56: one pixel of the outline's 2x grid), its strip, tier,
+   blurb, tags, More and record inside it; a light fill and a lighter line on hover or keyboard focus. No frame round a tag. */
+html body #start.st3 #startwrap .card.place{display:block;border:2px solid #454b56;border-image:none;box-shadow:none;background:transparent;width:auto;max-width:none;
+  margin:0;padding:0 0 8px;transform:none;transition:background .15s,border-color .15s;text-align:left}
+html body #start.st3 #startwrap .card.place *{grid-row:auto;grid-column:auto}
+html body #start.st3 #startwrap .card.place > *, html body #start.st3 #startwrap .card.place .take > *{margin-left:0;margin-right:0;align-self:stretch}
+html body #start.st3 #startwrap .card.place .take{display:flex;flex-direction:column}
+html body #start.st3 #startwrap .card.place .take > .prev{order:0}
+html body #start.st3 #startwrap .card.place .take > .tier{order:1}
+html body #start.st3 #startwrap .card.place .take > .roster{order:2}
+html body #start.st3 #startwrap .card.place .take > p{order:3}
+html body #start.st3 #startwrap .card.place .prev{margin:0 0 8px;height:64px}
+html body #start.st3 #startwrap .card.place .tier{margin:0 0 4px;padding:0 8px;text-align:left}
+html body #start.st3 #startwrap .card.place .roster span{border:0;border-image:none;background:transparent;padding:0;font-size:11.5px;font-weight:700;letter-spacing:.02em;
+  color:#e9e4da;display:inline-flex;align-items:center;gap:5px}
+html body #start.st3 #startwrap .card.place .roster span::before{content:'';width:6px;height:6px;background:#d9a441;flex:none}
+html body #start.st3 #startwrap .card.place .roster{justify-content:flex-start;margin:0 0 6px;gap:4px 12px;padding:0 8px}
+html body #start.st3 #startwrap .card.place p{margin:0;padding:0 8px;opacity:.78;font-size:13px;line-height:1.5}
+html body #start.st3 #startwrap .card.place .pfold{padding:0 8px}
+html body #start.st3 #startwrap .card.place .edge{border-top:0}
+/* START8: the record line ("no runs here yet") at alpha .60 (was .42 by the live cascade, measured 4.08:1) */
+html body #start.st3 #startwrap .card.place .phist{border-top:0;padding:0 8px;margin-top:6px;color:rgba(255,255,255,.6);opacity:1}
+html body #start.st3 #startwrap .card.place:hover, html body #start.st3 #startwrap .card.place:focus-within{background:rgba(255,255,255,.055);border-color:#6a707a}
+html body #start.st3 #startwrap .card.place:hover .p16s, html body #start.st3 #startwrap .card.place:focus-within .p16s{filter:brightness(1.15)}
+html body #start.st3 div#startwrap{max-width:none;margin:0}
+/* START1: the title and intro, the pace */
+html body #start.st3 div.sblk.sbintro{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:12px}
+html body #start.st3 div.sblk.sbintro h1{margin:0;text-align:left}
+html body #start.st3 div.sblk.sbintro #howbtn{margin:0}
+html body #start.st3 div.sblk.sbintro > p{grid-column:1 / -1;text-align:left;font-size:13.5px;line-height:1.6;margin:10px 0 0}
+html body #start.st3 div#diffhead, html body #start.st3 div#diffnote{text-align:left;margin-left:0;margin-right:0;max-width:none}
+html body #start.st3 div#diffhead{margin-top:0;padding:0}
+html body #start.st3 div#diffwrap{justify-content:flex-start;max-width:none;margin:8px 0 0}
+html body #start.st3 div#diffnote{margin:8px 0 0;min-height:0}
+/* START6: the settings, compact - the five switches and More in one wrapping row of smaller buttons (same art, same words), their notes
+   under them when More is open */
+html body #start.st3 div.sblk.sbswitch{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:8px}
+html body #start.st3 div.sblk.sbswitch div.sbsw{display:contents}
+html body #start.st3 div#plainwrap, html body #start.st3 div#srcwrap, html body #start.st3 div#zoomwrap, html body #start.st3 div#fxwrap,
+html body #start.st3 div#dtwrap{max-width:none;margin:0;order:1}
+html body #start.st3 div#plainnote, html body #start.st3 div#srcnote, html body #start.st3 div#zoomnote, html body #start.st3 div#fxnote,
+html body #start.st3 div#dtnote{order:3;flex:1 1 100%;max-width:none;margin:0;font-size:12px;line-height:1.5;text-align:left;opacity:1;color:rgba(247,244,238,.8)}
+html body #start.st3 div#plainwrap button, html body #start.st3 div#srcwrap button, html body #start.st3 div#zoomwrap button, html body #start.st3 div#fxwrap button,
+html body #start.st3 div#dtwrap button, html body #start.st3 div.sblk.sbswitch button#swmore{font-size:11.5px;padding:4px 12px;min-height:28px;line-height:1.3;margin:0}
+html body #start.st3 div.sblk.sbswitch button#swmore{order:2}
+html body #start.st3 div.sblk.sbswitch button:focus-visible, html body #start.st3 div#diffwrap button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+/* START4, START5: the upgrades - the heading row (the heading alone; room at its right for a later control), the nine nodes, the note,
+   the line a purchase leaves */
+html body #start.st3 div#uphead{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px 16px}
+html body #start.st3 div#uphead > div#metahead{flex:1 1 220px;font-size:15px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#ffd166;
+  opacity:1;margin:0;padding:0;cursor:default;max-width:none;text-align:left;line-height:1.3}
+html body #start.st3 div#uphead > div#metahead:hover{opacity:1}
+html body #start.st3 div#metawrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:14px 0 0;max-width:none;width:100%;background:transparent}
+html body #start.st3 #metawrap .mbtn{max-width:none;width:100%;opacity:1;border-image:none;border:2px solid #d9a441;background:#1d2026;color:#f7f4ee;padding:9px 12px;gap:4px;
+  font-size:12.5px;position:relative;margin:0}
+html body #start.st3 #metawrap .mbtn .mlv{opacity:1;color:#d4cec2}
+html body #start.st3 #metawrap .mbtn .mcost{color:#ffd166}
+html body #start.st3 #metawrap .mbtn .mof{opacity:1;font-size:10.5px}
+html body #start.st3 #metawrap .mbtn .mfx{opacity:1;color:rgba(247,244,238,.86);font-size:12px;line-height:1.45}
+html body #start.st3 #metawrap .mbtn:hover:not([disabled]){background:#272b32}
+html body #start.st3 #metawrap .mbtn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+/* START5: a node that cannot be bought yet - dashed grey edge, darker plate, a lock drawn here (7 x 8 pixels at 2x); every line readable */
+html body #start.st3 #metawrap .mbtn[disabled]:not(.maxed){border:2px dashed #6a707a;background:#111317;padding-right:32px;cursor:default}
+html body #start.st3 #metawrap .mbtn[disabled]:not(.maxed) .mcost{color:#e3c778}
+html body #start.st3 #metawrap .mbtn[disabled]:not(.maxed)::after{content:'';position:absolute;top:9px;right:9px;width:14px;height:16px;image-rendering:pixelated;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='8' shape-rendering='crispEdges'%3E%3Cg fill='%23a9afb8'%3E%3Crect x='2' y='0' width='3' height='1'/%3E%3Crect x='1' y='1' width='1' height='2'/%3E%3Crect x='5' y='1' width='1' height='2'/%3E%3Crect x='0' y='3' width='7' height='5'/%3E%3C/g%3E%3Crect x='3' y='5' width='1' height='2' fill='%23111317'/%3E%3C/svg%3E") 0 0/14px 16px no-repeat}
+/* START5: a node at its top level - solid green edge, readable */
+html body #start.st3 #metawrap .mbtn.maxed{border:2px solid #4f9a5a;background:#132018;color:#7ee787}
+html body #start.st3 #metawrap .mbtn.maxed .mlv{color:#a9f0b0}
+html body #start.st3 div#metanote{opacity:1;color:rgba(247,244,238,.8);font-size:12.5px;line-height:1.55;margin:14px 0 0;max-width:none;min-height:0;text-align:left}
+/* START8: the "Built" panel aligned: the panel and its inner lines keep their own widths and margins (the "#start div" rule gave each inner
+   div max-width 430px and auto margins) */
+html body #start.st3 div#metaearn{max-width:none;margin:0}
+html body #start.st3 div#metaearn.show{margin:12px 0 0}
+html body #start.st3 div#metaearn div{max-width:none;margin-left:0;margin-right:0;text-align:left}
+/* START1: the footer row - the Understanding line (no plate), Art credits, the dev door */
+html body #start.st3 div#startfoot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px}
+html body #start.st3 div#learnhead{background:transparent;box-shadow:none;margin:0;max-width:none;flex:1 1 320px;text-align:left}
+html body #start.st3 div#credwrap, html body #start.st3 div#devwrap{margin:0;max-width:none;align-self:auto}
+/* START1: two columns (a window 1000 CSS px wide or wider, not a phone) - title, pace, settings on the left; places, upgrades, footer on the right */
+html body #start.st3.stw{padding:24px 36px}
+html body #start.st3.stw div.wide{display:grid;grid-template-columns:360px minmax(0,1fr);column-gap:36px;align-items:start}
+html body #start.st3.stw div#startwrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 24px}
+html body #start.st3.stw div#metawrap{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:1199px){
+  html body #start.st3.stw{padding:20px 22px}
+  html body #start.st3.stw div.wide{grid-template-columns:340px minmax(0,1fr);column-gap:22px}
+  html body #start.st3.stw div#startwrap{gap:12px 16px}
+  html body #start.st3.stw div#metawrap{grid-template-columns:repeat(2,minmax(0,1fr))}
+  /* START6: two rows of switches at this width: the left column 340 px (V3: 330) and less side padding in the block (10 px) and between
+     the buttons (5 px); the buttons keep their 12 px side padding, so no word sits on the button art's 12 px edge */
+  html body #start.st3.stw div.sblk.sbswitch{gap:8px 5px;padding:14px 10px}
+}
+/* START1: one centred column (a narrower window, or a phone) - intro, places two by two, pace, upgrades, settings, footer */
+html body #start.st3.stn{padding:18px 16px}
+html body #start.st3.stn div.wide{max-width:640px}
+html body #start.st3.stn div#startside{gap:18px}
+html body #start.st3.stn div#startmain{display:none}
+html body #start.st3.stn div.sblk{padding:14px}
+html body #start.st3.stn div.sblk.sbintro{display:flex;flex-direction:column;align-items:center;gap:10px}
+html body #start.st3.stn div.sblk.sbintro h1{text-align:center}
+html body #start.st3.stn div.sblk.sbintro > p{text-align:center;margin:0;font-size:12.5px}
+html body #start.st3.stn div#startwrap{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+html body #start.st3.stn #startwrap .card.place .prev{height:48px}
+html body #start.st3.stn #startwrap .card.place .prev > h3{font-size:13.5px;left:8px;bottom:12px;white-space:normal}
+html body #start.st3.stn #startwrap .card.place .prev span{left:8px;bottom:5px}
+html body #start.st3.stn #startwrap .card.place p{font-size:12px;line-height:1.45}
+html body #start.st3.stn #startwrap .card.place .roster span{font-size:10.5px}
+html body #start.st3.stn #startwrap .card.place .roster{gap:2px 10px}
+html body #start.st3.stn #startwrap .card.place .tier, html body #start.st3.stn #startwrap .card.place .roster, html body #start.st3.stn #startwrap .card.place p,
+html body #start.st3.stn #startwrap .card.place .pfold, html body #start.st3.stn #startwrap .card.place .phist{padding:0 6px}
+html body #start.st3.stn div.sblk.sbdial{text-align:center}
+html body #start.st3.stn div#diffhead, html body #start.st3.stn div#diffnote{text-align:center}
+html body #start.st3.stn div#diffwrap{justify-content:center}
+html body #start.st3.stn div.sblk.sbswitch{justify-content:center;gap:8px 5px;padding:14px 10px}
+html body #start.st3.stn div#uphead > div#metahead{font-size:14px}
+html body #start.st3.stn div#startfoot{justify-content:center}
+html body #start.st3.stn div#learnhead{text-align:center}
 </style>
 </head>
 <body>
@@ -1879,7 +2017,8 @@
   </div>
 </div></div>
 
-<div id="start"><div class="wide">
+<!-- START1 2026-11-02: class st3 scopes the start screen's layout rules (the START1 style block before </head>); startPlace() in the script adds stw (two columns) or stn (one column) (build_START_2026-11-02) -->
+<div id="start" class="st3"><div class="wide">
   <!-- PT-P5 2026-10-19: PLAN_PT P5 - two wrappers, #startside (the heading, How to play, the intro, the dial and the four switches) and #startmain (the capacity section, the Understanding line, the place cards, Art credits and the dev door), around the same children in the same order, so a screen reader and a phone see the page as before; on a computer window at the two-column break and wider the CSS puts them side by side (build_PT_2026-10-19) -->
   <div id="startside">
   <!-- PT2-P9 2026-10-19: PLAN_PT2 P9 (preview S3) - each section of the start screen in its own block (div.sblk), around the same children in the same order: the intro (the heading, How to play and the intro paragraph), the growth dial, the four switches (each switch and its note in a div.sbsw, two by two), and in #startmain the capacity section (#capblk) and the six places (#placeblk). No player text is added, removed or changed; the CSS draws each block as a filled panel with a coloured left edge (build_PT2_2026-10-19) -->
@@ -1928,20 +2067,23 @@
   </div></div><!-- PT2-P9 2026-10-19: end of the last switch and of the switches' block (build_PT2_2026-10-19) -->
   </div><!-- PT-P5 2026-10-19: end of #startside (build_PT_2026-10-19) -->
   <div id="startmain"><!-- PT-P5 2026-10-19 (build_PT_2026-10-19) -->
-  <!-- PT2-F2 2026-10-19: PLAN_PT2 F2 - the markup keeps today's order (capacity, the Understanding line, the places), which is the single column's drawn and Tab order. On a computer window at the two-column break and wider the places are drawn first, so startOrder() in the script moves #placeblk in front of #capblk there and back after #learnhead below it, so Tab follows the drawn order in both layouts (build_PT2_2026-10-19) -->
+  <!-- START1 2026-11-02: the markup is now the two-column order: #startside holds the intro, the pace and the settings; #startmain holds the places, the upgrades (#capblk) and the footer row (#startfoot: the Understanding line, Art credits, the dev door). startPlace() in the script keeps this order on a computer window 1000 CSS px wide or wider that is not SMALL, and on a narrower window or a phone moves every block into #startside as one column (intro, places, pace, upgrades, settings, footer), so Tab follows the drawn order in both layouts. Was the PT2-F2 order (capacity, the Understanding line, the places) with startOrder() moving the places (build_START_2026-11-02) -->
+  <div class="sblk sbplaces" id="placeblk"><!-- PT2-P9 2026-10-19: the six places' block (build_PT2_2026-10-19) -->
+  <div id="startwrap"></div>
+  </div><!-- PT2-P9 2026-10-19: end of the places block (build_PT2_2026-10-19) -->
   <div class="sblk sbcap" id="capblk"><!-- PT2-P9 2026-10-19: the capacity section's block (build_PT2_2026-10-19) -->
-  <div id="metahead"></div>
+  <!-- START4 2026-11-02: the heading row #uphead holds the heading; it is a flex row so a control can sit at its right later; nothing else is in it (build_START_2026-11-02) -->
+  <div id="uphead"><div id="metahead"></div></div>
   <div id="metawrap"></div>
   <div id="metanote"></div>
   <div id="metaearn"></div>
   </div><!-- PT2-P9 2026-10-19: end of the capacity block (build_PT2_2026-10-19) -->
+  <div id="startfoot"><!-- START1 2026-11-02: the footer row (build_START_2026-11-02) -->
   <div id="learnhead"></div>
-  <div class="sblk sbplaces" id="placeblk"><!-- PT2-P9 2026-10-19: the six places' block (build_PT2_2026-10-19) -->
-  <div id="startwrap"></div>
-  </div><!-- PT2-P9 2026-10-19: end of the places block (build_PT2_2026-10-19) -->
   <!-- ART-E 2026-10-17: E2 - the "Art credits" button: after the place cards, before the dev door; it opens #credits (credOpen in the script) (build_ART_2026-10-17) -->
   <div id="credwrap"><button id="credbtn" class="dbtn credbtn" type="button">Art credits</button></div>
   <div id="devwrap"></div>
+  </div><!-- START1 2026-11-02: end of #startfoot (build_START_2026-11-02) -->
   </div><!-- PT-P5 2026-10-19: end of #startmain (build_PT_2026-10-19) -->
 </div></div>
 
@@ -2824,16 +2966,40 @@ if (SMALL) document.body.classList.add('small')   // PT-P5 2026-10-19: PLAN_PT P
 // in front of the capacity block (#capblk) in the page; in the single column it stands where the markup has it, after the Understanding line
 // (#learnhead), so that column's order is today's. Run once now and again whenever the window crosses the break; it only moves the block
 // when it is in the wrong place, so nothing moves on a load that needs no move. No card, handler or text changes (build_PT2_2026-10-19)
-const START_WIDE = matchMedia('(min-width:1200px)')
-const startOrder = () => {
-  const pl = $('placeblk'), cap = $('capblk'), lh = $('learnhead')
-  if (!pl || !cap || !lh) return
-  if (START_WIDE.matches && !SMALL) { if (pl.nextElementSibling !== cap) cap.parentNode.insertBefore(pl, cap) }
-  else if (lh.nextElementSibling !== pl) lh.parentNode.insertBefore(pl, lh.nextSibling)
+// START1 2026-11-02: GUARD_START_builder START-1 - the PT2-F2 lines above no longer describe the code: startOrder() and START_WIDE
+// (the 1,200 px query) are replaced by startPlace() on a 1,000 px query. Two columns on a window 1,000 CSS px wide or wider that is not
+// SMALL: #startside = intro, pace, settings; #startmain = places, upgrades, footer row (#startfoot). Otherwise one column, all in
+// #startside: intro, places, pace, upgrades, settings, footer row. It sets class stw or stn on #start for the CSS, runs now and again
+// whenever the window crosses the break, and moves a block only when it is not already in its place. No card, handler or text changes.
+// Was: const START_WIDE = matchMedia('(min-width:1200px)') and startOrder(), which moved #placeblk before #capblk or after #learnhead
+// (build_START_2026-11-02)
+const startPlace = () => {
+  const st = $('start'), side = $('startside'), main = $('startmain')
+  if (!st || !side || !main) return
+  const q = s => st.querySelector(s)
+  const B = [q('.sblk.sbintro'), q('.sblk.sbdial'), q('.sblk.sbswitch'), $('placeblk'), $('capblk'), $('startfoot')]
+  if (B.some(e => !e)) return
+  const [intro, pace, set, places, up, foot] = B
+  const wide = !SMALL && !!startPlace.mq && startPlace.mq.matches
+  st.classList.toggle('stw', wide); st.classList.toggle('stn', !wide)
+  const put = (col, list) => list.forEach((e, i) => { const at = col.children[i]; if (at !== e) col.insertBefore(e, at || null) })
+  if (wide) { put(side, [intro, pace, set]); put(main, [places, up, foot]) }
+  else put(side, [intro, places, pace, up, set, foot])
 }
-startOrder()
-if (START_WIDE.addEventListener) START_WIDE.addEventListener('change', startOrder)
-else if (START_WIDE.addListener) START_WIDE.addListener(startOrder)   // older Safari has only the old name
+startPlace.mq = typeof matchMedia === 'function' ? matchMedia('(min-width:1000px)') : null
+startPlace()
+if (startPlace.mq && startPlace.mq.addEventListener) startPlace.mq.addEventListener('change', startPlace)
+else if (startPlace.mq && startPlace.mq.addListener) startPlace.mq.addListener(startPlace)   // older Safari has only the old name
+// START8 2026-11-02: GUARD_START_builder START-8 - a node's hover puts its own, shorter line in #metanote; at the foot of the page that
+// shortened the page and pulled the nodes down under the pointer before a press landed. While the pointer is over the nodes (#metawrap),
+// the note keeps at least the height it had when the pointer came in; when the pointer leaves them the hold is dropped, so no blank band
+// stays under the note. addEventListener is checked first (the test harness's DOM may lack it). No text changes (build_START_2026-11-02)
+;(() => {
+  const mw = $('metawrap'), mn = $('metanote')
+  if (!mw || !mn || typeof mw.addEventListener !== 'function' || !mn.style) return
+  mw.addEventListener('mouseenter', () => { mn.style.minHeight = Math.ceil(mn.getBoundingClientRect().height) + 'px' })   // rounded up: a height rounded down let the page shrink by under 1 px
+  mw.addEventListener('mouseleave', () => { mn.style.minHeight = '' })
+})()
 
 const stick = { on: false, id: null, ox: 0, oy: 0, x: 0, y: 0, dx: 0, dy: 0 }
 const STICK_R = 58
@@ -6754,7 +6920,8 @@ function runsRecord() {
 }
 
 
-let metaFold = null   // TXT-B6 2026-10-30: null = folded (no hand choice; offerMeta, TXT-A2); false = unfolded, true = folded, by a hand press on the heading since the start screen last opened, or false as set by the spendfirst handler ("Spend your budget first"), so the block opens unfolded there; "Somewhere else" sets null (folded); was `// null = open (PT-P4); true/false = the player has folded or unfolded it by hand since the start screen last opened` (build_TXT_B_2026-10-30)   // PT-P4 2026-10-19: was "// null = follow affordability; true/false = the player has decided" (build_PT_2026-10-19)
+// START4 2026-11-02: the fold state metaFold is removed (offerMeta no longer folds); the line was `let metaFold = null   // TXT-B6 ...` with the comment kept below (build_START_2026-11-02)
+//   TXT-B6 2026-10-30: null = folded (no hand choice; offerMeta, TXT-A2); false = unfolded, true = folded, by a hand press on the heading since the start screen last opened, or false as set by the spendfirst handler ("Spend your budget first"), so the block opens unfolded there; "Somewhere else" sets null (folded); was `// null = open (PT-P4); true/false = the player has folded or unfolded it by hand since the start screen last opened` (build_TXT_B_2026-10-30)   // PT-P4 2026-10-19: was "// null = follow affordability; true/false = the player has decided" (build_PT_2026-10-19)
 let metaEarn = null   // the node just bought, kept so offerMeta can re-render what it means
 function offerMeta() {
   const st = metaStore()
@@ -6767,20 +6934,13 @@ function offerMeta() {
   // its comment "Re-evaluated on EVERY render while metaFold is null ... would hide the reward it just paid." and the line
   // const folded = metaFold === null ? !canBuy : metaFold (build_PT_2026-10-19)
   // TXT-A2 2026-10-30: ADJUDICATION_TXT_A section 4 S-2 (PLAN_TXT section 7, the capacity block folded) - with no hand choice (metaFold null) the section is folded: only the heading shows; a click or tap on the heading opens it as before, and the two places that reset metaFold to null ("Somewhere else" and the door) now fold it again. The PT-P4 comment above ("with no hand choice (metaFold null) it is unfolded") no longer holds; was `const folded = metaFold === null ? false : metaFold` (build_TXT_A_2026-10-30)
-  const folded = metaFold === null ? true : metaFold
+  // START4 2026-11-02: GUARD_START_builder START-4 - the section is always open: no fold state, no arrow, no click or key handler, no
+  // role, tabindex or aria-expanded on the heading; the PT-P4 and TXT-A2 comments above no longer describe the code; the heading's words
+  // are unchanged. Was: `const folded = metaFold === null ? true : metaFold`, `head.classList.toggle('folded', folded)`, the arrow
+  // `${folded ? '▸' : '▾'} ` before the words, `head.onclick = () => { metaFold = !folded; offerMeta() }`, and the TXT-A2 keyboard toggle
+  // (role button, tabindex 0, aria-expanded, head.onkeydown on Enter or Space) (build_START_2026-11-02)
   const head = $('metahead')
-  head.classList.toggle('folded', folded)
-  head.textContent = `${folded ? '▸' : '▾'} Institutional capacity — recovery budget: ${st.funds}`
-  head.onclick = () => { metaFold = !folded; offerMeta() }
-  // TXT-A2 2026-10-30: the heading as a keyboard toggle - now that the nodes start hidden, a keyboard player must be able to open them: the div (kept, since the start screen's CSS names div#metahead) gets role button, tabindex 0 and aria-expanded (true while unfolded); Enter or Space on it does what a click does, once per press (a repeat keydown does nothing), and the key stops here, as cardKeys does for a place card. No visible word changes (build_TXT_A_2026-10-30)
-  head.setAttribute('role', 'button')
-  head.setAttribute('tabindex', '0')
-  head.setAttribute('aria-expanded', folded ? 'false' : 'true')
-  head.onkeydown = e => {
-    if (e.key !== 'Enter' && e.key !== ' ') return
-    e.preventDefault(); e.stopPropagation()
-    if (!e.repeat) head.onclick()
-  }
+  head.textContent = `Institutional capacity — recovery budget: ${st.funds}`
   const wrap = $('metawrap'); wrap.innerHTML = ''
   for (const m of META) {
     const l = st.lv[m.id] || 0
@@ -14940,7 +15100,8 @@ $('again').onclick = () => { AU.start(PLACE.id); $('over').classList.remove('sho
 $('elsewhere').onclick = () => {
   $('over').classList.remove('show'); $('start').classList.remove('gone')
   // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
-  metaFold = null   // TXT-B6 2026-10-30: null = no hand choice, so "Somewhere else" opens the start screen with the capacity section folded (offerMeta, TXT-A2); a hand fold or unfold from the last visit is forgotten here; the code is unchanged, the comment was `// PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)` (build_TXT_B_2026-10-30)
+  // START4 2026-11-02: the reset `metaFold = null` is removed with the fold state (offerMeta no longer folds) (build_START_2026-11-02)
+  //   TXT-B6 2026-10-30: null = no hand choice, so "Somewhere else" opens the start screen with the capacity section folded (offerMeta, TXT-A2); a hand fold or unfold from the last visit is forgotten here; the code is unchanged, the comment was `// PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)` (build_TXT_B_2026-10-30)
   offerPlaces(); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
   offerFx()   // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch drawn with the others, after offerZoom() (build_PT_2026-10-19)
@@ -14952,7 +15113,8 @@ $('spendfirst').onclick = () => {
   AU.start(PLACE.id)
   $('over').classList.remove('show'); $('start').classList.remove('gone')
   // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
-  metaFold = false   // TXT-B6 2026-10-30: review_batch_2026-10-26/OPEN_LEDGER.md T28 (the Lead's ruling) - false = unfolded by choice, so after "Spend your budget first" the start screen opens with the capacity section unfolded (offerMeta: folded = metaFold when it is not null); a hand fold from the last visit is forgotten here; was `metaFold = null   // PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)` (build_TXT_B_2026-10-30)
+  // START4 2026-11-02: the reset `metaFold = false` is removed with the fold state (offerMeta no longer folds) (build_START_2026-11-02)
+  //   TXT-B6 2026-10-30: review_batch_2026-10-26/OPEN_LEDGER.md T28 (the Lead's ruling) - false = unfolded by choice, so after "Spend your budget first" the start screen opens with the capacity section unfolded (offerMeta: folded = metaFold when it is not null); a hand fold from the last visit is forgotten here; was `metaFold = null   // PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)` (build_TXT_B_2026-10-30)
   offerPlaces(PLACE.id); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
   offerFx()   // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch drawn with the others, after offerZoom() (build_PT_2026-10-19)
@@ -15263,9 +15425,9 @@ window.__surv = {
 ;(function pixGrounds() {
   const root = document.documentElement
   if (!root || !root.style || typeof root.style.setProperty !== 'function') return
-  const ids = PLACE_IDS.filter(id => ART_SRC[id])
-  const cell = (id, i) => `<svg x="${(i % 3) * 128}" y="${Math.floor(i / 3) * 128}" width="128" height="128"><image width="512" height="512" image-rendering="pixelated" href="${ART_SRC[id]}"/></svg>`
-  if (ids.length === 6) root.style.setProperty('--pix-mos', `url(data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="384" height="256">' + ids.map(cell).join('') + '</svg>')})`)
+  // START7 2026-11-02: the --pix-mos builder removed (no rule reads it since START7); the PIX2 comment above no longer holds for it; the
+  // three lines were `const ids = PLACE_IDS.filter(id => ART_SRC[id])`, `const cell = (id, i) => ...` (one 128 x 128 <svg><image> per place)
+  // and `if (ids.length === 6) root.style.setProperty('--pix-mos', ...)`; --pix-run below is unchanged (build_START_2026-11-02)
   const runGround = () => { if (PLACE && ART_SRC[PLACE.id]) root.style.setProperty('--pix-run', `url(${ART_SRC[PLACE.id]})`) }
   runGround()
   const over = $('over')
