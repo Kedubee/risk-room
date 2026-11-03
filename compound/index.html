@@ -1383,6 +1383,9 @@
   /* QC-M3 2026-10-13: the "Why not" line after a wrong pick - the explanation's size and spacing, at full opacity; its label in bold words, in the verdict's "bad" colour, so the words carry it and the colour only repeats them (build_Q_2026-10-13) */
   .redo-whynot{font-size:12.5px;line-height:1.6;margin-top:10px;text-align:left}
   .redo-whynot b{font-weight:800;color:#ff9d9d}
+  /* QZ4 2026-11-03: the game line under the answer line (mountDebrief). It is a <p> inside #over, so `#over p` gives it what it gives the answer line (.redo-why): 14 px, opacity .6 and a 20 px bottom margin. This rule adds the answer line's line height and left alignment; its label "In the game:" is bold in the debrief's own yellow (#ffe08a, as the payout line), so it reads as a line of its own (build_QZ_2026-11-03) */
+  .redo-gameline{line-height:1.6;text-align:left}
+  .redo-gameline b{font-weight:800;color:#ffe08a}
   /* start screen: what the debriefs have accumulated — one line, never folded */
   #learnhead{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
     opacity:.7;margin:6px auto 10px;line-height:1.7}
@@ -4622,66 +4625,71 @@ const POOL_Q = {
 // `why` carries its own attribution in the string (sweep3_2026-09-22/source_verification.md).
 const EVENT_Q = {
   tsunami: {
-    q: 'The tsunami has passed through. Why did none of your measures stop it?',
+    q: 'Your run had a tsunami warning. In real life, what is the plan when a tsunami is coming?',   // QZ1 2026-11-03: E-tsunami-q (final/list_QZ_final.tsv), verbatim; was `'The tsunami has passed through. Why did none of your measure…'` (build_QZ_2026-11-03)
     // CORRECTED 2026-09-22: opt 1 "no build survives standing in one" was false to the code (armour cuts the hit); opt 0 "absorbs" -> "stops" so it stays wrong (sweep 3, sweep3_2026-09-22/source_verification.md E2-s1; Lead F8)
-    opts: ['They were too low level — a maxed build stops it',
+    opts: ['Wait for an official alert before you start to move',   // QZ1 2026-11-03: E-tsunami-opt0 (final/list_QZ_final.tsv), verbatim; was `'They were too low level — a maxed build stops it'` (build_QZ_2026-11-03)
            // CORRECTED 2026-09-22: correct option was "no build survives standing in one" (armour cuts the hit in the game) (sweep 3, sweep3_2026-09-22/source_verification.md E2-s1; Lead F8)
-           'Events are not enemies; nothing here stops them',   // TXT-B4 2026-10-30: E-tsunami-opt1 (list_TXT_B_final.tsv); was `'Events are not enemies. Nothing in the game stops them, and armour only cuts the hit. The answer was being out of the lane before it arrived'` (build_TXT_B_2026-10-30)
-           'The green belt was facing the wrong way',
-           'It only stops if every lifeline is standing'],
+           'Reach high ground or go inland before the wave hits',   // QZ1 2026-11-03: E-tsunami-opt1 (final/list_QZ_final.tsv), verbatim; was `'Events are not enemies; nothing here stops them'`; this replaces the line's earlier comment (TXT-B4 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
+           'Climb to the top floor of the nearest building',   // QZ1 2026-11-03: E-tsunami-opt2 (final/list_QZ_final.tsv), verbatim; was `'The green belt was facing the wrong way'` (build_QZ_2026-11-03)
+           'Go down to the harbour to save your boat'],   // QZ1 2026-11-03: E-tsunami-opt3 (final/list_QZ_final.tsv), verbatim; was `'It only stops if every lifeline is standing'` (build_QZ_2026-11-03)
     correct: 1,
     // CORRECTED 2026-09-22: was an absolute for all five events ("no build that survives them"); game and world now separated, NWS route and hedge added (sweep 3, sweep3_2026-09-22/source_verification.md E2-s1 E2-s2 E1b E3c E5b; round 2: F3, NWS route to vertical evacuation (ask the local emergency office ahead of time) and its fallback status added, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     // CORRECTED 2026-09-23: comment made true - the word counts in the next line leave out the four-word source tag (section C round 2, section_C_2026-09-22)
     // CORRECTED 2026-09-23: shortened 110 -> 94 words, not counting the four-word source tag (114 -> 98 with it) (sweep 3 R4): the game part condensed; the NWS part, its hedge, the ask-ahead step and the tag unchanged (section C, section_C_2026-09-22)
-    whyShort: 'In the game, no measure stops an event. In real life, reach high ground or go inland before the wave arrives. (NOAA NWS)',   // TXT-B1 2026-10-30: E-tsunami-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
+    whyShort: 'The plan is to reach high ground or go inland before the wave arrives. Some strong, tall buildings may be able to provide protection — a fallback, not the plan. (NOAA NWS)',   // QZ1 2026-11-03: E-tsunami-whyShort (final/list_QZ_final.tsv), verbatim; was `'In the game, no measure stops an event. In real life, reach …'`; this replaces the line's earlier comment (TXT-B1 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
+    gameLine: 'No card stops a tsunami; its warning gives you time to move away.',   // QZ2 2026-11-03: E-tsunami-gameLine (final/list_QZ_final.tsv), verbatim; a new property: the game line the debrief shows under the answer line (QZ4, mountDebrief) (build_QZ_2026-11-03)
     why: 'In the game, no measure stops an event. Armour only cuts the damage, and Early warning gives you more time to get out of the lane. In real life, the plan is to reach high ground, or to go inland away from the water, before the wave arrives. If you worry that you will not reach a safe place in time, plan ahead. Ask your local emergency office about going up high in a building instead. Some strong, tall buildings may be able to provide protection, but that is a fallback, not the plan. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   debris: {
-    q: 'The debris flow came down the channel and through the village. Why did none of your measures stop it?',
-    opts: ['The channel was built too narrow for it',
+    q: 'Your run had a debris flow warning. In real life, what protects people from debris flows best?',   // QZ1 2026-11-03: E-debris-q (final/list_QZ_final.tsv), verbatim; was `'The debris flow came down the channel and through the villag…'` (build_QZ_2026-11-03)
+    opts: ['Building stronger homes in steep gullies',   // QZ1 2026-11-03: E-debris-opt0 (final/list_QZ_final.tsv), verbatim; was `'The channel was built too narrow for it'` (build_QZ_2026-11-03)
            // CORRECTED 2026-09-22: correct option was "Retention only ever buys a volume: once it is full what follows goes over the top" (USGS: basins can be built to contain flow, should be sized for the largest flows, and overflow if not emptied) (sweep 3 round 2: F1, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-           'Nothing in the game stops it',   // TXT-B4 2026-10-30: E-debris-opt1 (list_TXT_B_final.tsv); was `'Nothing in the game stops it. In real life, a basin that is big enough and emptied regularly can hold it, but here the answer is still not being in the channel'` (build_TXT_B_2026-10-30)
-           'Green defences were facing the wrong way',
-           'It stops once Maintenance is high enough'],
+           'Leaving, staying away, or moving homes off the path',   // QZ1 2026-11-03: E-debris-opt1 (final/list_QZ_final.tsv), verbatim; was `'Nothing in the game stops it'`; this replaces the line's earlier comment (TXT-B4 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
+           'A basin, which keeps working once it is built',   // QZ1 2026-11-03: E-debris-opt2 (final/list_QZ_final.tsv), verbatim; was `'Green defences were facing the wrong way'` (build_QZ_2026-11-03)
+           'Staying inside the house until the danger has passed'],   // QZ1 2026-11-03: E-debris-opt3 (final/list_QZ_final.tsv), verbatim; was `'It stops once Maintenance is high enough'` (build_QZ_2026-11-03)
     correct: 1,
     // CORRECTED 2026-09-22: was "not a landslide" (it is a type of landslide), "a delay" (no source), "The measure" (USGS names evacuation/avoidance/relocation as best) (sweep 3, sweep3_2026-09-22/source_verification.md E3a E3c E3c-Qwhy; round 2: F1, basin scope as USGS pp.17, 111, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-    whyShort: 'In the game, a debris flow has no health bar to shoot at. In real life, leaving, staying away and moving homes protect people best. (USGS)',   // TXT-B1 2026-10-30: E-debris-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
+    whyShort: 'Leaving, staying away and moving homes are the best ways to protect people. Basins can be built to hold a debris flow, but must be emptied regularly. (USGS)',   // QZ1 2026-11-03: E-debris-whyShort (final/list_QZ_final.tsv), verbatim; was `'In the game, a debris flow has no health bar to shoot at. In…'`; this replaces the line's earlier comment (TXT-B1 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
+    gameLine: 'No card or shot can stop a debris flow.',   // QZ2 2026-11-03: E-debris-gameLine (final/list_QZ_final.tsv), verbatim; a new property: the game line the debrief shows under the answer line (QZ4, mountDebrief) (build_QZ_2026-11-03)
     why: 'A debris flow is a fast type of landslide: soil, rock and water mixed into one moving mass. Like every event in the game, it has no health bar to shoot at, and the warning is what gets you out of the lane. In real life, basins can be built to hold a debris flow, and they should be big enough for the largest flows in the area. Over time they fill up and must be emptied regularly, or they will overflow. Leaving, staying away and moving homes out of its path are the best ways to protect people. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   rockfall: {
-    q: 'A rockfall just landed. What decided whether it caught you?',
-    opts: ['Your armour and capacity',
+    q: 'Your run had a rockfall warning. In real life, what can reduce the risk from rockfall?',   // QZ1 2026-11-03: E-rockfall-q (final/list_QZ_final.tsv), verbatim; was `'A rockfall just landed. What decided whether it caught you?'` (build_QZ_2026-11-03)
+    opts: ['Standing close to the outer walls of buildings',   // QZ1 2026-11-03: E-rockfall-opt0 (final/list_QZ_final.tsv), verbatim; was `'Your armour and capacity'` (build_QZ_2026-11-03)
            // CORRECTED 2026-09-23: was "when the circles filled" - since B3 a circle hurts from its own landing for ROCK_LIVE (0.35 s) and is drawn filled for exactly that window (section C, section_C_2026-09-22)
-           'Where you were standing while the circles were filled',
-           'How fast you were firing',
+           'Fitting nets, anchors and covers over roads',   // QZ1 2026-11-03: E-rockfall-opt1 (final/list_QZ_final.tsv), verbatim; was `'Where you were standing while the circles were filled'` (build_QZ_2026-11-03)
+           'Cutting down the trees on the slope above',   // QZ1 2026-11-03: E-rockfall-opt2 (final/list_QZ_final.tsv), verbatim; was `'How fast you were firing'` (build_QZ_2026-11-03)
            // PL-M1 2026-10-15: P1 (review_DIAL.md F6) - this wrong option was "Your difficulty setting"; no player text calls the dial a difficulty setting since the DIAL deploy. The new one is wrong by the why below (a rock catches you only inside its circle while it is filled; the hit test, eventHits and P.inv, reads no lifeline) and uses the game's own word "lifelines"; stem, other options, correct and why unchanged (build_POLISH_2026-10-15)
-           'How many lifelines you still had'],
+           'Rushing indoors as soon as the shaking starts'],   // QZ1 2026-11-03: E-rockfall-opt3 (final/list_QZ_final.tsv), verbatim; was `'How many lifelines you still had'` (build_QZ_2026-11-03)
     correct: 1,
     // CORRECTED 2026-09-22: was "cannot be absorbed, only avoided" (USGS names rockfall measures that lessen the hazard; armour cuts the hit in the game) (sweep 3, sweep3_2026-09-22/source_verification.md E1b E1b-Q; round 2: F6, standing in a circle is necessary for a hit, not the only decider (P.inv grace), sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
     // CORRECTED 2026-09-23: was "inside its circle when it lands" - a circle hurts while it is drawn filled, from its rock landing for ROCK_LIVE (0.35 s) (B3); USGS sentence and tag unchanged (section C, section_C_2026-09-22)
-    whyShort: 'In the game, a rock can only catch you inside its filled circle. In real life, nets and walls can reduce risk but do not stop every rock. (USGS)',   // TXT-B1 2026-10-30: E-rockfall-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
+    whyShort: 'Rock nets, rock anchors, walls and covers over roads can reduce the risk. They do not stop every rock. (USGS)',   // QZ1 2026-11-03: E-rockfall-whyShort (final/list_QZ_final.tsv), verbatim; was `'In the game, a rock can only catch you inside its filled cir…'`; this replaces the line's earlier comment (TXT-B1 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
+    gameLine: 'A rock can only catch you inside its circle while the circle is filled.',   // QZ2 2026-11-03: E-rockfall-gameLine (final/list_QZ_final.tsv), verbatim; a new property: the game line the debrief shows under the answer line (QZ4, mountDebrief) (build_QZ_2026-11-03)
     why: 'The warning circles were drawn before anything fell, and the fall landed exactly there. Each circle fills when its rock lands and stays filled for a moment. In the game, armour can cut the hit, but a rock can only catch you if you are inside its circle while it is filled. The warning is what makes that fair, and Early warning makes it longer. In real life, rock nets, rock anchors, walls and covers over roads can reduce the risk from falling rock, but they do not stop every rock. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   landslide: {
     // CORRECTED 2026-09-22: q was "What was the only way through it?" (opt 0 "Absorbing it with enough capacity" was also true in the game: one impact, then P.inv grace) (sweep 3 round 2: F2, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-    q: 'The landslide crossed the map in one straight lane. How could you avoid being hit by it?',
-    opts: ['Absorbing it with enough capacity',
-           'Shooting the leading edge',
-           'Moving out after the warning',   // TXT-B4 2026-10-30: E-landslide-opt2 (list_TXT_B_final.tsv); was `'Moving out of the lane after the warning — its origin was fixed the moment it was announced'` (build_TXT_B_2026-10-30)
-           'Standing behind a lifeline'],
+    q: 'Your run had a landslide warning. In real life, which is true of landslides in steep terrain?',   // QZ1 2026-11-03: E-landslide-q (final/list_QZ_final.tsv), verbatim; was `'The landslide crossed the map in one straight lane. How coul…'` (build_QZ_2026-11-03)
+    opts: ['Rain can set them off, but a quake does not',   // QZ1 2026-11-03: E-landslide-opt0 (final/list_QZ_final.tsv), verbatim; was `'Absorbing it with enough capacity'` (build_QZ_2026-11-03)
+           'Trees on a slope can make them more likely',   // QZ1 2026-11-03: E-landslide-opt1 (final/list_QZ_final.tsv), verbatim; was `'Shooting the leading edge'` (build_QZ_2026-11-03)
+           'Some kinds can go kilometres from where they start',   // QZ1 2026-11-03: E-landslide-opt2 (final/list_QZ_final.tsv), verbatim; was `'Moving out after the warning'`; this replaces the line's earlier comment (TXT-B4 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
+           'They happen in the mountains, but not on the coast'],   // QZ1 2026-11-03: E-landslide-opt3 (final/list_QZ_final.tsv), verbatim; was `'Standing behind a lifeline'` (build_QZ_2026-11-03)
     correct: 2,
     // CORRECTED 2026-09-22: "moving out of the way IS the measure" scoped to the game; hedged runout fact added (sweep 3, sweep3_2026-09-22/source_verification.md E4b; round 2: F11 USGS scope "in steep terrain" restored, F2 "how you get through" now "how you avoid being hit", sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-    whyShort: 'In the game, the lane was fixed at the warning and never followed you. In real life, some landslides in steep terrain can travel kilometres from where they start. (USGS)',   // TXT-B1 2026-10-30: E-landslide-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
+    whyShort: 'In steep terrain, some kinds of landslide can travel kilometres from where they start. (USGS)',   // QZ1 2026-11-03: E-landslide-whyShort (final/list_QZ_final.tsv), verbatim; was `'In the game, the lane was fixed at the warning and never fol…'`; this replaces the line's earlier comment (TXT-B1 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
+    gameLine: 'A landslide never turns to follow you; its path is set at the warning.',   // QZ2 2026-11-03: E-landslide-gameLine (final/list_QZ_final.tsv), verbatim; a new property: the game line the debrief shows under the answer line (QZ4, mountDebrief) (build_QZ_2026-11-03)
     why: 'The lane was fixed at the moment of the warning and never turned to follow you. In the game, a warning you can outrun is the whole mechanic. Moving out of the way is how you avoid being hit, and that is why evacuation has its own control. In real life, in steep terrain, some kinds of landslide, like debris flows, can travel kilometres from where they start. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   fissure: {
     // CORRECTED 2026-09-22: q was false to the code ("your armour did not help"; armour cuts event damage) (sweep 3, sweep3_2026-09-22/source_verification.md E5b; Lead F8)
-    q: 'Ground failure opened under the district. Why can armour not make it safe to stand on?',
-    opts: ['Ground failure ignores armour only past level 10',
+    q: 'Your run had a ground failure warning. In real life, what can reduce the risk from loose, soaked ground in strong shaking?',   // QZ1 2026-11-03: E-fissure-q (final/list_QZ_final.tsv), verbatim; was `'Ground failure opened under the district. Why can armour not…'` (build_QZ_2026-11-03)
+    opts: ['Wetting the soil, or checking that it feels firm',   // QZ1 2026-11-03: E-fissure-opt0 (final/list_QZ_final.tsv), verbatim; was `'Ground failure ignores armour only past level 10'` (build_QZ_2026-11-03)
            // CORRECTED 2026-09-22: opt 1 was "strengthening ... does nothing" (unverifiable); opt 3 became partly true and is made clearly wrong (sweep 3, sweep3_2026-09-22/source_verification.md E5b E5-Qopt; round 2: F6, the damage pauses during the P.inv grace, sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-           'Armour only makes each second hurt less',   // TXT-B4 2026-10-30: E-fissure-opt1 (list_TXT_B_final.tsv); was `'Armour only makes each second hurt less, and the ground keeps hurting you while you stand on it; you get off it'` (build_TXT_B_2026-10-30)
-           'It only respects the road lifeline',
+           'Packing the soil, or draining the water from it',   // QZ1 2026-11-03: E-fissure-opt1 (final/list_QZ_final.tsv), verbatim; was `'Armour only makes each second hurt less'`; this replaces the line's earlier comment (TXT-B4 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
+           'Ploughing the soil, or keeping it soft',   // QZ1 2026-11-03: E-fissure-opt2 (final/list_QZ_final.tsv), verbatim; was `'It only respects the road lifeline'` (build_QZ_2026-11-03)
            // CORRECTED 2026-09-22: wrong option was "Armour works, it just looks like it does not", now partly true; replaced by a clearly false one (sweep 3, sweep3_2026-09-22/source_verification.md E5-Qopt; Lead F8)
-           'Armour makes you immune once it is high enough'],
+           'Waiting for it to firm up, or building there'],   // QZ1 2026-11-03: E-fissure-opt3 (final/list_QZ_final.tsv), verbatim; was `'Armour makes you immune once it is high enough'` (build_QZ_2026-11-03)
     correct: 1,
     // CORRECTED 2026-09-22: was "Strengthening ... changes nothing" (unverifiable) and land-use planning as THE measure (one of several for liquefaction) (sweep 3, sweep3_2026-09-22/source_verification.md E5a E5b E5-Qwhy; round 2: F6 P.inv grace, F7 surface-rupture sentence dropped (no capture explains surface rupture or active faults in plain words), sweep3_2026-09-22/verify_predeploy_2026-09-22.md)
-    whyShort: 'In the game, armour cuts the damage but never to zero. In real life, packing, draining or not building on soaked ground can cut the risk. (USGS / NIST)',   // TXT-B1 2026-10-30: E-fissure-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
+    whyShort: 'Loose, water-soaked ground near the surface can lose strength for a while in strong shaking. Packing the ground tighter, draining it or not building on it can reduce the risk. (USGS / NIST)',   // QZ1 2026-11-03: E-fissure-whyShort (final/list_QZ_final.tsv), verbatim; was `'In the game, armour cuts the damage but never to zero. In re…'`; this replaces the line's earlier comment (TXT-B1 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
+    gameLine: 'Retrofitting cuts the harm from ground failure, but never down to zero.',   // QZ2 2026-11-03: E-fissure-gameLine (final/list_QZ_final.tsv), verbatim; a new property: the game line the debrief shows under the answer line (QZ4, mountDebrief) (build_QZ_2026-11-03)
     why: 'In the game, armour cuts the damage but never to zero, and ground failure keeps hurting you while you stand on it. In real life, liquefaction is loose, water-soaked ground near the surface losing its strength for a while in strong shaking. Packing the ground tighter, draining it or not building on it can reduce the risk. (USGS / NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
 }
 
@@ -5534,7 +5542,8 @@ function quizAsk(Q, target = quizTarget()) {
   }
   const v = a || Q
   // TXT-B2 2026-10-30: ADJUDICATION_TXT_B (B-2) - whyShort, the short answer line, is returned beside why and like it is always the base's; a question with no whyShort returns undefined there; was `return { q: v.q, opts: v.opts, correct: v.correct, why: Q.why, whyNot: v.whyNot, depth: a ? target : own, want: target }` (build_TXT_B_2026-10-30)
-  return { q: v.q, opts: v.opts, correct: v.correct, why: Q.why, whyShort: Q.whyShort, whyNot: v.whyNot, depth: a ? target : own, want: target }
+  // QZ3 2026-11-03: gameLine, the game line (QZ2), is returned beside whyShort and like it is always the base's; a question with no gameLine returns undefined there; was `return { q: v.q, opts: v.opts, correct: v.correct, why: Q.why, whyShort: Q.whyShort, whyNot: v.whyNot, depth: a ? target : own, want: target }` (build_QZ_2026-11-03)
+  return { q: v.q, opts: v.opts, correct: v.correct, why: Q.why, whyShort: Q.whyShort, gameLine: Q.gameLine, whyNot: v.whyNot, depth: a ? target : own, want: target }
 }
 
 // The question actually asked: this place's version if there is one, otherwise the pair's
@@ -11330,13 +11339,14 @@ function buildDebrief() {
   if (got.length) {
     const sy = pick(got), Q = questionFor(sy)
     // TXT-B2 2026-10-30: ADJUDICATION_TXT_B (B-2) - whyShort passed on beside why, here and in the event and field items below; was `why: Q.why, whyNot: Q.whyNot,` in each of the three (build_TXT_B_2026-10-30)
-    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyShort: Q.whyShort, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'syn',
+    // QZ3 2026-11-03: gameLine passed on beside whyShort, here and in the event and field items below (only an EVENT_Q entry has one; the others pass undefined); was `whyShort: Q.whyShort, whyNot: Q.whyNot,` in each of the three (build_QZ_2026-11-03)
+    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyShort: Q.whyShort, gameLine: Q.gameLine, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'syn',
                 tag: `Why it compounds · ${sy.name}` + (Q.themed ? ` · ${PLACE.name}` : '') })
   }
   const evs = [...new Set(eventsSeen)].filter(k => EVENT_Q[k])
   if (evs.length) {
     const k = pick(evs), Q = quizAsk(EVENT_Q[k])
-    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyShort: Q.whyShort, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'event',   // TXT-B2 2026-10-30: whyShort passed on (see the TXT-B2 comment above) (build_TXT_B_2026-10-30)
+    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyShort: Q.whyShort, gameLine: Q.gameLine, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'event',   // TXT-B2 2026-10-30: whyShort passed on (see the TXT-B2 comment above) (build_TXT_B_2026-10-30) // QZ3 2026-11-03: gameLine passed on (see the QZ3 comment above) (build_QZ_2026-11-03)
                 tag: `What you could only dodge · ${EVENTS[k].name}` })
   }
   while (list.length < T.debriefN) {
@@ -11344,7 +11354,7 @@ function buildDebrief() {
     if (!c) break
     poolAskedRun[c.q.id] = true
     const Q = quizAsk(c.q)
-    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyShort: Q.whyShort, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'pool', id: c.q.id,   // TXT-B2 2026-10-30: whyShort passed on (see the TXT-B2 comment above) (build_TXT_B_2026-10-30)
+    list.push({ q: Q.q, opts: Q.opts, correct: Q.correct, why: Q.why, whyShort: Q.whyShort, gameLine: Q.gameLine, whyNot: Q.whyNot, depth: Q.depth, want: Q.want, kind: 'pool', id: c.q.id,   // TXT-B2 2026-10-30: whyShort passed on (see the TXT-B2 comment above) (build_TXT_B_2026-10-30) // QZ3 2026-11-03: gameLine passed on (see the QZ3 comment above) (build_QZ_2026-11-03)
                 tag: 'Field question · ' + (c.anyP ? 'every place' : PLACE.name) })
   }
   return list
@@ -11564,6 +11574,14 @@ function mountDebrief() {
         const wmf = wrap.querySelector('.redo-wfold')
         if (wmf) { wmf.querySelector('.fold-b > p').innerHTML = Q.why; wmf.style.display = '' }
         why.style.display = ''
+        // QZ4 2026-11-03: a question with a gameLine (QZ2; only EVENT_Q entries) gets one more line, made here at the pick as the "Why not" line above is: a <p class="redo-gameline">, the label "In the game:" in bold, then the line as a text node (not HTML). It is inserted straight after the answer line (.redo-why), so it stands above the answer line's "More" fold and a screen reader reaches it after the answer line; as a direct child of the question's wrapper it is hidden by the answered-question collapse with the rest. It answers, skips and advances nothing and adds no beat, sound or timer. A question with no gameLine gets nothing here (build_QZ_2026-11-03)
+        if (Q.gameLine) {
+          const gl = document.createElement('p')
+          gl.className = 'redo-gameline'
+          gl.innerHTML = '<b>In the game:</b> '
+          gl.appendChild(document.createTextNode(Q.gameLine))
+          wrap.insertBefore(gl, why.nextSibling)
+        }
         const earn = []
         // P6-B5 2026-09-25: T2-2 - the pill "+N recovery budget released" and its B15 note (the step per answer, so the pills summed to what is banked) left this list: that same step, `share` above, now has its own payout line, S-B5's `+N budget` (build_P6_2026-09-25)
         // P6-B6 2026-09-25: T2-3 (a) - a streak tier crossed no longer shows as the pill `${r.tierUp.name} — you start the next run firing this way`: it becomes a small picture of the next run's volley at that tier (streakArt), with the tier's name in text; the pill's words stay as the picture's accessible name. No `why` line and no mastery card (both wait) (build_P6_2026-09-25)
