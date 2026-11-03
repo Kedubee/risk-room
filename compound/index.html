@@ -1334,6 +1334,8 @@
     #svc, body.touch #svc{bottom:calc(40px + env(safe-area-inset-bottom))}
     #dodge, body.touch #dodge{bottom:calc(72px + env(safe-area-inset-bottom))}
   }
+  /* HUDX1 2026-11-03: the in-run build list (#weapons) is not drawn, on computers and phones; syncHud still writes its rows, and the card screen shows them (#cardbuild, HUDX2). Not drawn, it has no size, so ptrFrame skips it and mergeMoment makes no travelling copies (build_FIX_2026-11-03) */
+  #weapons{display:none}
   #over .two{display:flex;gap:10px;justify-content:center}
   #over .two button.alt{background:transparent;border:1px solid rgba(255,255,255,.22)}
 
@@ -1713,6 +1715,8 @@
   #cardbuild{width:100%;max-width:420px;display:grid;grid-template-columns:1fr 1fr;gap:5px 14px;margin:4px auto 0;
     padding:10px 6px 0;border-top:1px solid rgba(255,255,255,.12);pointer-events:none}
   #cardbuild .wpn{justify-content:flex-start;text-align:left;min-width:0}
+  /* HUDX2 2026-11-03: the card-screen list, now on computers too, in the same place as on a phone (offerCards); the PT3-P10 note above read "on a phone only". Each row's second text (level, chip, streak) at .7 instead of .55 (.wpn span), so it reads at 4.5:1 or more on the list's ground (measured 4.36:1 at .55) (build_FIX_2026-11-03) */
+  #cardbuild .wpn > span{opacity:.7}
   /* P16a-F 2026-10-22: a level-up card's face line (p.face), its take region (.take, the card's button for the keys) and its Details fold (the default cursor inside the fold, where a click does not take the card) (.fold: the toggle .fold-t and the body .fold-b); the hint card's and How to play's face and fold; a fold holding only the source line hides while Sources is off (build_P16a_2026-10-22) (R5-FX 2026-10-26: OPEN_LEDGER T9 (K8) - since R4-F4 (ADJUDICATION_R4 F-08, the handler in cardFold) a click or tap inside an OPEN fold takes the card, except on the Details toggle and on a button, a link or a [role="button"] inside it, so the fold's body now shows the pointer; the toggle and the controls inside keep the cursor they had; "the default cursor inside the fold, where a click does not take the card" describes the rule before R4-F4; was `#cardwrap .card .fold-b{cursor:default}` (build_R5_2026-10-26 fix round)) */
   .card p.face{opacity:.95;font-weight:600}
   #hint-p.face,#howto-p.face{font-weight:600}
@@ -2100,7 +2104,8 @@ html body #start.st3.stn div#learnhead{text-align:center}
         <!-- ART-G 2026-10-17: G4 (build_record_ART_F.md (c)3) - the F2 note above no longer holds for these circles: the quake, storm and flood circles below take the palette's #8a6a4a, #7f8ea3 and #4f86c6 (PAL.theirs.body; were #c2703f, #c49a50, #a89f48); fire #e8763a unchanged; nothing else in the picture changed (build_ART_2026-10-17) -->
         <circle cx="58" cy="48" r="10" fill="#8a6a4a"/><circle cx="222" cy="40" r="8" fill="#7f8ea3"/>
         <circle cx="46" cy="160" r="11" fill="#4f86c6"/><circle cx="226" cy="158" r="9" fill="#e8763a"/>
-        <path d="M126 88L68 54M156 88L214 46M128 110L56 152" stroke="rgba(184,198,255,.28)" stroke-width="1.5" stroke-dasharray="2 5"/>
+        <!-- FIXF3 2026-11-03: your shots' trails solid, as every stroke in play is since FIX2 (no dashed line is drawn in play); colour and width unchanged; was `<path d="M126 88L68 54M156 88L214 46M128 110L56 152" stroke="rgba(184,198,255,.28)" stroke-width="1.5" stroke-dasharray="2 5"/>` (build_FIX_2026-11-03) -->
+        <path d="M126 88L68 54M156 88L214 46M128 110L56 152" stroke="rgba(184,198,255,.28)" stroke-width="1.5"/>
         <circle cx="104" cy="75" r="3.5" fill="#b8c6ff"/><circle cx="84" cy="64" r="3.5" fill="#b8c6ff"/>
         <circle cx="176" cy="71" r="3.5" fill="#b8c6ff"/><circle cx="198" cy="57" r="3.5" fill="#b8c6ff"/>
         <circle cx="100" cy="128" r="3.5" fill="#b8c6ff"/>
@@ -2119,7 +2124,8 @@ html body #start.st3.stn div#learnhead{text-align:center}
           <rect x="354" y="146" width="34" height="34" rx="7" fill="rgba(255,255,255,.14)"/><path d="M378 163l-11-7v14z"/>
         </g>
         <circle cx="458" cy="104" r="38" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
-        <path d="M458 104L474 88" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-dasharray="3 3"/>
+        <!-- FIXF3 2026-11-03: the drag line solid, as every stroke in play is since FIX2 (no dashed line is drawn in play); colour and width unchanged; was `<path d="M458 104L474 88" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-dasharray="3 3"/>` (build_FIX_2026-11-03) -->
+        <path d="M458 104L474 88" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
         <circle cx="476" cy="86" r="15" fill="rgba(255,255,255,.6)"/>
         <path d="M478 96q20 18 30 54q4 16-10 20q-16 4-24-12l-20-42q-6-14 6-20q12-6 18 0z" fill="#d6b08c" opacity=".85"/>
       </svg>
@@ -2130,7 +2136,8 @@ html body #start.st3.stn div#learnhead{text-align:center}
         <rect x="20" y="16" width="400" height="7" rx="3.5" fill="rgba(255,255,255,.12)"/>
         <rect x="20" y="16" width="270" height="7" rx="3.5" fill="#57c7ff"/>
         <text x="436" y="26" font-size="14" font-weight="800" fill="#f7f4ee">Lv 2</text>
-        <path d="M84 116L134 92" stroke="rgba(87,199,255,.45)" stroke-width="2" stroke-dasharray="3 4"/>
+        <!-- FIXF3 2026-11-03: the gem trail solid, as every stroke in play is since FIX2 (no dashed line is drawn in play); colour and width unchanged; was `<path d="M84 116L134 92" stroke="rgba(87,199,255,.45)" stroke-width="2" stroke-dasharray="3 4"/>` (build_FIX_2026-11-03) -->
+        <path d="M84 116L134 92" stroke="rgba(87,199,255,.45)" stroke-width="2"/>
         <!-- P16B-5 2026-10-29: T10 - the old disc and the two blue dots removed; the robot and two gems (.p16ov below) stand in their places; was `<circle cx="70" cy="122" r="14" fill="#f7f4ee"/>` and `<circle cx="100" cy="109" r="5" fill="#57c7ff"/><circle cx="138" cy="90" r="5" fill="#57c7ff"/>` (build_P16B_2026-10-28) -->
         <rect x="170" y="80" width="58" height="84" rx="8" fill="#15181d" stroke="rgba(255,255,255,.25)"/>
         <rect x="178" y="88" width="14" height="14" rx="3" fill="#ff9de2"/>
@@ -2158,11 +2165,13 @@ html body #start.st3.stn div#learnhead{text-align:center}
         <!-- D2 2026-09-22: the lifeline as the field now draws it - the place's neutral, a dark glyph, a neutral health arc (build_D_2026-09-22) -->
         <circle cx="110" cy="104" r="24" fill="none" stroke="#e8e2d4" stroke-width="4" stroke-dasharray="100 200" transform="rotate(-90 110 104)"/>
         <!-- P16B-5 2026-10-29: the lifeline's glyph square and the old disc removed; the hospital and the robot (.p16ov below) stand in their places; was `<rect x="97" y="91" width="26" height="26" rx="6" fill="#efe2da"/>`, `<path d="M110 97v14M103 104h14" stroke="#080a0d" stroke-opacity=".82" stroke-width="3.5"/>` and `<circle cx="152" cy="136" r="11" fill="#f7f4ee"/>` (build_P16B_2026-10-28) -->
-        <circle cx="250" cy="80" r="26" fill="rgba(255,157,92,.12)" stroke="#ff9d5c" stroke-width="2.5" stroke-dasharray="5 4"/>
-        <circle cx="292" cy="126" r="22" fill="rgba(255,157,92,.12)" stroke="#ff9d5c" stroke-width="2.5" stroke-dasharray="5 4"/>
+        <!-- FIXF3 2026-11-03: the two ground marks solid, as FIX2 made the marks in play; colour and width unchanged; were `<circle cx="250" cy="80" r="26" fill="rgba(255,157,92,.12)" stroke="#ff9d5c" stroke-width="2.5" stroke-dasharray="5 4"/>` and `<circle cx="292" cy="126" r="22" fill="rgba(255,157,92,.12)" stroke="#ff9d5c" stroke-width="2.5" stroke-dasharray="5 4"/>` (build_FIX_2026-11-03) -->
+        <circle cx="250" cy="80" r="26" fill="rgba(255,157,92,.12)" stroke="#ff9d5c" stroke-width="2.5"/>
+        <circle cx="292" cy="126" r="22" fill="rgba(255,157,92,.12)" stroke="#ff9d5c" stroke-width="2.5"/>
         <!-- P16B-5 2026-10-29: the old disc removed (the robot below); was `<circle cx="274" cy="104" r="10" fill="#f7f4ee"/>` (build_P16B_2026-10-28) -->
         <path d="M290 96L350 62M336 60l14 2-6 13" stroke="#f7f4ee" stroke-width="3" fill="none"/>
-        <circle cx="440" cy="104" r="44" fill="none" stroke="#c9d1d9" stroke-width="2.5" stroke-dasharray="7 6"/>
+        <!-- FIXF3 2026-11-03: the works site's ring solid, as FIX2 made it in play; colour and width unchanged; was `<circle cx="440" cy="104" r="44" fill="none" stroke="#c9d1d9" stroke-width="2.5" stroke-dasharray="7 6"/>` (build_FIX_2026-11-03) -->
+        <circle cx="440" cy="104" r="44" fill="none" stroke="#c9d1d9" stroke-width="2.5"/>
         <circle cx="440" cy="104" r="30" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="6"/>
         <!-- D2 2026-09-22: the works bar in the place's neutral, as the field now draws it (build_D_2026-09-22) -->
         <circle cx="440" cy="104" r="30" fill="none" stroke="#dbd4c6" stroke-width="6" stroke-dasharray="94 200" transform="rotate(-90 440 104)"/>
@@ -3288,6 +3297,16 @@ const T = {
   r2bGuideAlpha: 0.25,             // R2b-F2 2026-10-27: PLAN_R2b 2 (c) as changed by the user at the preview - the guide line's alpha; was `ctx.globalAlpha = .5` at the draw site (build_R2b_2026-10-27)
   r2LlClear: 10,                   // R2-X3: a telegraph circle's centre is kept T.lifelineR + its radius + this many px from a standing lifeline's centre (PLAN_R2 R2-X3)
   r2CrewRepair: 0.15,              // R2-X4: lifelines repair this share faster per Repair crews level (META crews; PLAN_R2 R2-X4)
+  // FIX1 2026-11-03: you clear a lifeline (fx1Clear). While you are within its repair reach (the `here` test of updateLifelines), every ordinary body attacking it - aimed at it (e.tgt) within fx1NearR px of its centre, or a flood front sitting on it (T.lifelineR + its radius) - is killed through hurtEnemy; an ordinary heat zone sitting on it shrinks away over fx1ZoneT s; an elite attacking it loses fx1EliteK of its maximum health a second, and a compound-event body or the true boss within fx1NearR + its radius fx1BossK, in ticks of fx1Tick s. fx1NearR 0 = off (today's game) (build_FIX_2026-11-03)
+  fx1NearR: 180, fx1ZoneT: 1.0, fx1EliteK: 0.25, fx1BossK: 0.05, fx1Tick: 0.25,
+  // FIX2 2026-11-03: the ranged body's mark - 'ring' (a thin solid ring SPLIT.ring.gap px out) or 'mark' (a small solid pale triangle above the body); drawing only (build_FIX_2026-11-03)
+  fx2RangedMark: 'ring',
+  // FIX3 2026-11-03: a timed body's exit - a compound-event body that passes on bossLife, the true boss that passes on tbossLife, and an elite heat zone whose life ends shrink and fade over fx3ExitT s with a puff, drawn after the body has left the game state; drawing only. 0 = off (today's drawing) (build_FIX_2026-11-03)
+  fx3ExitT: 1.5,
+  // FIX4 2026-11-03: the ranged share of SPLIT.kinds bodies by run clock: fx4Share0 before fx4From s, rising in a straight line to fx4Share1 at fx4At s, held after; makeHazard gives body n of a kind the ranged variant when floor((n + 1) x share) > floor(n x share), no random draw. fx4Share0 0.5 = off (today's alternation) (build_FIX_2026-11-03)
+  // FIXF1 2026-11-03: the early ranged share eased from 1 in 5 to 1 in 3 (the user's pick after the FIX build; GUARD_FIXF FF-1); fx4From, fx4Share1 and fx4At unchanged; off is still fx4Share0 0.5; was `fx4Share0: 0.2, fx4From: 180, fx4Share1: 0.5, fx4At: 480,` (build_FIX_2026-11-03)
+  // FIXR1 2026-11-03: the early ranged share back to today's one in two (the user's pick after the bot check of the 1-in-3 copy; GUARD_FIXR FR-1): with fx4Share0 at 0.5 the split kinds alternate melee / ranged from the first body as in live; FIX4's code stays, inert; fx4From, fx4Share1 and fx4At unchanged; was `fx4Share0: 1 / 3, fx4From: 180, fx4Share1: 0.5, fx4At: 480,` (build_FIX_2026-11-03)
+  fx4Share0: 0.5, fx4From: 180, fx4Share1: 0.5, fx4At: 480,
 }
 // PT5-R1a..R1f 2026-10-20: PLAN_PT5 R1 (the user's go-ahead relayed in record 3fc807d8; the approval of this round in PLAN_PT5.md) - the long-run numbers, one new table beside T (T itself is unchanged). Every number is from ../design_2026-10-20/curves_proposal.js (its P table and xpTable(80, 15, 72)) and DESIGN_long_runs.md; read by rampTimeAt, hpRampNow, hitRampNow (helpers), eliteShare, the spawn rate (step), the two P.need lines and rebuildLifeline (build_PT5_2026-10-20)
 const LONGRUN = {
@@ -5623,6 +5642,7 @@ function reset(placeId) {
   vbRzAcc = 0   // VB-M4 2026-10-18: V5 - the red-zone rockfall's clock does not cross into the next run (build_VALLEY_2026-10-17)
   boss = null; bossAcc = 0; bossesKilled = 0; bossesSurvived = 0; bossSeen = []
   tboss = null; tbossState = null; tbossWarned = false; tbossBonus = 0   // BS-M3 2026-09-30: the true boss does not cross into the next run (build_BS_2026-09-30)
+  fx3Exits = []   // FIX3 2026-11-03: no exit drawing crosses into the next run (build_FIX_2026-11-03)
   for (const k in UPGRADES) lv[k] = 0
   for (const k in mod) delete mod[k]
   for (const k in syn) delete syn[k]
@@ -5789,10 +5809,12 @@ const SPLIT = {
   hold: 260, holdBand: 40, sideW: 1.6, side: 0.8,
   backK: 0.5,   // PT6-N7 2026-10-21: PLAN_PT6 N7 - a ranged body nearer than SPLIT.hold to you backs off at this share of the speed it backed off at before (the radial part of its move, while it points away); its approach, sidestep and throws unchanged (build_PT6_2026-10-21)
   chip: { every: 3.2, n: 1, spread: 0, spd: 190, dmg: 4, range: 400, r: 4.5, life: 2.5 },   // SP-T2 2026-10-19: the Lead's tuning round (measure_SPLIT.md M4) - was `chip: { every: 3.2, n: 1, spread: 0, spd: 190, dmg: 6, range: 400, r: 4.5, life: 2.5 },`; the rock chip's damage 6 -> 4 (build_SPLIT_2026-10-18 tuning)
-  ring: { gap: 7, w: 1.2, dash: [3, 3], col: 'rgba(240,236,224,.82)', under: 'rgba(8,10,13,.5)', underW: 3 },
+  ring: { gap: 7, w: 1.2, dash: [], col: 'rgba(240,236,224,.82)', under: 'rgba(8,10,13,.5)', underW: 3 },   // FIX2 2026-11-03: dash [] (read by nothing now); was dash: [3, 3] (build_FIX_2026-11-03)
 }
 // SP-M2 2026-10-19: PLAN_SPLIT S2 - per kind, how many ordinary bodies of it this run has made: makeHazard gives the next one melee when it is even, ranged when odd (no random draw); reset() empties it, so every run starts on melee (build_SPLIT_2026-10-18)
 let splitN = {}
+// FIX4 2026-11-03: the ranged share of the split kinds at run clock t: T.fx4Share0 before T.fx4From, a straight line to T.fx4Share1 at T.fx4At, T.fx4Share1 after; read by makeHazard (build_FIX_2026-11-03)
+const fx4Share = () => t <= T.fx4From ? T.fx4Share0 : t >= T.fx4At ? T.fx4Share1 : T.fx4Share0 + (T.fx4Share1 - T.fx4Share0) * (t - T.fx4From) / (T.fx4At - T.fx4From)
 
 // ---------------------------------------------------------------- difficulty
 // CORRECTED 2026-09-23: comment made true - Learning is not the shortest run (the len note in DIFFS.learn below: "still the longest mode") (section C round 2, section_C_2026-09-22)
@@ -5913,7 +5935,8 @@ const ONBOARD_COPY = {
   'S3.2': { title: 'Level up: pick a card', body: 'Destroyed hazards drop blue gems: walk near them to fill the blue bar. At each level the game pauses and you pick one card.' },
   // XL-M3 2026-10-13: S3.3 and S4.3 - "it repairs once nothing sits on it" -> "it repairs fastest once nothing sits on it", strings_XL.md S-R1 verbatim (ruling RX1): under R1 it also repairs, more slowly, while something sits on it (build_XP_2026-10-13)
   // P16a-T 2026-10-22: S5-06 (strings_P16a.md) (build_P16a_2026-10-22)
-  'S3.3': { title: 'The map: defend, dodge, build', body: "Lifelines are services like hospitals. Stand in a hurt one's ring to repair it. Ground marks warn of events: move away. Stand in a dashed ring to build a bonus." },
+  // FIXF2 2026-11-03: S3.3's body - "a dashed ring" -> "a site's ring" (the works ring is solid since FIX2), strings_FIXT.md row 1 verbatim (the Lead's ruling: accepted); was `'S3.3': { title: 'The map: defend, dodge, build', body: "Lifelines are services like hospitals. Stand in a hurt one's ring to repair it. Ground marks warn of events: move away. Stand in a dashed ring to build a bonus." },` (build_FIX_2026-11-03)
+  'S3.3': { title: 'The map: defend, dodge, build', body: "Lifelines are services like hospitals. Stand in a hurt one's ring to repair it. Ground marks warn of events: move away. Stand in a site's ring to build a bonus." },
   // P16a-T 2026-10-22: S5-08 (strings_P16a.md) (build_P16a_2026-10-22)
   'S3.4': { title: 'After the run: questions', body: 'You can answer questions. Right answers keep budget for permanent upgrades and grow your streak; wrong answers lose both. A streak of two or more powers up your next run.' },
   'S3.5': { next: 'Next', back: 'Back', skip: 'Skip', start: 'Start playing' },
@@ -5927,7 +5950,8 @@ const ONBOARD_COPY = {
   // P16a-T 2026-10-22: S5-17 (strings_P16a.md) (build_P16a_2026-10-22)
   'S4.4': { title: 'Get out of the way', body: "Marks show where it will hit. It cannot be shot: move away, or press Space or EVAC. Some marks keep hurting after they land.", ok: 'Got it' },
   // P16a-T 2026-10-22: S5-19 (strings_P16a.md) (build_P16a_2026-10-22)
-  'S4.5': { title: 'Build a bonus here', body: 'Stand in the dashed ring for a few seconds to build it. Its bonus lasts the whole run. Unbuilt sites disappear after 15 seconds.', ok: 'Got it' },
+  // FIXF2 2026-11-03: S4.5's body - "the dashed ring" -> "the site's ring", strings_FIXT.md row 2 verbatim (the Lead's ruling: accepted), the body now in double quotes for the apostrophe; was `'S4.5': { title: 'Build a bonus here', body: 'Stand in the dashed ring for a few seconds to build it. Its bonus lasts the whole run. Unbuilt sites disappear after 15 seconds.', ok: 'Got it' },` (build_FIX_2026-11-03)
+  'S4.5': { title: 'Build a bonus here', body: "Stand in the site's ring for a few seconds to build it. Its bonus lasts the whole run. Unbuilt sites disappear after 15 seconds.", ok: 'Got it' },
   // CORRECTED 2026-09-23: "Questions are skippable." now says what Skip does - finish() ends every question left, releaseFunds pays right answers only, learnAnswer is not called (section C, section_C_2026-09-22)
   // P6-B2 2026-09-25: F1 (a) - a right answer's share is now banked when it is shown (bankShare), not by releaseFunds at finish(); the words of S3.4 and S4.6 stay true, and "Only the right answers you already gave keep their share" now also holds for leaving by the end buttons (build_P6_2026-09-25)
   // P16a-T 2026-10-22: S5-21 (strings_P16a.md) (build_P16a_2026-10-22)
@@ -6367,14 +6391,16 @@ const CARD_FACES = {
   'FC-S3-118': "Adds a wide sweep of many lighter shots.",
   'FC-S5-02': "Move: WASD or drag. Dash: Space or EVAC.",
   'FC-S5-04': "Collect blue gems, level up, pick one card.",
-  'FC-S5-06': "Repair lifelines, dodge marks, build in dashed rings.",
+  // FIXF2 2026-11-03: the face of S3.3, strings_FIXT.md row 3 verbatim (the Lead's ruling: accepted); was `'FC-S5-06': "Repair lifelines, dodge marks, build in dashed rings.",` (build_FIX_2026-11-03)
+  'FC-S5-06': "Repair lifelines, dodge marks, build at sites.",
   'FC-S5-08': "Right answers keep budget and grow your streak.",
   'FC-S5-11': "Click or tap a card to take it.",
   // SYN-T 2026-10-23: R2 (ADJUDICATION_SYN; review_SYN.md F1 face) - the hint S4.2 face under T.synLv; was `'FC-S5-13': "An extra effect from two measures you own.",` (build_SYN_2026-10-22)
   'FC-S5-13': "An extra effect from two measures at Lv 2.",
   'FC-S5-15': "Stand in its ring to repair it.",
   'FC-S5-17': "This event cannot be shot: move away or dash.",
-  'FC-S5-19': "Stand in the dashed ring to build it.",
+  // FIXF2 2026-11-03: the face of S4.5, strings_FIXT.md row 4 verbatim (the Lead's ruling: accepted); was `'FC-S5-19': "Stand in the dashed ring to build it.",` (build_FIX_2026-11-03)
+  'FC-S5-19': "Stand in the site's ring to build it.",
   'FC-S5-21': "Right answers keep budget; wrong answers lose it.",
   'FC-S5-23': "Full repair from 65% or less secures a lifeline.",
 }
@@ -7224,7 +7250,7 @@ function vbGround(z) {
       if (a1 > a0) ctx.fillRect(a0, fy0, a1 - a0, fy1 - fy0)
     }
     const ys = VB.y0 + Math.floor((fy0 - VB.y0) / 28) * 28
-    ctx.save(); ctx.setLineDash([16, 12]); ctx.strokeStyle = `rgba(${rc},.55)`; ctx.lineWidth = 2; ctx.beginPath()
+    ctx.save(); ctx.strokeStyle = `rgba(${rc},.55)`; ctx.lineWidth = 2; ctx.beginPath()   // FIX2 2026-11-03: solid; was dashed [16, 12] (build_FIX_2026-11-03)
     for (const x of [VB.x0 + VB.band, VB.x1 - VB.band]) if (x > vx0 && x < vx1) { ctx.moveTo(x, ys); ctx.lineTo(x, fy1) }
     ctx.stroke(); ctx.restore()
   }
@@ -7583,6 +7609,7 @@ function bossTick(B, dt) {
     // CORRECTED 2026-09-23: was "It was never going to be stopped - only outlasted." - a compound event can be absorbed (hurtBoss); this line shows only for one that was not (section C, section_C_2026-09-22)
     flash(B.name + ' passes', say('BOSS.passes.line', 'Not absorbed this time, but outlasted.'), B.col)
     emit('smoke', B.x, B.y, 24, B.ramp, { scale: 1.5 })
+    fx3Exit(B, 'boss')   // FIX3 2026-11-03 (build_FIX_2026-11-03)
     bossesSurvived++
     boss = null
     syncHud()
@@ -7848,9 +7875,40 @@ function tbossPass(B) {
   flash('The boss passes', say('BOSS.true.passes', 'Not absorbed, but outlasted. It will not return this run.'), B.col, { now: true, keep: true })   // UXBS-FIX 2026-09-30: F2 - { now: true, keep: true } (flash) (build_BS_2026-09-30 fix round)
   flashDropPhases()   // G-M6 2026-10-13: N1 (build_G_2026-10-01)
   emit('smoke', B.x, B.y, 24, B.ramp, { scale: 1.5 })
+  fx3Exit(B, 'tboss')   // FIX3 2026-11-03 (build_FIX_2026-11-03)
   tbossState = 'passed'
   tboss = null
   syncHud()
+}
+
+// FIX3 2026-11-03: a timed body's exit, drawing only. fx3Exit records what is needed to draw a body that has just left on its timer (a compound-event body passing, the true boss passing, an elite heat zone whose life ended) - its place, size, colour, art and facing, and the run clock t at which it left; nothing in the game reads fx3Exits. fx3Draw draws each for T.fx3ExitT s of run clock (so it waits while the game is paused): the body shrinks to 15 % and fades to nothing, and eight grey puffs at fixed angles drift out from its edge and fade; no random number, no particle, no sound. T.fx3ExitT 0: nothing is recorded. reset() empties the list (build_FIX_2026-11-03)
+let fx3Exits = []
+function fx3Exit(B, kind) {
+  if (!(T.fx3ExitT > 0)) return
+  const g = { kind, t0: t, x: B.x, y: B.y, r: B.r, col: B.col, phase: B.phase,
+    o: { x: B.x, y: B.y, r: B.r, col: B.col, name: B.name, ramp: B.ramp, tb: B.tb, phase: B.phase, elite: B.elite, kind: B.kind, flash: 0 } }   // o: what artBoss / artZone read
+  const f = ARTB_FACE.get(B); ARTB_FACE.set(g.o, { x: B.x, d: f ? f.d : 1 })
+  fx3Exits.push(g)
+}
+function fx3Draw() {
+  for (let i = fx3Exits.length - 1; i >= 0; i--) {
+    const g = fx3Exits[i], a = (t - g.t0) / T.fx3ExitT
+    if (!(a >= 0 && a < 1)) { fx3Exits.splice(i, 1); continue }
+    const bodyR = g.kind === 'heat' ? g.r * ARTB_META.el_heat.f : g.r
+    ctx.save()
+    ctx.fillStyle = `rgba(150,146,140,${(.3 * (1 - a)).toFixed(3)})`
+    ctx.beginPath()
+    for (let j = 0; j < 8; j++) {
+      const an = j * TAU / 8 + .39 + .25 * Math.sin(j * 2.3), d = bodyR * (.55 + 1.1 * a) * (1 + .25 * Math.cos(j * 1.7)), pr = bodyR * (.22 + .3 * a) * (1 + .35 * Math.sin(j * 2.9))
+      ctx.moveTo(g.x + Math.cos(an) * d + pr, g.y + Math.sin(an) * d); ctx.arc(g.x + Math.cos(an) * d, g.y + Math.sin(an) * d, pr, 0, TAU)
+    }
+    ctx.fill()
+    ctx.globalAlpha = 1 - a
+    const o = g.o; o.r = g.r * (1 - .85 * a); o.phase = g.phase + (t - g.t0)
+    if (g.kind === 'heat') artZone(o, false, hazClock(), 1)
+    else if (!artBoss(o, false)) { ctx.fillStyle = g.col; ctx.beginPath(); ctx.arc(g.x, g.y, o.r, 0, TAU); ctx.fill() }
+    ctx.restore()
+  }
 }
 
 // ---------------------------------------------------------------- events
@@ -8648,6 +8706,29 @@ function llReturn(L) {
   flash(`${K.name} moved`, 'It is back, and hazards can reach it again.', K.col)
 }
 
+// FIX1 2026-11-03: you clear a lifeline. Run once a step, after the bodies have moved and before updateLifelines. For each standing lifeline (llUp) with you within its repair reach (repairReach() + P.r, the `here` of updateLifelines): a body attacks it when it is aimed at it (e.tgt) and within T.fx1NearR px of its centre, or when it is a heat zone or flood front sitting on it (within T.lifelineR + its radius, the wear's own test). R4 lane bodies (e.r4l) are skipped. An ordinary body attacking it is killed by hurtEnemy (a kill, its XP mote, its death effect); an ordinary heat zone instead has its life cut to T.fx1ZoneT s (once) and its radius shrinks with that life until moveHazard removes it; an elite attacking it takes T.fx1EliteK of its maximum health a second by hurtEnemy, and a compound-event body or the true boss within T.fx1NearR + its radius T.fx1BossK by hurtBoss, both in ticks of T.fx1Tick s on the lifeline's own clock (L.fx1Cd, reset when you leave), each tick putting the body's hit flash (e.flash, B.flash) back as it was. A step that clears anything pushes the crews' square ring at the lifeline. T.fx1NearR 0: nothing here runs (build_FIX_2026-11-03)
+function fx1Clear(dt) {
+  if (!(T.fx1NearR > 0)) return
+  for (const e of enemies) if (e.fx1Z) e.r = e.fx1Z.r * clamp(e.life / e.fx1Z.life, 0, 1)
+  for (const L of lifelines) {
+    if (!llUp(L) || dist2(L, P) >= (repairReach() + P.r) ** 2) { L.fx1Cd = 0; continue }
+    L.fx1Cd = (L.fx1Cd || 0) - dt
+    const tick = L.fx1Cd <= 0
+    if (tick) L.fx1Cd = T.fx1Tick
+    let cleared = 0
+    for (const e of enemies.slice()) {   // a copy: hurtEnemy splices the dead out
+      if (e.gone || e.r4l) continue
+      const sits = (e.behaviour === 'zone' || e.behaviour === 'front') && dist2(e, L) < (T.lifelineR + e.r) ** 2
+      if (!sits && !(e.tgt === L && dist2(e, L) < T.fx1NearR ** 2)) continue
+      if (e.elite) { if (tick) { const f0 = e.flash; hurtEnemy(e, e.max * T.fx1EliteK * T.fx1Tick, 0, 0); e.flash = f0 } continue }   // the tick leaves the body's hit flash as it was, so the ticks add no white flash
+      if (e.behaviour === 'zone') { if (!e.fx1Z) { e.life = Math.min(e.life, T.fx1ZoneT); e.fx1Z = { r: e.r, life: e.life }; cleared++ } continue }
+      hurtEnemy(e, e.hp, 0, 0); cleared++
+    }
+    if (tick) for (const B of bossesUp()) if (B.state !== 'arrive' && dist2(B, L) < (T.fx1NearR + B.r) ** 2) { const f0 = B.flash; hurtBoss(B.max * T.fx1BossK * T.fx1Tick, 0, 0, B); B.flash = f0 }
+    if (cleared) fxPush({ ring: true, noHit: true, x: L.x, y: L.y, r: 8, max: T.lifelineR, life: 0.3, col: LIFELINES[L.kind].col, style: 'square', hit: new Set() })
+  }
+}
+
 // Only the two hazards that occupy ground grind a lifeline continuously — a heatwave that
 // settles over it, a flood front crossing it. Everything else spends itself on arrival
 // (see the enemy loop). The first version let arriving chasers park there instead, and a
@@ -8810,7 +8891,8 @@ function makeHazard(id, x, y, extra) {
   }, extra || {})
   // SP-M2 / SP-M3 / SP-M4 2026-10-19: PLAN_SPLIT S1-S4 - an Earthquake, Storm or Wildfire body is melee or ranged, by turns per kind (splitN: melee, ranged, melee ...), whatever path made it; no random number is drawn here. sp0 keeps today's size, health, damage, speed and shot clock, so makeElite can put them back (an elite has no variant). The variant multiplies today's body (SPLIT.melee / SPLIT.ranged); a ranged Earthquake's first chip waits 0.5 s to SPLIT.chip.every s, taken from the phase makeHazard already drew (as a storm's or a fire's first shot waits rand(0.5, every)) (build_SPLIT_2026-10-18)
   if (SPLIT.kinds[id]) {
-    const n = splitN[id] || 0, v = n % 2 ? 'ranged' : 'melee', m = SPLIT[v]
+    // FIX4 2026-11-03: the variant by fx4Share() - with the share at 0.5 this is n % 2 (today's alternation); was `const n = splitN[id] || 0, v = n % 2 ? 'ranged' : 'melee', m = SPLIT[v]` (build_FIX_2026-11-03)
+    const n = splitN[id] || 0, sh4 = fx4Share(), v = Math.floor((n + 1) * sh4) > Math.floor(n * sh4) ? 'ranged' : 'melee', m = SPLIT[v]
     splitN[id] = n + 1
     e.sp0 = { r: e.r, hp: e.hp, max: e.max, dmg: e.dmg, spd: e.spd, sc: e.sc }
     e.split = v
@@ -8937,7 +9019,7 @@ function dropPrep() {
 function moveHazard(e, dt) {
   if (e.behaviour === 'zone') {
     e.life -= dt
-    if (e.life <= 0) { e.gone = true; const i = enemies.indexOf(e); if (i > -1) enemies.splice(i, 1) }
+    if (e.life <= 0) { if (e.elite) fx3Exit(e, 'heat'); e.gone = true; const i = enemies.indexOf(e); if (i > -1) enemies.splice(i, 1) }   // FIX3 2026-11-03: `if (e.elite) fx3Exit(e, 'heat');` added (build_FIX_2026-11-03)
     return
   }
   if (e.behaviour === 'front') {
@@ -9911,7 +9993,7 @@ function r5Mark(x, y) {
 function r5Dash(x, y, r, col, a) {
   ctx.save(); ctx.globalAlpha = a
   ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.strokeStyle = 'rgba(8,10,13,.5)'; ctx.lineWidth = 4; ctx.stroke()
-  ctx.setLineDash([8, 6]); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke()
+  ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke()   // FIX2 2026-11-03: solid; was dashed [8, 6] (build_FIX_2026-11-03)
   ctx.restore()
 }
 // R5-F 2026-10-26: the places drawn as plain shapes in the place's neutrals, still: a box (the depot, a building), a house, the gauge post, the siren, the mast, the firebreak line (build_R5_2026-10-26)
@@ -9932,7 +10014,7 @@ function r5Break(f) {
   const L = T.r5M6LineHalf, x0 = f.x - f.mx * L, y0 = f.y - f.my * L, x1 = f.x + f.mx * L, y1 = f.y + f.my * L
   ctx.save(); ctx.lineCap = 'butt'
   ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.strokeStyle = 'rgba(8,10,13,.55)'; ctx.lineWidth = 7; ctx.stroke()
-  ctx.setLineDash([12, 8]); ctx.strokeStyle = R5COL.ui; ctx.lineWidth = 3; ctx.stroke()
+  ctx.strokeStyle = R5COL.ui; ctx.lineWidth = 3; ctx.stroke()   // FIX2 2026-11-03: solid; was dashed [12, 8] (build_FIX_2026-11-03)
   ctx.restore()
 }
 // R5-F 2026-10-26: the task on the field, under the bodies: its places, the delivery ring, the object with its field marker (or the residents, with the marker at the door while any wait there), and while a Brush clearing reward runs, the cleared ring (build_R5_2026-10-26)
@@ -11019,7 +11101,8 @@ function offerCards(fromLevelUp) {
   wrap.appendChild(bar)
   wrap.appendChild(cp)
   // PT3-P10 2026-10-19: PLAN_PT3 P10 - on a phone (SMALL) the build list with its names, on this screen only: the rows syncHud last wrote (hudRows), in #cardbuild after the card bar and the Combos panel (CSS #cardbuild); syncHud keeps it current while the screen is up; it goes when the screen closes or is rebuilt (build_PT3_2026-10-19)
-  if (SMALL) { const bl = document.createElement('div'); bl.id = 'cardbuild'; bl._rows = hudRows || ''; bl.innerHTML = bl._rows; wrap.appendChild(bl) }
+  // HUDX2 2026-11-03: the same list on computers too, in the same place (after the card bar and the Combos panel, in the screen's flow); the PT3-P10 note above read "on a phone (SMALL)"; was `if (SMALL) { const bl = ...` (build_FIX_2026-11-03)
+  { const bl = document.createElement('div'); bl.id = 'cardbuild'; bl._rows = hudRows || ''; bl.innerHTML = bl._rows; wrap.appendChild(bl) }
 
   // Belt and braces: a card screen with nothing takeable must never show.
   if (!wrap.querySelector('.card')) { closeCards(); return }
@@ -11569,6 +11652,7 @@ function syncHud() {
   // G-M5 2026-10-13: (c) a filled dot after a measure row whose pair is ready - exactly availableSynergy's test (pairReady; P3, RG9) - named by strings_G.md S-G5a's recommended form (RG9); (d) when a pair first becomes ready this run, its two measure rows pulse once for 1.0 s (class `pp`; a still highlight under reduced motion, CSS) - once per pair per run (pairPulsed), cleared by a timer as the CB merge mark is (build_G_2026-10-01)
   const ready = SYNERGIES.filter(pairReady)
   // G-FIX 2026-10-13: F2 - the one pulse waits while a card screen or another full overlay covers the list (hudCovered): the pair stays unpulsed and pairWait is set, and step calls syncHud again once nothing covers it, so it plays then, once; the reduced-motion still highlight is the same class, so it follows the same rule (ADJUDICATION_G F2) (build_G_2026-10-01 fix round)
+  // HUDX3 2026-11-03: since HUDX1 #weapons is not drawn, so this pulse (class pp, also in the card screen's copy, #cardbuild) plays where no one sees it: it still waits while hudCovered() is true, so it plays after the card screen closes, on the undrawn list; the code is unchanged (build_FIX_2026-11-03)
   const covered = hudCovered()
   pairWait = false
   for (const sy of ready) if (!pairPulsed[sy.id]) {
@@ -11608,10 +11692,12 @@ function syncHud() {
   const html = rows.join('')
   if (html !== hudRows) { hudRows = html; $('weapons').innerHTML = html }   // CB-M3 2026-09-30: only when the rows change (build_CB_2026-09-30)
   // PT3-P10 2026-10-19: PLAN_PT3 P10 - the card screen's named copy of the list (phones only; offerCards), rewritten only when its rows change (build_PT3_2026-10-19)
-  const cbl = SMALL ? $('cardbuild') : null; if (cbl && cbl._rows !== html) { cbl._rows = html; cbl.innerHTML = html }
+  // HUDX2 2026-11-03: on computers too (offerCards builds #cardbuild on every card screen); the PT3-P10 note above read "phones only"; was `const cbl = SMALL ? $('cardbuild') : null; ...` (build_FIX_2026-11-03)
+  const cbl = $('cardbuild'); if (cbl && cbl._rows !== html) { cbl._rows = html; cbl.innerHTML = html }
 }
 
 // CB-M3 2026-09-30: the merge moment (PLAN_CB C3; ruling RC4), played by closeCards for each synergy taken on the card screen just closed (synMerge). The synergy's row is marked fresh (syncHud, CSS .wpn.fresh): it appears as the copies arrive and glows briefly. Unless reduced motion is set, a copy of each of its two measure rows is laid over that row and travels to the synergy's row, shrinking and fading as it goes (0.65 s), then is removed; the measure rows and their levels stay in the list - nothing is taken out of it. A copy is made only where both rows are laid out and inside the list's visible box (on a phone the list is cut at 38vh). Under reduced motion nothing travels and the row is simply highlighted. After 2.4 s the mark is cleared. The banner (flash) is not touched. No text: the copies are aria-hidden (build_CB_2026-09-30)
+// HUDX3 2026-11-03: since HUDX1 #weapons is not drawn: its box has no size, so the scroll below is skipped (scrollHeight 0) and no row is `shown`, so no copy travels; the fresh mark is still set and cleared as before, in the rows of both lists (#cardbuild is hidden with the card screen that just closed); the code is unchanged (build_FIX_2026-11-03)
 function mergeMoment(ids) {
   for (const id of ids) cbFresh[id] = true
   syncHud()
@@ -11912,6 +11998,7 @@ function step(dt) {
       if (P.hp <= 0) return die()
     }
   }
+  fx1Clear(dt)   // FIX1 2026-11-03: you clear a lifeline you stand at (build_FIX_2026-11-03)
   updateLifelines(dt)
   updateGroundThings(dt)
   updateEvents(dt)
@@ -13581,11 +13668,12 @@ function drawEvents(layer) {
           const k = warning ? 1 - ev.tw / ev.warn : 1
           artcTele(q.x, q.y, q.r, k)   // ART-C 2026-10-17: C1 - the EN50 ring under the outline below, faint; nothing until loaded (build_ART_2026-10-17)
           // CB-M5 2026-09-30: a strike the compound event marked (byBoss) crawls on the hazards' clock (hazClock: frozen at a hold's start), so during a hold, while its warning waits (updateEvents), its circles stop crawling too; the place's own scheduled strikes are not held and keep the run clock (PLAN_CB C5; ADJUDICATION_SY G2) (build_CB_2026-09-30)
-          ctx.setLineDash([7, 5]); ctx.lineDashOffset = -(ev.byBoss ? hazClock() : t) * 24
+          // FIX2 2026-11-03: solid - the ring at .25 alpha, 2 px, and over it a 3.5 px arc from the top that sweeps clockwise round the ring as the strike nears (k), closed at the strike, at .45 + .35 k; was a dashed [7, 5] ring crawling on the clock (byBoss: hazClock) at .35 + .35 k, 2 px (build_FIX_2026-11-03)
           ctx.beginPath(); ctx.arc(q.x, q.y, q.r, 0, TAU)
           ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 5; ctx.stroke()
-          ctx.strokeStyle = `rgba(255,180,120,${.35 + .35 * k})`; ctx.lineWidth = 2; ctx.stroke()
-          ctx.setLineDash([])
+          ctx.strokeStyle = 'rgba(255,180,120,.25)'; ctx.lineWidth = 2; ctx.stroke()
+          ctx.beginPath(); ctx.arc(q.x, q.y, q.r, -Math.PI / 2, -Math.PI / 2 + TAU * clamp(k, 0, 1))
+          ctx.strokeStyle = `rgba(255,180,120,${.45 + .35 * k})`; ctx.lineWidth = 3.5; ctx.stroke()
           ctx.fillStyle = 'rgba(0,0,0,.30)'
           ctx.beginPath(); ctx.arc(q.x, q.y, q.r * (1 - k) * .9 + 3, 0, TAU); ctx.fill()
         } else if (!q.done) {
@@ -13611,10 +13699,13 @@ function drawEvents(layer) {
       for (const L of ev.lines) {
         ctx.beginPath(); ctx.moveTo(L.x1, L.y1); ctx.lineTo(L.x2, L.y2)
         if (warning) {
-          ctx.setLineDash([12, 10]); ctx.lineDashOffset = -t * 30
+          // FIX2 2026-11-03: solid - the dark pass, the light line at half its pulsing alpha, and over it the light line at full pulse growing in from both ends to meet in the middle as the opening nears (k); was a dashed [12, 10] line crawling on the run clock (build_FIX_2026-11-03)
+          const kl = clamp(1 - ev.tw / ev.warn, 0, 1) / 2
           ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 7; ctx.stroke()
-          ctx.strokeStyle = `rgba(190,160,110,${pulse})`; ctx.lineWidth = 3; ctx.stroke()
-          ctx.setLineDash([])
+          ctx.strokeStyle = `rgba(190,160,110,${pulse * .5})`; ctx.lineWidth = 3; ctx.stroke()
+          ctx.beginPath(); ctx.moveTo(L.x1, L.y1); ctx.lineTo(L.x1 + (L.x2 - L.x1) * kl, L.y1 + (L.y2 - L.y1) * kl)
+          ctx.moveTo(L.x2, L.y2); ctx.lineTo(L.x2 + (L.x1 - L.x2) * kl, L.y2 + (L.y1 - L.y2) * kl)
+          ctx.strokeStyle = `rgba(190,160,110,${pulse})`; ctx.stroke()
         } else {
           // the trench is dark on dark ground, so its light pass is a rim either side of its full width - where it hurts
           ctx.strokeStyle = `rgba(${rgbOf(PAL.theirs.edge.trench)},.85)`; ctx.lineWidth = L.w + 4; ctx.stroke()
@@ -13639,11 +13730,13 @@ function drawEvents(layer) {
     else if (vbOn() && ev.kind === 'landslide') { ctx.rotate(-ev.a); ctx.translate(-cx, -cy); ctx.beginPath(); ctx.rect(VB.x0, VB.y0, VB.x1 - VB.x0, VB.y1 - VB.y0); ctx.clip(); ctx.translate(cx, cy); ctx.rotate(ev.a) }
     if (warning) {
       const tw = rgbOf(PAL.theirs.tele.wall)
-      ctx.setLineDash([26, 18]); ctx.lineDashOffset = -t * 40
+      // FIX2 2026-11-03: solid - the dark pass, the light line at half its pulsing alpha, and over it the light line at full pulse growing in from both ends to meet in the middle as the wall nears (k); was a dashed [26, 18] line crawling on the run clock (build_FIX_2026-11-03)
+      const kw = clamp(1 - ev.tw / ev.warn, 0, 1) * h
       ctx.beginPath(); ctx.moveTo(0, -h); ctx.lineTo(0, h)
       ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 9; ctx.stroke()
-      ctx.strokeStyle = `rgba(${tw},${pulse + .2})`; ctx.lineWidth = 5; ctx.stroke()
-      ctx.setLineDash([])
+      ctx.strokeStyle = `rgba(${tw},${(pulse + .2) * .5})`; ctx.lineWidth = 5; ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(0, -h); ctx.lineTo(0, -h + kw); ctx.moveTo(0, h); ctx.lineTo(0, h - kw)
+      ctx.strokeStyle = `rgba(${tw},${pulse + .2})`; ctx.stroke()
       ctx.beginPath()
       for (let i = -3; i <= 3; i++) { ctx.moveTo(58, i * 90); ctx.lineTo(14, i * 90 - 20); ctx.lineTo(14, i * 90 + 20); ctx.closePath() }
       ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 3; ctx.stroke()
@@ -13696,10 +13789,12 @@ function drawEvents(layer) {
     if (B.state === 'arrive') {
       const k = 1 - B.tState / T.bossWarn
       artcTele(B.x, B.y, B.r + 40 * (1 - k), k)   // ART-C 2026-10-17: C1 - the EN50 ring inside the arrival ring, faint, under it (build_ART_2026-10-17)
-      ctx.strokeStyle = `rgba(255,77,94,${.3 + .4 * Math.sin(hk * 14)})`
-      ctx.lineWidth = 3; ctx.setLineDash([14, 12]); ctx.lineDashOffset = -hk * 50
+      // FIX2 2026-11-03: solid - the ring at .6 of its pulsing alpha, 2 px wide (was 3), and over it a steady .8 arc from the top that sweeps clockwise round the ring as the body arrives (k); was a dashed [14, 12] ring crawling on the hazards' clock at the full pulsing alpha (build_FIX_2026-11-03)
+      ctx.strokeStyle = `rgba(255,77,94,${(.3 + .4 * Math.sin(hk * 14)) * .6})`
+      ctx.lineWidth = 2
       ctx.beginPath(); ctx.arc(B.x, B.y, B.r + 40 * (1 - k), 0, TAU); ctx.stroke()
-      ctx.setLineDash([])
+      ctx.strokeStyle = 'rgba(255,77,94,.8)'; ctx.lineWidth = 3.5
+      ctx.beginPath(); ctx.arc(B.x, B.y, B.r + 40 * (1 - k), -Math.PI / 2, -Math.PI / 2 + TAU * clamp(k, 0, 1)); ctx.stroke()
     }
     if (B.state === 'wind') {
       // the charge telegraph: a lane pointing at where you are standing
@@ -13721,12 +13816,14 @@ function tbossLaneDraw(B, hk) {
   ctx.save(); ctx.translate(B.x, B.y)
   if (!L.live) {
     const k = clamp(L.t / T.tbLaneWarn, 0, 1)
-    ctx.strokeStyle = `rgba(255,77,94,${.25 + .2 * k})`; ctx.lineWidth = 2; ctx.setLineDash([10, 10]); ctx.lineDashOffset = -hk * 40
+    // FIX2 2026-11-03: solid - the arc it will sweep and the band's outline at the same alpha, 1.5 px wide (was 2), and over the arc a 3 px stroke from the band's start along the sweep that grows to the arc's end as the sweep nears (k); was a dashed [10, 10] arc and outline crawling on the hazards' clock (build_FIX_2026-11-03)
+    ctx.strokeStyle = `rgba(255,77,94,${.25 + .2 * k})`; ctx.lineWidth = 1.5
     ctx.beginPath(); ctx.arc(0, 0, len, L.a, L.a + B.laneDir * T.tbLaneArc, B.laneDir < 0); ctx.stroke()
+    ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, 0, len, L.a, L.a + B.laneDir * T.tbLaneArc * k, B.laneDir < 0); ctx.stroke()
+    ctx.lineWidth = 1.5
     ctx.rotate(L.a)
     ctx.fillStyle = `rgba(255,77,94,${.08 + .14 * k})`; ctx.fillRect(0, -hw, len, hw * 2)
     ctx.strokeRect(0, -hw, len, hw * 2)
-    ctx.setLineDash([])
   } else {
     ctx.rotate(L.a)
     ctx.fillStyle = 'rgba(255,77,94,.42)'; ctx.fillRect(0, -hw, len, hw * 2)
@@ -13824,14 +13921,15 @@ const RING_STYLE = {
   shock:  { w: 4,   dash: [] },          // the drills: today's smooth ring, the heaviest
   echo:   { w: 2,   dash: [] },          // the drills' Volley echo: thin
   frag:   { w: 3,   dash: [] },          // Fragmenting: six broken arcs, turning as they open
-  resid:  { w: 3,   dash: [6, 4] },      // Residual: drawn inward, from its reach to where the thing fell
+  // FIX2 2026-11-03: resid, dash, dot and shim solid (dash []); each keeps its width and geometry (ringPath); were [6, 4], [14, 8], [2, 5] and [4, 3] (build_FIX_2026-11-03)
+  resid:  { w: 3,   dash: [] },          // Residual: drawn inward, from its reach to where the thing fell
   double: { w: 2.5, dash: [] },          // the evacuation push: two rings
-  dash:   { w: 3,   dash: [14, 8] },     // the service ring: long dashes
-  dot:    { w: 2,   dash: [2, 5] },      // the relay's launch mark: dots
+  dash:   { w: 3,   dash: [] },          // the service ring
+  dot:    { w: 2,   dash: [] },          // the relay's launch mark
   square: { w: 3,   dash: [] },          // a lifeline's strike-back: the lifeline's own rounded square
   // GR-M6 2026-09-29: the synergy ring's line width doubled, 6 -> 12, with its radius (closeCards) - still the widest solid ring in the game (PLAN_GR X6) (build_GR_2026-09-29)
   syn:    { w: 12,  dash: [] },          // SY-M3 2026-09-29: a synergy taken - the widest solid ring, once, in the synergy's colour (build_SY_2026-09-29)
-  shim:   { w: 2.5, dash: [4, 3] },      // GR-M4 2026-09-29: the shield's shimmer where a thrown thing is blocked - short dashes, small (build_GR_2026-09-29)
+  shim:   { w: 2.5, dash: [] },          // GR-M4 2026-09-29: the shield's shimmer where a thrown thing is blocked - small (build_GR_2026-09-29)
 }
 function ringPath(f) {
   const s = f.style
@@ -13963,10 +14061,10 @@ function draw() {
   // D2 2026-09-22: in the service ring's colour and dash (yours, PAL.yours.ring.service) - it was the lifeline's own colour, which is now the place's pale neutral and would sit unseen against the player's disc (build_D_2026-09-22)
   if (SF.t > 0 && SF.kind) {
     ctx.strokeStyle = PAL.yours.ring.service
-    ctx.lineWidth = 2; ctx.setLineDash([5, 5])
+    ctx.lineWidth = 2   // FIX2 2026-11-03: solid; was dashed [5, 5] (build_FIX_2026-11-03)
     ctx.globalAlpha = Math.min(1, SF.t / T.serviceDur * 2.5) * (.45 + .35 * Math.sin(t * 10))
     ctx.beginPath(); ctx.arc(P.x, P.y, P.r + 15, 0, TAU); ctx.stroke()
-    ctx.globalAlpha = 1; ctx.setLineDash([])
+    ctx.globalAlpha = 1
   }
 
   // GR2-M2 2026-09-30: the slowing veil (PLAN_GR2 W2) - a soft ring at its edge, T.grVeilR px out: a wide faint band in its colour, then its edge as a rippling line (a gentle wave, 9 crests, drifting) over a dark pass so it reads on every ground; under reduced motion the line is a still circle. Its shape, one wide ring around you, is its non-colour mark. Drawn under everything else yours (build_GR2_2026-09-30)
@@ -14013,7 +14111,7 @@ function draw() {
     const reach = repairReach()
     if (reach > T.lifelineR) {
       ctx.save()
-      ctx.strokeStyle = 'rgba(255,255,255,.22)'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.setLineDash([0.1, 7])
+      ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.lineWidth = 1   // FIX2 2026-11-03: a thin solid ring at .16 (the round dots at .22, 2 px wide, covered about a third of the ring); was dotted [0.1, 7], round caps, 2 px, .22 (build_FIX_2026-11-03)
       ctx.beginPath(); ctx.arc(L.x, L.y, reach, 0, TAU); ctx.stroke()
       ctx.restore()
     }
@@ -14022,9 +14120,10 @@ function draw() {
     // D2 2026-09-22: the health arc is the lifeline's own mark, drawn in the place's neutral; below a third it is the alarm - red and dashed, so the warning is in the line as well as the hue (it was red / amber / green by hue alone) (build_D_2026-09-22)
     const crit = frac < .34
     ctx.strokeStyle = crit ? PAL.theirs.tele.alarm : PAL.place.arc
-    ctx.lineWidth = 3; if (crit) ctx.setLineDash([4, 3])
-    ctx.beginPath(); ctx.arc(L.x, L.y, 20, -Math.PI / 2, -Math.PI / 2 + TAU * frac); ctx.stroke()
-    ctx.setLineDash([])
+    // FIX2 2026-11-03: below a third the arc is solid red over a dark pass and 5 px wide (3 px above a third), so the alarm is in the line's weight as well as the hue; was dashed [4, 3], 3 px (build_FIX_2026-11-03)
+    ctx.beginPath(); ctx.arc(L.x, L.y, 20, -Math.PI / 2, -Math.PI / 2 + TAU * frac)
+    if (crit) { ctx.save(); ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 7; ctx.stroke(); ctx.restore() }
+    ctx.lineWidth = crit ? 5 : 3; ctx.stroke()
     if (L.under || L.inbound) {
       const hot = L.under ? .3 : .14
       ctx.strokeStyle = `rgba(255,77,94,${hot + .3 * Math.sin(t * 9)})`
@@ -14048,11 +14147,10 @@ function draw() {
   // works sites: a ring you have to stand in, and a bar that only fills while you do
   for (const w of works) {
     const k = WORKS[w.kind], frac = w.prog / w.need, fade = clamp(w.life / 4, 0, 1)
-    ctx.setLineDash([9, 9]); ctx.lineDashOffset = -t * (w.inside ? 34 : 12)
+    // FIX2 2026-11-03: solid; was dashed [9, 9] crawling on the run clock (faster while you stand in it) (build_FIX_2026-11-03)
     ctx.strokeStyle = w.inside ? k.col : `rgba(255,255,255,${.16 * fade})`
     ctx.lineWidth = 2
     ctx.beginPath(); ctx.arc(w.x, w.y, T.worksR, 0, TAU); ctx.stroke()
-    ctx.setLineDash([])
     if (w.inside) {
       const g = ctx.createRadialGradient(w.x, w.y, T.worksR * .2, w.x, w.y, T.worksR)
       g.addColorStop(0, 'rgba(255,255,255,.05)'); g.addColorStop(1, 'rgba(255,255,255,0)')
@@ -14128,9 +14226,8 @@ function draw() {
       g.addColorStop(0, `rgba(210,85,79,${.30 * fade})`)
       g.addColorStop(1, 'rgba(210,85,79,0)')
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, TAU); ctx.fill()
-      ctx.strokeStyle = `rgba(255,140,120,${.5 * fade})`; ctx.lineWidth = 2
-      ctx.setLineDash([7, 7]); ctx.lineDashOffset = -tk * 22
-      ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, TAU); ctx.stroke(); ctx.setLineDash([])
+      ctx.strokeStyle = `rgba(255,140,120,${.32 * fade})`; ctx.lineWidth = 1.5   // FIX2 2026-11-03: a solid rim at .32 x fade, 1.5 px; was dashed [7, 7] crawling on the hazards' clock at .5 x fade, 2 px (build_FIX_2026-11-03)
+      ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, TAU); ctx.stroke()
       // shimmer: two rings breathing out of it, so a heatwave looks like air and not a pond
       ctx.setLineDash([])
       for (let i = 0; i < 2; i++) {
@@ -14139,7 +14236,7 @@ function draw() {
         ctx.lineWidth = 1.5
         ctx.beginPath(); ctx.arc(e.x, e.y, e.r * (0.35 + ph * 0.62), 0, TAU); ctx.stroke()
       }
-      artZone(e, hld, tk, fade)   // ART-B 2026-10-17: B1, B2, B4 - the heat zone's fire (basic) or heat slime (elite) at its centre, fading with the zone; nothing until loaded (build_ART_2026-10-17)
+      artZone(e, hld, tk, e.elite && T.fx3ExitT > 0 ? 1 : fade)   // FIX3 2026-11-03: an elite's heat slime is drawn whole until its zone ends, then leaves by fx3Draw; was `artZone(e, hld, tk, fade)` (build_FIX_2026-11-03)   // ART-B 2026-10-17: B1, B2, B4 - the heat zone's fire (basic) or heat slime (elite) at its centre, fading with the zone; nothing until loaded (build_ART_2026-10-17)
       if (e.elite) eliteMark(e, true)   // BS-M2 2026-09-30 (build_BS_2026-09-30)
       continue
     }
@@ -14147,12 +14244,14 @@ function draw() {
     hazardSprite(e, e.flash > 0 ? '#fff' : hld ? heldCol(e.col) : e.col)   // SY-M1 2026-09-29: greyed while held (build_SY_2026-09-29)
     if (e.elite) eliteMark(e, false)   // BS-M2 2026-09-30 (build_BS_2026-09-30)
     // SP-M5 2026-10-19: S5 - a ranged body's mark: a thin, pale, steady dashed ring SPLIT.ring.gap px out from its body (outside the elite outline at 3 px, the hold outline at 3 px and the wrong-answer ring at 4 px), two-tone like the game's other rings; the dashes stand still and it never pulses, so it reads apart by its broken shape, not by colour alone. A melee body has none. Drawn with the art and with the fallback shape, and while held; no particle, no random draw; the context's dash, width and colour are put back after it (build_SPLIT_2026-10-18)
+    // FIX2 2026-11-03: solid - T.fx2RangedMark 'ring': the same ring, gap, widths and colours, unbroken; 'mark': a small pale downward triangle (7 px wide) over a dark edge, SPLIT.ring.gap px above the body; was the ring dashed by SPLIT.ring.dash [3, 3] (build_FIX_2026-11-03)
     if (e.split === 'ranged') {
       const R = SPLIT.ring
-      ctx.save(); ctx.setLineDash(R.dash); ctx.lineDashOffset = 0
-      ctx.beginPath(); ctx.arc(e.x, e.y, e.r + R.gap, 0, TAU)
+      ctx.save()
+      if (T.fx2RangedMark === 'mark') { const my = e.y - e.r - R.gap; ctx.beginPath(); ctx.moveTo(e.x - 3.5, my - 5); ctx.lineTo(e.x + 3.5, my - 5); ctx.lineTo(e.x, my); ctx.closePath() }
+      else { ctx.beginPath(); ctx.arc(e.x, e.y, e.r + R.gap, 0, TAU) }
       ctx.strokeStyle = R.under; ctx.lineWidth = R.underW; ctx.stroke()
-      ctx.strokeStyle = R.col; ctx.lineWidth = R.w; ctx.stroke()
+      if (T.fx2RangedMark === 'mark') { ctx.fillStyle = R.col; ctx.fill() } else { ctx.strokeStyle = R.col; ctx.lineWidth = R.w; ctx.stroke() }
       ctx.restore()
     }
     if (e.hard) {
@@ -14194,6 +14293,7 @@ function draw() {
     ctx.beginPath(); ctx.arc(B.x, B.y, B.r * .26, 0, TAU); ctx.fill()
     }   // ART-B 2026-10-17: B3 - end of the dark-centre fallback (build_ART_2026-10-17)
   }
+  fx3Draw()   // FIX3 2026-11-03: the timed bodies leaving, over the bodies (build_FIX_2026-11-03)
 
   // SY-M1 2026-09-29: the held outline - one path round every body (3 px out), zone (on its edge) and the compound event (5 px out), stroked dark and wide, then thin in the hold's colour: steady, no dash, no pulse (build_SY_2026-09-29)
   if (hld) {
@@ -14577,7 +14677,7 @@ function draw() {
   if (r2bHot.length) {
     pf = pf || ptrFrame()
     const g0 = P.r * z + T.r2bGuideGap
-    ctx.save(); ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.setLineDash([3, 7]); ctx.globalAlpha = T.r2bGuideAlpha   // R2b-F2 2026-10-27: was `ctx.globalAlpha = .5` (build_R2b_2026-10-27)
+    ctx.save(); ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.globalAlpha = T.r2bGuideAlpha   // FIX2 2026-11-03: solid at T.r2bGuideAlpha; was dotted [3, 7] (build_FIX_2026-11-03)   // R2b-F2 2026-10-27: was `ctx.globalAlpha = .5` (build_R2b_2026-10-27)
     for (const h of r2bHot.slice(0, T.r2bGuideMax)) {
       const px = clamp(h.lx, pf.l, pf.r), py = clamp(h.ly, pf.t, pf.b)
       const dx = px - W / 2, dy = py - H / 2, len = Math.hypot(dx, dy)
