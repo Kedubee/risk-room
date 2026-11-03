@@ -3300,7 +3300,8 @@ const T = {
   // FIX1 2026-11-03: you clear a lifeline (fx1Clear). While you are within its repair reach (the `here` test of updateLifelines), every ordinary body attacking it - aimed at it (e.tgt) within fx1NearR px of its centre, or a flood front sitting on it (T.lifelineR + its radius) - is killed through hurtEnemy; an ordinary heat zone sitting on it shrinks away over fx1ZoneT s; an elite attacking it loses fx1EliteK of its maximum health a second, and a compound-event body or the true boss within fx1NearR + its radius fx1BossK, in ticks of fx1Tick s. fx1NearR 0 = off (today's game) (build_FIX_2026-11-03)
   fx1NearR: 180, fx1ZoneT: 1.0, fx1EliteK: 0.25, fx1BossK: 0.05, fx1Tick: 0.25,
   // FIX2 2026-11-03: the ranged body's mark - 'ring' (a thin solid ring SPLIT.ring.gap px out) or 'mark' (a small solid pale triangle above the body); drawing only (build_FIX_2026-11-03)
-  fx2RangedMark: 'ring',
+  // TINT2 2026-11-03: 'none' added - no mark is drawn (a ranged body is told by its body colour, TINT1); 'ring' and 'mark' draw as before; was `fx2RangedMark: 'ring',` (build_FIX_2026-11-03)
+  fx2RangedMark: 'none',
   // FIX3 2026-11-03: a timed body's exit - a compound-event body that passes on bossLife, the true boss that passes on tbossLife, and an elite heat zone whose life ends shrink and fade over fx3ExitT s with a puff, drawn after the body has left the game state; drawing only. 0 = off (today's drawing) (build_FIX_2026-11-03)
   fx3ExitT: 1.5,
   // FIX4 2026-11-03: the ranged share of SPLIT.kinds bodies by run clock: fx4Share0 before fx4From s, rising in a straight line to fx4Share1 at fx4At s, held after; makeHazard gives body n of a kind the ranged variant when floor((n + 1) x share) > floor(n x share), no random draw. fx4Share0 0.5 = off (today's alternation) (build_FIX_2026-11-03)
@@ -13060,9 +13061,37 @@ const ARTB = { img: {}, ok: {}, alt: {} }
 const ARTB_FACE = new WeakMap()
 for (const id of Object.keys(ARTB_SRC)) {
   const im = new Image()
-  im.onload = () => { ARTB.ok[id] = true }
+  im.onload = () => { ARTB.ok[id] = true; tintStrip(id) }   // TINT1 2026-11-03: `; tintStrip(id)` added (the ranged copy of a split kind's strip, made once here); was `im.onload = () => { ARTB.ok[id] = true }` (build_FIX_2026-11-03)
   im.src = ARTB_SRC[id]
   ARTB.img[id] = im
+}
+// TINT1 2026-11-03: a ranged body of a split kind (SPLIT.kinds) is drawn from mobr_<kind>, a copy of its kind's mob_<kind> strip with
+// R, G and B of every fully opaque pixel multiplied by TINT_K (rounded); half-transparent and transparent pixels are kept. It is made once,
+// when mob_<kind> has loaded: drawn on a canvas, recoloured, and turned into an image like the other strips, with the same cell table
+// (ARTB_META); ARTB.ok['mobr_' + kind] is true once that image has loaded. TINT_COL[kind]: PAL.theirs.body[kind] by the same rule, the
+// fallback shape's colour for a ranged body. Drawing only (build_FIX_2026-11-03)
+const TINT_K = 0.65
+const tintHex = h => '#' + rgbOf(h).split(',').map(v => Math.round(v * TINT_K).toString(16).padStart(2, '0')).join('')
+const TINT_COL = {}
+for (const k of Object.keys(SPLIT.kinds)) TINT_COL[k] = tintHex(PAL.theirs.body[k])
+function tintStrip(id) {
+  const kind = id.slice(4)
+  if (id.slice(0, 4) !== 'mob_' || !SPLIT.kinds[kind]) return
+  const im = ARTB.img[id], c = document.createElement('canvas')
+  c.width = im.width; c.height = im.height
+  const g = c.getContext('2d', { willReadFrequently: true })
+  g.drawImage(im, 0, 0)
+  const d = g.getImageData(0, 0, c.width, c.height), p = d.data
+  for (let i = 0; i < p.length; i += 4) {
+    if (p[i + 3] !== 255) continue
+    p[i] = Math.round(p[i] * TINT_K); p[i + 1] = Math.round(p[i + 1] * TINT_K); p[i + 2] = Math.round(p[i + 2] * TINT_K)
+  }
+  g.putImageData(d, 0, 0)
+  const rid = 'mobr_' + kind, out = new Image()
+  ARTB_META[rid] = ARTB_META[id]
+  out.onload = () => { ARTB.ok[rid] = true }
+  out.src = c.toDataURL('image/png')
+  ARTB.img[rid] = out
 }
 // the white (hit flash) or held ('h') copy of a set's strip, made once
 function artbAlt(id, mode) {
@@ -13103,7 +13132,8 @@ function artbDraw(id, o, D, fr, mode, a) {
 }
 // a hazard body (not a zone): true when drawn from the art
 function artHazard(e, hld, tk) {
-  const id = (e.elite ? 'el_' : 'mob_') + e.kind
+  // TINT1 2026-11-03: a ranged body of a split kind takes mobr_<kind> once it has loaded (mob_<kind> until then); was `const id = (e.elite ? 'el_' : 'mob_') + e.kind` (build_FIX_2026-11-03)
+  const id = e.elite ? 'el_' + e.kind : e.split === 'ranged' && ARTB.ok['mobr_' + e.kind] ? 'mobr_' + e.kind : 'mob_' + e.kind
   if (!ARTB.ok[id]) return false
   const M = ARTB_META[id]
   artbDraw(id, e, 2 * e.r * M.f, Math.floor(tk * M.fps + e.phase / TAU * M.n), e.flash > 0 ? 'w' : hld ? 'h' : '', 1)
@@ -14045,8 +14075,9 @@ function draw() {
   artcMarks()   // ART-C 2026-10-17: C7 - the few ground marks, right after the ground, under everything else (build_ART_2026-10-17)
 
   // pickup radius, faint
-  ctx.strokeStyle = 'rgba(87,199,255,.10)'
-  ctx.beginPath(); ctx.arc(P.x, P.y, P.pickup, 0, TAU); ctx.stroke()
+  // CLR1 2026-11-03: the pickup-radius ring is no longer drawn (the user, 2026-11-03: the two circles always drawn round the player go); the line above describes the removed mark; pickup itself (P.pickup, the gems' pull) is unchanged (build_FIX_2026-11-03)
+  // CLR1: was `ctx.strokeStyle = 'rgba(87,199,255,.10)'`
+  // CLR1: was `ctx.beginPath(); ctx.arc(P.x, P.y, P.pickup, 0, TAU); ctx.stroke()`
   // G-M4 2026-10-13: (e) Risk data from Lv 3 - one tick across the pickup ring per Risk data level (3 at Lv 3, 4 at Lv 4), evenly spaced from the top, in the measure's colour; still, so nothing moves under reduced motion. Lv 1 and Lv 2 keep their own forms (a wider ring, homing) (PLAN_G G4) (build_G_2026-10-01)
   // R2-2a-1 2026-10-27: Risk data's ticks across the pickup ring removed (the user's preview decision of 13:39:46, "remove all those outlines": every per-measure mark on the player's body goes; the G-M4 line above describes the removed mark; Risk data's Mainstreamed sign is now the build-list dot ring alone; the pickup ring itself stays); was `if (lv.magnet >= 3) {` (build_R2_2026-10-27)
   // R2-2a-1: was `ctx.save(); ctx.strokeStyle = 'rgba(87,199,255,.55)'; ctx.lineWidth = 2; ctx.beginPath()`
@@ -14241,11 +14272,12 @@ function draw() {
       continue
     }
     if (!artHazard(e, hld, tk))   // ART-B 2026-10-17: B1, B2, B4, B5 - the basic or elite sprite; until its image has loaded (and headless) the line below draws today's shape (build_ART_2026-10-17)
-    hazardSprite(e, e.flash > 0 ? '#fff' : hld ? heldCol(e.col) : e.col)   // SY-M1 2026-09-29: greyed while held (build_SY_2026-09-29)
+    hazardSprite(e, e.flash > 0 ? '#fff' : hld ? heldCol(e.split === 'ranged' ? TINT_COL[e.kind] : e.col) : e.split === 'ranged' ? TINT_COL[e.kind] : e.col)   // TINT1 2026-11-03: a ranged body's fallback shape in TINT_COL[e.kind] (held: its heldCol); was `hazardSprite(e, e.flash > 0 ? '#fff' : hld ? heldCol(e.col) : e.col)` (build_FIX_2026-11-03)   // SY-M1 2026-09-29: greyed while held (build_SY_2026-09-29)
     if (e.elite) eliteMark(e, false)   // BS-M2 2026-09-30 (build_BS_2026-09-30)
     // SP-M5 2026-10-19: S5 - a ranged body's mark: a thin, pale, steady dashed ring SPLIT.ring.gap px out from its body (outside the elite outline at 3 px, the hold outline at 3 px and the wrong-answer ring at 4 px), two-tone like the game's other rings; the dashes stand still and it never pulses, so it reads apart by its broken shape, not by colour alone. A melee body has none. Drawn with the art and with the fallback shape, and while held; no particle, no random draw; the context's dash, width and colour are put back after it (build_SPLIT_2026-10-18)
     // FIX2 2026-11-03: solid - T.fx2RangedMark 'ring': the same ring, gap, widths and colours, unbroken; 'mark': a small pale downward triangle (7 px wide) over a dark edge, SPLIT.ring.gap px above the body; was the ring dashed by SPLIT.ring.dash [3, 3] (build_FIX_2026-11-03)
-    if (e.split === 'ranged') {
+    // TINT2 2026-11-03: `&& T.fx2RangedMark !== 'none'` added - with 'none' nothing is drawn here; was `if (e.split === 'ranged') {` (build_FIX_2026-11-03)
+    if (e.split === 'ranged' && T.fx2RangedMark !== 'none') {
       const R = SPLIT.ring
       ctx.save()
       if (T.fx2RangedMark === 'mark') { const my = e.y - e.r - R.gap; ctx.beginPath(); ctx.moveTo(e.x - 3.5, my - 5); ctx.lineTo(e.x + 3.5, my - 5); ctx.lineTo(e.x, my); ctx.closePath() }
@@ -14580,11 +14612,12 @@ function draw() {
   // R2-2a-1: was `ctx.moveTo(P.x - P.hx * P.r, P.y - P.hy * P.r); ctx.lineTo(P.x - P.hx * wl, P.y - P.hy * wl); ctx.stroke(); ctx.restore()`
   // R2-2a-1: was `}`
   // G-M4 2026-10-13: (d) Risk financing - the halo's base alpha rises T.haloPerLv per level from T.haloA0 (the old .09), at most T.haloMax; its 0.48 Hz breathing (sin(t x 3)) stops under reduced motion, the halo then held at its middle size (PLAN_G G4: the carried gap) (build_G_2026-10-01)
-  ctx.fillStyle = `rgba(247,244,238,${Math.min(T.haloMax, T.haloA0 + T.haloPerLv * lv.hp).toFixed(3)})`
+  // CLR2 2026-11-03: the halo is no longer drawn, nor its R2-G gold edge (Risk financing at its top level) (the user, 2026-11-03: the two circles always drawn round the player go); the G-M4 line above and the R2-G line below describe the removed marks; r2HaloR had no other reader; T.haloA0, T.haloPerLv and T.haloMax stay in T, now unused; the robot, the hit blink and the disc fallback below are unchanged (build_FIX_2026-11-03)
+  // CLR2: was ctx.fillStyle = `rgba(247,244,238,${Math.min(T.haloMax, T.haloA0 + T.haloPerLv * lv.hp).toFixed(3)})`
   // R2-G 2026-10-27: Risk financing Mainstreamed - a gold edge just outside the halo (the halo's radius unchanged, named so the edge can follow it); was `ctx.beginPath(); ctx.arc(P.x, P.y, P.r * (2.05 + (reduceMotion ? 0 : Math.sin(t * 3) * .12)), 0, TAU); ctx.fill()` (build_R2_2026-10-27)
-  const r2HaloR = P.r * (2.05 + (reduceMotion ? 0 : Math.sin(t * 3) * .12))
-  ctx.beginPath(); ctx.arc(P.x, P.y, r2HaloR, 0, TAU); ctx.fill()
-  if (r2G.hp) { ctx.strokeStyle = r2Gc; ctx.lineWidth = r2E; ctx.beginPath(); ctx.arc(P.x, P.y, r2HaloR + r2E / 2, 0, TAU); ctx.stroke() }
+  // CLR2: was `const r2HaloR = P.r * (2.05 + (reduceMotion ? 0 : Math.sin(t * 3) * .12))`
+  // CLR2: was `ctx.beginPath(); ctx.arc(P.x, P.y, r2HaloR, 0, TAU); ctx.fill()`
+  // CLR2: was `if (r2G.hp) { ctx.strokeStyle = r2Gc; ctx.lineWidth = r2E; ctx.beginPath(); ctx.arc(P.x, P.y, r2HaloR + r2E / 2, 0, TAU); ctx.stroke() }`
   // ART-A 2026-10-17: A3 - the robot (artRobot) in place of the lit disc and its dark centre once its strip has loaded; until then, and headless, the four lines below as before. The halo above and the wake, plating arcs and maintenance ring are unchanged; the hit box is P.r as before (build_ART_2026-10-17)
   if (!artRobot()) {
   ctx.fillStyle = P.inv > 0 && ((t * 20) | 0) % 2 ? '#ffffff' : '#f7f4ee'
