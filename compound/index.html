@@ -559,6 +559,11 @@
       Licence: CC0, https://creativecommons.org/publicdomain/zero/1.0/
       Changed: the clinic and the schoolhouse cut out of the sheet; shown at twice their size on the "A lifeline is under attack" card
       Used for: the Hospital and the School, on their cards and on the "A lifeline is under attack" card; the hospital in How to play
+      LLB2 2026-11-03 (build_LL_2026-11-03; not yet in the visible list): two more cuts from the sheet, made the same way (white outside the
+      black outline made transparent, the box trimmed; Designer LLTEX's cut.py): the shed with two chimneys (misc. industrial #3; box 140, 136,
+      34 x 31) and the silo with the domed tank (misc. industrial #5; box 263, 138, 34 x 32). On the map (T.llArt 'A' at twice their size,
+      'B' and 'C' at their own size; nearest pixels), the clinic, the schoolhouse, the shed and the silo draw the Hospital, School, Power and
+      Water lifelines. The Road link's road piece on the map is not from the sheet: a Designer LLTEX script drew it in the sheet's colours.
     warning sign (N12-36) by ninja_6734_
       Page: https://opengameart.org/content/warning-sign
       Licence: CC0, https://creativecommons.org/publicdomain/zero/1.0/
@@ -3308,6 +3313,9 @@ const T = {
   // FIXF1 2026-11-03: the early ranged share eased from 1 in 5 to 1 in 3 (the user's pick after the FIX build; GUARD_FIXF FF-1); fx4From, fx4Share1 and fx4At unchanged; off is still fx4Share0 0.5; was `fx4Share0: 0.2, fx4From: 180, fx4Share1: 0.5, fx4At: 480,` (build_FIX_2026-11-03)
   // FIXR1 2026-11-03: the early ranged share back to today's one in two (the user's pick after the bot check of the 1-in-3 copy; GUARD_FIXR FR-1): with fx4Share0 at 0.5 the split kinds alternate melee / ranged from the first body as in live; FIX4's code stays, inert; fx4From, fx4Share1 and fx4At unchanged; was `fx4Share0: 1 / 3, fx4From: 180, fx4Share1: 0.5, fx4At: 480,` (build_FIX_2026-11-03)
   fx4Share0: 0.5, fx4From: 180, fx4Share1: 0.5, fx4At: 480,
+  // LLB1 2026-11-03: GUARD_LLB LB-1 - how the map draws a lifeline (LLB_ART, after lifelineSprite): 'B' the pack's building x1 on a dark pad, health arc at radius 35; 'A' x2, arc 41; 'C' x1 with today's glyph as a half-size sign, arc 31; 'off' (or any other value) today's glyph, arc 20; drawing only (build_LL_2026-11-03)
+  // LLC1 2026-11-03: GUARD_LLC LC-1 - C by default (the user's pick at the B build): the pack's building x1 with today's glyph as a half-size sign, arc 31; 'B', 'A' and 'off' draw as before; was `llArt: 'B',` (build_LL_2026-11-03)
+  llArt: 'C',
 }
 // PT5-R1a..R1f 2026-10-20: PLAN_PT5 R1 (the user's go-ahead relayed in record 3fc807d8; the approval of this round in PLAN_PT5.md) - the long-run numbers, one new table beside T (T itself is unchanged). Every number is from ../design_2026-10-20/curves_proposal.js (its P table and xpTable(80, 15, 72)) and DESIGN_long_runs.md; read by rampTimeAt, hpRampNow, hitRampNow (helpers), eliteShare, the spawn rate (step), the two P.need lines and rebuildLifeline (build_PT5_2026-10-20)
 const LONGRUN = {
@@ -13919,6 +13927,37 @@ function lifelineSprite(kind, x, y, col) {
   ctx.restore()
 }
 
+// LLB1 2026-11-03: GUARD_LLB LB-1 - the lifelines drawn as buildings of Pixel City - Municipal buildings (N12-30), as Designer LLTEX's mockup draws them (design_2026-11-03_LLTEX/mockup_record_LLTEX.md), by T.llArt:
+// per value the scale of the picture (k), the health arc's radius (arc), the side of the dark pad under it (pad; 0 = no pad) and whether today's glyph is drawn at half size as a sign at its top right (sign) (build_LL_2026-11-03)
+const LLB_ART = { A: { k: 2, arc: 41, pad: 0, sign: false }, B: { k: 1, arc: 35, pad: 44, sign: false }, C: { k: 1, arc: 31, pad: 0, sign: true } }
+// LLB1 2026-11-03: the five pictures - Hospital and School are the page's own UI_SRC.ic_ll_hospital / ic_ll_school (the clinic and the schoolhouse); Power the shed with two chimneys (34 x 31) and Water the silo and the domed tank (34 x 32), cut from the same sheet;
+// Road link a road piece (34 x 21) drawn by a Designer LLTEX script, not from the sheet - the last three as data URIs in this file, no network request (build_LL_2026-11-03)
+const LLB_IMG = {}
+;(() => { const S = { hospital: UI_SRC.ic_ll_hospital, school: UI_SRC.ic_ll_school, power: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAfCAYAAACCox+xAAACWElEQVR42s3XP6+aUBgG8IdGE5sLNTcn4m1cHLSBQTuaro1xd+ILaD9DE2cTv0qHfpA7kUsHGBh0u0pIQ8BckzY5HfRwkX8eENu+C4KAv7zP60EBzppOp3QymVDcqGq8JxJCcMt6g/+kroZUFVnt2htUFRlXR1baiKa9/qvRrLQR7bakcL/bkrDSRrRqUI0H4fgHoH485vgHMNhKG1H71h2JInoP9+Hx3sM9mndv4fgHfOzKqCqyGg/C27+E73n7lwQuGhkAfP32KBSFCDydsJ9/Yn/4BQC4a9TPjj/VFbiui8/vHLSkBgBg7fgoChJ4EKwrace/u224rosvH34nzi8CSkSzdnx0W1Lig7NwaZExhC0NIIoiVhouRibEV0lCCHr+jzD3LERWZFEEAIiiiCAIjoN+um8aKNGRTqeDZ+90sXMOiiOikbWkRqITDMBANganvUf+dSQByoksOqSsE1nlum65Z82lDsUR8U5kFI2PRXRBo4QQGIaBzWaTDnr/CbY0wNrx8bTeFepEtGazGcPQ6LBSANhut5BlGfP5/KyFw+EQnueh2WyebYMgCIcv2omsLbsfIQTL5TJEtdvtV4hpmlAUBQCw2+0AAIvFggvU7/eh6zoXAECIkOXj48GyLKiq+jojlmUBQAhiFzCQYRghiKdYvHmA3GG9FlQUkJgR0zRTT7gU2Xg8hq7rXBGklaqqiZX1KlBZADMIGd9xLhDDXAPI/BlQtkNlATyQQqCygCKQXJCiKKkIXkCZ/zXC6QNyO1QUUEVRAJRSSk3TpPFnx7+oSgB/ABxs4ph/LnniAAAAAElFTkSuQmCC', water: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAgCAYAAAB3j6rJAAADUUlEQVR42s2XT2gUVxzHPxtiGCIprmx3Fx1QBONMSongIeglWDSlF0l6qIUWUnNILoFQsCIR9rBgFRUkOckeghE9iBS9+ZeqEAy5lBShm0SpEoZ1Z7I4xZhlzR+eh+RNZ/b/rEnaLyw7b95v3vvM7/ed92YClNHB1t3C3R7/83WADVKgHMTp+JDn3PnYwIbB1FULAfBj7y8FWdpQEKloNEo0GmUzVFdN0GbAVARRFOX/k5HNUH2pjsa7g3BiBIB0Og3A4sNLFQfcc7ynwMx/3xwJ1AyS/eZXgjd7WQJ2AnZ2mYajJyFxsSzAF9910xxs8vTdBlEJqL4c5crxBIqikMvlyKbTYBglIdwAn+8IA7CQecukadPV18+MPQ8gSsF8skckxP5IkMaGeg9EdnGZ5mATM/Y8tmXS1ddftHRlQRrvDjrHpTxysHW3k4ns4jJbQ9uZS1nMpSyyi8vM2PP88SbjxE9Mv2TXse+LLoqf4hEBkIl3Q2yU5mATcymLxoZ6Jk3bM5ZtmQBs+WwbuQu9tXtkbGwMVVXdHhGmadLZ0cbXXT9xP95NBgjFRgGccgAsvftndawrp1iB1fjbV/2BSKmq6mmbpulph2Kj/LD0hqF4NwCZImNISJ4/9p8R9xIvfZKvp3sP0f78MTe+PAzA2csjxKb/RYnvC3Hm5x7e5z7Q/uIZT/ceAq76f2pyuVzZfpl66QPDMIjvCzkQxlo5ZZz8rwakpm0+GI4AkFhQHBjDMEgsKL73GiFNmK9SZQFIPbnHo0gLB1y1V1UVwzA83jpi/sWjSEv+DQs3iAOQD5FOp8tCAIwPnyP15J7HE4ZhcGvrLk+ZJPRv37Y7hl+bTwCiDiCZTBIOhwmHV1fFOw8mOB8bcGouf9cTF7nzYKIozLXkrBOfWFCwLdMpE8C15Czjw+eca+R8yWTSeWcVsgGgaRoAlmXR2dHmmbAYhFudHW2Y2lcF5yNTvzvXypudmppy+nVdL3x8ZYCmaTybfIVlWb5M675rN2AxgPy3eCHLU0zuDNWiSgC6rhd8TqwrULUAkiFQah2pFcgvQMUPLL9AtQJUA+ILqFYAPyAVgTRNKwCpFsDX7useUNf1shnyC7AeEmuLoRBCiPy947/QugB8BPC6ss5N+pJ1AAAAAElFTkSuQmCC', road: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAVCAYAAAAjODzXAAABMElEQVR42rWWvY2EMBCFZ05bAQE9TOgWqMHRhidauIQckg2vh42QaIAeCOkBCbfgC9jZM8jG+GefRAAzGn96njEGSJd+PUnCRADQemNAxKSamAKwLMsuUJZlNBCGAtR1DQAAQgiQUloTY4AwFOCoXEB4FeBx1/DzdKenAmGoAz7FAuFZE/Z9D9M0WYs+7tu0uFwKBcKzKWCdAeVyCAFAz/MMRVF4i37CIaUUENE/CCsV6KpDSqn3NyKCLxuhmWSTlBLatgUhxGkeu2Sqqipr/XePmK6YyrVl37/b4l3X7eJEZJ+a3EDruu7eGYQBzKmxniOpQOM4WmPDMHjPkSxAvP9N01wCYN18xz8RWYF4QQZyNbgPIPrv63LoqGMPfOw+4gIKBch2Q2OgWICcynJn/QOV0LEOuWr5+gAAAABJRU5ErkJggg==' }; for (const n in S) { const im = new Image(); im.src = S[n]; LLB_IMG[n] = im } })()
+// LLB1 2026-11-03: the LLB_ART row in use for a lifeline of this kind - null when T.llArt is not 'A', 'B' or 'C' or the kind's picture has not loaded, and then the lifeline draws as before, arc at 20 (build_LL_2026-11-03)
+function llbArt(kind) {
+  const v = LLB_ART[T.llArt], im = LLB_IMG[kind]
+  return v && im && im.complete && im.naturalWidth ? v : null
+}
+function llbArcR(kind) { const v = llbArt(kind); return v ? v.arc : 20 }
+// LLB1 2026-11-03: the lifeline's picture centred on it, pixel-exact (smoothing off), over the pad when the row has one (dark fill, a 2 px edge in the lifeline's own colour at .55); without a row, lifelineSprite as before (build_LL_2026-11-03)
+function llbDraw(L, k) {
+  const v = llbArt(L.kind)
+  if (!v) { lifelineSprite(L.kind, L.x, L.y, k.col); return }
+  const im = LLB_IMG[L.kind], w = im.naturalWidth * v.k, h = im.naturalHeight * v.k
+  ctx.save()
+  if (v.pad) {
+    const d = v.pad
+    ctx.fillStyle = 'rgba(8,10,13,.62)'; ctx.beginPath(); ctx.roundRect(L.x - d / 2, L.y - d / 2, d, d, 4); ctx.fill()
+    ctx.globalAlpha = .55; ctx.strokeStyle = k.col; ctx.lineWidth = 2; ctx.stroke(); ctx.globalAlpha = 1
+  }
+  const sm = ctx.imageSmoothingEnabled; ctx.imageSmoothingEnabled = false
+  ctx.drawImage(im, Math.round(L.x - w / 2), Math.round(L.y - h / 2), w, h)
+  ctx.imageSmoothingEnabled = sm
+  if (v.sign) { ctx.translate(L.x + 14, L.y - 11); ctx.scale(.5, .5); lifelineSprite(L.kind, 0, 0, k.col) }
+  ctx.restore()
+}
+
 // D2 2026-09-22: one small glyph per works kind, stroked in the site's own neutral - retrofit a cross-brace, monitoring station a mast, muster point a flag, planting a sprout, depot a crate (X01 (c)) (build_D_2026-09-22)
 function worksGlyph(kind, x, y, col) {
   ctx.save(); ctx.translate(x, y)
@@ -14146,13 +14185,15 @@ function draw() {
       ctx.beginPath(); ctx.arc(L.x, L.y, reach, 0, TAU); ctx.stroke()
       ctx.restore()
     }
-    lifelineSprite(L.kind, L.x, L.y, k.col)
+    // LLB1 2026-11-03: the picture by T.llArt (llbDraw); was `lifelineSprite(L.kind, L.x, L.y, k.col)`, which llbDraw still draws for 'off' and until the picture has loaded (build_LL_2026-11-03)
+    llbDraw(L, k)
     const frac = L.hp / 100
     // D2 2026-09-22: the health arc is the lifeline's own mark, drawn in the place's neutral; below a third it is the alarm - red and dashed, so the warning is in the line as well as the hue (it was red / amber / green by hue alone) (build_D_2026-09-22)
     const crit = frac < .34
     ctx.strokeStyle = crit ? PAL.theirs.tele.alarm : PAL.place.arc
     // FIX2 2026-11-03: below a third the arc is solid red over a dark pass and 5 px wide (3 px above a third), so the alarm is in the line's weight as well as the hue; was dashed [4, 3], 3 px (build_FIX_2026-11-03)
-    ctx.beginPath(); ctx.arc(L.x, L.y, 20, -Math.PI / 2, -Math.PI / 2 + TAU * frac)
+    // LLB1 2026-11-03: the arc's radius by T.llArt (llbArcR: 35 for 'B', 41 'A', 31 'C', 20 for 'off' and until the picture has loaded); was `ctx.arc(L.x, L.y, 20, ...)` (build_LL_2026-11-03)
+    ctx.beginPath(); ctx.arc(L.x, L.y, llbArcR(L.kind), -Math.PI / 2, -Math.PI / 2 + TAU * frac)
     if (crit) { ctx.save(); ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 7; ctx.stroke(); ctx.restore() }
     ctx.lineWidth = crit ? 5 : 3; ctx.stroke()
     if (L.under || L.inbound) {
