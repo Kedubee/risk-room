@@ -3869,12 +3869,12 @@ const heldCol = h => { let v = HELD_OF.get(h)
 const UPGRADES = {
   field:  { name: 'Building codes',   short: 'Codes',    max: 5, kind: 'measure', col: '#ff9de2',
             // P16a-T 2026-10-22: S3-01 (strings_P16a.md) (build_P16a_2026-10-22)
-            desc: l => l === 0 ? 'Standards applied to everything standing around you. Nothing dramatic happens; things simply do not fall. Building codes leave Heatwaves alone.'
+            desc: l => l === 0 ? 'Standards applied to everything standing around you. Nothing dramatic happens; things simply do not fall. In this game, building codes leave Heatwaves alone.'   // GW-23 2026-11-04: list_GW.tsv row GW-23 (the literal), new_text verbatim; was `'Standards applied to everything standing around you. Nothing…'` (build_GW_2026-11-04)
                                : `Enforced across a wider area (Lv ${l + 1}).`,
             src: 'UNDRR: “Earthquakes do not kill people; collapsing structures do.”' },
   // G-M1 2026-10-13: the level cards branch on what the level does, read from the small-shot resolver (pulseSmall; RG4): a level that adds a small shot, a level that makes it full, any other level as before; strings_G.md S-G1a verbatim (build_G_2026-10-01)
   pulse:  { name: 'Early warning',    short: 'Warning',  max: 6, kind: 'measure', col: '#ffd166',
-            desc: l => l === 0 ? 'Detects what is closest and answers it before it arrives. Your shots leave Heatwaves alone.'   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ15, the text from ADJUDICATION_strings_PT6.md R1 (build_PT6_2026-10-21)
+            desc: l => l === 0 ? 'In this game, it detects what is closest and answers it before it arrives. Your shots leave Heatwaves alone.'   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ15, the text from ADJUDICATION_strings_PT6.md R1 (build_PT6_2026-10-21)   // GW-13 2026-11-04: list_GW.tsv row GW-13 (the literal), new_text verbatim; was `'Detects what is closest and answers it before it arrives. Yo…'` (build_GW_2026-11-04)
                                // P16a-T 2026-10-22: S3-04 (strings_P16a.md) (build_P16a_2026-10-22)
                                : pulseSmall(l + 1) > pulseSmall(l) ? `Faster, and reaches past the first thing it meets. One more shot, small until your next Warning level (Lv ${l + 1}).`
                                : pulseSmall(l + 1) < pulseSmall(l) ? `Faster, and reaches past the first thing it meets. Your small shot grows to full size (Lv ${l + 1}).`
@@ -3888,24 +3888,24 @@ const UPGRADES = {
   ring:   { name: 'Green defences',   short: 'Nature',   max: 5, kind: 'measure', col: '#8ef6c6',
             // CORRECTED 2026-09-15: unverifiable "costs nothing" claim replaced by what the belt does in-game (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
             // P16a-T 2026-10-22: S3-14 (strings_P16a.md; ADJUDICATION_P16a.md m1) (build_P16a_2026-10-22)
-            desc: l => l === 0 ? 'Mangroves, dunes, wetlands. An always-on belt around you blocks thrown things that touch it. It wears down hazards it touches, except Heatwaves and the big events with a bar at the top of the screen.'   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ1, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+            desc: l => l === 0 ? 'Mangroves, dunes, wetlands. In this game, an always-on belt around you blocks thrown things that touch it. It wears down hazards it touches, except Heatwaves and the big events with a bar at the top of the screen.'   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ1, the text from strings_PT6_final.md (build_PT6_2026-10-21)   // GW-40 2026-11-04: list_GW.tsv row GW-40 (the literal), new_text verbatim; was `'Mangroves, dunes, wetlands. An always-on belt around you blo…'` (build_GW_2026-11-04)
                                : `A wider belt (Lv ${l + 1}).`,
             src: 'UNDRR: mangrove forests avoid more than US$80 billion of coastal flood losses a year.' },
   armour: { name: 'Retrofitting',     short: 'Retrofit', max: 4, kind: 'measure', col: '#c9d1d9',
-            desc: () => 'The buildings that already exist, strengthened. Less of every hit gets through.',
+            desc: () => 'The buildings that already exist, strengthened. In this game, less of every hit gets through.',   // GW-18 2026-11-04: list_GW.tsv row GW-18 (the literal), new_text verbatim; was `'The buildings that already exist, strengthened. Less of ever…'` (build_GW_2026-11-04)
             src: 'UNDRR: resilient infrastructure returns US$4 for each US$1 invested in low- and middle-income countries.' },
   magnet: { name: 'Risk data',        short: 'Data',     max: 4, kind: 'measure', col: '#57c7ff',
-            desc: l => l >= 1 ? 'Monitoring and loss records. From here on, what you fire turns toward what it was aimed at.'
-                              : 'Monitoring and loss records. You see further out, and nothing is collected that was never measured.',
+            desc: l => l >= 1 ? 'Monitoring and loss records. In this game, what you fire now turns toward what it was aimed at.'   // GW-20 2026-11-04: list_GW.tsv row GW-20 (the literal), new_text verbatim; was `'Monitoring and loss records. From here on, what you fire tur…'` (build_GW_2026-11-04)
+                              : 'Monitoring and loss records. In this game, you collect from 40% further.',   // GW-21 2026-11-04: list_GW.tsv row GW-21 (the literal), new_text verbatim; was `'Monitoring and loss records. You see further out, and nothin…'` (build_GW_2026-11-04)
             // CORRECTED 2026-09-15: "disaggregated loss data" split into the source's two items (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
             src: 'UNDRR asks countries to record, analyse and share disaster impact data: on affected people, broken down by group, and a full accounting of losses.' },
   hp:     { name: 'Risk financing',   short: 'Finance',  max: 5, kind: 'measure', col: '#ff4d5e',
-            desc: () => 'Reserves and insurance. Capacity to take a hit and still be standing.',
+            desc: () => 'Reserves and insurance. In this game, they give you capacity to take a hit.',   // GW-15 2026-11-04: list_GW.tsv row GW-15 (the literal), new_text verbatim; was `'Reserves and insurance. Capacity to take a hit and still be …'` (build_GW_2026-11-04)
             // CORRECTED 2026-09-15: "exceed" became "about" (GAR 2025 SPM body); ecosystem costs added (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
             src: 'UNDRR GAR 2025 estimates disaster costs at about US$2.3 trillion a year. That includes cascading and ecosystem costs.' },
   speed:  { name: 'Land-use planning', short: 'Land use', max: 5, kind: 'measure', col: '#7ee787',
             // CORRECTED 2026-09-15: unverifiable "cheapest measure" claim replaced by the in-game speed effect (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-            desc: () => 'Not building in the path of it. Each level, you move 10% faster.',
+            desc: () => 'Not building in the path of it. In this game, you move 10% faster each level.',   // GW-25 2026-11-04: list_GW.tsv row GW-25 (the literal), new_text verbatim; was `'Not building in the path of it. Each level, you move 10% fas…'` (build_GW_2026-11-04)
             src: 'UNDRR names land-use planning alongside building codes as key to reducing vulnerability.' },
   rate:   { name: 'Maintenance',      short: 'Upkeep',   max: 6, kind: 'measure', col: '#ff7a2f',
             // LL-M1 2026-09-25: was "Everything you have already built, working when it is needed." - the card now states both lifeline effects, S-L1 verbatim (strings_LL.md, ruling RL1): repair +30% per level (updateLifelines) and the repair reach +10% per level (repairReach); still one text with no level branch, so every "Level N" card prints it (build_LL_2026-09-25)
@@ -5801,17 +5801,17 @@ const HAZARDS = {
   quake: { name: 'Earthquake', col: PAL.theirs.body.quake, behaviour: 'chase', at: 0,
            r: 12, hp: 8, spd: 74, dmg: 9, xp: 2, burst: true,
            // TXT-A9 2026-10-30: ADJUDICATION_TXT_A section 6 B3 (strings_TXT_A2.md B3; A2-01/A2-02) - the first-seen flash's line (the S-5 field, read by makeHazard); no PLAIN key, so say() returns this line with Plain English on too; src below is unchanged and still feeds the report's hazard row; was no first field (build_TXT_A_2026-10-30)
-           first: 'Earthquakes often come in groups. They go after you or a lifeline.',
+           first: 'Earthquakes often come in groups. In this game, they go after you or a lifeline.',   // GW-27 2026-11-04: list_GW.tsv row GW-27 (first), new_text verbatim; was `'Earthquakes often come in groups. They go after you or a lif…'` (build_GW_2026-11-04)
            src: 'Sudden, little warning, and over in seconds — which is why the only thing that works is what was already in place.' },
   storm: { name: 'Storm',      col: PAL.theirs.body.storm, behaviour: 'orbit', at: 30,
            r: 9,  hp: 6, spd: 150, dmg: 7, xp: 2,
            // A storm hurts you by touch (dmg, on contact) and with what it picks up and throws (shoot).
            shoot: { every: 2.9, n: 3, spread: 0.44, spd: 215, dmg: 5, range: 440, r: 4.5, life: 2.4 },
            // CORRECTED 2026-09-15: "the one hazard with warning" cut; hedge restored; storm contact named (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-           src: 'UNDRR: 24 hours of warning before a storm or heatwave can cut damage by 30%. The storm hurts you by touch and by what it lifts and throws.' },
+           src: 'UNDRR: 24 hours of warning before a storm or heatwave can cut damage by 30%. In this game, the storm hurts by touch and by what it lifts and throws.' },   // GW-26 2026-11-04: list_GW.tsv row GW-26 (src), new_text verbatim; was `'UNDRR: 24 hours of warning before a storm or heatwave can cu…'` (build_GW_2026-11-04)
   flood: { name: 'Flood',      col: PAL.theirs.body.flood, behaviour: 'front', at: 70,
            r: 14, hp: 22, spd: 44, dmg: 11, xp: 3,
-           src: 'A front, not an event. It arrives from one direction and keeps arriving.' },
+           src: 'In this game, it is a front, not an event. It arrives from one direction and keeps arriving.' },   // GW-08 2026-11-04: list_GW.tsv row GW-08 (src), new_text verbatim; was `'A front, not an event. It arrives from one direction and kee…'` (build_GW_2026-11-04)
   heat:  { name: 'Heatwave',   col: PAL.theirs.body.heat, behaviour: 'zone', at: 115,
            r: 78, hp: 1, spd: 0, dmg: 13, xp: 4, life: 11,
            // TXT-A5 2026-10-30: ADJUDICATION_TXT_A section 4 S-5, strings_TXT_A.md A2-03 - a new field, first: the line of the hazard's first-seen flash (makeHazard reads it, through say() as HAZ.heat.first); src below is unchanged and still feeds the report's hazard row (build_TXT_A_2026-10-30)
@@ -6545,8 +6545,8 @@ const META_FACES = { reserves: l => `+${8 * l} starting capacity, every run.`, o
 // entry takes the one argument the current template reads. Keyed by the copy's row ids.
 const PLAIN = {
   // P16a-T 2026-10-22: S3-02 (strings_P16a.md) (build_P16a_2026-10-22)
-  'UPG.field.desc0': 'Building standards, applied to everything standing around you. Nothing dramatic happens. Things simply do not fall. Building codes leave Heatwaves alone.',
-  'UPG.pulse.desc0': 'It finds what is closest. It deals with it before it arrives. Your shots leave Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ16, the text from ADJUDICATION_strings_PT6.md R1 (build_PT6_2026-10-21)
+  'UPG.field.desc0': 'Building standards, applied to everything standing around you. Nothing dramatic happens. Things simply do not fall. In this game, building codes leave Heatwaves alone.',   // GW-37 2026-11-04: list_GW.tsv row GW-37 (the literal), new_text verbatim; was `'Building standards, applied to everything standing around yo…'` (build_GW_2026-11-04)
+  'UPG.pulse.desc0': 'In this game, it finds what is closest. It deals with it before it arrives. Your shots leave Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ16, the text from ADJUDICATION_strings_PT6.md R1 (build_PT6_2026-10-21)   // GW-38 2026-11-04: list_GW.tsv row GW-38 (the literal), new_text verbatim; was `'It finds what is closest. It deals with it before it arrives…'` (build_GW_2026-11-04)
   // G-M1 2026-10-13: the same three-way branch as UPGRADES.pulse.desc (pulseSmall; RG4), strings_G.md S-G1a Learning verbatim; the third branch is the old line (build_G_2026-10-01)
   // P16a-T 2026-10-22: S3-08 (strings_P16a.md) (build_P16a_2026-10-22)
   'UPG.pulse.descN': l => pulseSmall(l + 1) > pulseSmall(l) ? `Faster. It also goes past the first thing it meets. One more shot, small until your next Early warning level (Lv ${l + 1}).`
@@ -6557,14 +6557,14 @@ const PLAIN = {
   'UPG.pulse.tier2': 'Faster again. It also goes past the first thing it meets (Lv 8).',
   'UPG.pulse.tier3': 'Faster again. It also goes past the first thing it meets. Top level, marked in gold (Lv 9).',
   'UPG.wave.desc0': 'Practised regularly. It does not stop the hazard. It moves people out of its way.',
-  'UPG.armour.desc0': 'The buildings that are already there, made stronger. Less of every hit gets through.',
-  'UPG.magnet.desc0': 'Monitoring, and records of losses. You see further out. Nothing is collected that was never measured.',
-  'UPG.magnet.descN': 'Monitoring, and records of losses. From now on, what you fire turns toward what it was aimed at.',
+  'UPG.armour.desc0': 'The buildings that are already there, made stronger. In this game, less of every hit gets through.',   // GW-19 2026-11-04: list_GW.tsv row GW-19 (the literal), new_text verbatim; was `'The buildings that are already there, made stronger. Less of…'` (build_GW_2026-11-04)
+  'UPG.magnet.desc0': 'Monitoring, and records of losses. In this game, you collect from 40% further away.',   // GW-39 2026-11-04: list_GW.tsv row GW-39 (the literal), new_text verbatim; was `'Monitoring, and records of losses. You see further out. Noth…'` (build_GW_2026-11-04)
+  'UPG.magnet.descN': 'Monitoring, and records of losses. In this game, what you fire now turns toward what it was aimed at.',   // GW-42 2026-11-04: list_GW.tsv row GW-42 (the literal), new_text verbatim; was `'Monitoring, and records of losses. From now on, what you fir…'` (build_GW_2026-11-04)
   // R2-FX-3 2026-10-27: strings_R2.md D2-16L, D2-17L, D2-18L - the Learning twins of Risk data's three tier cards (as above, read by say() under descRow's tier row id) (build_R2_2026-10-27 fix round)
   'UPG.magnet.tier1': 'You collect from 40% further away (Lv 5).',
   'UPG.magnet.tier2': 'You collect from 40% further away again (Lv 6).',
   'UPG.magnet.tier3': 'You collect from 40% further away again. Top level, marked in gold (Lv 7).',
-  'UPG.hp.desc0': 'Money saved up, and insurance. Capacity to take a hit and still be standing.',
+  'UPG.hp.desc0': 'Money saved up, and insurance. In this game, they give you capacity to take a hit.',   // GW-17 2026-11-04: list_GW.tsv row GW-17 (the literal), new_text verbatim; was `'Money saved up, and insurance. Capacity to take a hit and st…'` (build_GW_2026-11-04)
   // R2-FX-3 2026-10-27: strings_R2.md D2-20L - the Learning twin of Risk financing's Advanced II card (the one D2 row above grade 7); its other two tier cards have no twin and show their Steady line in both modes (build_R2_2026-10-27 fix round)
   'UPG.hp.tier2': 'Capacity up by 40 again (Lv 7).',
   // LL-M1 2026-09-25: was "All you have built, working when it is needed." - replaced where it stands, never deleted (deleted, Learning would fall through to the Steady text); S-L1's Learning text verbatim (strings_LL.md) (build_LL_2026-09-25)
@@ -6654,7 +6654,7 @@ const PLAIN = {
   // P16a-T 2026-10-22: S3-119 (strings_P16a.md) (build_P16a_2026-10-22)
   'MOD.fan.desc0': 'A wide sweep, added to your aimed shots. Many more shots spread across the front. Each is lighter and does not go as far.',
   'HAZ.quake.src': 'It is sudden, with little warning, and over in seconds. That is why the only thing that works is what was already in place.',
-  'HAZ.flood.src': 'A front, not an event. It comes from one direction and keeps coming.',
+  'HAZ.flood.src': 'In this game, it is a front, not an event. It comes from one direction and keeps coming.',   // GW-09 2026-11-04: list_GW.tsv row GW-09 (the literal), new_text verbatim; was `'A front, not an event. It comes from one direction and keeps…'` (build_GW_2026-11-04)
   'HAZ.heat.src': 'It does not come to you. It settles over a place and stays. That is why it kills more people than it looks like it should.',
   // TXT-A5 2026-10-30: ADJUDICATION_TXT_A section 4 S-5, strings_TXT_A.md A2-04 - the plain twin of HAZARDS.heat.first, a new key; HAZ.heat.src above is kept, since the report's hazard row reads it (verify_TXT_A F05: no PLAIN entry removed) (build_TXT_A_2026-10-30)
   'HAZ.heat.first': 'It stays in one place, and your shots leave it alone.',
@@ -6662,9 +6662,9 @@ const PLAIN = {
   // R4-F1 2026-10-25: ADJUDICATION_R4 final list - the Learning twins of the new elites' lines, which r4First reads through say() as ELT.<id>.first and ELT.<id>.src; the list gives none for E3 (first and src) or for E9's src, so those show their Steady text in both modes (build_R4_2026-10-25)
   'ELT.E1.first': 'When you destroy it, circles fill, then hit. Do it far from you and your lifelines.',
   'ELT.E1.src': 'USGS (US): most big earthquakes have aftershocks. These can still do damage or kill.',
-  'ELT.E5.first': 'A thin lane shows where a fast flood will run. Get out of the lane.',
+  'ELT.E5.first': 'A thin path shows where a fast flood will run. Get out of the path.',   // GW-02 2026-11-04: list_GW.tsv row GW-02 (the literal), new_text verbatim; was `'A thin lane shows where a fast flood will run. Get out of th…'` (build_GW_2026-11-04)
   'ELT.E5.src': 'NSSL (US): flash floods can happen within minutes of the rain. That leaves less time to warn people.',
-  'ELT.E9.first': 'It shows a lane, then runs down it fast, leaving fire. Get off the lane.',
+  'ELT.E9.first': 'It shows a path, then runs down it fast, leaving fire. Get off the path.',   // GW-03 2026-11-04: list_GW.tsv row GW-03 (the literal), new_text verbatim; was `'It shows a lane, then runs down it fast, leaving fire. Get o…'` (build_GW_2026-11-04)
   // R5-FX 2026-10-26: ADJUDICATION_R5 K1 (strings_R5_final.md) - the Learning twins of the R5 carry lines and of the Backup power site's gain line, read through say() as CRY.<id>.<slot> (r5Start: name, banner, src; r5End: name, done, fail; r5Pick: name, pick; r5Arrived: CRY.M3.next) and WRK.backup.gain (the works built flash); rows with no Learning line (every name, M1 banner, M1 done, M4 count, backup note) show their Steady text in both modes (build_R5_2026-10-26 fix round)
   // TXT-A7 2026-10-30: strings_TXT_A.md A2-25 (ADJUDICATION_TXT_A section 3, applied); was `'CRY.M1.pick': 'You have the generator. Take it to the hospital. EVAC drops it.',` (build_TXT_A_2026-10-30)
   'CRY.M1.pick': 'You have the generator: take it to the hospital. EVAC drops it.',
@@ -6673,8 +6673,8 @@ const PLAIN = {
   'CRY.M2.banner': 'Get the river reading from the gauge. Take it to the siren.',
   // TXT-A7 2026-10-30: strings_TXT_A.md A2-26 and A2-27 (ADJUDICATION_TXT_A section 3, applied); was `'CRY.M2.pick': 'You have the reading. Take it to the siren. EVAC drops it.',` and `'CRY.M2.done': 'Warning issued. Floods move slower. The next flood front comes later.',` (build_TXT_A_2026-10-30)
   'CRY.M2.pick': 'You have the reading: take it to the siren. EVAC drops it.',
-  'CRY.M2.done': 'Warning issued: floods move slower. The next flood front comes later.',
-  'CRY.M2.fail': 'The warning did not go out. The next flood front is wider.',
+  'CRY.M2.done': 'Warning issued. In this game, floods move slower, and the next flood front comes later.',   // GW-43 2026-11-04: list_GW.tsv row GW-43 (the literal), new_text verbatim; was `'Warning issued: floods move slower. The next flood front com…'` (build_GW_2026-11-04)
+  'CRY.M2.fail': 'The warning did not go out. In this game, the next flood front is wider.',   // GW-44 2026-11-04: list_GW.tsv row GW-44 (the literal), new_text verbatim; was `'The warning did not go out. The next flood front is wider.'` (build_GW_2026-11-04)
   'CRY.M2.src': 'UNDRR: an early warning system has linked parts. If one part fails, the whole system could fail.',
   'CRY.M3.banner': 'Carry the storm warning from the radio mast to three homes. Go one home at a time.',
   // TXT-A7 2026-10-30: strings_TXT_A.md A2-28 (ADJUDICATION_TXT_A section 3, applied); was `'CRY.M3.pick': 'You have the warning. Take it to the marked home. EVAC drops it.',` (build_TXT_A_2026-10-30)
@@ -6682,7 +6682,7 @@ const PLAIN = {
   'CRY.M3.next': 'This home has the warning. Go back to the mast for the next home.',
   // TXT-A7 2026-10-30: strings_TXT_A.md A2-29 (ADJUDICATION_TXT_A section 3, applied); was `'CRY.M3.done': 'All three homes have the warning. You get XP. Hits hurt you less for a few seconds.',` (build_TXT_A_2026-10-30)
   'CRY.M3.done': 'All three homes have the warning. You get XP, and hits hurt less for a few seconds.',
-  'CRY.M3.fail': 'Some homes did not get the warning. One more ring of storms is coming.',
+  'CRY.M3.fail': 'Some homes did not get the warning. In this game, one more ring of storms is coming.',   // GW-45 2026-11-04: list_GW.tsv row GW-45 (the literal), new_text verbatim; was `'Some homes did not get the warning. One more ring of storms …'` (build_GW_2026-11-04)
   'CRY.M3.src': 'In Bangladesh, volunteers take cyclone warnings around their area. One survey found many people got them door to door.',
   'CRY.M4.banner': 'People are in a damaged building. Lead them out, away from all buildings.',
   'CRY.M4.pick': 'They follow you now. Stay away from buildings.',
@@ -6742,7 +6742,7 @@ const PLAIN = {
   // CORRECTED 2026-09-23: "looks at" (twice) became "asks for" - the source is an instruction ("Ensure ... integrate lifecycle resilience, maintenance, and retrofit pathways for existing assets.", UNDRR Earthquake Day, Key Messages, capture P01 L371), and two other game lines already say "UNDRR asks for lifecycle resilience and maintenance pathways"; UNDRR and "resilience" (the gloss label) kept; the English UPG.rate.src unchanged (pre-deploy text, predeploy_2026-09-23)
   'UPG.rate.src': 'UNDRR asks for resilience over an asset’s whole life. It also asks for ways to maintain and retrofit existing assets.',
   // P16a-T 2026-10-22: S3-15 (strings_P16a.md; ADJUDICATION_P16a.md m1) (build_P16a_2026-10-22)
-  'UPG.ring.desc0': 'Mangroves, dunes, wetlands. A belt stays around you all the time. It blocks thrown things that touch it. It wears down hazards it touches, but not Heatwaves or the big events with a bar at the top of the screen.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ2, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+  'UPG.ring.desc0': 'Mangroves, dunes, wetlands. In this game, a belt stays around you all the time. It blocks thrown things that touch it. It wears down hazards it touches, but not Heatwaves or the big events with a bar at the top of the screen.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ2, the text from strings_PT6_final.md (build_PT6_2026-10-21)   // GW-41 2026-11-04: list_GW.tsv row GW-41 (the literal), new_text verbatim; was `'Mangroves, dunes, wetlands. A belt stays around you all the …'` (build_GW_2026-11-04)
   'TRD.relief.desc': 'Help arrives each time you level up. You get 30% of your capacity back.',
   'TRD.relief.src': 'Money spent rebuilding is money not spent making the thing stronger first. That is the opposite of the measure UNDRR values at US$4 in benefit for every US$1 in low- and middle-income countries.',
   // CORRECTED 2026-09-23: the projection sentence split in two to read at or below the other plain entries (reading level); "project", the condition, the Dominican Republic scope and the quotation unchanged, the quotation now introduced by "The rise they project is" (section C round 2, section_C_2026-09-22)
@@ -6755,7 +6755,7 @@ const PLAIN = {
   'BOSS.true.arrive': 'Several hazards, arriving together: this is the boss. Beat it, or last until it passes.',
   'BOSS.true.phase1': 'The boss called them in. Now it also shoots in a ring around itself.',
   // TXT-A7 2026-10-30: strings_TXT_A.md A2-18 (ADJUDICATION_TXT_A section 3, applied); was `'BOSS.true.phase2': 'The boss called them in. Now it also sweeps a lane across the ground. Stay out of it.',` (build_TXT_A_2026-10-30)
-  'BOSS.true.phase2': 'The boss called them in, and now it also sweeps a lane across the ground. Stay out of it.',
+  'BOSS.true.phase2': 'The boss called them in, and now it also sweeps a path across the ground. Stay out of it.',   // GW-04 2026-11-04: list_GW.tsv row GW-04 (the literal), new_text verbatim; was `'The boss called them in, and now it also sweeps a lane acros…'` (build_GW_2026-11-04)
   // UXBS-FIX 2026-09-30: F3 - 'BOSS.true.down', 'BOSS.true.rep.down' and (the same claim, swept) 'BOSS.true.rep.passed' say the boss makes the recovery budget bigger - its SIZE, runFunds in die() - not that you got it; right answers release it. Were: "You beat it. You get all your capacity back, a lot of XP and extra recovery budget." / "You beat it. You got all your capacity back, a lot of XP and <b>${bonus}</b> more recovery budget." / "You did not beat it, but you lasted until it passed. Beating it gives all your capacity back, a lot of XP and extra recovery budget." (fix_record_UXBS.md F3) (build_BS_2026-09-30 fix round)
   // TXT-A7 2026-10-30: strings_TXT_A.md A2-19 (ADJUDICATION_TXT_A section 3, applied); was `'BOSS.true.down': 'You beat it. You get all your capacity back and a lot of XP. Your recovery budget gets bigger.',` (build_TXT_A_2026-10-30)
   'BOSS.true.down': 'You beat it: you get all your capacity back and a lot of XP. Your recovery budget gets bigger.',
@@ -6808,7 +6808,7 @@ const GLOSS = {
   'S7.B8': 'Moving people and property to safer places for a time. It is done before, during or after a hazard happens.',
   'S7.B10c': 'A chain reaction. One hazard or failure sets off linked impacts that may spread across systems and sectors.',
   // TXT-A7 2026-10-30: strings_TXT_A.md A3-39 (ADJUDICATION_TXT_A section 3, applied); was `'S7.LL': 'Services that help you: three at random from hospital, school, power, water, road. One place has four. Losing one hurts.',` (build_TXT_A_2026-10-30)
-  'S7.LL': 'Services that help you: three at random from hospital, school, power, water, road. One place has four, and losing one hurts.',
+  'S7.LL': 'In this game, services that help you. Three at random from hospital, school, power, water, road. One place has four, and losing one hurts.',   // GW-36 2026-11-04: list_GW.tsv row GW-36 (the literal), new_text verbatim; was `'Services that help you: three at random from hospital, schoo…'` (build_GW_2026-11-04)
 }
 const GLOSS_MEASURE = { field: 'S7.A1', pulse: 'S7.A2', wave: 'S7.A3', ring: 'S7.A4', armour: 'S7.A5',
                         magnet: 'S7.A6', hp: 'S7.A7', speed: 'S7.A8', rate: 'S7.A9' }
@@ -6873,7 +6873,7 @@ const healLine = (row, cur) => (P && P.healMul === 0.3) ? HOSPITAL_LOST[row] : c
 const META = [
   { id: 'reserves', name: 'Contingency reserves', max: 3, cost: l => 6 + l * 5,
     fx: '+8 starting capacity per level.',
-    src: 'Reserves and insurance: capacity to take a hit and still be standing.',
+    src: 'Reserves and insurance. In this game, they give you capacity to take a hit.',   // GW-16 2026-11-04: list_GW.tsv row GW-16 (src), new_text verbatim; was `'Reserves and insurance: capacity to take a hit and still be …'` (build_GW_2026-11-04)
     now: l => `+${8 * l} starting capacity, from the first second of every run.`,
     of: 'hp' },
   { id: 'routes', name: 'Practiced routes', max: 3, cost: l => 6 + l * 5,
@@ -6883,33 +6883,33 @@ const META = [
     of: 'wave' },
   { id: 'dissem', name: 'Warning dissemination', max: 3, cost: l => 6 + l * 5,
     fx: 'What Warning fires travels 8% faster per level.',
-    src: 'It detects what is closest and answers it before it arrives. Your shots leave Heatwaves alone. Dissemination is the speed of the answer.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - DS, the text from ADJUDICATION_strings_PT6.md R1 (build_PT6_2026-10-21)
+    src: 'In this game, it detects what is closest and answers it before it arrives. Dissemination is the speed of the answer. Your shots leave Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - DS, the text from ADJUDICATION_strings_PT6.md R1 (build_PT6_2026-10-21)   // GW-14 2026-11-04: list_GW.tsv row GW-14 (src), new_text verbatim; was `'It detects what is closest and answers it before it arrives.…'` (build_GW_2026-11-04)
     now: l => `What Warning fires travels ${8 * l}% faster.`,
     of: 'pulse' },
   { id: 'enforce', name: 'Enforcement capacity', max: 3, cost: l => 6 + l * 5,
     fx: 'Everything you build hits 5% harder per level.',
     // P16a-T 2026-10-22: S3-135 (strings_P16a.md) (build_P16a_2026-10-22)
-    src: 'Standards applied to everything standing around you: nothing dramatic happens, things simply do not fall. Building codes leave Heatwaves alone.',
+    src: 'Standards applied to everything standing around you: nothing dramatic happens, things simply do not fall. In this game, building codes leave Heatwaves alone.',   // GW-24 2026-11-04: list_GW.tsv row GW-24 (src), new_text verbatim; was `'Standards applied to everything standing around you: nothing…'` (build_GW_2026-11-04)
     now: l => `Everything you build hits ${5 * l}% harder.`,
     of: 'field' },
   { id: 'monitor', name: 'Monitoring network', max: 3, cost: l => 6 + l * 5,
     fx: 'You collect from 6% further per level.',
-    src: 'Monitoring and loss records: you see further out, and nothing is collected that was never measured.',
+    src: 'Monitoring and loss records. In this game, you collect from 6% further per level.',   // GW-22 2026-11-04: list_GW.tsv row GW-22 (src), new_text verbatim; was `'Monitoring and loss records: you see further out, and nothin…'` (build_GW_2026-11-04)
     now: l => `You collect from ${6 * l}% further out.`,
     of: 'magnet' },
   { id: 'office', name: 'Standing assessment office', max: 2, cost: l => 8 + l * 6,
     fx: '+1 reroll charge per level.',
-    src: 'Commissioning a study is paying to change your option menu.',
+    src: 'In this game, commissioning a study is paying to change your option menu.',   // GW-30 2026-11-04: list_GW.tsv row GW-30 (src), new_text verbatim; was `'Commissioning a study is paying to change your option menu.'` (build_GW_2026-11-04)
     now: l => `+${l} to the reroll charges you get each run.`,   // S5.7.27: one pool per run, not per screen
     of: 'magnet' },
   { id: 'telegraph', name: 'Warning culture', max: 3, cost: l => 6 + l * 5,
     fx: 'Event telegraphs last 6% longer per level.',
-    src: 'How long the telegraph lasts is what early warning buys.',
+    src: 'In this game, how long the telegraph lasts is what early warning buys.',   // GW-28 2026-11-04: list_GW.tsv row GW-28 (src), new_text verbatim; was `'How long the telegraph lasts is what early warning buys.'` (build_GW_2026-11-04)
     now: l => `Event telegraphs last ${6 * l}% longer.`,
     of: 'pulse' },
   { id: 'drills0', name: 'Institutionalised drills', max: 3, cost: l => 6 + l * 5,
     fx: 'Evacuate comes back 5% sooner per level.',
-    src: 'Drills shorten the wait, because that is what a drill is.',
+    src: 'In this game, drills shorten the wait before Evacuate comes back.',   // GW-29 2026-11-04: list_GW.tsv row GW-29 (src), new_text verbatim; was `'Drills shorten the wait, because that is what a drill is.'` (build_GW_2026-11-04)
     now: l => `Evacuate comes back ${5 * l}% sooner.`,
     of: 'wave' },
   // R2-X4 2026-10-27: PLAN_R2 R2-X4 (the user's item 3) - Repair crews: lifelines repair T.r2CrewRepair faster per level (updateLifelines, both repair branches); bought with recovery budget between runs only - never a run card (offerCards reads UPGRADES, not META). Four R2PROV placeholders for the Drafter; src is to reuse a shipped verified line (no new claim) (build_R2_2026-10-27)
@@ -7039,7 +7039,7 @@ function offerMeta() {
   // (build_POLISH_2026-10-15 fix round 2)
   $('metanote').innerHTML = st.funds || Object.keys(st.lv).length
     // P16a-T 2026-10-22: S1-12 (strings_P16a.md; ADJUDICATION_P16a.md m9) (build_P16a_2026-10-22)
-    ? 'Each of these is one of the ten measures, <b>held permanently instead of picked mid-run</b>. What a run protected is what pays for them. That way, recovery cuts the risk of the next disaster. The Sendai Framework says it is critical to do this, and to prevent new risk. It says to do both by <b>Building Back Better</b>. It also says to do both by helping people learn and know more about disaster risk. The budget is released by the debrief, not by surviving.' +
+    ? 'Each of these is one of the ten measures, <b>held permanently instead of picked mid-run</b>. In this game, what a run protected is what pays for them. That way, recovery cuts the risk of the next disaster. The Sendai Framework says it is critical to do this, and to prevent new risk. It says to do both by <b>Building Back Better</b>. It also says to do both by helping people learn and know more about disaster risk. The budget is released by the debrief, not by surviving.' +   // GW-34 2026-11-04: list_GW.tsv row GW-34 (the literal), new_text verbatim; was `'Each of these is one of the ten measures, <b>held permanentl…'` (build_GW_2026-11-04)
       '' +
       '' +
       '' +
@@ -7348,7 +7348,7 @@ const LIFELINES = {
               on: P => { P.regen = (P.regen || 0) + 0.75 }, off: P => { P.regen -= 0.75 },
               lost: P => { P.healMul = 0.3 },
               note: 'A hospital still working is the difference between an event and a catastrophe. It is also usually the building with the most people in it.',
-              gone: 'Surge capacity is the first thing a disaster spends. Once the hospital is gone the injuries that were survivable stop being survivable, and nothing else on the map replaces it — which is why Sendai names health facilities in the target itself.' },
+              gone: 'Surge capacity is the first thing a disaster spends. Once the hospital is gone the injuries that were survivable stop being survivable — which is why Sendai names health facilities in the target itself.' },   // GW-31 2026-11-04: list_GW.tsv row GW-31 (gone), new_text verbatim; was `'Surge capacity is the first thing a disaster spends. Once th…'` (build_GW_2026-11-04)
   school:   { name: 'School', col: PAL.place.lifeline.school, tag: '+15% collect',
               gain: 'Everything you collect is worth 15% more.',
               cost: 'And 15% less than baseline once it is gone.',
@@ -7834,7 +7834,7 @@ function tbossPhases(B) {
     AU.play('surge')
     // G-M6 2026-10-13: N1 - each phase line also carries { tbp: true }, so flashDropPhases can find it when the boss leaves (build_G_2026-10-01)
     if (B.tphase === 1) { B.ringCd = 0.6; flash('More hazards may arrive', say('BOSS.true.phase1', 'The boss now fires a ring of shots too.'), B.col, { now: true, keep: true, tbp: true }) }   // UXBS-FIX 2026-09-30: F2, F8 (build_BS_2026-09-30 fix round)
-    else { B.laneCd = 0.8; flash('More hazards may arrive', say('BOSS.true.phase2', 'The boss now sweeps a lane across the ground too.'), B.col, { now: true, keep: true, tbp: true }) }   // UXBS-FIX 2026-09-30: F2, F8 (build_BS_2026-09-30 fix round)
+    else { B.laneCd = 0.8; flash('More hazards may arrive', say('BOSS.true.phase2', 'The boss now sweeps a path across the ground too.'), B.col, { now: true, keep: true, tbp: true }) }   // UXBS-FIX 2026-09-30: F2, F8 (build_BS_2026-09-30 fix round)   // GW-05 2026-11-04: list_GW.tsv row GW-05 (the literal), new_text verbatim; was `'The boss now sweeps a lane across the ground too.'` (build_GW_2026-11-04)
   }
 }
 
@@ -9342,8 +9342,8 @@ const ELITES2 = {
   // R4-F1 2026-10-25: ADJUDICATION_R4 final list (E1, E3, E5, E9: name, first and src, verbatim) in place of the phase-1 placeholders; was, one line per id, `<id>: { name: '<P> <id> name', first: '<P> <id> first', src: '<P> <id> src' },` for E1, E3, E5 and E9, where <P> is the six-letter placeholder tag, left out of this quote so the file holds none (build_R4_2026-10-25)
   E1: { name: 'Aftershock cluster', first: 'When you destroy it, circles fill, then strike. Do it away from you and lifelines.', src: 'USGS (US): most large earthquakes have aftershocks, and they can still be damaging or deadly.' },
   E3: { name: 'Squall line', first: 'A band with arrows marks where a wall of storms will cross. Go through the gap.', src: 'NSSL (US): squall lines tend to pass quickly.' },
-  E5: { name: 'Flash flood', first: 'A narrow lane shows where a fast front will run. Step out of the lane.', src: 'NSSL (US): flash floods can happen within minutes of the rain, limiting the time to warn people.' },
-  E9: { name: 'Crown fire', first: 'It marks a lane, then rushes down it, leaving fire behind. Step off the lane.', src: 'DOI/USDA (US): a crown fire moves through the treetops, more or less independently of the fire below.' },
+  E5: { name: 'Flash flood', first: 'A narrow path shows where a fast front will run. Step out of the path.', src: 'NSSL (US): flash floods can happen within minutes of the rain, limiting the time to warn people.' },   // GW-06 2026-11-04: list_GW.tsv row GW-06 (first), new_text verbatim; was `'A narrow lane shows where a fast front will run. Step out of…'` (build_GW_2026-11-04)
+  E9: { name: 'Crown fire', first: 'It marks a path, then rushes down it, leaving fire behind. Step off the path.', src: 'DOI/USDA (US): a crown fire moves through the treetops, more or less independently of the fire below.' },   // GW-07 2026-11-04: list_GW.tsv row GW-07 (first), new_text verbatim; was `'It marks a lane, then rushes down it, leaving fire behind. S…'` (build_GW_2026-11-04)
 }
 // R4-E 2026-10-25: the place map - the new elite each place's main hazard gets, and that hazard (build_R4_2026-10-25)
 const E2_OF = { fault: { id: 'E1', kind: 'quake' }, metro: { id: 'E1', kind: 'quake' }, delta: { id: 'E3', kind: 'storm' },
@@ -9606,8 +9606,8 @@ function r4Heavy() {
 const CARRY = {
   // TXT-A7 2026-10-30: strings_TXT_A.md A2-20 to A2-24 (ADJUDICATION_TXT_A section 3, applied), on the four lines below: M1 done, M2 pick, M3 pick, M6 pick and done; was `done: 'The generator is on. The hospital keeps working. A Backup power site starts one by itself.'`, `pick: 'Reading taken. Get it to the siren. EVAC drops it.'`, `pick: 'Warning in hand. Take it to the marked home. EVAC drops it.'`, `pick: 'Brush picked up. Get it past the firebreak. EVAC drops it.'` and `done: 'Ring cleared. For 30s, fire spreads into it at half its rate. It is not stopped.'` (build_TXT_A_2026-10-30)
   M1: { name: 'Hospital generator', banner: 'The power is out. Carry the generator to the hospital.', pick: 'Take it to the hospital. EVAC drops it.', done: 'The generator is on, and the hospital keeps working. A Backup power site starts one by itself.', fail: 'Too late. The hospital loses health.', src: 'WHO/PAHO hospital guide: backup you can only start by hand is rated Low.' },
-  M2: { name: 'Flood gauge', banner: 'Take the gauge reading to the warning siren.', pick: 'Reading taken: get it to the siren. EVAC drops it.', done: 'Warning issued. Floods slow, and the next front comes later.', fail: 'No warning went out. The next front comes in wider.', src: 'UNDRR: if one part of an early warning system fails, the whole system could fail.' },
-  M3: { name: 'Warning round', banner: 'Take the warning from the mast to three homes, one at a time.', pick: 'Warning in hand: take it to the marked home. EVAC drops it.', done: 'All three homes warned. You get XP, and armour for a few seconds.', fail: 'Not every home was warned. One more ring of storms comes in.', src: 'Studies in Bangladesh: volunteers spread cyclone warnings with megaphones. In one survey, many got them door to door.', next: 'Home warned. Back to the mast for the next home.' },   // R5-T phase 2a: next - after homes 1 and 2, back to the mast (CRY.M3.next)
+  M2: { name: 'Flood gauge', banner: 'Take the gauge reading to the warning siren.', pick: 'Reading taken: get it to the siren. EVAC drops it.', done: 'Warning issued. In this game, floods slow, and the next front comes later.', fail: 'No warning went out. In this game, the next front comes in wider.', src: 'UNDRR: if one part of an early warning system fails, the whole system could fail.' },   // GW-10, GW-11 2026-11-04: list_GW.tsv rows GW-10 (done) and GW-11 (fail), new_text verbatim; was `'Warning issued. Floods slow, and the next front comes later.'` and `'No warning went out. The next front comes in wider.'` (build_GW_2026-11-04)
+  M3: { name: 'Warning round', banner: 'Take the warning from the mast to three homes, one at a time.', pick: 'Warning in hand: take it to the marked home. EVAC drops it.', done: 'All three homes warned. You get XP, and hits hurt less for a few seconds.', fail: 'Not every home was warned. In this game, one more ring of storms comes in.', src: 'Studies in Bangladesh: volunteers spread cyclone warnings with megaphones. In one survey, many got them door to door.', next: 'Home warned. Back to the mast for the next home.' },   // R5-T phase 2a: next - after homes 1 and 2, back to the mast (CRY.M3.next)   // GW-01, GW-12 2026-11-04: list_GW.tsv rows GW-01 (done) and GW-12 (fail), new_text verbatim; was `'All three homes warned. You get XP, and armour for a few sec…'` and `'Not every home was warned. One more ring of storms comes in.'` (build_GW_2026-11-04)
   M4: { name: 'Lead them out', banner: 'Lead them out of the damaged building, away from all buildings.', pick: 'They are following you. Keep away from buildings.', done: 'Clear of the buildings. You get XP and capacity.', fail: 'They walk to open ground on their own. No reward.', src: 'Ready.gov (US): in a damaged building, go outside and quickly move away. Do not enter damaged buildings.', count: '{n} reached open ground' },
   M6: { name: 'Brush clearing', banner: 'Carry the brush from around the house past the firebreak.', pick: 'Brush picked up: get it past the firebreak. EVAC drops it.', done: 'Ring cleared: for 30s, fire spreads into it at half its rate. It is not stopped.', fail: 'The brush stayed. Spot fires start.', src: 'UNEP: managing plants around buildings is one way to cut fire risk. Fuel treatments do not necessarily stop fires.' },
 }
@@ -12455,7 +12455,7 @@ function renderReport() {
       // CORRECTED 2026-09-22: was "+15% to everything"; svc() feeds eff(), which multiplies damage and fire rate only (sweep 3, sweep3_2026-09-22/source_verification.md n/a, code; Lead F7)
       // LL-M2 2026-09-25: S-L4 R-1 (ruling RL2) - after a rebuild the bonus stopped while a lifeline was down, so "held all run" reads "held since your last rebuild" in a run with one; a run with none prints exactly as before (build_LL_2026-09-25)
       `+${Math.round((T.svcBonus - 1) * 100)}% damage and fire rate, ${llRebuilds ? 'held since your last rebuild' : 'held all run'}. Paid only while every service is up, not most of them.`,
-      `+${Math.round((T.svcBonus - 1) * 100)}% damage and fire rate, ${llRebuilds ? 'held since your last rebuild' : 'held all run'}. Paid only while every service is up, not most of them — the disruption of basic services is what Target D sets out to reduce.`, 'More: the Target D link'))   // TXT-B5 2026-10-30: N-03 (list_TXT_B_final.tsv) - the toggle's accessible name, rowMore's fifth argument; the line was the same up to and including the closing backtick, then `))` (build_TXT_B_2026-10-30)
+      `+${Math.round((T.svcBonus - 1) * 100)}% damage and fire rate, ${llRebuilds ? 'held since your last rebuild' : 'held all run'}. In this game, it is paid only while every service is up. The disruption of basic services is what Target D sets out to reduce.`, 'More: the Target D link'))   // TXT-B5 2026-10-30: N-03 (list_TXT_B_final.tsv) - the toggle's accessible name, rowMore's fifth argument; the line was the same up to and including the closing backtick, then `))` (build_TXT_B_2026-10-30)   // GW-35 2026-11-04: list_GW.tsv row GW-35 (the literal), new_text verbatim; was ``+${Math.round((T.svcBonus - 1) * 100)}% damage and fire rate…`` (build_GW_2026-11-04)
   // UXBS-FIX 2026-09-30: F5 - the true boss's row still shows here, right after the lifeline row, but it is added below the first / best run rows (hls.splice at hlBoss), and only when the rows that come unconditionally leave a slot (hls.length < 3), so the block is never more than three rows (verify_UXBS F5); where it shows, the order on screen is as before (build_BS_2026-09-30 fix round)
   const hlBoss = hls.length
   // FX2 2026-09-23: shown only when every question asked was answered right - "asked" is the debrief's list, the count releaseFunds banks against (a skipped question counts as asked and not right, as the comment under debriefN in T says); it was `quizRight + quizWrong > 0 && !quizWrong`, true after one right answer and a skip (review_F.md, pre-existing). No questions: not shown, as before (build_F_2026-09-23 fix round)
@@ -12581,7 +12581,7 @@ function renderReport() {
       // S5.7.31: the sum counts only Early warning levels (see fireEvent), so it is 0.0 when the level
       // came after the last event - the row waits for something to report, not just for the level.
       (lv.pulse > 1 && warnBought >= 0.05
-        ? row('#ffd166', 'Warning bought you', `${warnBought.toFixed(1)} extra seconds of notice across ${eventsSeen.length} of them, from the Early warning levels you added. That is the whole of what an early-warning system is: not less hazard, more time.`)
+        ? row('#ffd166', 'Warning bought you', `${warnBought.toFixed(1)} extra seconds of notice across ${eventsSeen.length} of them, from the Early warning levels you added. In this game, that is what Early warning gives you: not less hazard, more time.`)   // GW-32 2026-11-04: list_GW.tsv row GW-32 (the literal), new_text verbatim; was ``${warnBought.toFixed(1)} extra seconds of notice across ${ev…`` (build_GW_2026-11-04)
         : ''))
   }
 
@@ -12670,7 +12670,7 @@ function renderReport() {
             // PL-M2 2026-10-15: P2 - the closing sentences, each now grade 7 or below on both scorers (they graded 15.64 and 8.01). What is released goes to the recovery budget on the start screen (bankShare / releaseFunds -> metaStore().funds, shown by offerMeta), where it buys META nodes, "held permanently" (METALV, every run). The paraphrase stays inside Sendai para. 19(k) (prevent the creation of and reduce disaster risk by "Building Back Better", in recovery); the term and the citation are unchanged. It read "It becomes standing capacity on the start screen: recovery spent reducing the next disaster rather than restoring the last one’s vulnerability. That loop is the framework’s own recovery clause: Building Back Better." (build_POLISH_2026-10-15)
             // PL-FIX 2026-10-15: FX-A (check_POLISH.md F1, F4) - the last two sentences replaced by two that say only what Sendai para. 19(k) says: in the post-disaster recovery phase "it is critical to prevent the creation of and to reduce disaster risk by" Building Back Better. "do this" is the sentence before it (recovery cuts the risk of the next disaster: "to reduce disaster risk"); "prevent new risk" is "prevent the creation of ... disaster risk"; "do both by" is "by". Nothing about putting an old risk back, and no claim that the framework names this loop. The first two sentences, the term and the citation are unchanged; each new sentence is grade 7 or below on both of c3_fk.py's methods. It read "It does not put the old risk back. That loop is what the framework calls Building Back Better." (build_POLISH_2026-10-15 fix round)
             // PL-FIX2 2026-10-15: FX-G (review_POLISH.md M1) - one sentence added before the citation, the same words as the start-screen meta note ($('metanote')): Sendai para. 19(k) names two means, "by "Building Back Better" and increasing public education and awareness of disaster risk"; "It says to do both by Building Back Better." alone read as the whole method. "It also says to do both by" is the source's "by ... and"; "helping people learn and know more about disaster risk" is "increasing public education and awareness of disaster risk" (learn = education, know = awareness, more = increasing, people = public). It follows all three branches above, like the rest of this literal; every other word, the term and the citation are unchanged; the new sentence grades 6.88 on c3_fk.py (DICT and HEUR), r4_text.py (V3 and VG) and quiz_audit.py's fk() (6.9) (build_POLISH_2026-10-15 fix round 2)
-            'You can spend what is released on the start screen, on measures you keep for every run. That way, recovery cuts the risk of the next disaster. The Sendai Framework says it is critical to do this, and to prevent new risk. It says to do both by Building Back Better. It also says to do both by helping people learn and know more about disaster risk. (Sendai Framework ¶19(k))')   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
+            'In this game, what is released buys measures on the start screen for every run. That way, recovery cuts the risk of the next disaster. The Sendai Framework says it is critical to do this, and to prevent new risk. It says to do both by Building Back Better. It also says to do both by helping people learn and know more about disaster risk. (Sendai Framework ¶19(k))')   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // GW-33 2026-11-04: list_GW.tsv row GW-33 (the literal), new_text verbatim; was `'You can spend what is released on the start screen, on measu…'` (build_GW_2026-11-04)
         })()
       : '') +
     row('#8fe3ff', 'Evacuate',
