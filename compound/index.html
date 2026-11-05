@@ -557,13 +557,15 @@
     Pixel City - Municipal buildings (N12-30) by pixel32
       Page: https://opengameart.org/content/pixel-city-municipal-buildings
       Licence: CC0, https://creativecommons.org/publicdomain/zero/1.0/
-      Changed: the clinic and the schoolhouse cut out of the sheet; shown at twice their size on the "A lifeline is under attack" card
-      Used for: the Hospital and the School, on their cards and on the "A lifeline is under attack" card; the hospital in How to play
+      HF-4 2026-11-05: the next two lines, list_HF.tsv rows HF-C3 and HF-C4, new_text verbatim; were `Changed: the clinic and the schoolhouse cut out of the sheet…` and `Used for: the Hospital and the School, on their cards and on…` (build_HF_2026-11-05)
+      Changed: the clinic and schoolhouse (twice their size on the "A lifeline is under attack" card), the shed with two chimneys and the silo with the domed tank, cut from the sheet
+      Used for: the Hospital, School, Power and Water lifelines on the map; the Hospital and the School on their Rebuild cards and on the "A lifeline is under attack" card; the hospital in How to play
       LLB2 2026-11-03 (build_LL_2026-11-03; not yet in the visible list): two more cuts from the sheet, made the same way (white outside the
       black outline made transparent, the box trimmed; Designer LLTEX's cut.py): the shed with two chimneys (misc. industrial #3; box 140, 136,
       34 x 31) and the silo with the domed tank (misc. industrial #5; box 263, 138, 34 x 32). On the map (T.llArt 'A' at twice their size,
       'B' and 'C' at their own size; nearest pixels), the clinic, the schoolhouse, the shed and the silo draw the Hospital, School, Power and
       Water lifelines. The Road link's road piece on the map is not from the sheet: a Designer LLTEX script drew it in the sheet's colours.
+      HF-4 2026-11-05: the LLB2 lines above say "not yet in the visible list"; the visible list now carries the shed and the silo: the Art credits dialog's N12-30 entry names them and the Hospital, School, Power and Water lifelines they draw on the map (list_HF.tsv rows HF-C1 and HF-C2) (build_HF_2026-11-05)
     warning sign (N12-36) by ninja_6734_
       Page: https://opengameart.org/content/warning-sign
       Licence: CC0, https://creativecommons.org/publicdomain/zero/1.0/
@@ -2754,8 +2756,10 @@ html body #start.st3.stn div#learnhead{text-align:center}
         <p class="cl cby">by pixel32</p>
         <p class="cl">Page: <a href="https://opengameart.org/content/pixel-city-municipal-buildings" target="_blank" rel="noopener noreferrer">https://opengameart.org/content/pixel-city-municipal-buildings</a></p>
         <p class="cl">Licence: CC0, <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">https://creativecommons.org/publicdomain/zero/1.0/</a></p>
-        <p class="cl">Changed: the clinic and the schoolhouse cut out of the sheet; shown at twice their size on the "A lifeline is under attack" card</p>
-        <p class="cl">Used for: the Hospital and the School, on their cards and on the "A lifeline is under attack" card; the hospital in How to play</p>
+        <!-- HF-4 2026-11-05: the next line, list_HF.tsv row HF-C1, new_text verbatim; was `<p class="cl">Changed: the clinic and the schoolhouse cut ou…` (build_HF_2026-11-05) -->
+        <p class="cl">Changed: the clinic and schoolhouse (twice their size on the "A lifeline is under attack" card), the shed with two chimneys and the silo with the domed tank, cut from the sheet</p>
+        <!-- HF-4 2026-11-05: the next line, list_HF.tsv row HF-C2, new_text verbatim; was `<p class="cl">Used for: the Hospital and the School, on thei…` (build_HF_2026-11-05) -->
+        <p class="cl">Used for: the Hospital, School, Power and Water lifelines on the map; the Hospital and the School on their Rebuild cards and on the "A lifeline is under attack" card; the hospital in How to play</p>
       </li>
       <li class="ca" data-id="N12-36">
         <h5 class="ct">warning sign</h5>
@@ -2913,6 +2917,7 @@ const zoomCase = () => !SMALL ? 'desktop' : zoomW >= zoomH ? 'mobileLandscape' :
 // draw and the switch's own labels, so no game number reads it (T5). Precedence: the player's choice, when set, over the table; the dev dial
 // (initDev) edits the table, so its value shows while no player's choice is set, and its line says when one is overriding it. zoomDevSync is
 // the dial's redraw, set by initDev, so a press of the switch redraws the dial's line (build_ZOOMTOG_2026-10-18)
+// HF-5 2026-11-05: (ledger T42) on "so no game number reads it (T5)" above: since RZ1 (build_RZ_2026-11-03) the spawn rings read zoomView() (W and H divided by zoomNow()), so zoomNow() now also feeds those game numbers (the RZ2 note above); comment only, the paragraph's own words stay (build_HF_2026-11-05)
 // ZOOMTOG-FU 2026-10-18: F-a (the Lead's follow-up, T1 / T4) - a choice equal to the screen case's own table value is no choice: a stored value
 // equal to ZOOM[zoomCase()] at load (the file's value then: initDev has not run) reads as null, and zoomPickSave(null) removes the key, so the
 // default applies again and the dev dial is not overridden there; every other listed value is stored and read as before (build_ZOOMTOG_2026-10-18)
@@ -3319,6 +3324,8 @@ const T = {
   // FIXF1 2026-11-03: the early ranged share eased from 1 in 5 to 1 in 3 (the user's pick after the FIX build; GUARD_FIXF FF-1); fx4From, fx4Share1 and fx4At unchanged; off is still fx4Share0 0.5; was `fx4Share0: 0.2, fx4From: 180, fx4Share1: 0.5, fx4At: 480,` (build_FIX_2026-11-03)
   // FIXR1 2026-11-03: the early ranged share back to today's one in two (the user's pick after the bot check of the 1-in-3 copy; GUARD_FIXR FR-1): with fx4Share0 at 0.5 the split kinds alternate melee / ranged from the first body as in live; FIX4's code stays, inert; fx4From, fx4Share1 and fx4At unchanged; was `fx4Share0: 1 / 3, fx4From: 180, fx4Share1: 0.5, fx4At: 480,` (build_FIX_2026-11-03)
   fx4Share0: 0.5, fx4From: 180, fx4Share1: 0.5, fx4At: 480,
+  // HF-3 2026-11-05: the early ranged fire rate (the user's pick of 2026-11-05: two thirds of the rate up to 3:00, back to the full rate at 8:00): an ordinary ranged body (e.split 'ranged') reloads in hfShot0 x its interval up to hfShotFrom s of run clock, in a straight line down to 1 x at hfShotAt s, 1 x after (hfShot, enemyFire); elites and every other thrower unchanged; the first throw after spawn unchanged; off = hfShot0 1 (build_HF_2026-11-05)
+  hfShot0: 1.5, hfShotFrom: 180, hfShotAt: 480,
   // LLB1 2026-11-03: GUARD_LLB LB-1 - how the map draws a lifeline (LLB_ART, after lifelineSprite): 'B' the pack's building x1 on a dark pad, health arc at radius 35; 'A' x2, arc 41; 'C' x1 with today's glyph as a half-size sign, arc 31; 'off' (or any other value) today's glyph, arc 20; drawing only (build_LL_2026-11-03)
   // LLC1 2026-11-03: GUARD_LLC LC-1 - C by default (the user's pick at the B build): the pack's building x1 with today's glyph as a half-size sign, arc 31; 'B', 'A' and 'off' draw as before; was `llArt: 'B',` (build_LL_2026-11-03)
   llArt: 'C',
@@ -3929,11 +3936,11 @@ const R2_TIER_DESC = {
   pulse:  ['Faster, and reaches past the first thing it meets (Lv 7).', 'Faster again, and reaches past the first thing it meets (Lv 8).', 'Faster again, and reaches past the first thing it meets. Top level, marked in gold (Lv 9).'],   // R2-FX-2: D2-04..06; was `pulse:  ['R2PROV pulse tier1', 'R2PROV pulse tier2', 'R2PROV pulse tier3'],`
   wave:   ['More often, and further out (Lv 6).', 'More often again, and further out (Lv 7).', 'More often again, and further out. Top level, marked in gold (Lv 8).'],   // R2-FX-2: D2-07..09; was `wave:   ['R2PROV wave tier1', 'R2PROV wave tier2', 'R2PROV wave tier3'],`
   ring:   ['A wider belt (Lv 6).', 'A wider belt again (Lv 7).', 'A wider belt again. Top level, marked in gold (Lv 8).'],   // R2-FX-2: D2-10..12; was `ring:   ['R2PROV ring tier1', 'R2PROV ring tier2', 'R2PROV ring tier3'],`
-  armour: ['Hits on you are 12% smaller again (Lv 5).', 'Hits on you are 12% smaller again (Lv 6).', 'Hits on you are 12% smaller again. Top level, marked in gold (Lv 7).'],   // R2-FX-2: D2-13..15; was `armour: ['R2PROV armour tier1', 'R2PROV armour tier2', 'R2PROV armour tier3'],`
-  magnet: ['You collect from 40% further (Lv 5).', 'You collect from 40% further again (Lv 6).', 'You collect from 40% further again. Top level, marked in gold (Lv 7).'],   // R2-FX-2: D2-16..18; was `magnet: ['R2PROV magnet tier1', 'R2PROV magnet tier2', 'R2PROV magnet tier3'],`
-  hp:     ['+40 capacity (Lv 6).', '+40 capacity again (Lv 7).', '+40 capacity again. Top level, marked in gold (Lv 8).'],   // R2-FX-2: D2-19..21; was `hp:     ['R2PROV hp tier1', 'R2PROV hp tier2', 'R2PROV hp tier3'],`
-  speed:  ['You move 10% faster (Lv 6).', 'You move 10% faster again (Lv 7).', 'You move 10% faster again. Top level, marked in gold (Lv 8).'],   // R2-FX-2: D2-22..24; was `speed:  ['R2PROV speed tier1', 'R2PROV speed tier2', 'R2PROV speed tier3'],`
-  rate:   ['Lifelines repair faster. Your repair reach is wider (Lv 7).', 'Lifelines repair faster again. Your repair reach is wider again (Lv 8).', 'Lifelines repair faster again. Top level, marked in gold (Lv 9).'],   // R2-FX-2: D2-25..27; was `rate:   ['R2PROV rate tier1', 'R2PROV rate tier2', 'R2PROV rate tier3'],`
+  armour: ['Hits on you are 12% smaller again (Lv 5).', 'Hits on you are 12% smaller again (Lv 6).', 'Hits on you are 12% smaller again. Top level, marked by a gold ring in the list below the cards (Lv 7).'],   // R2-FX-2: D2-13..15; was `armour: ['R2PROV armour tier1', 'R2PROV armour tier2', 'R2PROV armour tier3'],`   // HF-4 2026-11-05: list_HF.tsv row HF-B1, new_text verbatim; was `armour: ['Hits on you are 12% smaller again (Lv 5).', 'Hits …` (build_HF_2026-11-05)
+  magnet: ['You collect from 40% further (Lv 5).', 'You collect from 40% further again (Lv 6).', 'You collect from 40% further again. Top level, marked by a gold ring in the list below the cards (Lv 7).'],   // R2-FX-2: D2-16..18; was `magnet: ['R2PROV magnet tier1', 'R2PROV magnet tier2', 'R2PROV magnet tier3'],`   // HF-4 2026-11-05: list_HF.tsv row HF-B2, new_text verbatim; was `magnet: ['You collect from 40% further (Lv 5).', 'You collec…` (build_HF_2026-11-05)
+  hp:     ['+40 capacity (Lv 6).', '+40 capacity again (Lv 7).', '+40 capacity again. Top level, marked by a gold ring in the list below the cards (Lv 8).'],   // R2-FX-2: D2-19..21; was `hp:     ['R2PROV hp tier1', 'R2PROV hp tier2', 'R2PROV hp tier3'],`   // HF-4 2026-11-05: list_HF.tsv row HF-B3, new_text verbatim; was `hp:     ['+40 capacity (Lv 6).', '+40 capacity again (Lv 7).…` (build_HF_2026-11-05)
+  speed:  ['You move 10% faster (Lv 6).', 'You move 10% faster again (Lv 7).', 'You move 10% faster again. Top level, marked by a gold ring in the list below the cards (Lv 8).'],   // R2-FX-2: D2-22..24; was `speed:  ['R2PROV speed tier1', 'R2PROV speed tier2', 'R2PROV speed tier3'],`   // HF-4 2026-11-05: list_HF.tsv row HF-B4, new_text verbatim; was `speed:  ['You move 10% faster (Lv 6).', 'You move 10% faster…` (build_HF_2026-11-05)
+  rate:   ['Lifelines repair faster. Your repair reach is wider (Lv 7).', 'Lifelines repair faster again. Your repair reach is wider again (Lv 8).', 'Lifelines repair faster again. Top level, marked by a gold ring in the list below the cards (Lv 9).'],   // R2-FX-2: D2-25..27; was `rate:   ['R2PROV rate tier1', 'R2PROV rate tier2', 'R2PROV rate tier3'],`   // HF-4 2026-11-05: list_HF.tsv row HF-B5, new_text verbatim; was `rate:   ['Lifelines repair faster. Your repair reach is wide…` (build_HF_2026-11-05)
   dmg:    ['You hit 20% harder (Lv 7).', 'You hit 20% harder again (Lv 8).', 'You hit 20% harder again. Top level, marked in gold (Lv 9).'],   // R2-FX-2: D2-28..30; was `dmg:    ['R2PROV dmg tier1', 'R2PROV dmg tier2', 'R2PROV dmg tier3'],`
 }
 for (const k in UPGRADES) { const u = UPGRADES[k], d0 = u.desc; u.max0 = u.max; u.max = u.max0 + TIERS.length; u.desc = l => l >= u.max0 ? R2_TIER_DESC[k][Math.min(l - u.max0, TIERS.length - 1)] : d0(l) }
@@ -5841,6 +5848,8 @@ const SPLIT = {
 let splitN = {}
 // FIX4 2026-11-03: the ranged share of the split kinds at run clock t: T.fx4Share0 before T.fx4From, a straight line to T.fx4Share1 at T.fx4At, T.fx4Share1 after; read by makeHazard (build_FIX_2026-11-03)
 const fx4Share = () => t <= T.fx4From ? T.fx4Share0 : t >= T.fx4At ? T.fx4Share1 : T.fx4Share0 + (T.fx4Share1 - T.fx4Share0) * (t - T.fx4From) / (T.fx4At - T.fx4From)
+// HF-3 2026-11-05: the factor on an ordinary ranged body's reload interval at run clock t: T.hfShot0 up to T.hfShotFrom, a straight line to 1 at T.hfShotAt, 1 after; read by enemyFire; with T.hfShot0 at 1 it is exactly 1 at every t (build_HF_2026-11-05)
+const hfShot = () => t <= T.hfShotFrom ? T.hfShot0 : t >= T.hfShotAt ? 1 : T.hfShot0 + (1 - T.hfShot0) * (t - T.hfShotFrom) / (T.hfShotAt - T.hfShotFrom)
 
 // ---------------------------------------------------------------- difficulty
 // CORRECTED 2026-09-23: comment made true - Learning is not the shortest run (the len note in DIFFS.learn below: "still the longest mode") (section C round 2, section_C_2026-09-22)
@@ -5986,6 +5995,10 @@ const ONBOARD_COPY = {
   // BS-M5 2026-09-30: S4.7's body now names both rewards, strings_BS_hp.md S-H2 (b) Option B verbatim (ruling RH1); it read "... That secures it. Do this 3 times without losing a lifeline, and hazards stop for 3s. Losing one ..." (build_BS_2026-09-30)
   // P16a-T 2026-10-22: S5-23 (strings_P16a.md) (build_P16a_2026-10-22)
   'S4.7': { title: 'Secure 3 to stop hazards', body: 'You brought a lifeline from 65% or less back to full. That secures it and gives you capacity back. Do it 3 times without losing one: hazards stop for 3s and all your capacity comes back.', ok: 'Got it' },
+  // HF-1 2026-11-05: S4.8, the first carry task (hint carry, raised in r5Start); list_HF.tsv rows HF-A1t, HF-A1b, HF-A1o verbatim (build_HF_2026-11-05)
+  'S4.8': { title: 'A task: finish in time', body: 'When your goal is off screen, a green arrow points to it. Finish in time for a reward. If time runs out, some tasks cost you, but the run goes on.', ok: 'Got it' },
+  // HF-1 2026-11-05: S4.9, the first power loss (hint power, raised in hitLifeline); list_HF.tsv rows HF-A2t, HF-A2b, HF-A2o verbatim (build_HF_2026-11-05)
+  'S4.9': { title: 'No power: other lifelines wear faster', body: 'A small icon marks each lifeline that now wears faster. A hospital with backup power is not affected. Taking the Rebuild: Power card ends this.', ok: 'Got it' },
 }
 
 // ---- the store: one new key, read and written in the same pattern as learnStore ----------------
@@ -6028,7 +6041,7 @@ function onboardMark(id) {
 // SY-M1 2026-09-29: `secure` (S4.7), the first save (build_SY_2026-09-29)
 // P16B-5 2026-10-29: PLAN_P16B design 5 - the UI_SRC key of the picture a hint card shows, set where the hint is raised (lifeline: the building of the lifeline under attack; event: the hazard picture of the event, for the two events with one) (build_P16B_2026-10-28)
 const p16bPic = {}
-const HINTS = { levelup: 'S4.1', synergy: 'S4.2', lifeline: 'S4.3', event: 'S4.4', works: 'S4.5', debrief: 'S4.6', secure: 'S4.7' }
+const HINTS = { levelup: 'S4.1', synergy: 'S4.2', lifeline: 'S4.3', event: 'S4.4', works: 'S4.5', debrief: 'S4.6', secure: 'S4.7', carry: 'S4.8', power: 'S4.9' }   // HF-1 2026-11-05: carry (S4.8, the first carry task) and power (S4.9, the first power loss) added; was `const HINTS = { levelup: 'S4.1', synergy: 'S4.2', lifeline: …` (build_HF_2026-11-05)
 let hintOpen = null, hintUnder = false, hintFocus = null
 const hintQueue = []
 function setPaused(v) { if (hintOpen) hintUnder = v; else paused = v }
@@ -6429,6 +6442,9 @@ const CARD_FACES = {
   'FC-S5-19': "Stand in the site's ring to build it.",
   'FC-S5-21': "Right answers keep budget; wrong answers lose it.",
   'FC-S5-23': "Full repair from 65% or less secures a lifeline.",
+  // HF-1 2026-11-05: the faces of S4.8 and S4.9, the next free odd numbers after FC-S5-23; list_HF.tsv rows HF-A1f and HF-A2f verbatim (build_HF_2026-11-05)
+  'FC-S5-25': "Find the green triangle, then do what the task says.",
+  'FC-S5-27': "Hazards sitting on your other lifelines now wear them down faster.",
 }
 // P16a-F 2026-10-22: the face a card or page shows, by its kind, id and level (l: 0 on a "New measure" card); an Early warning level by what it does to the small shot, as UPGRADES.pulse.desc branches (build_P16a_2026-10-22)
 function faceId(kind, id, l) {
@@ -6451,7 +6467,7 @@ function faceId(kind, id, l) {
     return two && two[l === 0 ? 0 : 1]
   }
   if (kind === 'how') return { 'S3.1': 'FC-S5-02', 'S3.2': 'FC-S5-04', 'S3.3': 'FC-S5-06', 'S3.4': 'FC-S5-08', 'S4.1': 'FC-S5-11', 'S4.2': 'FC-S5-13',
-    'S4.3': 'FC-S5-15', 'S4.4': 'FC-S5-17', 'S4.5': 'FC-S5-19', 'S4.6': 'FC-S5-21', 'S4.7': 'FC-S5-23' }[id]
+    'S4.3': 'FC-S5-15', 'S4.4': 'FC-S5-17', 'S4.5': 'FC-S5-19', 'S4.6': 'FC-S5-21', 'S4.7': 'FC-S5-23', 'S4.8': 'FC-S5-25', 'S4.9': 'FC-S5-27' }[id]   // HF-1 2026-11-05: S4.8 and S4.9 added; was `'S4.3': 'FC-S5-15', 'S4.4': 'FC-S5-17', 'S4.5': 'FC-S5-19', …` (build_HF_2026-11-05)
 }
 // P16a-F 2026-10-22: a row's Learning text whatever the Plain English switch says (say() with the switch on) (build_P16a_2026-10-22)
 function sayPlain(id, cur, arg) { const p = PLAIN[id]; return p == null ? cur : typeof p === 'function' ? p(arg) : p }
@@ -6563,7 +6579,7 @@ const PLAIN = {
   // R2-FX-3 2026-10-27: strings_R2.md D2-16L, D2-17L, D2-18L - the Learning twins of Risk data's three tier cards (as above, read by say() under descRow's tier row id) (build_R2_2026-10-27 fix round)
   'UPG.magnet.tier1': 'You collect from 40% further away (Lv 5).',
   'UPG.magnet.tier2': 'You collect from 40% further away again (Lv 6).',
-  'UPG.magnet.tier3': 'You collect from 40% further away again. Top level, marked in gold (Lv 7).',
+  'UPG.magnet.tier3': 'You collect from 40% further away again. Top level, marked by a gold ring in the list below the cards (Lv 7).',   // HF-4 2026-11-05: list_HF.tsv row HF-B6, new_text verbatim; was `'UPG.magnet.tier3': 'You collect from 40% further away again…` (build_HF_2026-11-05)
   'UPG.hp.desc0': 'Money saved up, and insurance. In this game, they give you capacity to take a hit.',   // GW-17 2026-11-04: list_GW.tsv row GW-17 (the literal), new_text verbatim; was `'Money saved up, and insurance. Capacity to take a hit and st…'` (build_GW_2026-11-04)
   // R2-FX-3 2026-10-27: strings_R2.md D2-20L - the Learning twin of Risk financing's Advanced II card (the one D2 row above grade 7); its other two tier cards have no twin and show their Steady line in both modes (build_R2_2026-10-27 fix round)
   'UPG.hp.tier2': 'Capacity up by 40 again (Lv 7).',
@@ -8678,6 +8694,7 @@ function hitLifeline(L, amount) {
   flash(K.name + ' lost', say('LL.' + L.kind + '.cost', K.cost) + (L.kind === 'power' ? r5BkNote() : '') + (left > 0
     ? say('LL.lost.more', ` ${left} more and the run ends here.`, left)
     : ' That was the last one this place could lose.'), '#ff9d9d')
+  if (L.kind === 'power' && left > 0) hint('power')   // HF-1 2026-11-05: the first power loss opens S4.9 once per browser, only when the run goes on: left > 0 is lifelinesLost.length < cap, so the line below does not call die(); on the loss that ends the run (left 0) no card opens (build_HF_2026-11-05)
   syncHud()
   if (lifelinesLost.length >= cap) { endReason = 'services'; die() }
 }
@@ -9686,6 +9703,7 @@ function r5Start(id, tier, dev) {
   const X = CARRY[id], src = srcShown ? say('CRY.' + id + '.src', X.src) : ''
   flash(say('CRY.' + id + '.name', X.name), say('CRY.' + id + '.banner', X.banner) + (src ? '\n' + src : ''), R5COL.ui, { now: true, keep: true, two: !!src })
   AU.play('offer')
+  if (!dev) hint('carry')   // HF-1 2026-11-05: the first carry task started in natural play (r5Cadence, dev undefined) opens S4.8 once per browser; one started from the dev panel (r5DevStart, dev true) does not (build_HF_2026-11-05)
   return k
 }
 // R5-F 2026-10-26: a task ends - true delivered (its reward, its done line), false failed (its consequence, which never ends the run by itself, and its fail line), null ended with neither (a dev restart, M1 when the hospital falls or the Backup power site is built). Both lines are shown at once ({ now }). The next cadence task may start T.r5Gap0-T.r5Gap1 s later (one draw) (build_R5_2026-10-26)
@@ -10468,7 +10486,7 @@ function enemyFire(dt) {
     const dx = P.x - e.x, dy = P.y - e.y
     const d = Math.hypot(dx, dy)
     if (d > sh.range || d < 1) continue
-    e.sc = sh.every / (1 + t / 340)
+    e.sc = sh.every / (1 + t / 340) * (e.split === 'ranged' ? hfShot() : 1)   // HF-3 2026-11-05: x hfShot() for an ordinary ranged body only (an elite has no split, makeElite); every other thrower x 1, today's value bit for bit; was `e.sc = sh.every / (1 + t / 340)` (build_HF_2026-11-05)
     const base = Math.atan2(dy, dx)
     for (let i = 0; i < sh.n && ebullets.length < T.ebulletCap; i++) {
       const a = base + (i - (sh.n - 1) / 2) * sh.spread + rand(-0.05, 0.05)
@@ -13984,6 +14002,17 @@ function llbDraw(L, k) {
   if (v.sign) { ctx.translate(L.x + 14, L.y - 11); ctx.scale(.5, .5); lifelineSprite(L.kind, 0, 0, k.col) }
   ctx.restore()
 }
+// HF-2 2026-11-05: the cascade mark - a lightning bolt broken across its middle, 9 units tall and 5.4 wide, centred on (x, y): its upper wedge and its lower wedge, two closed three-point paths in one beginPath with a 1.8-unit gap between them; a thin dark pass (WALL_EDGE_DARK stroked at 2, round joins so the sharp tips grow no spikes), then filled in one solid colour from the palette (PAL.place.lifeline.power). Static: no clock, no alpha, no shadow, filter, gradient or image. 13 canvas calls (save, beginPath, 2 moveTo, 4 lineTo, 2 closePath, stroke, fill, restore) (build_HF_2026-11-05)
+function hfCascMark(x, y) {
+  ctx.save()
+  ctx.lineJoin = 'round'
+  ctx.beginPath()
+  ctx.moveTo(x + 1.8, y - 4.5); ctx.lineTo(x - 1.2, y - 0.9); ctx.lineTo(x + 2.7, y - 0.9); ctx.closePath()
+  ctx.moveTo(x - 2.7, y + 0.9); ctx.lineTo(x + 1.2, y + 0.9); ctx.lineTo(x - 1.8, y + 4.5); ctx.closePath()
+  ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 2; ctx.stroke()
+  ctx.fillStyle = PAL.place.lifeline.power; ctx.fill()
+  ctx.restore()
+}
 
 // D2 2026-09-22: one small glyph per works kind, stroked in the site's own neutral - retrofit a cross-brace, monitoring station a mast, muster point a flag, planting a sprout, depot a crate (X01 (c)) (build_D_2026-09-22)
 function worksGlyph(kind, x, y, col) {
@@ -14241,6 +14270,8 @@ function draw() {
       ctx.strokeStyle = k.col; ctx.lineWidth = 3
       ctx.beginPath(); ctx.arc(L.x, L.y, T.lifelineR, 0, TAU); ctx.stroke()
     }
+    // HF-2 2026-11-05: the cascade mark (the user's pick: a small stop icon) - while this standing lifeline's wear is sped by the cascade, exactly updateLifelines' casc condition (P.cascade && L.kind !== 'power' && !L.r5bk) and only where llUp(L) holds (a lifeline that can take wear: the loop above already skips one that is lost or secured, so llUp adds nothing here and is kept to name the rule), one small broken bolt centred above the health arc, its lower end 6 units outside llbArcR; drawn last in the loop body so no ring of the loop crosses it; gone the frame the condition ends (build_HF_2026-11-05)
+    if (P.cascade && L.kind !== 'power' && !L.r5bk && llUp(L)) hfCascMark(L.x, L.y - llbArcR(L.kind) - 6 - 4.5)
   }
 
   // works sites: a ring you have to stand in, and a bar that only fills while you do
