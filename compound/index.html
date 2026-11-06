@@ -2070,6 +2070,34 @@ html body #start.st3 #u1wrap .mbtn[disabled]:not(.maxed)::after{content:'';posit
   background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='8' shape-rendering='crispEdges'%3E%3Cg fill='%23a9afb8'%3E%3Crect x='2' y='0' width='3' height='1'/%3E%3Crect x='1' y='1' width='1' height='2'/%3E%3Crect x='5' y='1' width='1' height='2'/%3E%3Crect x='0' y='3' width='7' height='5'/%3E%3C/g%3E%3Crect x='3' y='5' width='1' height='2' fill='%23111317'/%3E%3C/svg%3E") 0 0/14px 16px no-repeat}
 html body #start.st3 #u1wrap .mbtn.maxed{border:2px solid #4f9a5a;background:#132018;color:#7ee787}
 html body #start.st3 #u1wrap .mbtn.maxed .mlv{color:#a9f0b0}
+/* UPGS-P4 2026-11-05: layout B (mockups_UPGS.html "B. Tabs": .tabs, .tab, .nr, .pip, .cols), only while #capblk has class upgs (T.upgsOn 1). The tab
+   row: the two tabs on a gold rule, the Trade-offs button at its end; the open tab's nodes as rows - icon, name, level dots, the price at the right,
+   the effect line under - in two columns on the two-column start screen (stw) and one column otherwise; the node plate, its locked and maxed looks
+   are today's #metawrap rules; square corners as the game's other buttons; "Why these?" is the game's own fold toggle (.fold-t) (build_UPGS_2026-11-05) */
+html body #start.st3 div#capblk.upgs div#upgsbar{display:flex;align-items:flex-end;flex-wrap:wrap;gap:8px 12px;margin:12px 0 0;max-width:none;border-bottom:2px solid #d9a441}
+html body #start.st3 div#capblk.upgs div#upgstabs{display:flex;flex-wrap:wrap;gap:4px;flex:1 1 auto;margin:0;max-width:none}
+html body #start.st3 #capblk.upgs #upgstabs button{font:inherit;font-size:12.5px;font-weight:700;line-height:1.3;padding:7px 12px;margin:0;border:2px solid #3a3f48;border-bottom:0;border-radius:0;background:#191b20;color:#d4cec2;cursor:pointer}
+html body #start.st3 #capblk.upgs #upgstabs button.on{border-color:#d9a441;background:#1d2026;color:#fff}
+html body #start.st3 #capblk.upgs #upgstabs button[hidden]{display:none}
+html body #start.st3 #capblk.upgs #upgstabs button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+html body #start.st3 div#capblk.upgs div#upgsbar > button#r3btn{flex:0 0 auto;min-height:33px;padding:4px 12px;font-size:11px;margin:0 0 4px}
+html body #start.st3 div#capblk.upgs div#metawrap{grid-template-columns:minmax(0,1fr);margin:10px 0 0}
+html body #start.st3.stw div#capblk.upgs div#metawrap{grid-template-columns:repeat(2,minmax(0,1fr))}
+html body #start.st3 #capblk.upgs #metawrap .mbtn .urow{display:flex;align-items:center;gap:8px;min-width:0}
+html body #start.st3 #capblk.upgs #metawrap .mbtn .urow .p16ic{margin:0;flex:0 0 auto}
+html body #start.st3 #capblk.upgs #metawrap .mbtn .unm{flex:0 1 auto;min-width:0}
+html body #start.st3 #capblk.upgs #metawrap .mbtn .udw{flex:0 0 auto;display:block;line-height:1}
+html body #start.st3 #capblk.upgs #metawrap .mbtn .udots{display:inline;white-space:nowrap}
+html body #start.st3 #capblk.upgs #metawrap .mbtn .udots i{display:inline-block;vertical-align:middle;margin-right:3px;width:9px;height:9px;border-radius:50%;border:1.5px solid #ffd166;box-sizing:border-box}
+html body #start.st3 #capblk.upgs #metawrap .mbtn .udots i.on{background:#ffd166}
+html body #start.st3 #capblk.upgs #metawrap .mbtn.maxed .udots i{border-color:#7ee787;background:#7ee787}
+html body #start.st3 #capblk.upgs #metawrap .mbtn .mcost{margin-left:auto;padding-left:8px}
+html body #start.st3 #capblk.upgs #metawrap .mbtn[disabled]:not(.maxed) .mcost{padding-right:6px}
+html body #start.st3 #capblk.upgs .usr{font-size:0}
+html body #start.st3 #capblk.upgs button#upgswhy{margin:10px 0 0}
+html body #start.st3 #capblk.upgs button#upgswhy[hidden]{display:none}
+html body #start.st3 div#capblk.upgs div#metanote{margin:10px 0 0}
+html body #start.st3 div#capblk.upgs div#metanote[hidden], html body #start.st3 div#capblk.upgs div#metaearn[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -3463,6 +3491,13 @@ const T = {
   u1CardFrom: 4,                   // U1-B7 / U1-B8: the two lifeline cards are offered from this player level, as the trade-off cards (TRADEOFFS from 4) (build_U1_2026-11-05)
   u1GreenSlow: 0.7,                // U1-B8 Lifeline greenery: a Flood front near a planted lifeline moves at this x its speed (build_U1_2026-11-05)
   u1GreenWear: 0.7,                // U1-B8 Lifeline greenery: what sits on a planted lifeline wears it at this x (build_U1_2026-11-05)
+  // UPGS-P1 2026-11-05: GUARD_UPGS_builder THE ITEMS - the round's numbers; upgsOn 0 = today's game in every respect (today's layout, max levels, prices, no new node, no cut) (build_UPGS_2026-11-05)
+  upgsOn: 1,                       // UPGS-P1 master switch: 1 as built; 0 = today's game (build_UPGS_2026-11-05)
+  upgsEvLL: 0.6,                   // UPGS-P1 the permanent cut: the wear a place event or a boss strike puts on a lifeline x this (1 = no cut; upgsEvK) (build_UPGS_2026-11-05)
+  upgsShield: 0.06,                // UPGS-P2 Event shielding: that wear x (1 - this x level) on top of the cut (upgsEvK) (build_UPGS_2026-11-05)
+  upgsGrowth: 1.6,                 // UPGS-P3 a level past today's max costs the previous level's price x this, Math.round (upgsCost) (build_UPGS_2026-11-05)
+  upgsMax: { reserves: 5, routes: 5, dissem: 5, enforce: 5, monitor: 5, office: 3, telegraph: 5, drills0: 5, crews: 5,
+    tough: 6, spare: 6, bbb: 3, follow: 6, shield: 6 },   // UPGS-P3 each node's max with upgsOn 1 (bot/proposal.json max_new; the new node 6) (build_UPGS_2026-11-05)
   // FIX1 2026-11-03: you clear a lifeline (fx1Clear). While you are within its repair reach (the `here` test of updateLifelines), every ordinary body attacking it - aimed at it (e.tgt) within fx1NearR px of its centre, or a flood front sitting on it (T.lifelineR + its radius) - is killed through hurtEnemy; an ordinary heat zone sitting on it shrinks away over fx1ZoneT s; an elite attacking it loses fx1EliteK of its maximum health a second, and a compound-event body or the true boss within fx1NearR + its radius fx1BossK, in ticks of fx1Tick s. fx1NearR 0 = off (today's game) (build_FIX_2026-11-03)
   fx1NearR: 180, fx1ZoneT: 1.0, fx1EliteK: 0.25, fx1BossK: 0.05, fx1Tick: 0.25,
   // FIX2 2026-11-03: the ranged body's mark - 'ring' (a thin solid ring SPLIT.ring.gap px out) or 'mark' (a small solid pale triangle above the body); drawing only (build_FIX_2026-11-03)
@@ -6989,6 +7024,8 @@ const PLAIN = {
   'META.spare.src': 'Cabinet Office (UK): spare capacity lets a service switch to another part of the network. Some services would still work less well at first.',
   'META.bbb.src': 'UNDRR: build back better means you rebuild after a disaster so that places cope better.',
   'META.follow.src': 'Cabinet Office (UK): a quick, good response comes from plans and practice made first. In this game, teams hit what your shots can, but not elites or big events.',
+  // UPGS-P2 2026-11-05: the new node's Learning twin, list UPGS-B-srcL (its right single quote the literal character, as the twins above) (build_UPGS_2026-11-05)
+  'META.shield.src': 'European Commission: 2026 advice, not a rule, says to guard key services’ sites and networks. In this game, events and boss strikes hurt lifelines less.',
   // U1-B7 2026-11-05: the Lifelines fight back card's level-1 face, Learning twin, list U1-C2-face1L (build_U1_2026-11-05)
   'FC-U1-def1': 'When you go, lifelines also hit attackers with no crown.',
 }
@@ -7126,9 +7163,9 @@ const META = [
     now: l => `Event telegraphs last ${6 * l}% longer.`,
     of: 'pulse' },
   { id: 'drills0', name: 'Institutionalised drills', max: 3, cost: l => 6 + l * 5,
-    fx: 'Evacuate comes back 5% sooner per level.',
+    get fx() { return T.upgsOn ? 'Evacuate comes back 5% faster per level.' : 'Evacuate comes back 5% sooner per level.' },   // UPGS-P5 2026-11-05: list UPGS-C2-drills0-fx with T.upgsOn 1, today's line with 0 (build_UPGS_2026-11-05); was `fx: 'Evacuate comes back 5% sooner per level.',`
     src: 'In this game, drills shorten the wait before Evacuate comes back.',   // GW-29 2026-11-04: list_GW.tsv row GW-29 (src), new_text verbatim; was `'Drills shorten the wait, because that is what a drill is.'` (build_GW_2026-11-04)
-    now: l => `Evacuate comes back ${5 * l}% sooner.`,
+    now: l => T.upgsOn ? `Evacuate comes back ${Math.round(100 - 100 / (1 + 0.05 * l))}% sooner.` : `Evacuate comes back ${5 * l}% sooner.`,   // UPGS-P5 2026-11-05: list UPGS-C2-drills0-now (RULED F4) with T.upgsOn 1, today's line with 0 (build_UPGS_2026-11-05); was `now: l => `Evacuate comes back ${5 * l}% sooner.`,`
     of: 'wave' },
   // R2-X4 2026-10-27: PLAN_R2 R2-X4 (the user's item 3) - Repair crews: lifelines repair T.r2CrewRepair faster per level (updateLifelines, both repair branches); bought with recovery budget between runs only - never a run card (offerCards reads UPGRADES, not META). Four R2PROV placeholders for the Drafter; src is to reuse a shipped verified line (no new claim) (build_R2_2026-10-27)
   // R2-FX-5 2026-10-27: strings_R2.md D4 - the node's four lines as drafted (the Lead's provisional ruling); now(l) is the additive template because repDt's factor is additive, 1 + T.r2CrewRepair x (METALV.crews || 0) with r2CrewRepair 0.15 (updateLifelines, both branches); was `{ id: 'crews', name: 'R2PROV crews name', max: 3, cost: l => 6 + l * 5,` / was `fx: 'R2PROV crews fx',` / was `src: 'R2PROV crews src',` / was `now: l => 'R2PROV crews now ' + l,` (build_R2_2026-10-27 fix round)
@@ -7159,6 +7196,13 @@ const META_U1 = [
     fx: `Secure a lifeline: two teams follow you for ${T.u1CrewT0 + T.u1CrewT}s.`,   // U1-B2 list U1-B6-fx (build_U1_2026-11-05)
     src: 'Cabinet Office (UK): how fast and well people respond depends on planning and practice first. In this game, teams hit what your shots can, but not elites or big events.',   // U1-B2 list U1-B6-src (build_U1_2026-11-05)
     now: l => `When you secure a lifeline, two teams follow you for ${T.u1CrewT0 + T.u1CrewT * l}s.` },   // U1-B2 list U1-B6-now (build_U1_2026-11-05)
+  // UPGS-P2 2026-11-05: the new lifeline node (list UPGS-B-name, -fx, -now, -src; twin UPGS-B-srcL as PLAIN 'META.shield.src'), shown only with T.upgsOn 1
+  // (upgsU1) and, as the group, T.u1On 1; stored in compoundMetaV1.lv as shield. Its `max: 3` and `cost` are the price list's knee only (levels 1-3 at
+  // 6 + 5 x level, as every node's); its max on screen is T.upgsMax.shield (6) through upgsMax, its prices upgsCost (6, 11, 16, 26, 42, 67) (build_UPGS_2026-11-05)
+  { id: 'shield', name: 'Event shielding', max: 3, cost: l => 6 + l * 5, u1: true, upgs: true,   // UPGS-P2 list UPGS-B-name (build_UPGS_2026-11-05)
+    fx: `Events and boss strikes hurt lifelines ${Math.round(100 * T.upgsShield)}% less per level.`,   // UPGS-P2 list UPGS-B-fx (build_UPGS_2026-11-05)
+    src: 'European Commission: its 2026 guidance advises on physically protecting critical infrastructure, but is not binding. In this game, events and boss strikes hurt lifelines less.',   // UPGS-P2 list UPGS-B-src (build_UPGS_2026-11-05)
+    now: l => `Events and boss strikes hurt lifelines ${Math.round(100 * T.upgsShield * l)}% less.` },   // UPGS-P2 list UPGS-B-now (build_UPGS_2026-11-05)
 ]
 // U1-B2 2026-11-05: F10 - a lifeline node's fx / now / face line through say() (META.<id>.fx, META.<id>.now; the list gives no twin for them, so
 // they fall through); any other node's line is returned as it is (build_U1_2026-11-05)
@@ -7173,6 +7217,15 @@ const u1RbPct = () => T.lifelineRebuildHp + T.u1BbbPct * u1Lv('bbb')
 const u1SpareT = () => T.u1SpareT * u1Lv('spare')
 // U1-B6 2026-11-05: how long the escort teams follow after a real save, s: T.u1CrewT0 + T.u1CrewT x the Escort teams level (0 with the node unbought) (build_U1_2026-11-05)
 const u1FollowT = () => u1Lv('follow') ? T.u1CrewT0 + T.u1CrewT * u1Lv('follow') : 0
+// UPGS-P1 / UPGS-P2 2026-11-05: the factor on the wear a place event or a boss strike puts on a lifeline (updateEvents, the one site): the permanent cut
+// T.upgsEvLL x (1 - T.upgsShield x the Event shielding level); exactly 1 with T.upgsOn 0 (build_UPGS_2026-11-05)
+const upgsEvK = () => T.upgsOn ? T.upgsEvLL * (1 - T.upgsShield * u1Lv('shield')) : 1
+// UPGS-P3 2026-11-05: a node's active max - T.upgsMax with T.upgsOn 1, today's `max` with 0 (build_UPGS_2026-11-05)
+const upgsMax = m => T.upgsOn && T.upgsMax[m.id] != null ? T.upgsMax[m.id] : m.max
+// UPGS-P3 2026-11-05: the price of level l (0-based): today's cost(l) below today's max (and at every l with T.upgsOn 0), then the previous price x T.upgsGrowth, Math.round (build_UPGS_2026-11-05)
+const upgsCost = (m, l) => !T.upgsOn || l < m.max ? m.cost(l) : Math.round(upgsCost(m, l - 1) * T.upgsGrowth)
+// UPGS-P2 2026-11-05: the lifeline nodes on show - the new node only with T.upgsOn 1 (build_UPGS_2026-11-05)
+const upgsU1 = () => T.upgsOn ? META_U1 : META_U1.filter(m => !m.upgs)
 // U1-B0 2026-11-05: R3-1 (delta_R3.diff hunk 4, ported) - the three META axes beside META. Each axis has two sides: a, set by a negative value,
 // and b, by a positive one; each side has three tiers, bought in order with recovery budget (R3-2); before a run the player sets each axis
 // from -3 to +3 within the tiers bought (0 = off); on gg only, one more position, 'h' (hybrid = grey tier I and green tier I at once, open
@@ -7311,6 +7364,80 @@ function runsRecord() {
 // START4 2026-11-02: the fold state metaFold is removed (offerMeta no longer folds); the line was `let metaFold = null   // TXT-B6 ...` with the comment kept below (build_START_2026-11-02)
 //   TXT-B6 2026-10-30: null = folded (no hand choice; offerMeta, TXT-A2); false = unfolded, true = folded, by a hand press on the heading since the start screen last opened, or false as set by the spendfirst handler ("Spend your budget first"), so the block opens unfolded there; "Somewhere else" sets null (folded); was `// null = open (PT-P4); true/false = the player has folded or unfolded it by hand since the start screen last opened` (build_TXT_B_2026-10-30)   // PT-P4 2026-10-19: was "// null = follow affordability; true/false = the player has decided" (build_PT_2026-10-19)
 let metaEarn = null   // the node just bought, kept so offerMeta can re-render what it means
+// UPGS-P4 2026-11-05: GUARD_UPGS_builder P4 - layout B (the user's pick, ROUND_UPGS.md "The pick and the go"): with T.upgsOn 1, #capblk holds
+// #uphead (the heading and budget), #upgsbar (the tablist #upgstabs - Measures, and Lifeline resilience with T.u1On 1 - then #r3btn, moved here
+// from #uphead), #metawrap as the one tab panel (the open group's nodes), the "Why these?" toggle #upgswhy, then #metanote and #metaearn, which
+// it shows and hides (hidden). With T.upgsOn 0 every piece is taken out again, #metanote and #metaearn lose their hidden, and #r3btn goes back
+// where axBuild put it, so the area is today's. upgsTab: the open tab ('m' or 'l'), kept across redraws; upgsWhy: "Why these?" open; both set back
+// (measures tab, closed) by upgsReset whenever the start screen opens ("Somewhere else", "Spend your budget first"; at page load they start so) (build_UPGS_2026-11-05)
+let upgsTab = 'm', upgsWhy = false
+function upgsReset() { upgsTab = 'm'; upgsWhy = false }
+function upgsPick(k) { if (k === 'l' && !T.u1On) return; upgsTab = k; offerMeta() }
+// the tabs' keys: Left / Right move to the other tab and open it (the ends wrap round), Enter or Space presses a tab once; they stop at the tablist,
+// so the start screen's own arrow handler (the place cards) and Space handler do not also act on them
+function upgsKey(e) {
+  const k = e.key, a = e.target
+  if (!a || a.getAttribute('role') !== 'tab') return
+  const dir = k === 'ArrowRight' ? 1 : k === 'ArrowLeft' ? -1 : 0
+  if (dir) {
+    e.preventDefault(); e.stopPropagation()
+    if (e.repeat) return
+    const g = [...$('upgstabs').querySelectorAll('[role="tab"]')].filter(b => !b.hidden)
+    const nx = g[(g.indexOf(a) + dir + g.length) % g.length]
+    if (nx && nx !== a) { upgsPick(nx.dataset.tab); nx.focus() }
+    return
+  }
+  if (k === 'Enter' || k === ' ') { e.preventDefault(); e.stopPropagation(); if (!e.repeat) a.click() }
+}
+function upgsLay() {
+  const cap = $('capblk'), on = !!T.upgsOn
+  let bar = $('upgsbar')
+  if (on && !bar) {
+    bar = document.createElement('div'); bar.id = 'upgsbar'
+    bar.innerHTML = '<div id="upgstabs" role="tablist">' +
+      '<button type="button" role="tab" id="upgstab-m" data-tab="m"><span id="upgstab-m-t">Measures</span></button>' +   // UPGS-P4 list UPGS-A1-label (build_UPGS_2026-11-05)
+      '<button type="button" role="tab" id="upgstab-l" data-tab="l"><span id="upgstab-l-t">Lifeline resilience</span></button></div>'   // UPGS-P4 list UPGS-A2-label (build_UPGS_2026-11-05)
+    cap.insertBefore(bar, $('metawrap'))
+    for (const b of bar.querySelectorAll('[role="tab"]')) b.onclick = () => upgsPick(b.dataset.tab)
+    $('upgstabs').addEventListener('keydown', upgsKey)
+    const why = document.createElement('button'); why.type = 'button'; why.id = 'upgswhy'; why.className = 'fold-t'
+    why.setAttribute('aria-controls', 'metanote metaearn')
+    why.innerHTML = '<span aria-hidden="true">&#9656;</span> Why these?'   // UPGS-P4 list UPGS-A4-label (build_UPGS_2026-11-05)
+    why.onclick = () => { upgsWhy = !upgsWhy; offerMeta() }
+    cap.insertBefore(why, $('metanote'))
+  } else if (!on && bar) {
+    const w = $('metawrap')
+    bar.remove(); $('upgswhy').remove()
+    w.removeAttribute('role'); w.removeAttribute('aria-labelledby')
+    $('metanote').hidden = false; $('metaearn').hidden = false
+  }
+  cap.classList.toggle('upgs', on)
+  if (!T.u1On) upgsTab = 'm'
+  return on
+}
+// the tabs' and the toggle's states after a draw: the open tab selected (the other out of the Tab order), each tab's accessible name with its group's
+// levels (list UPGS-A1-aria, UPGS-A2-aria), #metawrap labelled by the open tab; "Why these?" named with the open tab's label (UPGS-A4-aria, RULED F9),
+// not shown on the measures tab in the empty state, where #metanote (the empty-state note, RULED F7) is shown open instead
+function upgsSync(st, empty) {
+  for (const [k, list] of [['m', META], ['l', upgsU1()]]) {
+    const b = $('upgstab-' + k), sel = upgsTab === k
+    let got = 0, tot = 0
+    for (const m of list) { got += st.lv[m.id] || 0; tot += upgsMax(m) }
+    b.setAttribute('aria-selected', sel ? 'true' : 'false'); b.tabIndex = sel ? 0 : -1; b.classList.toggle('on', sel)
+    b.setAttribute('aria-controls', 'metawrap')
+    b.setAttribute('aria-label', k === 'm' ? `Measures, ${got} of ${tot} levels bought` : `Lifeline resilience, ${got} of ${tot} levels bought`)   // UPGS-P4 list UPGS-A1-aria, UPGS-A2-aria (build_UPGS_2026-11-05)
+  }
+  $('upgstab-l').hidden = !T.u1On
+  const w = $('metawrap'); w.setAttribute('role', 'tabpanel'); w.setAttribute('aria-labelledby', 'upgstab-' + upgsTab)
+  const why = $('upgswhy'), emptyM = upgsTab === 'm' && empty
+  why.hidden = emptyM
+  why.setAttribute('aria-expanded', upgsWhy ? 'true' : 'false')
+  why.setAttribute('aria-labelledby', 'upgswhy upgstab-' + upgsTab + '-t')   // UPGS-P4 list UPGS-A4-aria (RULED F9) (build_UPGS_2026-11-05)
+  why.firstChild.innerHTML = upgsWhy ? '&#9662;' : '&#9656;'
+  $('metanote').hidden = !(upgsWhy || emptyM); $('metaearn').hidden = !upgsWhy
+}
+// UPGS-P4 2026-11-05: the lifeline group's intro, read by both layouts (was the literal in offerMeta's #u1intro line) (build_UPGS_2026-11-05)
+const u1Intro = () => say('META.u1.intro', 'These are not measures; each one is about your lifelines. They are kept for every run, bought with the same recovery budget.')   // U1-B2 list U1-A2 (build_U1_2026-11-05); UPGS-P5 list UPGS-A5-intro (keep) (build_UPGS_2026-11-05)
 function offerMeta() {
   const st = metaStore()
   METALV = st.lv
@@ -7331,44 +7458,56 @@ function offerMeta() {
   const head = $('metahead')
   head.textContent = `Institutional capacity — recovery budget: ${st.funds}`
   const wrap = $('metawrap'); wrap.innerHTML = ''
+  const UB = upgsLay()   // UPGS-P4 2026-11-05: layout B's pieces made (T.upgsOn 1) or taken out (0) (build_UPGS_2026-11-05)
   // U1-B2 2026-11-05: one renderer for both groups - the nine measure nodes into #metawrap, then (T.u1On 1) the four lifeline nodes into #u1wrap,
   // made here under its heading and intro between #metawrap and #metanote; with T.u1On 0 the group is removed and #metawrap is as before (build_U1_2026-11-05)
   let u1g = $('u1grp')
-  if (T.u1On && !u1g) {
+  if (T.u1On && !u1g && !UB) {   // UPGS-P4 2026-11-05: no #u1grp in layout B (the tab names the group, P4 (v); list UPGS-A7-u1head) (build_UPGS_2026-11-05); was `if (T.u1On && !u1g) {`
     u1g = document.createElement('div'); u1g.id = 'u1grp'
     u1g.innerHTML = '<div id="u1head"></div><div id="u1intro"></div><div id="u1wrap"></div>'
     $('capblk').insertBefore(u1g, $('metanote'))
-  } else if (!T.u1On && u1g) { u1g.remove(); u1g = null }
+  } else if ((!T.u1On || UB) && u1g) { u1g.remove(); u1g = null }   // UPGS-P4 2026-11-05: (build_UPGS_2026-11-05); was `} else if (!T.u1On && u1g) { u1g.remove(); u1g = null }`
   if (u1g) {
     $('u1head').textContent = 'Lifeline resilience'   // U1-B2 list U1-A1 (build_U1_2026-11-05)
-    $('u1intro').textContent = say('META.u1.intro', 'These are not measures; each one is about your lifelines. They are kept for every run, bought with the same recovery budget.')   // U1-B2 list U1-A2 (build_U1_2026-11-05)
+    $('u1intro').textContent = u1Intro()   // UPGS-P4 2026-11-05: the same say() call, moved into u1Intro (build_UPGS_2026-11-05); was `$('u1intro').textContent = say('META.u1.intro', 'These are not…`
     $('u1wrap').innerHTML = ''
   }
-  for (const m of (u1g ? META.concat(META_U1) : META)) {   // U1-B2 2026-11-05: was `for (const m of META) {` (build_U1_2026-11-05)
+  // UPGS-P4 2026-11-05: in layout B the open tab's nodes only - the nine measures, or the lifeline nodes (the new one with them) (build_UPGS_2026-11-05); was `for (const m of (u1g ? META.concat(META_U1) : META)) {   // U1-B2 2026-11-05: was `for (const m of…`
+  for (const m of (UB ? (upgsTab === 'l' ? upgsU1() : META) : u1g ? META.concat(upgsU1()) : META)) {   // U1-B2 2026-11-05: was `for (const m of META) {` (build_U1_2026-11-05)
     const l = st.lv[m.id] || 0
+    const mx = upgsMax(m), c = upgsCost(m, l)   // UPGS-P3 2026-11-05: the active max and this level's price (today's m.max and m.cost(l) with T.upgsOn 0) (build_UPGS_2026-11-05)
     const b = document.createElement('button')
-    b.className = 'mbtn' + (l >= m.max ? ' maxed' : '')
+    b.className = 'mbtn' + (l >= mx ? ' maxed' : '')   // UPGS-P3 2026-11-05: (build_UPGS_2026-11-05); was `b.className = 'mbtn' + (l >= m.max ? ' maxed' : '')`
     // Owned nodes say what they are worth NOW; an empty one says what a level would buy.
     const U = m.of && UPGRADES[m.of]
-    b.innerHTML = `<span><b>${m.name}</b> <span class="mlv">${l}/${m.max}</span>` +
-      (l >= m.max ? '' : ` <span class="mcost">· ${m.cost(l)}</span>`) + `</span>` +
+    // UPGS-P4 2026-11-05: layout B's row - the measure's icon (none on a lifeline node), the name, the level dots to the active max (named as list
+    // UPGS-A6-dots), the price at the right (none when maxed), the effect line under; no "..., held permanently" line. The button's name is its
+    // content (list UPGS-A6-row, RULED F8): the hidden comma, middle dot and full stop (.usr, inline) give the punctuation; the browser puts one space
+    // between the row's items and before the effect line, so each piece sits inside the item it ends (build_UPGS_2026-11-05)
+    if (UB) b.innerHTML = `<span class="urow">${U ? uiIcon(m.of, 1) : ''}<span class="unm"><b>${m.name}</b><span class="usr">,</span></span>` +
+      `<span class="udw"><span class="udots" role="img" aria-label="${l} of ${mx} levels">${'<i class="on"></i>'.repeat(Math.min(l, mx))}${'<i></i>'.repeat(Math.max(0, mx - l))}</span>${l >= mx ? '<span class="usr">.</span>' : ''}</span>` +
+      (l >= mx ? '' : `<span class="mcost"><span class="usr">&middot;</span> ${c}<span class="usr">.</span></span>`) + `</span>` +
+      `<span class="mfx">${u1Say(m, l, l ? (META_FACES[m.id] ? META_FACES[m.id](l) : m.now(l)) : m.fx)}</span>`
+    else   // UPGS-P3 2026-11-05: today's row, with mx and c (build_UPGS_2026-11-05)
+    b.innerHTML = `<span><b>${m.name}</b> <span class="mlv">${l}/${mx}</span>` +   // UPGS-P3 (build_UPGS_2026-11-05); was `b.innerHTML = `<span><b>${m.name}</b> <span class="mlv">${l}/${m…`
+      (l >= mx ? '' : ` <span class="mcost">· ${c}</span>`) + `</span>` +   // UPGS-P3 (build_UPGS_2026-11-05); was `(l >= m.max ? '' : ` <span class="mcost">· ${m.cost(l)}</span>`) + `</span>` +`
       // P16B-4 2026-10-29: PLAN_P16B design 4 - the measure's icon (16 px) before "<name>, held permanently"; was `(U ? \`<span class="mof" style="--c:${U.col}">${U.name}, held permanently</span>\` : '') +` (build_P16B_2026-10-28)
       (U ? `<span class="mof" style="--c:${U.col}">${uiIcon(m.of, 1)}${U.name}, held permanently</span>` : '') +
       // P16a-F 2026-10-22: a bought node with a face line (META_FACES) shows it in place of now(l); the "Built" panel below still shows now(l); was was ``<span class="mfx">${l ? m.now(l) : m.fx}</span>`` (build_P16a_2026-10-22)
       `<span class="mfx">${u1Say(m, l, l ? (META_FACES[m.id] ? META_FACES[m.id](l) : m.now(l)) : m.fx)}</span>`   // U1-B2 2026-11-05: a lifeline node's line through say() as META.<id>.fx / .now (F10); every other node's line as before (u1Say returns it unchanged) (build_U1_2026-11-05); was `` `<span class="mfx">${l ? (META_FACES[m.id] ? META_FACES[m.id](l) : m.now(l)) : m.fx}</span>` ``
-    b.disabled = l >= m.max || st.funds < m.cost(l)
+    b.disabled = l >= mx || st.funds < c   // UPGS-P3 2026-11-05: (build_UPGS_2026-11-05); was `b.disabled = l >= m.max || st.funds < m.cost(l)`
     b.onmouseenter = () => { $('metanote').textContent = m.u1 ? say('META.' + m.id + '.src', m.src) : m.src }   // U1-B2 2026-11-05: a lifeline node's src through say() (F10) (build_U1_2026-11-05); was `b.onmouseenter = () => { $('metanote').textContent = m.src }`
     b.onclick = () => {
       const s2 = metaStore()
       const cur = s2.lv[m.id] || 0
-      if (cur >= m.max || s2.funds < m.cost(cur)) return
-      s2.funds -= m.cost(cur); s2.lv[m.id] = cur + 1
+      if (cur >= upgsMax(m) || s2.funds < upgsCost(m, cur)) return   // UPGS-P3 2026-11-05: (build_UPGS_2026-11-05); was `if (cur >= m.max || s2.funds < m.cost(cur)) return`
+      s2.funds -= upgsCost(m, cur); s2.lv[m.id] = cur + 1   // UPGS-P3 2026-11-05: (build_UPGS_2026-11-05); was `s2.funds -= m.cost(cur); s2.lv[m.id] = cur + 1`
       metaSave(s2); METALV = s2.lv
       metaEarn = { m, l: cur + 1 }
       AU.play('worksDone')
       offerMeta()
     }
-    ;(m.u1 ? $('u1wrap') : wrap).appendChild(b)   // U1-B2 2026-11-05: a lifeline node into its own group (build_U1_2026-11-05); was `wrap.appendChild(b)`
+    ;(m.u1 && !UB ? $('u1wrap') : wrap).appendChild(b)   // U1-B2 2026-11-05: a lifeline node into its own group (build_U1_2026-11-05); was `wrap.appendChild(b)`   // UPGS-P4 2026-11-05: in layout B every node into the one panel (build_UPGS_2026-11-05); was `;(m.u1 ? $('u1wrap') : wrap).appendChild(b)`
   }
   // The layer's own argument, said once, above the nodes. Every node below is one of the
   // ten measures held permanently rather than picked mid-run, and the loop it sits in is a
@@ -7387,6 +7526,15 @@ function offerMeta() {
   // risk" is "increasing public education and awareness of disaster risk" (learn = education, know = awareness, more = increasing,
   // people = public). Every other word, <b>Building Back Better</b> and the first and last sentences are unchanged
   // (build_POLISH_2026-10-15 fix round 2)
+  // UPGS-P4 / UPGS-P5 2026-11-05: in layout B the note holds the open tab's long text - the lifeline tab: the group intro (list UPGS-A5-intro, keep);
+  // the measures tab: list UPGS-A5-note1, or in the empty state (today's test, below) UPGS-A5-note2, shown open under the panel (RULED F7); with
+  // T.upgsOn 0 the note is today's, unchanged below (build_UPGS_2026-11-05)
+  const upgsEmpty = !(st.funds || Object.keys(st.lv).length || Object.keys(AXST.ax).some(k => AXST.ax[k] > 0))   // UPGS-P4 today's test, below (build_UPGS_2026-11-05)
+  if (UB && upgsTab === 'l') $('metanote').textContent = u1Intro()   // UPGS-P4 (build_UPGS_2026-11-05)
+  else if (UB) $('metanote').innerHTML = !upgsEmpty
+    ? 'These nodes are measures, <b>held permanently instead of picked mid-run</b>. In this game, what a run protected is what pays for them. That way, recovery cuts the risk of the next disaster. The Sendai Framework says it is critical to do this, and to prevent new risk. It says to do both by <b>Building Back Better</b>. It also says to do both by helping people learn and know more about disaster risk. The budget is released by the debrief, not by surviving.'   // UPGS-P5 list UPGS-A5-note1 (build_UPGS_2026-11-05)
+    : 'Empty for now. A run sets how big the recovery budget is; the debrief decides how much you keep. These nodes are measures, held permanently instead of picked mid-run.'   // UPGS-P5 list UPGS-A5-note2 (RULED F7) (build_UPGS_2026-11-05)
+  else   // UPGS-P4 2026-11-05: T.upgsOn 0 - today's note, unchanged (build_UPGS_2026-11-05)
   // U1-B1 2026-11-05: R3 phase 2 (iv), F18 - an axis tier bought also counts, so "Empty for now." hides once any is bought (build_U1_2026-11-05); was `$('metanote').innerHTML = st.funds || Object.keys(st.lv).length`
   $('metanote').innerHTML = st.funds || Object.keys(st.lv).length || Object.keys(AXST.ax).some(k => AXST.ax[k] > 0)
     // P16a-T 2026-10-22: S1-12 (strings_P16a.md; ADJUDICATION_P16a.md m9) (build_P16a_2026-10-22)
@@ -7409,7 +7557,7 @@ function offerMeta() {
     const m = metaEarn.m, l = metaEarn.l
     const U = m.of && UPGRADES[m.of]
     // C0 2026-09-23: the measure's source line (U.src) goes through say() under UPG.<id>.src, the key its card uses; the node's own line m.src is a separate string and is left alone (section C plumbing) (build_B_2026-09-22)
-    earn.innerHTML = `<div class="me-h">Built · ${m.name} ${l}/${m.max}</div>` +
+    earn.innerHTML = `<div class="me-h">Built · ${m.name} ${l}/${upgsMax(m)}</div>` +   // UPGS-P3 2026-11-05: the active max (list UPGS-A5-builth, keep) (build_UPGS_2026-11-05); was `earn.innerHTML = `<div class="me-h">Built · ${m.name} ${l}/${m.max}<…`
       `<div class="me-now">${u1Say(m, l, m.now(l))}</div><div class="me-src">${m.u1 ? say('META.' + m.id + '.src', m.src) : m.src}</div>` +   // U1-B2 2026-11-05: a lifeline node's src through say() (build_U1_2026-11-05); was `` `<div class="me-now">${m.now(l)}</div><div class="me-src">${m.src}</div>` + ``
       (U ? `<div class="me-of"><i style="background:${U.col}"></i>` +
            `<b>${U.name}</b>, the measure you pick mid-run — this is the same thing held ` +
@@ -7417,6 +7565,10 @@ function offerMeta() {
     earn.classList.add('show')
   } else { earn.classList.remove('show'); earn.innerHTML = '' }
   axRender()   // U1-B0 2026-11-05: R3-5 (delta_R3.diff hunk 7) - the axes' button and dialog drawn with the nodes, so a purchase, a payout or a grant shows there too (build_U1_2026-11-05)
+  // UPGS-P4 2026-11-05: the Trade-offs button at the end of the tab row in layout B (its text, dialog and behaviour unchanged), back at the right of
+  // #uphead with T.upgsOn 0, where axBuild put it; then the tabs' and the toggle's states (build_UPGS_2026-11-05)
+  if (UB) { $('upgsbar').appendChild(axBtn); upgsSync(st, upgsEmpty) }
+  else if (axBtn.parentNode !== $('uphead')) $('uphead').appendChild(axBtn)
 }
 
 // U1-B0 2026-11-05: R3-5 (delta_R3.diff hunk 7, layout B only; the layout switch and layouts A and C dropped) - one button at the right of #uphead (#r3btn)
@@ -9045,7 +9197,7 @@ function updateEvents(dt) {
           if (secs <= 0) continue
           ev.llBilled.set(L, billed + secs)
         }
-        hitLifeline(L, (ev.lines ? 26 : 42) * secs * 2 * (ev.llK || 1))   // BS-M1 2026-09-30: x ev.llK - a mid-boss strike's wear x T.bossMidMul; every other event carries none (build_BS_2026-09-30)
+        hitLifeline(L, (ev.lines ? 26 : 42) * secs * 2 * (ev.llK || 1) * upgsEvK())   // BS-M1 2026-09-30: x ev.llK - a mid-boss strike's wear x T.bossMidMul; every other event carries none (build_BS_2026-09-30)   // UPGS-P1 2026-11-05: x upgsEvK() - the permanent cut and Event shielding, place events and boss strikes (byBoss) alike; 1 with T.upgsOn 0 (build_UPGS_2026-11-05); was `hitLifeline(L, (ev.lines ? 26 : 42) * secs * 2 * (ev.llK || 1…`
       }
     }
 
@@ -16610,6 +16762,7 @@ $('elsewhere').onclick = () => {
   // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
   // START4 2026-11-02: the reset `metaFold = null` is removed with the fold state (offerMeta no longer folds) (build_START_2026-11-02)
   //   TXT-B6 2026-10-30: null = no hand choice, so "Somewhere else" opens the start screen with the capacity section folded (offerMeta, TXT-A2); a hand fold or unfold from the last visit is forgotten here; the code is unchanged, the comment was `// PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)` (build_TXT_B_2026-10-30)
+  upgsReset()   // UPGS-P4 2026-11-05: the start screen opens on the measures tab with "Why these?" closed (build_UPGS_2026-11-05)
   offerPlaces(); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
   offerFx()   // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch drawn with the others, after offerZoom() (build_PT_2026-10-19)
@@ -16623,6 +16776,7 @@ $('spendfirst').onclick = () => {
   // PL-S3 2026-10-15: offerSrc() added after offerPlain(), so the start screen's Sources switch shows the state the card bar left (build_POLISH_2026-10-15)
   // START4 2026-11-02: the reset `metaFold = false` is removed with the fold state (offerMeta no longer folds) (build_START_2026-11-02)
   //   TXT-B6 2026-10-30: review_batch_2026-10-26/OPEN_LEDGER.md T28 (the Lead's ruling) - false = unfolded by choice, so after "Spend your budget first" the start screen opens with the capacity section unfolded (offerMeta: folded = metaFold when it is not null); a hand fold from the last visit is forgotten here; was `metaFold = null   // PT-P4 2026-10-19: PLAN_PT P4 - the capacity section opens unfolded every time the start screen opens: a hand fold from the last visit is forgotten here (offerMeta: no choice = open) (build_PT_2026-10-19)` (build_TXT_B_2026-10-30)
+  upgsReset()   // UPGS-P4 2026-11-05: the start screen opens on the measures tab with "Why these?" closed (build_UPGS_2026-11-05)
   offerPlaces(PLACE.id); offerDiffs(); offerPlain(); offerSrc(); offerMeta(); offerLearn(); offerDev()   // DL-M2 / DL-M3 2026-10-14: offerPressure() -> offerPlain() (build_DIAL_2026-10-14)
   offerZoom()   // ZOOMTOG 2026-10-18: T3 - the start screen's Zoom switch drawn with the others, after offerSrc() (build_ZOOMTOG_2026-10-18)
   offerFx()   // PT-P1 2026-10-19: PLAN_PT P1 - the Effects switch drawn with the others, after offerZoom() (build_PT_2026-10-19)
@@ -16631,7 +16785,7 @@ $('spendfirst').onclick = () => {
 // P01 2026-09-23: set from the shop's own test (offerMeta's canBuy, verbatim; PT6-C 2026-10-21: PLAN_PT6 C, F4 - PT-P4 removed that line from offerMeta, so the line below is now the only copy of the test (build_PT6_2026-10-21)), so the door opens only when something can be bought - the fast path then says what is unspent and the third button shows; otherwise the end screen is exactly as before. `banked` is false while the debrief still holds this run's budget (build_F_2026-09-23)
 function syncDoor(banked) {
   const st = metaStore()
-  const canBuy = META.some(m => (st.lv[m.id] || 0) < m.max && st.funds >= m.cost(st.lv[m.id] || 0))
+  const canBuy = META.some(m => (st.lv[m.id] || 0) < upgsMax(m) && st.funds >= upgsCost(m, st.lv[m.id] || 0))   // UPGS-P3 2026-11-05: the door's test reads the active max and price (build_UPGS_2026-11-05); was `const canBuy = META.some(m => (st.lv[m.id] || 0) < m.max && st.funds >= m.cost(st.lv[m.…`
   const open = banked && canBuy
   $('again-unspent').textContent = open ? ` \u00b7 ${st.funds} unspent` : ''
   $('spendfirst').hidden = !open
@@ -16918,7 +17072,7 @@ window.__surv = {
   axesGrant (sd, n) { if (!AX_SIDE[sd]) return null; AXST.ax[sd] = Math.max(0, Math.min(AX_MAX, n | 0)); axClamp(); axSave(); offerMeta(); return AXST.ax[sd] },
   axesSet (id, v) { if (!AXES.some(A => A.id === id)) return null; axSet(id, v); return AXST.set[id] },
   // U1-B2 2026-11-05: the lifeline nodes for scripted checks - a test-only grant of a node's level (as metaGrant grants funds; the same store and offerMeta), and the U1 run state (build_U1_2026-11-05)
-  u1Grant (id, n) { if (!META_U1.some(m => m.id === id)) return null; const s2 = metaStore(); s2.lv[id] = Math.max(0, Math.min(3, n | 0)); metaSave(s2); offerMeta(); return s2.lv[id] },
+  u1Grant (id, n) { const m = upgsU1().find(m => m.id === id); if (!m) return null; const s2 = metaStore(); s2.lv[id] = Math.max(0, Math.min(upgsMax(m), n | 0)); metaSave(s2); offerMeta(); return s2.lv[id] },   // UPGS-P3 2026-11-05: clamped to the active max (3 with T.upgsOn 0, as today), the new node only with T.upgsOn 1 (upgsU1) (build_UPGS_2026-11-05); was `u1Grant (id, n) { if (!META_U1.some(m => m.id === id)) return null; const s2 = metaStore(); s2.lv[id] = Math.max(0, Math.min(3, n | 0)); …`
   // U1-B7 / U1-B8 / U1-B6 2026-11-05: test-only - a lifeline card's level raised through the card's own take (u1Take: greenery plants as the card does), and the escort teams sent as a real save sends them (u1Escort) (build_U1_2026-11-05)
   u1Card (k, n) { if (!U1_CARDS[k]) return null; while (U1C[k] < Math.min(n | 0, u1CardTop())) u1Take(k); syncHud(); return U1C[k] },
   u1EscortNow () { u1Escort('#f7f4ee'); return U1CREW ? U1CREW.left : 0 },
