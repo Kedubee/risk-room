@@ -1237,6 +1237,8 @@
     font:inherit;font-size:11px;font-weight:800;letter-spacing:.08em;opacity:.4;
     cursor:pointer;transition:opacity .12s,border-color .12s,background .12s}
   #dodge.ready{opacity:1;border-color:#8fe3ff;color:#8fe3ff;background:rgba(143,227,255,.12)}
+  /* KQP-B10 2026-11-07: GUARD_KQP_builder THE ITEMS B10 (ruled kept) - the Evacuate button while a penalty's wait is in its count (step's HUD paint and kqpHud set .kqp): the lifeline alarm's colour #ff9d9d (hitLifeline's flash) on the text and the border, no other change; nothing without the class, and the class is never set with T.kqpOn 0 (build_KQP_2026-11-07) */
+  #dodge.kqp{color:#ff9d9d;border-color:#ff9d9d}
   /* PT6-C 2026-10-21: PLAN_PT6 C (O3a) - while the start screen is up (#start without .gone: opaque, z-index 23, over EVAC's 9) EVAC is hidden from view and so from Tab, so the first Tab lands on the start screen's first control; visibility, not display, so its box and place are kept for anything that measures it; it is back the moment a place is chosen. A browser without :has() ignores the rule and behaves as before (build_PT6_2026-10-21) */ body:has(#start:not(.gone)) #dodge{visibility:hidden}
   /* BATCH-FIX 2026-10-26: K2 (review_batch_B F6) - while the level-up card screen is up (#cards.show, z-index 20 over EVAC's 9) EVAC is hidden from view and so from Tab, as PT6-C above hides it while the start screen is up, so the first Tab on the card screen lands on the first card's take region; visibility, not display, so its box is kept for ptrFrame; it is back when the screen closes. A browser without :has() ignores the rule and behaves as before */ body:has(#cards.show) #dodge{visibility:hidden}
   /* PT7-S1 2026-10-21: PLAN_PT7 S1 - on touch screens (body.touch #mute{display:flex}) the sound button, as EVAC in PT6-C O3a above, is hidden from view and so from Tab while the start screen is up (#start without .gone: opaque, z-index 23, over the button's 9), so the first Tab lands on the start screen's first control; visibility, not display, so its box is kept for ptrFrame, which measures it; it is back the moment a place is chosen. A browser without :has() ignores the rule and behaves as before (build_PT7_2026-10-21) */ body:has(#start:not(.gone)) #mute{visibility:hidden}
@@ -2119,6 +2121,41 @@ html body #start.st3 #capblk.upgs button#upgswhy{margin:10px 0 0}
 html body #start.st3 #capblk.upgs button#upgswhy[hidden]{display:none}
 html body #start.st3 div#capblk.upgs div#metanote{margin:10px 0 0}
 html body #start.st3 div#capblk.upgs div#metanote[hidden], html body #start.st3 div#capblk.upgs div#metaearn[hidden]{display:none}
+/* NT-N6 2026-11-07: the Trade-offs tab's panel (#ntaxp, T.ntOn 1): #metawrap and the panel hidden by their hidden attribute (as #metanote above), the panel at #metawrap's place and margin; inside #start the control would take the start screen's own rules (#start div: max-width 430px, margin auto; #start p: opacity .6 and its type), which the dialog never had, so these rules give each piece back the look the dialog's rules give it (the values are the #r3ctl, #r3earn and #r3dlg .r3intro rules above, copied; the other divs as in the dialog, no side margin and no width cap); nothing else is restyled (build_NT_2026-11-07) */
+html body #start.st3 div#capblk.upgs div#metawrap[hidden], html body #start.st3 div#capblk.upgs div#ntaxp[hidden]{display:none}   /* NT-N6 2026-11-07 (build_NT_2026-11-07) */
+html body #start.st3 div#capblk.upgs div#ntaxp{max-width:none;margin:10px 0 0}   /* NT-N6 2026-11-07 (build_NT_2026-11-07) */
+#start #ntaxp div{max-width:none;margin-left:0;margin-right:0}   /* NT-N6 2026-11-07 (build_NT_2026-11-07) */
+#start #ntaxp div#r3ctl{margin:8px auto 2px;max-width:720px}   /* NT-N6 2026-11-07 (build_NT_2026-11-07) */
+#start #ntaxp div#r3earn{max-width:640px;margin:4px auto 0}   /* NT-N6 2026-11-07 (build_NT_2026-11-07) */
+#start #ntaxp div.r3sd{margin-top:0;margin-bottom:0}   /* NT-N6 2026-11-07: a side's column top-aligned in its grid row, as in the dialog (#start div's margin auto would centre it) (build_NT_2026-11-07) */
+#start #ntaxp .dbtn{opacity:1}   /* NT-N6 2026-11-07: the control's buttons at full opacity, as in the dialog (#start .dbtn:not(.on):not(.howbtn) sets .78) (build_NT_2026-11-07) */
+#start #ntaxp p.r3intro{opacity:1;font-size:12.5px;line-height:1.5;color:#f7f4ee;margin:0 0 10px;max-width:640px}   /* NT-N6 2026-11-07 (build_NT_2026-11-07) */
+/* NT2-N6a 2026-11-07: in the Trade-offs tab (#ntaxp, T.ntOn 1 only) each axis is one row (axRender, nt2): the axis name; the left side (its toggle and "N/3 bought" on one line, its buy button under them, its fold under that); the middle (the positions on one line; the setting line, then the hybrid's toggle and its note, on the next; its fold under); the right side, mirrored. On the two-column start screen (stw) the intro line and the recovery budget line share one line (the control's own box steps aside, display: contents, and keeps its key handler), and every row has the same four columns (fixed name and middle, the two sides sharing the rest), so the columns line up from row to row. One column (stn, a phone): the name across, the two sides side by side, the middle across under them. Every font size, colour and button as the rules above; only margins, paddings and placement set here (build_NT_2026-11-07 NT2) */
+#start #ntaxp div#r3ctl{max-width:none}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+#start #ntaxp section.r3x{display:grid;gap:0 8px;align-items:start;text-align:left;margin:0 0 6px;padding:4px 8px}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+#start #ntaxp section.r3x > span.r3n{margin:7px 0 0;line-height:1.3}   /* NT2-N6a 2026-11-07: level with the side names' first line (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3sd{display:grid;grid-template-columns:auto minmax(0,auto);justify-content:start;align-items:center;column-gap:8px}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3sd:last-child{justify-content:end}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3sd > span.r3have{margin:0}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3sd > button.r3b{grid-column:1 / -1;justify-self:start}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3sd:last-child > button.r3b{justify-self:end}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3sd > div{grid-column:1 / -1;width:0;min-width:100%}   /* NT2-N6a 2026-11-07: the open fold takes the side's width and does not widen the toggle's column (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3mid{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 10px;min-width:0;margin:0}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3mid > span.r3pos{flex:1 1 100%}   /* NT2-N6a 2026-11-07: the positions on a line of their own (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3mid > span.r3now{margin:2px 0 0}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3mid > div.r3hyb{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;column-gap:8px;margin:0}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3hyb > span.r3have{margin:0}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+#start #ntaxp div.r3hyb > div{flex:1 1 100%;text-align:left}   /* NT2-N6a 2026-11-07: the hybrid's open lines read left-aligned, as the sides' (build_NT_2026-11-07 NT2) */
+html body #start.st3.stw #ntaxp{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:start}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+html body #start.st3.stw #ntaxp div#r3ctl{display:contents}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+html body #start.st3.stw #ntaxp p.r3intro{grid-column:1;grid-row:1;max-width:none;margin:0}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+html body #start.st3.stw #ntaxp span.r3fund{grid-column:2;grid-row:1;text-align:right;margin:2px 0 0}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+html body #start.st3.stw #ntaxp section.r3x, html body #start.st3.stw #ntaxp div#r3earn{grid-column:1 / -1}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+html body #start.st3.stw #ntaxp section.r3x{grid-template-columns:108px minmax(150px,1fr) minmax(0,450px) minmax(150px,1fr);margin:0}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+html body #start.st3.stn #ntaxp section.r3x{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+html body #start.st3.stn #ntaxp section.r3x > span.r3n{grid-column:1 / -1;margin:2px 0 0}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+html body #start.st3.stn #ntaxp section.r3x > div.r3sd:last-child{grid-column:2;grid-row:2}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
+html body #start.st3.stn #ntaxp section.r3x > div.r3mid{grid-column:1 / -1;grid-row:3;margin-top:4px}   /* NT2-N6a 2026-11-07 (build_NT_2026-11-07 NT2) */
 </style>
 </head>
 <body>
@@ -3533,8 +3570,20 @@ const T = {
   // KQ-K1 2026-11-06: GUARD_KQ_builder THE ITEMS K1 - the in-run quiz's switch and numbers (PLAN_KQ K1); kqOn 0 = the base game (d84837f5) in every respect of Part A: no quiz at any moment, GLOSS's own definitions, no HUD item, no store written, nothing drawn or announced; every value is read where it acts, so one set after boot counts (build_KQ_2026-11-06)
   kqOn: 1,                         // KQ-K1 master switch: 1 as built; 0 = the base game (build_KQ_2026-11-06)
   kqChoices: 3, kqBFrom: 2, kqPicks: 2, kqPowerS: 15, kqPowerDmg: 2,   // KQ-K1 the lines shown in a question; moment (b) from this arrival number on; reward 1's picks; reward 3's seconds of run clock and its factor on the damage you deal (build_KQ_2026-11-06)
-  kqAuto: 0, kqAutoReward: 1,      // KQ-K1 a test hook: 0 the player answers; 1 answers right and takes reward kqAutoReward (1, 2 or 3); 2 answers wrong; with 1 or 2 no screen is drawn and the quiz is settled at once (build_KQ_2026-11-06)
+  kqAuto: 0, kqAutoReward: 1,      // KQ-K1 a test hook: 0 the player answers; 1 answers right and takes reward kqAutoReward (1, 2 or 3); 2 answers wrong; 3 answers wrong by kqAutoWrong / kqAutoWrongN / kqAutoSeed and otherwise right with kqAutoReward (KQP-B2); with 1, 2 or 3 no screen is drawn and the quiz is settled at once (build_KQ_2026-11-06)   // KQP-B1 2026-11-07: the hook's third value named in the comment; the two values unchanged; was `  kqAuto: 0, kqAutoReward: 1,      // KQ-K1 a test hook: 0 t…` (build_KQP_2026-11-07)
   kqLockMs: 500,                     // KQ-FIX-F2 2026-11-06: the in-run quiz's short lock against a key or tap already under way, in real milliseconds (performance.now(), not run clock: the game is paused). For this long after the dialog opens, and again after each pick, no key, click or tap on it picks or closes anything, and nothing is queued for when it ends; 0 = no lock. The T.kqAuto hook and the test surface (__surv.kq) are not locked (build_KQ_2026-11-06 fix round)
+  // KQP-B1 2026-11-07: GUARD_KQP_builder THE ITEMS B1 (DESIGN_KQP D3 / D4 / D6 / D7 as ruled) - the wrong-answer penalty's switch and numbers; kqpOn 0 = round NT's game (202b3856) in every respect: no penalty, no notice, no new word on any screen, no Evacuate tint, nothing drawn, no store value; every value is read where it acts, so one set after boot counts (build_KQP_2026-11-07)
+  kqpOn: 1,                        // KQP-B1 master switch: 1 as built; 0 = the base game (build_KQP_2026-11-07)
+  kqpLL: { from: 3, step: 3, cap: 30 },     // KQP-B1 the lifeline hit, in % of llMax(): from + step x (w - 1), never over cap; w = this run's wrong answers so far, this one included (kqpVal) (build_KQP_2026-11-07)
+  kqpHp: { from: 2, step: 2, cap: 30 },     // KQP-B1 the capacity hit, in % of P.max, taken raw (no armour, no exposure, no grace time, no shake, no sound), never below 1 (build_KQP_2026-11-07)
+  kqpEvac: { from: 2, step: 1, cap: 15 },   // KQP-B1 Evacuate's wait, seconds of run time added to P.dodgeT (a ready Evacuate waits this long; one cooling down waits this much longer) (build_KQP_2026-11-07)
+  kqpLLMargin: 5,                  // KQP-B1 (B4) a lifeline above the dip line (T.serviceDipAt % of llMax()) is never taken to or below it by a penalty: a hit that would is cut to stop this many points above the line (ruled 5; the prototype had 1) (build_KQP_2026-11-07)
+  kqpLLBelow: 0,                   // KQP-B1 (B4) 0 = the designer's rule, as built: a lifeline that can take the whole hit and stay at or above line + margin is drawn first; else one above line + margin, the hit cut there; none: another penalty kind is drawn. 1 = the Lead session's default, kept behind the value: any lifeline that is up and above its own floor, the hit cut at line + margin for one above the line, at kqpLLFloor for one at or below it (build_KQP_2026-11-07)
+  kqpLLFloor: 20,                  // KQP-B1 (B4) with kqpLLBelow 1: the floor for a lifeline at or below the dip line, % of llMax() (build_KQP_2026-11-07)
+  kqpNoticeKeepS: 4,               // KQP-FIX-F3 2026-11-07: ADJUDICATION_KQP (the Lead session, 14:2x) - the seconds of run time the wrong-answer notice stays a kept line (then an ordinary now-line); 0 = never kept; read where it acts (kqpNotice) (build_KQP_2026-11-07 fix round 3)
+  kqAutoWrong: 0.33,               // KQP-B1 (B2) the test hook kqAuto 3 with kqAutoWrongN under 0: the chance that a quiz is answered wrong, 0-1, drawn from the quiz's own generator seeded by the store's n and kqAutoSeed (kqpAutoWrong) (build_KQP_2026-11-07)
+  kqAutoWrongN: -1,                // KQP-B1 (B2) the test hook kqAuto 3 with this 0 or more: the first this many quizzes of the run are answered wrong, the rest right with kqAutoReward; kqAutoWrong and kqAutoSeed are then not read (build_KQP_2026-11-07)
+  kqAutoSeed: 0,                   // KQP-B1 (B2, ruled) the test hook kqAuto 3 with kqAutoWrongN under 0: a per-run seed added to the hook's draw, so the bots' right / wrong pattern varies by run (the harness writes seed x 1000 + the place's index); 0 gives the prototype's draws (build_KQP_2026-11-07)
   // UIX-T 2026-11-06: GUARD_UIX_builder THE ITEMS - the round's numbers; uixOn 0 = the base game (dfa8b025) in every respect; a mechanic item is on only when uixOn and its own switch are both 1 (uixCut U1, uixHeat U2, uixUnch U3, uixOne U7); U4, U5, U6 and the text follow uixOn alone; every switch is read where it acts, so a value set after boot takes effect (build_UIX_2026-11-06)
   uixOn: 1,                        // UIX-T master switch: 1 as built; 0 = the base game (build_UIX_2026-11-06)
   uixCut: 1, uixHeat: 1, uixUnch: 1, uixOne: 1,   // UIX-T the sub-switches of U1, U2, U3, U7 (build_UIX_2026-11-06)
@@ -3544,6 +3593,7 @@ const T = {
   uixSignRoom: 230,                // UIX-U5 the plank signs show only when the space right of the start screen's layout is at least this wide (px) (build_UIX_2026-11-06)
   uixSignGap: 24, uixSignW: 240, uixSignDy: 12,   // UIX-U5 a sign's left edge this far right of the layout (px), its width at most uixSignW and at most the space less two gaps, its top this far below its block's top (as mock_uix.js drew them) (build_UIX_2026-11-06)
   uixBig: 1, uixBigPx: 2.5,        // UIX2-B1 2026-11-06: large shots switch to the large picked sprites, on only when uixOn and uixBig are both 1 (read in arBullets, so a value set after boot takes effect); uixBigPx: the most a pixel sprite is drawn, drawn height / its cell height AR_CELL[id].ch (build_UIX_2026-11-06 UIX2)
+  ntOn: 1, ntVbDash: [16, 12],     // NT-N1..N8 2026-11-07: the round's master switch (1 as built; 0 = the base game in every respect), read where each item acts, so a value set after boot takes effect; ntVbDash: NT-N8 the Mountain valley band edges' dash, the FIX2 note's "was dashed [16, 12]" (build_NT_2026-11-07)
   // FIX1 2026-11-03: you clear a lifeline (fx1Clear). While you are within its repair reach (the `here` test of updateLifelines), every ordinary body attacking it - aimed at it (e.tgt) within fx1NearR px of its centre, or a flood front sitting on it (T.lifelineR + its radius) - is killed through hurtEnemy; an ordinary heat zone sitting on it shrinks away over fx1ZoneT s; an elite attacking it loses fx1EliteK of its maximum health a second, and a compound-event body or the true boss within fx1NearR + its radius fx1BossK, in ticks of fx1Tick s. fx1NearR 0 = off (today's game) (build_FIX_2026-11-03)
   fx1NearR: 180, fx1ZoneT: 1.0, fx1EliteK: 0.25, fx1BossK: 0.05, fx1Tick: 0.25,
   // FIX2 2026-11-03: the ranged body's mark - 'ring' (a thin solid ring SPLIT.ring.gap px out) or 'mark' (a small solid pale triangle above the body); drawing only (build_FIX_2026-11-03)
@@ -4174,6 +4224,7 @@ const R2_TIER_DESC = {
   rate:   ['Lifelines repair faster. Your repair reach is wider (Lv 7).', 'Lifelines repair faster again. Your repair reach is wider again (Lv 8).', 'Lifelines repair faster again. Top level, marked by a gold ring in the list below the cards (Lv 9).'],   // R2-FX-2: D2-25..27; was `rate:   ['R2PROV rate tier1', 'R2PROV rate tier2', 'R2PROV rate tier3'],`   // HF-4 2026-11-05: list_HF.tsv row HF-B5, new_text verbatim; was `rate:   ['Lifelines repair faster. Your repair reach is wide…` (build_HF_2026-11-05)
   dmg:    ['You hit 20% harder (Lv 7).', 'You hit 20% harder again (Lv 8).', 'You hit 20% harder again. Top level, marked in gold (Lv 9).'],   // R2-FX-2: D2-28..30; was `dmg:    ['R2PROV dmg tier1', 'R2PROV dmg tier2', 'R2PROV dmg tier3'],`
 }
+{ const d = R2_TIER_DESC.dmg, d2 = d[2]; Object.defineProperty(d, 2, { get: () => T.ntOn ? 'You hit 20% harder again. Top level (Lv 9).' : d2, enumerable: true }) }   // NT-N5 2026-11-07: Resilient investment's top-level line (D2-30) read when shown: with T.ntOn 1 the Lead's ruling, the clause on the gold mark removed (that gold was drawn only on the smear, removed by NT-N2); with 0 the line above as it is (build_NT_2026-11-07)
 for (const k in UPGRADES) { const u = UPGRADES[k], d0 = u.desc; u.max0 = u.max; u.max = u.max0 + TIERS.length; u.desc = l => l >= u.max0 ? R2_TIER_DESC[k][Math.min(l - u.max0, TIERS.length - 1)] : d0(l) }
 // R2-T 2026-10-27: the tier helpers. r2N: tiers held past max0; r2L: the level term held at max0 (today's maximum); r2K: the tier factor 1 + T.r2Tier x r2N, applied to a main effect whose formula reads r2L (Codes area, Warning rate, Drills reach and rate). R2-G: r2Gold - the measure is at its new maximum (Mainstreamed). R2-P: r2Cap - the pool rule's ceiling: today's maximum before T.r2From of run clock, the new one from then (build_R2_2026-10-27)
 const r2N = k => Math.max(0, (lv[k] || 0) - UPGRADES[k].max0)
@@ -6342,7 +6393,9 @@ function hintClear() {                 // reset(): a card never crosses into the
 }
 
 // KQ-K2 / KQ-K3 / KQ-K4 / KQ-K5 / KQ-K6 / KQ-K7 / KQ-K8 / KQ-K9 / KQ-K11 2026-11-06: GUARD_KQ_builder THE ITEMS, PART A - the in-run quiz (PLAN_KQ). One question about a measure the player holds, at up to three kinds of moment (kqMoment: 'a' when the first mid-boss is due, before it arrives; 'b' a mid-boss event absorbed whose arrival number is T.kqBFrom or more; 'c' the true boss absorbed); a right answer gives the choice of one reward (picks, a repair, a boost); a wrong one gives nothing and the measure is asked again first. With T.kqOn 0 nothing here acts: no quiz at any moment, GLOSS's own definitions, no HUD item, no store written (build_KQ_2026-11-06)
+// KQP-B12 2026-11-07: the KQ line above says a wrong answer gives nothing: with T.kqpOn 1 it also draws one penalty (the penalty block at the end of this quiz block, KQP-B3); with T.kqpOn 0 it gives nothing, as before; comment only (build_KQP_2026-11-07)
 // KQ-K9: every word of the quiz a player reads, keyed by its row id in design_2026-11-06_KQ/list_KQ_final2.tsv, new_text byte for byte. {card} and {other} are a measure's name (UPGRADES[id].name), put in when the line is drawn (kqT); a ${...} part reads its T value when the line is drawn. Bound by the list's notes, not by code: "Two" / "two" (KQ-UI-R1T, KQ-UI-R1D) say T.kqPicks 2 and "twice" (KQ-UI-R3D) says T.kqPowerDmg 2 - the words do not follow a changed value
+// KQP-B12 2026-11-07: the KQ-K9 line above now reads: every word of the quiz a player reads but the penalty's and, with T.kqpOn 1, the row under the question - those are KQP_TEXT's rows (design_2026-11-07_KQP/list_KQP_ruled.tsv), in the penalty block below; comment only (build_KQP_2026-11-07)
 const KQ_TEXT = Object.freeze({
   'KQ-STEM': 'Which one shows {card} in real life?',
   'KQ-A-field': 'Anyone who builds a house must follow the earthquake rules for their area.',
@@ -6431,6 +6484,7 @@ function kqDraw(id, n) {
   return lines
 }
 // KQ-K2: a moment. Returns true only when the dialog is now up for it (so updateBoss holds the first mid-boss back until it has closed). Never when the run is over; 'a' at most once a run; 'b' only for an event whose arrival number (B.kqArr, set in spawnBoss) is T.kqBFrom or more. A moment that falls while a quiz is already up waits (kqPend) and is asked when that one closes. With T.kqAuto 1 or 2 (the test hook) no screen is drawn and the quiz is settled here, at once: 1 answers right and takes reward T.kqAutoReward (whether or not the dialog would show it), 2 answers wrong
+// KQP-B12 2026-11-07: the KQ-K2 line above now reads: with T.kqAuto 1, 2 or 3 (the test hook) no screen is drawn - 3 answers wrong by kqpAutoWrong (T.kqAutoWrong / T.kqAutoWrongN / T.kqAutoSeed) and otherwise right with reward T.kqAutoReward (KQP-B2); comment only (build_KQP_2026-11-07)
 function kqMoment(m, B) {
   if (!T.kqOn || over) return false
   if (m === 'a' && kqUsedA) return false
@@ -6441,8 +6495,9 @@ function kqMoment(m, B) {
   if (m === 'a') kqUsedA = true
   kqQ = { m, id, lines: kqDraw(id, st.n), phase: 'ask', pick: -1, rewards: [] }
   kqLog.push({ t, m, id, lines: kqQ.lines.slice(), right: null, reward: 0, shown: [] })
-  if (T.kqAuto === 1 || T.kqAuto === 2) {
-    kqAnswer(T.kqAuto === 1 ? kqQ.lines.indexOf(id) : kqQ.lines.findIndex(k => k !== id))
+  if (T.kqAuto === 1 || T.kqAuto === 2 || T.kqAuto === 3) {   // KQP-B2 2026-11-07: 3 - the bots' mixed hook: wrong by kqpAutoWrong, else right with kqAutoReward; no screen, settled at once, as 1 and 2 are; was `  if (T.kqAuto === 1 || T.kqAuto === 2) {` (build_KQP_2026-11-07)
+    const kqpWr = T.kqAuto === 2 || (T.kqAuto === 3 && kqpAutoWrong(st.n))   // KQP-B2 2026-11-07: 2 always wrong; 3 by the hook's rule (the store's n before this answer and T.kqAutoSeed seed it) (build_KQP_2026-11-07)
+    kqAnswer(kqpWr ? kqQ.lines.findIndex(k => k !== id) : kqQ.lines.indexOf(id))   // KQP-B2 2026-11-07: was `    kqAnswer(T.kqAuto === 1 ? kqQ.lines.indexOf(id) : kqQ.li…` (build_KQP_2026-11-07)
     if (!(kqQ && kqQ.phase === 'right' && kqReward(T.kqAutoReward))) kqClose(0)
     return false
   }
@@ -6472,6 +6527,7 @@ function kqAnswer(i) {
   kqSave(st)
   Q.pick = i; Q.phase = right ? 'right' : 'wrong'; Q.rewards = right ? kqRewards() : []
   const g = kqLog[kqLog.length - 1]; g.right = right; g.shown = Q.rewards.slice()
+  if (!right) kqpApply(Q, g)   // KQP-B3 2026-11-07: a wrong answer draws and applies its penalty here, where the answer has become a fact and before kqRender draws the result screen - so the screen states what has happened, the HUD behind it already shows it (kqpHud), and Evacuate's wait starts counting when play resumes (step); nothing with T.kqpOn 0 (build_KQP_2026-11-07)
   if (kqOpen) { kqLockAt = performance.now(); kqRender() }   // KQ-FIX-F2 2026-11-06: the lock is armed again at a pick, as the lines give way to the rewards or to the one button; was `if (kqOpen) kqRender()` (build_KQ_2026-11-06 fix round)
   return true
 }
@@ -6487,6 +6543,7 @@ function kqReward(k) {
   return true
 }
 // KQ-K3 / KQ-K8: the quiz closes, with reward k (0: none - a wrong answer, die()). Held keys are muted as closeCards mutes them; focus returns to where it was. R1: T.kqPicks picks banked and the card screen opened by a bare offerCards() (no level, no XP, no per-level repair; drawn again if it was already up). R2: a refill, not a save - capacity to its maximum (healFull), every standing lifeline to llMax() with its dip mark cleared, as the developer panel's "Heal all lifelines"; no service fires, nothing is secured, no save is counted. R3: the boost's timer set to T.kqPowerS (set again, not added). The game is unpaused through setPaused unless the card screen is showing; a moment that waited is asked next
+// KQP-B12 2026-11-07: the KQ-K3 / KQ-K8 line above now reads: after the unpause, with T.kqpOn 1 and a penalty drawn for the closing question, the one notice (kqpNotice, KQP-B8) is raised, and then a moment that waited is asked; comment only (build_KQP_2026-11-07)
 function kqClose(k) {
   const shown = kqOpen
   if (shown) {
@@ -6497,11 +6554,13 @@ function kqClose(k) {
     else if (kqFocus && kqFocus.focus && document.contains(kqFocus)) kqFocus.focus()
     kqFocus = null
   }
+  const kqpN = k === 0 && kqQ && kqQ.pen ? kqQ.pen : null   // KQP-B8 2026-11-07: the penalty of the question now closing (a wrong answer, k 0), for the notice below; null when none was drawn (build_KQP_2026-11-07)
   kqQ = null
   if (k === 1) { picksLeft += T.kqPicks; offerCards() }
   else if (k === 2) { healFull(); for (const L of lifelines) if (L.alive) { L.hp = llMax(); L.dipped = false } syncHud() }
   else if (k === 3) { kqBoost = T.kqPowerS; kqHudSync() }
   if (shown && !$('cards').classList.contains('show')) setPaused(false)
+  if (kqpN && !over) kqpNotice(kqpN)   // KQP-B8 2026-11-07: the short notice as play resumes - one flash per penalty through the game's own flash row (raised as a kept now-line and kept for T.kqpNoticeKeepS s of run time - pushed aside inside them it comes back once for its own time; after them it is an ordinary now-line: pushed aside it waits once when the slot is empty and is dropped when the slot is taken - usually at most two showings; a third is possible when a long line pushes the notice aside inside the kept seconds and again after them; never more than three), in the lifeline alarm's colour, gone on the flash row's own clock; nothing else drawn; never after die() (over); never with T.kqpOn 0 (no pen exists then) (build_KQP_2026-11-07)   // KQP-FIX-F1 2026-11-07: ADJUDICATION_KQP section 6 - the notice is an ordinary now-line, not a held one: the old comment said it was not dropped and yielded as a held line; comment only; was `  if (kqpN && !over) kqpNotice(kqpN)   // KQP-B8 2026-11-07:…` (build_KQP_2026-11-07 fix round)   // KQP-FIX-F3 2026-11-07: the F1 words replaced by the ruled rule; comment only; was `  if (kqpN && !over) kqpNotice(kqpN)   // KQP-B8 2026-11-07:…` (build_KQP_2026-11-07 fix round 3)   // KQP-FIX-F4 2026-11-07: the Lead session's ruling on fix_record_KQP3 (c) 1 - the behaviour stands as built (36 of 37 notices in the bot runs showed at most twice, 1 of 37 three times, never four); the statement of two was false in the source; comment only; was `  if (kqpN && !over) kqpNotice(kqpN)   // KQP-B8 2026-11-07:…` (build_KQP_2026-11-07 fix round 4)
   if (kqPend.length && !over) { const m = kqPend.shift(); kqMoment(m, m === 'b' ? { kqArr: T.kqBFrom } : null) }
 }
 // KQ-K2: reset() closes an open quiz and clears every piece of the run's quiz state (reset sets the pause itself); die() closes an open quiz with no reward and no record, and drops a moment that waited
@@ -6509,6 +6568,7 @@ function kqReset() {
   kqPend.length = 0
   if (kqOpen) { kqOpen = false; $('kq').hidden = true }
   kqFocus = null; kqQ = null; kqUsedA = false; kqBoost = 0; kqLog = []
+  kqpWrong = 0; kqpLast = null; kqpLog = []; kqpLockLeft = 0; kqpForce = null; kqpNoticeOpt = null; kqpNoticeT = 0   // KQP-B9 2026-11-07: the run's wrong count and penalty record live in the run's quiz state, cleared with it, never in the store (build_KQP_2026-11-07)   // KQP-FIX-F3 2026-11-07: the held notice object and its seconds cleared with the rest; was `  kqpWrong = 0; kqpLast = null; kqpLog = []; kqpLockLeft = 0…` (build_KQP_2026-11-07 fix round 3)
   kqHudSync()
 }
 function kqDie() { kqPend.length = 0; if (kqQ) kqClose(0) }
@@ -6519,11 +6579,12 @@ function kqHudSync() {
   if (el.hidden !== !tx) el.hidden = !tx
 }
 // KQ-K7: the dialog's lines, from KQ_TEXT. The title, the question line and the line under it stay; under them the lines as buttons (#kq-act), which give way after a pick to the verdict and what follows it (#kq-res, the polite live region: the chosen line and the right line are shown as the run-end quiz shows an answered option, a disabled .opt marked .right / .wrong) and to the rewards as buttons, or to the one button
+// KQP-B12 2026-11-07: the KQ-K7 line above now reads: the dialog's lines are from KQ_TEXT and, with T.kqpOn 1, two from KQP_TEXT - the row under the question (KQP-UI-HINT in place of KQ-UI-HINT, KQP-B7) and, on the wrong screen, the penalty's paragraph (KQP-UI-LL / HP / EVAC with KQP-UI-NEXT while every curve still climbs) under KQ-UI-WRONG4 and above the one button (KQP-B7); comment only (build_KQP_2026-11-07)
 function kqRender() {
   const Q = kqQ, res = $('kq-res'), act = $('kq-act'), name = k => UPGRADES[k].name, card = name(Q.id)
   $('kq-t').textContent = kqT('KQ-UI-TITLE')
   $('kq-q').textContent = kqT('KQ-STEM', card)
-  $('kq-h').textContent = Q.phase === 'ask' ? kqT('KQ-UI-HINT') : ''; $('kq-h').hidden = Q.phase !== 'ask'   // KQ-FIX-F3 2026-11-06: the row KQ-UI-HINT is on screen only while the lines can be picked; after a pick, right or wrong, its paragraph is empty and hidden (the comment above kqRender says the line under the question stays: since this fix round it does not); was `$('kq-h').textContent = kqT('KQ-UI-HINT')` (build_KQ_2026-11-06 fix round)
+  $('kq-h').textContent = Q.phase === 'ask' ? (T.kqpOn ? KQP_TEXT['KQP-UI-HINT'] : kqT('KQ-UI-HINT')) : ''; $('kq-h').hidden = Q.phase !== 'ask'   // KQ-FIX-F3 2026-11-06: the row KQ-UI-HINT is on screen only while the lines can be picked; after a pick, right or wrong, its paragraph is empty and hidden (the comment above kqRender says the line under the question stays: since this fix round it does not); was `$('kq-h').textContent = kqT('KQ-UI-HINT')` (build_KQ_2026-11-06 fix round)   // KQP-B7 / KQP-B12 2026-11-07: the row under the question is KQP-UI-HINT (the ruled list) with T.kqpOn 1 and KQ-UI-HINT, as the base, with 0 - read at render time, so a switch set after boot counts; the F3 comment names KQ-UI-HINT as the one row: since this build it is one of two; was `  $('kq-h').textContent = Q.phase === 'ask' ? kqT('KQ-UI-HIN…` (build_KQP_2026-11-07)
   res.textContent = ''; act.textContent = ''
   const para = s => { const e = document.createElement('p'); e.textContent = s; res.appendChild(e) }
   const line = (k, cls) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'opt ' + cls; b.disabled = true; b.textContent = kqT('KQ-A-' + k); res.appendChild(b) }
@@ -6539,7 +6600,7 @@ function kqRender() {
     }
   } else {
     const ch = Q.lines[Q.pick]
-    line(ch, 'wrong'); para(kqT('KQ-UI-WRONG') + ' ' + kqT('KQ-UI-WRONG2', card, name(ch))); para(kqT('KQ-UI-WRONG3', card)); line(Q.id, 'right'); def(); para(kqT('KQ-UI-WRONG4', card))
+    line(ch, 'wrong'); para(kqT('KQ-UI-WRONG') + ' ' + kqT('KQ-UI-WRONG2', card, name(ch))); para(kqT('KQ-UI-WRONG3', card)); line(Q.id, 'right'); def(); para(kqT('KQ-UI-WRONG4', card)); if (Q.pen && T.kqpOn) para(kqpLine(Q.pen))   // KQP-B7 2026-11-07: under KQ-UI-WRONG4 and above the one button, the penalty's own paragraph (its kind and size in words: KQP-UI-LL / HP / EVAC, then KQP-UI-NEXT while every kind's curve still climbs), in the live region as the rows above it; nothing with T.kqpOn 0; was `    line(ch, 'wrong'); para(kqT('KQ-UI-WRONG') + ' ' + kqT('…` (build_KQP_2026-11-07)
     const b = btn(() => kqClose(0)); b.className = ''; b.id = 'kq-ok'; b.textContent = kqT('KQ-UI-OK')
   }
   const first = act.querySelector('button')
@@ -6555,8 +6616,106 @@ function kqTest() {
     next: () => kqNext(kqStore()), draw: (id, n) => kqDraw(id, n), rewards: () => kqRewards(),
     open: (m, arr) => kqMoment(m, m === 'b' ? { kqArr: arr == null ? T.kqBFrom : arr } : null),
     pick: i => kqAnswer(i), reward: k => kqReward(k), ok: () => { if (kqQ && kqQ.phase === 'wrong') { kqClose(0); return true } return false },
+    wrong: kqpWrong, last: kqpLast ? Object.assign({}, kqpLast) : null, pens: kqpLog.map(x => Object.assign({}, x)), lockLeft: kqpLockLeft, curve: w => ({ ll: kqpVal(T.kqpLL, w), hp: kqpVal(T.kqpHp, w), evac: kqpVal(T.kqpEvac, w) }), forcePen: k => { kqpForce = KQP_KINDS.includes(k) ? k : null; return kqpForce },   // KQP-B9 2026-11-07: the penalty's test surface - the run's wrong count, the last penalty and the log (copies), the Evacuate tint's seconds, the curve at a w, and a test-only way to force the next penalty's kind (once; anything else clears it); the existing entries unchanged (build_KQP_2026-11-07)
+    noticeKeepLeft: kqpNoticeT,   // KQP-FIX-F3 2026-11-07: read-only - the seconds of run time the last notice stays kept (0 when none is held) (build_KQP_2026-11-07 fix round 3)
   })
 }
+// KQP-B3 / KQP-B4 / KQP-B5 / KQP-B6 / KQP-B8 / KQP-B10 / KQP-B11 2026-11-07: GUARD_KQP_builder THE ITEMS (DESIGN_KQP as ruled; the prototype's code transplanted) - the wrong-answer penalty. On a wrong in-run quiz answer one penalty is drawn at random from KQP_KINDS by the quiz's own generator (kqRng, seeded by the store's n, the run's wrong count w and the run clock; never Math.random, never the run's stream): a lifeline hit (kqpHitLL), a capacity hit (kqpHitHp) or a longer Evacuate wait (kqpHitEvac); its size is kqpVal of the kind's curve at w (T.kqpLL, T.kqpHp, T.kqpEvac). Applied in kqAnswer (KQP-B3), stated on the result screen (kqpLine, KQP-B7) and as play resumes (kqpNotice, KQP-B8). Under god mode (dev.on && dev.god) nothing is lowered; the draw, the line and the record stand. With T.kqpOn 0 nothing here runs (build_KQP_2026-11-07)
+const KQP_KINDS = Object.freeze(['ll', 'hp', 'evac'])
+// KQP-B11 2026-11-07: every word of the penalty a player reads, keyed by its row id in design_2026-11-07_KQP/list_KQP_ruled.tsv (new_text byte for byte). {ll} is the lifeline's name (LIFELINES[kind].name); {n} is the size, a whole number (pen.val: the % of the maximum applied, or the seconds). KQP-UI-HINT has no slot and is read by kqRender in place of KQ-UI-HINT while T.kqpOn is 1 (build_KQP_2026-11-07)
+const KQP_TEXT = Object.freeze({
+  'KQP-UI-LL': '{ll} loses {n}% of its health.',
+  'KQP-UI-HP': 'You lose {n}% of your full capacity.',
+  'KQP-UI-EVAC': 'Evacuate waits {n} more seconds.',
+  'KQP-UI-NEXT': 'The next wrong answer costs more.',
+  'KQP-FL-LL-T': 'Wrong answer: {ll} hit',
+  'KQP-FL-LL-L': 'It loses {n}% of its health.',
+  'KQP-FL-HP-T': 'Wrong answer: you are hit',
+  'KQP-FL-HP-L': 'You lose {n}% of your full capacity.',
+  'KQP-FL-EVAC-T': 'Wrong answer: Evacuate waits',
+  'KQP-FL-EVAC-L': '{n} more seconds until you can Evacuate.',
+  'KQP-UI-HINT': 'Choose one. A right answer wins a reward, a wrong one costs you.',
+})
+// KQP-B9 2026-11-07: the run's penalty state: kqpWrong - this run's wrong answers so far (w); kqpLast - the last penalty drawn; kqpLog - every penalty of the run; kqpLockLeft - seconds of Evacuate's wait still tinted (KQP-B10); kqpForce - a test-only kind for the next draw (kqTest.forcePen). All cleared by kqReset, with the quiz's run state (build_KQP_2026-11-07)
+let kqpWrong = 0, kqpLast = null, kqpLog = [], kqpLockLeft = 0, kqpForce = null
+let kqpNoticeOpt = null, kqpNoticeT = 0   // KQP-FIX-F3 2026-11-07: the notice's options object while it is held (the flash row keeps it by reference, so its keep can be cleared here) and the seconds of run time it stays kept; at most one held at a time; both cleared in kqReset (build_KQP_2026-11-07 fix round 3)
+const kqpOn = () => !!T.kqpOn
+const kqpLockOn = () => kqpOn() && kqpLockLeft > 0 && P.dodgeT > 0   // KQP-B10 2026-11-07: the Evacuate button carries .kqp while a penalty's wait is in its count and the button is not ready; never with T.kqpOn 0 (build_KQP_2026-11-07)
+// KQP-B3 2026-11-07: a curve's value at w: from + step x (w - 1), never over cap (no curve: 0) (build_KQP_2026-11-07)
+const kqpVal = (c, w) => c ? Math.min(c.cap, c.from + c.step * (Math.max(1, w | 0) - 1)) : 0
+const kqpCurve = k => k === 'll' ? T.kqpLL : k === 'hp' ? T.kqpHp : T.kqpEvac
+const kqpGrows = w => KQP_KINDS.every(k => kqpVal(kqpCurve(k), w + 1) > kqpVal(kqpCurve(k), w))   // KQP-B7 2026-11-07: true while every kind's curve still climbs at w + 1 (w <= 9 at B1's values) (build_KQP_2026-11-07)
+// KQP-B2 2026-11-07: the test hook kqAuto 3 - with T.kqAutoWrongN 0 or more the first that many quizzes of the run are wrong (kqLog already counts this one); else wrong with chance T.kqAutoWrong, from the quiz's own generator seeded Math.imul(n + 1, 2654435761) + 7777777 + T.kqAutoSeed by the store's n before this answer and the run's seed value, so a run with the same inputs makes the same answers and two seed values make two patterns (build_KQP_2026-11-07)
+function kqpAutoWrong(n) {
+  if (T.kqAutoWrongN >= 0) return kqLog.length <= T.kqAutoWrongN
+  return kqRng(Math.imul(n + 1, 2654435761) + 7777777 + (T.kqAutoSeed | 0))() < T.kqAutoWrong
+}
+// KQP-B7 2026-11-07: a row with its two bindings put in (build_KQP_2026-11-07)
+const kqpT = (id, pen) => KQP_TEXT[id].split('{ll}').join(pen.ll ? LIFELINES[pen.ll].name : '').split('{n}').join(String(pen.val))
+const kqpRow = pen => pen.kind === 'll' ? 'LL' : pen.kind === 'hp' ? 'HP' : 'EVAC'
+// KQP-B7 2026-11-07: the result screen's paragraph: the kind's row, then KQP-UI-NEXT while every kind's curve still climbs at the next w (so the sentence is always true) (build_KQP_2026-11-07)
+const kqpLine = pen => kqpT('KQP-UI-' + kqpRow(pen), pen) + (kqpGrows(pen.w) ? ' ' + KQP_TEXT['KQP-UI-NEXT'] : '')
+// KQP-B8 2026-11-07: the notice as play resumes - the flash row's title and line for the kind, in the lifeline alarm's colour (#ff9d9d, hitLifeline), raised as a kept now-line and kept for T.kqpNoticeKeepS s of run time - pushed aside inside them it comes back once for its own time; after them it is an ordinary now-line: pushed aside it waits once when the slot is empty and is dropped when the slot is taken - usually at most two showings; a third is possible when a long line pushes the notice aside inside the kept seconds and again after them; never more than three, gone on the flash row's own clock (FLASH_T) (build_KQP_2026-11-07)   // KQP-FIX-F1 2026-11-07: the old comment said it was not dropped; comment only; was `// KQP-B8 2026-11-07: the notice as play resumes - the flash…` (build_KQP_2026-11-07 fix round)   // KQP-FIX-F3 2026-11-07: the F1 words replaced by the ruled rule; comment only; was `// KQP-B8 2026-11-07: the notice as play resumes - the flash…` (build_KQP_2026-11-07 fix round 3)   // KQP-FIX-F4 2026-11-07: the Lead session's ruling on fix_record_KQP3 (c) 1 - the behaviour stands as built (36 of 37 notices in the bot runs showed at most twice, 1 of 37 three times, never four); the statement of two was false in the source; comment only; was `// KQP-B8 2026-11-07: the notice as play resumes - the flash…` (build_KQP_2026-11-07 fix round 4)
+function kqpNotice(pen) { if (!kqpOn()) return; if (kqpNoticeOpt) { kqpNoticeOpt.keep = false; kqpNoticeOpt = null } const s = T.kqpNoticeKeepS, opt = { now: true, keep: s > 0 }; if (s > 0) { kqpNoticeOpt = opt; kqpNoticeT = s } else kqpNoticeT = 0; flash(kqpT('KQP-FL-' + kqpRow(pen) + '-T', pen), kqpT('KQP-FL-' + kqpRow(pen) + '-L', pen), '#ff9d9d', opt) }   // KQP-FIX-F3 2026-11-07: a previous notice still held loses its keep first (one kept notice at a time); then the new one is raised as a kept now-line and held for T.kqpNoticeKeepS s of run time (step clears its keep); with T.kqpNoticeKeepS 0 it is an ordinary now-line and nothing is held; the same title, line and colour; was `function kqpNotice(pen) { if (kqpOn()) flash(kqpT('KQP-FL-' …` (build_KQP_2026-11-07 fix round 3)
+// KQP-B3 / KQP-B10 2026-11-07: the HUD behind the dialog - step's own HUD lines do not run while the game is paused, so the three things a penalty can change are painted here as step paints them (the capacity bar and its low class, the Evacuate button when it is not ready - its text and .kqp class - and the lifeline panel) (build_KQP_2026-11-07)
+function kqpHud() {
+  const frac = clamp(P.hp / P.max, 0, 1)
+  $('hpbar').style.width = frac * 100 + '%'
+  $('hpwrap').classList.toggle('low', frac < 0.34)
+  const dg = $('dodge')
+  if (!dodgeReady()) { dg.className = kqpLockOn() ? 'kqp' : ''; dg.textContent = P.dodgeGo > 0 ? 'EVACUATING' : Math.ceil(P.dodgeT) + 's' }
+  paintLifelines()
+}
+// KQP-B4 2026-11-07: the lifeline hit. n = kqpVal(T.kqpLL, w) % of llMax(), taken directly from L.hp (not through hitLifeline: no alarm line, no warn sound, no hint card, no fall - the result screen's line and the notice announce it), never on a lifeline that is not up (llUp: secured or lost). The dip rule: dip = T.serviceDipAt % of llMax(), above = dip + T.kqpLLMargin (70 at level 0). With T.kqpLLBelow 0 (as built) the lifelines that can take the whole hit and stay at or above `above` are drawn from first; if none, those above `above`, the hit cut to stop at `above`; if none, null and kqpApply draws another kind. With T.kqpLLBelow 1 (the Lead session's default, kept behind the value) every lifeline that is up and above its own floor (`above` for one above the line; T.kqpLLFloor % for one at or below it), the hit cut at that floor. The lifeline is drawn uniformly from the pool by the same generator (r); val = the share applied, rounded, at least 1 when anything was taken (build_KQP_2026-11-07)   // KQP-FIX-F2 2026-11-07: ADJUDICATION_KQP section 6 - the comment said the share applied, rounded; comment only; was `// KQP-B4 2026-11-07: the lifeline hit. n = kqpVal(T.kqpLL, …` (build_KQP_2026-11-07 fix round)
+function kqpHitLL(w, rnd, rs, god) {
+  const n = kqpVal(T.kqpLL, w), max = llMax(), pts = n * max / 100, dip = T.serviceDipAt * max / 100, above = dip + T.kqpLLMargin, low = T.kqpLLFloor * max / 100
+  const up = lifelines.filter(L => llUp(L))
+  let pool, mode
+  if (T.kqpLLBelow) { pool = up.filter(L => L.hp > (L.hp > dip ? above : low)); mode = 'any' }
+  else { const whole = up.filter(L => L.hp - pts >= above); pool = whole.length ? whole : up.filter(L => L.hp > above); mode = whole.length ? 'whole' : 'cut' }
+  if (!pool.length) return null
+  const r = rnd(); rs.push(r)
+  const L = pool[(r * pool.length) | 0], floor = L.hp > dip ? above : low
+  const before = L.hp, after = Math.max(floor, before - pts), applied = before - after
+  if (!god) L.hp = after
+  return { kind: 'll', n, pts: +pts.toFixed(3), applied: god ? 0 : +applied.toFixed(3), val: god ? Math.round(pts / max * 100) : applied > 0 ? Math.max(1, Math.round(applied / max * 100)) : 0, ll: L.kind, before: +before.toFixed(3), after: +(god ? before : after).toFixed(3), cut: applied + 1e-9 < pts, mode, pool: pool.length, llMax: max, dip }   // KQP-FIX-F2 2026-11-07: ADJUDICATION_KQP section 6 - a floor-cut hit shows at least 1 %: val is at least 1 when anything was taken, 0 when nothing was, the curve's value under god mode as before; was `  return { kind: 'll', n, pts: +pts.toFixed(3), applied: god…` (build_KQP_2026-11-07 fix round)
+}
+// KQP-B5 2026-11-07: the capacity hit. n = kqpVal(T.kqpHp, w) % of P.max, taken raw from P.hp (a penalty, not a hazard: no armour, no exposure, no grace time, no shake, no sound; the result screen's line and the notice announce it), never below 1, so never die(); val = the share applied, rounded, at least 1 when anything was taken and 0 when nothing was (capacity already at the floor) (build_KQP_2026-11-07)   // KQP-FIX-F2 2026-11-07: the comment said the share applied, rounded; comment only; was `// KQP-B5 2026-11-07: the capacity hit. n = kqpVal(T.kqpHp, …` (build_KQP_2026-11-07 fix round)
+function kqpHitHp(w, god) {
+  const n = kqpVal(T.kqpHp, w), pts = P.max * n / 100
+  const before = P.hp, after = Math.min(before, Math.max(1, before - pts)), applied = before - after
+  if (!god) P.hp = after
+  return { kind: 'hp', n, pts: +pts.toFixed(3), applied: god ? 0 : +applied.toFixed(3), val: god ? Math.round(pts / P.max * 100) : applied > 0 ? Math.max(1, Math.round(applied / P.max * 100)) : 0, before: +before.toFixed(3), after: +(god ? before : after).toFixed(3), max: P.max, cut: applied + 1e-9 < pts }   // KQP-FIX-F2 2026-11-07: a floor-cut hit shows at least 1 %: val is at least 1 when anything was taken, 0 when nothing was (capacity already at the floor), the curve's value under god mode as before; was `  return { kind: 'hp', n, pts: +pts.toFixed(3), applied: god…` (build_KQP_2026-11-07 fix round)
+}
+// KQP-B6 2026-11-07: Evacuate's wait. n = kqpVal(T.kqpEvac, w) seconds of run time added to P.dodgeT (a ready Evacuate now waits n s; one cooling down waits n s longer): the HUD button shows the whole seconds as it shows a cooldown, and the wait counts down in step, so it starts when play resumes. kqpLockLeft = before + n tints the button for the whole of the new wait (KQP-B10) (build_KQP_2026-11-07)
+function kqpHitEvac(w, god) {
+  const n = kqpVal(T.kqpEvac, w), before = Math.max(0, P.dodgeT)
+  if (!god) { P.dodgeT = before + n; kqpLockLeft = before + n }
+  return { kind: 'evac', n, applied: god ? 0 : n, val: n, before: +before.toFixed(3), after: +(god ? before : before + n).toFixed(3), going: P.dodgeGo > 0 }
+}
+// KQP-B3 2026-11-07: the draw and the application. w = this run's wrong answers, this one included. The generator is kqRng seeded Math.imul(n + 1, 2654435761) + 65599 x w + 1000003 + Math.floor(t x 1000) (n = the store's count as kqAnswer has just written it; t = the run clock, ruled in so the kind varies by the moment while a run with the same inputs still draws the same; constants unlike kqDraw's and kqpAutoWrong's, so no other draw is replayed); its first value picks the kind, uniformly over the kinds not yet tried (a forced kind from the test surface first), the next the lifeline (kqpHitLL). A kind that cannot land (the lifeline hit with no lifeline it may hit) is dropped and the next value draws from the rest; hp and evac always land. Every value drawn (r), the kinds tried and the lifelines' health before the hit (lls) are kept in the record. Nothing here touches Math.random, the run's stream or any clock (build_KQP_2026-11-07)
+function kqpApply(Q, g) {
+  if (!kqpOn()) return null
+  kqpWrong++
+  const w = kqpWrong, st = kqStore(), god = !!(dev.on && dev.god)
+  const rnd = kqRng(Math.imul(st.n + 1, 2654435761) + 65599 * w + 1000003 + Math.floor(t * 1000))
+  const lls = lifelines.map(L => [L.kind, +L.hp.toFixed(3), llUp(L), !!L.alive, !!L.dipped])
+  const kinds = KQP_KINDS.slice(), rs = [], tried = []
+  let pen = null
+  while (kinds.length && !pen) {
+    const r = rnd(); rs.push(r)
+    const k = kqpForce && kinds.includes(kqpForce) ? kqpForce : kinds[(r * kinds.length) | 0]
+    kinds.splice(kinds.indexOf(k), 1); tried.push(k)
+    pen = k === 'll' ? kqpHitLL(w, rnd, rs, god) : k === 'hp' ? kqpHitHp(w, god) : kqpHitEvac(w, god)
+  }
+  kqpForce = null
+  if (!pen) return null
+  pen.w = w; pen.t = +t.toFixed(3); pen.n0 = st.n; pen.god = god; pen.tried = tried; pen.r = rs; pen.lls = lls
+  kqpLast = pen; kqpLog.push(pen); Q.pen = pen; if (g) g.pen = pen
+  kqpHud()
+  return pen
+}
+// KQP end of the penalty block (build_KQP_2026-11-07)
 // KQ end of the in-run quiz block (build_KQ_2026-11-06)
 
 // ---- how-to-play overlay (S3) -------------------------------------------------------------------
@@ -7674,9 +7833,10 @@ const uixTabBtns = () => (T.uixOn
   ? '<button type="button" role="tab" id="upgstab-m" data-tab="m"><span id="upgstab-m-t">Readiness</span></button>' +   // UIX-T list UIX-A1-label (build_UIX_2026-11-06)
     '<button type="button" role="tab" id="upgstab-i" data-tab="i"><span id="upgstab-i-t">Information</span></button>'   // UIX-T list UIX-A2-label (build_UIX_2026-11-06)
   : '<button type="button" role="tab" id="upgstab-m" data-tab="m"><span id="upgstab-m-t">Measures</span></button>') +   // UPGS-P4 list UPGS-A1-label (build_UPGS_2026-11-05)   // UIX-U4 moved here from upgsLay (build_UIX_2026-11-06)
-  '<button type="button" role="tab" id="upgstab-l" data-tab="l"><span id="upgstab-l-t">Lifeline resilience</span></button>'   // UPGS-P4 list UPGS-A2-label (build_UPGS_2026-11-05)   // UIX-U4 moved here from upgsLay (build_UIX_2026-11-06)
+  '<button type="button" role="tab" id="upgstab-l" data-tab="l"><span id="upgstab-l-t">Lifeline resilience</span></button>' +   // UPGS-P4 list UPGS-A2-label (build_UPGS_2026-11-05)   // UIX-U4 moved here from upgsLay (build_UIX_2026-11-06)   // NT-N6 2026-11-07: ` +` added for the line below; was `'<button type="button" role="tab" id="upgstab-l" data-tab="l…` (build_NT_2026-11-07)
+  (T.ntOn ? '<button type="button" role="tab" id="upgstab-t" data-tab="t"><span id="upgstab-t-t">Trade-offs</span></button>' : '')   // NT-N6 2026-11-07: with T.ntOn 1 Trade-offs is the last tab, its label the plank button's own word; with 0 nothing (build_NT_2026-11-07)
 function upgsReset() { upgsTab = 'm'; upgsWhy = false }
-function upgsPick(k) { if (k === 'l' && !T.u1On) return; if (k === 'i' && !T.uixOn) return; upgsTab = k; offerMeta() }   // UIX-U4 2026-11-06: 'i' only with T.uixOn 1; was `function upgsPick(k) { if (k === 'l' && !T.u1On) return; upg…` (build_UIX_2026-11-06)
+function upgsPick(k) { if (k === 'l' && !T.u1On) return; if (k === 'i' && !T.uixOn) return; if (k === 't' && !T.ntOn) return; upgsTab = k; offerMeta() }   // UIX-U4 2026-11-06: 'i' only with T.uixOn 1; was `function upgsPick(k) { if (k === 'l' && !T.u1On) return; upg…` (build_UIX_2026-11-06)   // NT-N6 2026-11-07: 't' only with T.ntOn 1; was `function upgsPick(k) { if (k === 'l' && !T.u1On) return; if …` (build_NT_2026-11-07)
 // the tabs' keys: Left / Right move to the other tab and open it (the ends wrap round), Enter or Space presses a tab once; they stop at the tablist,
 // so the start screen's own arrow handler (the place cards) and Space handler do not also act on them
 // UIX-U4 2026-11-06: with T.uixOn 1 there are three tabs (two with T.u1On 0): Left / Right move to the next or previous shown tab, wrapping; the code below already walks every shown tab (build_UIX_2026-11-06)
@@ -7708,7 +7868,7 @@ function upgsLay() {
     why.innerHTML = '<span aria-hidden="true">&#9656;</span> Why these?'   // UPGS-P4 list UPGS-A4-label (build_UPGS_2026-11-05)
     why.onclick = () => { upgsWhy = !upgsWhy; offerMeta() }
     cap.insertBefore(why, $('metanote'))
-  } else if (on && !$('upgstab-i') !== !T.uixOn) {   // UIX-U4 2026-11-06: T.uixOn changed after the bar was made (set after boot): the tab buttons made again in #upgstabs, which keeps its key handler (build_UIX_2026-11-06)
+  } else if (on && (!$('upgstab-i') !== !T.uixOn || !$('upgstab-t') !== !T.ntOn)) {   // UIX-U4 2026-11-06: T.uixOn changed after the bar was made (set after boot): the tab buttons made again in #upgstabs, which keeps its key handler (build_UIX_2026-11-06)   // NT-N6 2026-11-07: or T.ntOn changed after boot (the Trade-offs tab made or taken out); was `} else if (on && !$('upgstab-i') !== !T.uixOn) {   // UIX-U4…` (build_NT_2026-11-07)
     $('upgstabs').innerHTML = uixTabBtns()   // UIX-U4 (build_UIX_2026-11-06)
     for (const b of bar.querySelectorAll('[role="tab"]')) b.onclick = () => upgsPick(b.dataset.tab)   // UIX-U4 (build_UIX_2026-11-06)
   } else if (!on && bar) {
@@ -7718,7 +7878,7 @@ function upgsLay() {
     $('metanote').hidden = false; $('metaearn').hidden = false
   }
   cap.classList.toggle('upgs', on)
-  if ((!T.u1On && upgsTab === 'l') || (!T.uixOn && upgsTab === 'i')) upgsTab = 'm'   // UIX-U4 2026-11-06: a hidden or absent tab falls back to the first; the same as the base whenever upgsTab is 'm' or 'l'; was `if (!T.u1On) upgsTab = 'm'` (build_UIX_2026-11-06)
+  if ((!T.u1On && upgsTab === 'l') || (!T.uixOn && upgsTab === 'i') || (!T.ntOn && upgsTab === 't')) upgsTab = 'm'   // UIX-U4 2026-11-06: a hidden or absent tab falls back to the first; the same as the base whenever upgsTab is 'm' or 'l'; was `if (!T.u1On) upgsTab = 'm'` (build_UIX_2026-11-06)   // NT-N6 2026-11-07: the Trade-offs tab too; was `if ((!T.u1On && upgsTab === 'l') || (!T.uixOn && upgsTab ===…` (build_NT_2026-11-07)
   return on
 }
 // the tabs' and the toggle's states after a draw: the open tab selected (the other out of the Tab order), each tab's accessible name with its group's
@@ -7736,13 +7896,15 @@ function upgsSync(st, empty) {
     b.setAttribute('aria-label', k === 'm' ? (T.uixOn ? `Readiness, ${got} of ${tot} levels bought` : `Measures, ${got} of ${tot} levels bought`) : k === 'i' ? `Information, ${got} of ${tot} levels bought` : `Lifeline resilience, ${got} of ${tot} levels bought`)   // UPGS-P4 list UPGS-A1-aria, UPGS-A2-aria (build_UPGS_2026-11-05)   // UIX-T list UIX-A1-aria, UIX-A2-aria; was `b.setAttribute('aria-label', k === 'm' ? `Measures, ${got} o…` (build_UIX_2026-11-06)
   }
   $('upgstab-l').hidden = !T.u1On
+  if (T.ntOn) { const b = $('upgstab-t'), sel = upgsTab === 't'; b.setAttribute('aria-selected', sel ? 'true' : 'false'); b.tabIndex = sel ? 0 : -1; b.classList.toggle('on', sel); b.setAttribute('aria-controls', 'ntaxp') }   // NT-N6 2026-11-07: the Trade-offs tab's state as the other tabs' (its accessible name is set by axRender, the plank button's text); it controls its own panel #ntaxp (build_NT_2026-11-07)
   const w = $('metawrap'); w.setAttribute('role', 'tabpanel'); w.setAttribute('aria-labelledby', 'upgstab-' + upgsTab)
   const why = $('upgswhy'), emptyM = upgsMeasTab() && empty   // UIX-U4 2026-11-06: either measures tab; was `const why = $('upgswhy'), emptyM = upgsTab === 'm' && empty` (build_UIX_2026-11-06)
-  why.hidden = emptyM
+  const ntAx = !!(T.ntOn && upgsTab === 't')   // NT-N6 2026-11-07: the Trade-offs tab is open (build_NT_2026-11-07)
+  why.hidden = emptyM || ntAx   // NT-N6 2026-11-07: no "Why these?" on the Trade-offs tab (its control carries its own intro line and source lines); was `why.hidden = emptyM` (build_NT_2026-11-07)
   why.setAttribute('aria-expanded', upgsWhy ? 'true' : 'false')
   why.setAttribute('aria-labelledby', 'upgswhy upgstab-' + upgsTab + '-t')   // UPGS-P4 list UPGS-A4-aria (RULED F9) (build_UPGS_2026-11-05)
   why.firstChild.innerHTML = upgsWhy ? '&#9662;' : '&#9656;'
-  $('metanote').hidden = !(upgsWhy || emptyM); $('metaearn').hidden = !upgsWhy
+  $('metanote').hidden = ntAx || !(upgsWhy || emptyM); $('metaearn').hidden = ntAx || !upgsWhy   // NT-N6 2026-11-07: neither the note nor the node purchase box on the Trade-offs tab (it has its own, #r3earn); was `$('metanote').hidden = !(upgsWhy || emptyM); $('metaearn').h…` (build_NT_2026-11-07)
 }
 // UPGS-P4 2026-11-05: the lifeline group's intro, read by both layouts (was the literal in offerMeta's #u1intro line) (build_UPGS_2026-11-05)
 const u1Intro = () => say('META.u1.intro', 'These are not measures; each one is about your lifelines. They are kept for every run, bought with the same recovery budget.')   // U1-B2 list U1-A2 (build_U1_2026-11-05); UPGS-P5 list UPGS-A5-intro (keep) (build_UPGS_2026-11-05)
@@ -7782,7 +7944,7 @@ function offerMeta() {
   }
   // UPGS-P4 2026-11-05: in layout B the open tab's nodes only - the nine measures, or the lifeline nodes (the new one with them) (build_UPGS_2026-11-05); was `for (const m of (u1g ? META.concat(META_U1) : META)) {   // U1-B2 2026-11-05: was `for (const m of…`
   // UIX-U4 2026-11-06: with T.uixOn 1 the open measures tab holds its own nodes only (uixTabNodes: five or four of "the nine measures" above) (build_UIX_2026-11-06)
-  for (const m of (UB ? (upgsTab === 'l' ? upgsU1() : T.uixOn ? uixTabNodes(upgsTab) : META) : u1g ? META.concat(upgsU1()) : META)) {   // U1-B2 2026-11-05: was `for (const m of META) {` (build_U1_2026-11-05)   // UIX-U4 2026-11-06: was `for (const m of (UB ? (upgsTab === 'l' ? upgsU1() : META) : …` (build_UIX_2026-11-06)
+  for (const m of (UB ? (upgsTab === 't' ? [] : upgsTab === 'l' ? upgsU1() : T.uixOn ? uixTabNodes(upgsTab) : META) : u1g ? META.concat(upgsU1()) : META)) {   // U1-B2 2026-11-05: was `for (const m of META) {` (build_U1_2026-11-05)   // UIX-U4 2026-11-06: was `for (const m of (UB ? (upgsTab === 'l' ? upgsU1() : META) : …` (build_UIX_2026-11-06)   // NT-N6 2026-11-07: no nodes while the Trade-offs tab is open ('t' only with T.ntOn 1, upgsLay); was `for (const m of (UB ? (upgsTab === 'l' ? upgsU1() : T.uixOn …` (build_NT_2026-11-07)
     const l = st.lv[m.id] || 0
     const mx = upgsMax(m), c = upgsCost(m, l)   // UPGS-P3 2026-11-05: the active max and this level's price (today's m.max and m.cost(l) with T.upgsOn 0) (build_UPGS_2026-11-05)
     const b = document.createElement('button')
@@ -7878,7 +8040,8 @@ function offerMeta() {
   axRender()   // U1-B0 2026-11-05: R3-5 (delta_R3.diff hunk 7) - the axes' button and dialog drawn with the nodes, so a purchase, a payout or a grant shows there too (build_U1_2026-11-05)
   // UPGS-P4 2026-11-05: the Trade-offs button at the end of the tab row in layout B (its text, dialog and behaviour unchanged), back at the right of
   // #uphead with T.upgsOn 0, where axBuild put it; then the tabs' and the toggle's states (build_UPGS_2026-11-05)
-  if (UB) { $('upgsbar').appendChild(axBtn); upgsSync(st, upgsEmpty) }
+  ntAxPlace(UB)   // NT-N6 2026-11-07: the Trade-offs control in its tab panel (T.ntOn 1, layout B) or back in its dialog (build_NT_2026-11-07)
+  if (UB) { if (T.ntOn) axBtn.remove(); else $('upgsbar').appendChild(axBtn); upgsSync(st, upgsEmpty) }   // NT-N6 2026-11-07: with T.ntOn 1 no plank button (the tab opens the control); was `if (UB) { $('upgsbar').appendChild(axBtn); upgsSync(st, upgs…` (build_NT_2026-11-07)
   else if (axBtn.parentNode !== $('uphead')) $('uphead').appendChild(axBtn)
   uixSigns()   // UIX-U5 2026-11-06: the two plank signs placed (or taken out) after every draw of the area (build_UIX_2026-11-06)
 }
@@ -7918,6 +8081,21 @@ function uixSigns() {
   }
 }
 addEventListener('resize', uixSigns)   // UIX-U5 (build_UIX_2026-11-06)
+// NT-N6 2026-11-07: GUARD_NT_builder N6 - with T.ntOn 1 in layout B (T.upgsOn 1) the Trade-offs control sits in the tab row's last tab (build_NT_2026-11-07)
+// NT-N6 2026-11-07: its panel #ntaxp (role tabpanel, labelled by the tab) right after #metawrap holds the dialog's intro line (axIntro) and the control (#r3ctl), both moved, not copied, drawn by axRender as before (build_NT_2026-11-07)
+// NT-N6 2026-11-07: shown, with #metawrap hidden, while the Trade-offs tab is open; otherwise (T.ntOn 0, or layout A) the two go back into the dialog's panel before its close bar, where axBuild put them, and #ntaxp is taken out (build_NT_2026-11-07)
+// NT-N6 2026-11-07: with T.ntOn 1 there is no plank button, so the dialog is not opened; one left open when the switch is set is closed (build_NT_2026-11-07)
+function ntAxPlace(UB) {   // NT-N6 (build_NT_2026-11-07)
+  const on = !!(T.ntOn && UB), pnl = axDlg.firstChild, bar = pnl.querySelector('.howbar')   // NT-N6 (build_NT_2026-11-07)
+  let p = $('ntaxp')   // NT-N6 (build_NT_2026-11-07)
+  if (on) {   // NT-N6 (build_NT_2026-11-07)
+    if (!p) { p = document.createElement('div'); p.id = 'ntaxp'; p.setAttribute('role', 'tabpanel'); p.setAttribute('aria-labelledby', 'upgstab-t') }   // NT-N6 (build_NT_2026-11-07)
+    if (axIntro.parentNode !== p) p.append(axIntro, axCtl)   // NT-N6 (build_NT_2026-11-07)
+    if (p.previousElementSibling !== $('metawrap')) $('metawrap').parentNode.insertBefore(p, $('metawrap').nextSibling)   // NT-N6 (build_NT_2026-11-07)
+    if (!axDlg.hidden) { axDlg.hidden = true; $('start').inert = false }   // NT-N6 (build_NT_2026-11-07)
+    const sel = upgsTab === 't'; p.hidden = !sel; $('metawrap').hidden = sel   // NT-N6 (build_NT_2026-11-07)
+  } else if (p) { p.remove(); pnl.insertBefore(axIntro, bar); pnl.insertBefore(axCtl, bar); $('metawrap').hidden = false }   // NT-N6 (build_NT_2026-11-07)
+}   // NT-N6 (build_NT_2026-11-07)
 
 // U1-B0 2026-11-05: R3-5 (delta_R3.diff hunk 7, layout B only; the layout switch and layouts A and C dropped) - one button at the right of #uphead (#r3btn)
 // opens a modal dialog (#r3dlg) holding the three axes, built as the Art credits dialog is (#start inert while open, focus on its heading, Tab and
@@ -7930,7 +8108,7 @@ addEventListener('resize', uixSigns)   // UIX-U5 (build_UIX_2026-11-06)
 // layout) with the list's U1-E3 and U1-E6 rows; every line through say() (F10). Nothing here draws a random number or changes a game value; the
 // setting is applied at the next reset() (build_U1_2026-11-05)
 let axEarn = null          // the side tier just bought: { sd, l }, shown under the control (the node purchase's metaEarn, for the axes)
-let axCtl = null, axBtn = null, axDlg = null
+let axCtl = null, axBtn = null, axDlg = null, axIntro = null   // NT-N6 2026-11-07: axIntro, the dialog's intro line (p.r3intro), kept so it can sit in the Trade-offs tab; was `let axCtl = null, axBtn = null, axDlg = null` (build_NT_2026-11-07)
 const axOpenSd = {}        // U1-B1: the sides (and 'hybrid') whose tier and source lines are open, kept across redraws (build_U1_2026-11-05)
 const axEl = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e }
 const AX_DOT = String.fromCharCode(183)
@@ -7946,7 +8124,7 @@ function axBuild() {
   const panel = axEl('div', 'howpanel credpanel'), h = axEl('h2', null, 'Trade-offs for every run')   // U1-B0 list U1-E6-B2 (build_U1_2026-11-05)
   h.id = 'r3dlg-t'; h.tabIndex = -1
   panel.appendChild(h)
-  panel.appendChild(axEl('p', 'r3intro', ''))   // U1-B1: the dialog line D5-B3 (= D5-A2), written by axRender through say() (build_U1_2026-11-05)
+  panel.appendChild(axIntro = axEl('p', 'r3intro', ''))   // U1-B1: the dialog line D5-B3 (= D5-A2), written by axRender through say() (build_U1_2026-11-05)   // NT-N6 2026-11-07: kept in axIntro; was `panel.appendChild(axEl('p', 'r3intro', ''))   // U1-B1: the …` (build_NT_2026-11-07)
   panel.appendChild(axCtl)
   const bar = axEl('div', 'howbar'), sp = axEl('span'), cl = axEl('button', null, 'Close')   // U1-B0 strings_R3 D5-B4 (build_U1_2026-11-05)
   cl.type = 'button'; cl.id = 'r3dlg-close'; cl.onclick = axClose
@@ -8031,10 +8209,12 @@ function axToggle(key, label, body) {
 function axRender() {
   if (!axCtl) axBuild()
   const funds = metaStore().funds
+  const nt2 = !!(T.ntOn && T.upgsOn)   // NT2-N6a 2026-11-07: the control sits in the Trade-offs tab (ntAxPlace's test: T.ntOn 1 in layout B, T.upgsOn 1): each axis one row - its name, the left side, the positions with the setting line (and the hybrid), the right side - and each side's face line (and the hybrid's) inside its fold, behind its toggle; otherwise (the dialog) as before (build_NT_2026-11-07 NT2)
   const anyTier = Object.keys(AXST.ax).some(k => AXST.ax[k] > 0)
   const n = AXES.filter(A => AXST.set[A.id] !== 0).length
   axBtn.textContent = anyTier ? `Trade-offs · ${n} of 3 set` : 'Trade-offs'   // U1-B0 list U1-E6-B1 ("Trade-offs" alone before any tier is bought, strings_R3 D5-B1) (build_U1_2026-11-05)
-  axDlg.querySelector('.r3intro').textContent = say('AX.intro', 'Each side gives something and takes something. Buy levels with recovery budget, then choose a setting; it stays until you change it.')   // U1-B1 strings_R3 D5-B3 = D5-A2 (build_U1_2026-11-05)
+  if (T.ntOn && $('upgstab-t')) $('upgstab-t').setAttribute('aria-label', axBtn.textContent)   // NT-N6 2026-11-07: the Trade-offs tab's accessible name, the plank button's text above (build_NT_2026-11-07)
+  axIntro.textContent = say('AX.intro', 'Each side gives something and takes something. Buy levels with recovery budget, then choose a setting; it stays until you change it.')   // U1-B1 strings_R3 D5-B3 = D5-A2 (build_U1_2026-11-05)   // NT-N6 2026-11-07: the same element by its kept reference (it may sit in the tab); was `axDlg.querySelector('.r3intro').textContent = say('AX.intro'…` (build_NT_2026-11-07)
   const keep = document.activeElement && axCtl.contains(document.activeElement) ? (document.activeElement.dataset.key || null) : null
   axCtl.innerHTML = ''
   axCtl.appendChild(axEl('span', 'r3fund', `Recovery budget: ${funds}`))   // U1-B0 list U1-E6-F5 (build_U1_2026-11-05)
@@ -8048,10 +8228,11 @@ function axRender() {
       const l = AXST.ax[sd] | 0
       const col = axEl('div', 'r3sd')
       const body = axEl('div')
+      if (nt2) body.appendChild(axEl('span', 'r3face', axSay(sd, 'face')))   // NT2-N6a 2026-11-07: in the tab the face line opens with the tier and source lines, first in the fold (build_NT_2026-11-07 NT2)
       body.appendChild(axEl('span', 'r3more', axSay(sd, 'tier', Math.max(1, l))))
       if (srcShown) body.appendChild(axEl('span', 'r3src', axSay(sd, 'src')))
       col.appendChild(axToggle(sd, AX_SIDE[sd], body))
-      col.appendChild(axEl('span', 'r3face', axSay(sd, 'face')))
+      if (!nt2) col.appendChild(axEl('span', 'r3face', axSay(sd, 'face')))   // NT2-N6a 2026-11-07: under the toggle in the dialog only; was `col.appendChild(axEl('span', 'r3face', axSay(sd, 'face')))` (build_NT_2026-11-07 NT2)
       col.appendChild(axEl('span', 'r3have', `${l}/3 bought`))   // U1-B1 strings_R3 D5-K11 (build_U1_2026-11-05)
       if (l < AX_MAX) {   // U1-B1: (iii) the side's buy button under its own end label; none once its three tiers are bought (the "now" line says 3/3) (build_U1_2026-11-05)
         const b = axEl('button', 'dbtn r3b', `Buy level ${l + 1} ${AX_DOT} ${axCost(l)}`)   // U1-B0 strings_R3 D5-K10 (build_U1_2026-11-05)
@@ -8076,17 +8257,20 @@ function axRender() {
       pos.appendChild(b)
     }
     const now = axEl('span', 'r3now', axNowLine(A, cur))
-    sec.append(n, sides, pos, now)
+    const mid = nt2 ? axEl('div', 'r3mid') : null   // NT2-N6a 2026-11-07: in the tab the middle of the row: the positions, the setting line, the hybrid (build_NT_2026-11-07 NT2)
+    if (nt2) { mid.append(pos, now); sec.append(n, sides.firstChild, mid, sides.lastChild) }   // NT2-N6a 2026-11-07: left to right - the axis name, the left side, the middle, the right side (the same elements, in reading order) (build_NT_2026-11-07 NT2)
+    else sec.append(n, sides, pos, now)   // NT2-N6a 2026-11-07: the dialog as before; was `sec.append(n, sides, pos, now)` (build_NT_2026-11-07 NT2)
     if (A.hyb) {   // U1-B1: (ii) the hybrid shows D2-03 only; its two tier lines (D3-03: D3-01 and D3-02 at level 1) and its source line one tap away (build_U1_2026-11-05)
       const hb = axEl('div', 'r3hyb'), body = axEl('div')
+      if (nt2) body.appendChild(axEl('span', 'r3face', axSay('hybrid', 'face')))   // NT2-N6a 2026-11-07: in the tab the hybrid's face line first in its fold (build_NT_2026-11-07 NT2)
       body.appendChild(axEl('span', 'r3more', axSay(A.a, 'tier', 1)))
       body.appendChild(axEl('span', 'r3more', axSay(A.b, 'tier', 1)))
       if (srcShown) body.appendChild(axEl('span', 'r3src', axSay('hybrid', 'src')))
       hb.appendChild(axToggle('hybrid', 'Hybrid', body))   // U1-B0 list U1-E1-hybrid (build_U1_2026-11-05)
-      hb.appendChild(axEl('span', 'r3face', axSay('hybrid', 'face')))
+      if (!nt2) hb.appendChild(axEl('span', 'r3face', axSay('hybrid', 'face')))   // NT2-N6a 2026-11-07: under the toggle in the dialog only; was `hb.appendChild(axEl('span', 'r3face', axSay('hybrid', 'face'…` (build_NT_2026-11-07 NT2)
       if (!(na >= 1 && nb >= 1)) hb.appendChild(axEl('span', 'r3have', 'Hybrid: buy level 1 of both sides first.'))   // U1-B1 strings_R3 D5-K9 (build_U1_2026-11-05)
       hb.appendChild(body)
-      sec.appendChild(hb)
+      ;(nt2 ? mid : sec).appendChild(hb)   // NT2-N6a 2026-11-07: in the tab in the row's middle, under the setting line; was `sec.appendChild(hb)` (build_NT_2026-11-07 NT2)
     }
     axCtl.appendChild(sec)
   }
@@ -8312,7 +8496,7 @@ function vbGround(z) {
       if (a1 > a0) ctx.fillRect(a0, fy0, a1 - a0, fy1 - fy0)
     }
     const ys = VB.y0 + Math.floor((fy0 - VB.y0) / 28) * 28
-    ctx.save(); ctx.strokeStyle = `rgba(${rc},.55)`; ctx.lineWidth = 2; ctx.beginPath()   // FIX2 2026-11-03: solid; was dashed [16, 12] (build_FIX_2026-11-03)
+    ctx.save(); ctx.strokeStyle = `rgba(${rc},.55)`; ctx.lineWidth = 2; if (T.ntOn) ctx.setLineDash(T.ntVbDash); ctx.beginPath()   // FIX2 2026-11-03: solid; was dashed [16, 12] (build_FIX_2026-11-03)   // NT-N8 2026-11-07: with T.ntOn 1 dashed again, T.ntVbDash [16, 12] as the FIX2 note says (inside this save / restore, so the dash ends with it); was `` ctx.save(); ctx.strokeStyle = `rgba(${rc},.55)`; ctx.lineWid… `` (build_NT_2026-11-07)
     for (const x of [VB.x0 + VB.band, VB.x1 - VB.band]) if (x > vx0 && x < vx1) { ctx.moveTo(x, ys); ctx.lineTo(x, fy1) }
     ctx.stroke(); ctx.restore()
   }
@@ -11050,6 +11234,7 @@ function r4Draw(tele) {
     }
     const warn = f.st === 'warn'
     if (warn !== tele || (!warn && f.st !== 'track')) continue
+    if (!warn && f.k === 'band' && T.ntOn) continue   // NT-N7 2026-11-07: with T.ntOn 1 the Squall line's (E3) band is drawn only while it warns: its track after the warning (fill, edge, arrows) is not drawn; E5's lane track below and every warning unchanged; drawing only (build_NT_2026-11-07)
     const fa = warn ? r4FillA(f) : T.r4TrackA * r4Fade(f), ea = warn ? 0.9 : 0.45 * r4Fade(f)
     const fill = `rgba(${rgbOf(C.fill)},${fa.toFixed(3)})`, edge = `rgba(${rgbOf(C.edge)},${ea.toFixed(3)})`
     const uA = f.u0 - f.ext, uB = f.u1 + f.ext
@@ -13436,6 +13621,8 @@ function step(dt) {
     P.x += P.hx * spdNow() * haste * throttle * dt; P.y += P.hy * spdNow() * haste * throttle * dt }
   P.inv = Math.max(0, P.inv - dt)
   if (P.dodgeT > 0) P.dodgeT -= dt
+  if (kqpLockLeft > 0) kqpLockLeft = Math.max(0, kqpLockLeft - dt)   // KQP-B10 2026-11-07: the Evacuate tint's seconds count down with the wait, in run time (nothing drawn here; the class is set in the HUD paint below and in kqpHud) (build_KQP_2026-11-07)
+  if (kqpNoticeT > 0 && (kqpNoticeT -= dt) <= 0 && kqpNoticeOpt) { kqpNoticeOpt.keep = false; kqpNoticeOpt = null }   // KQP-FIX-F3 2026-11-07: the kept seconds of the wrong-answer notice count down in run time (a pause holds them, as it holds the flash row's own clock); when they run out the held object's keep is cleared - the flash row holds the same object, so a notice still waiting or on screen becomes an ordinary now-line (build_KQP_2026-11-07 fix round 3)
   if (P.dodgeGo > 0) {
     P.dodgeGo -= dt
     P.x += P.dodgeX * spdNow() * T.dodgeSpd * dt
@@ -13841,7 +14028,7 @@ function step(dt) {
     : (lifelines.filter(L => L.alive).length + '/' + lifelines.length + ' SERVICES')
   const dg = $('dodge')
   if (dodgeReady()) { dg.className = 'ready'; dg.textContent = COARSE ? 'EVAC' : 'EVAC · SPACE' }
-  else { dg.className = ''
+  else { dg.className = kqpLockOn() ? 'kqp' : ''   // KQP-B10 2026-11-07: while a penalty's wait is in the count the button carries .kqp (CSS #dodge.kqp, the lifeline alarm's colour), so a lock is told from a cooldown; '' as before otherwise and with T.kqpOn 0; was `  else { dg.className = ''` (build_KQP_2026-11-07)
          dg.textContent = P.dodgeGo > 0 ? 'EVACUATING' : Math.ceil(P.dodgeT) + 's' }
   paintLifelines()
 }
@@ -15174,7 +15361,7 @@ function arBullets(list, look, col) {
   const id = AR_SHOT[AR_TIER()][look] || AR_SHOT[AR_TIER()].disc, C = AR_CELL[id], im = arStrip(id, col), F = AR_SHOT_F[id]
   const fr = C.n > 1 ? Math.floor(t * 12) : 0
   const hq = uixHeadOf(id)   // UIX-U6 2026-11-06: the head cuts of this sprite (null: drawn whole, as before) (build_UIX_2026-11-06)
-  const big = T.uixOn && T.uixBig && UIX2_PX[id] ? UIX2_BIG[look] : null, BC = big ? AR_CELL[big] : null, bim = big ? arStrip(big, col) : null, BF = big ? AR_SHOT_F[big] : 0   // UIX2-B3 2026-11-06: with UIX2-B1 on and a pixel sprite, its large sprite, cell, strip (once per call) and height factor; null: every shot as before (build_UIX_2026-11-06 UIX2)
+  const big = !T.ntOn && T.uixOn && T.uixBig && UIX2_PX[id] ? UIX2_BIG[look] : null, BC =big ? AR_CELL[big] : null, bim = big ? arStrip(big, col) : null, BF = big ? AR_SHOT_F[big] : 0   // UIX2-B3 2026-11-06: with UIX2-B1 on and a pixel sprite, its large sprite, cell, strip (once per call) and height factor; null: every shot as before (build_UIX_2026-11-06 UIX2)   // NT-N1 2026-11-07: with T.ntOn 1 the UIX2 swap never acts (big null: every shot drawn with its tier's own sprite, as with T.uixBig 0; the U6 head cut stays); was `const big = T.uixOn && T.uixBig && UIX2_PX[id] ? UIX2_BIG[lo…` (build_NT_2026-11-07)
   for (const b of list) {
     const h = arShotR(b.r) * F, w = C.cw * h / C.ch * (look === 'dart' ? dartK(b) / 1.9 : 1), k = C.n > 1 ? (fr + (b.rank || 0)) % C.n : 0
     ctx.save()
@@ -15493,11 +15680,19 @@ function drawEvents(layer) {
           artcTele(q.x, q.y, q.r, k)   // ART-C 2026-10-17: C1 - the EN50 ring under the outline below, faint; nothing until loaded (build_ART_2026-10-17)
           // CB-M5 2026-09-30: a strike the compound event marked (byBoss) crawls on the hazards' clock (hazClock: frozen at a hold's start), so during a hold, while its warning waits (updateEvents), its circles stop crawling too; the place's own scheduled strikes are not held and keep the run clock (PLAN_CB C5; ADJUDICATION_SY G2) (build_CB_2026-09-30)
           // FIX2 2026-11-03: solid - the ring at .25 alpha, 2 px, and over it a 3.5 px arc from the top that sweeps clockwise round the ring as the strike nears (k), closed at the strike, at .45 + .35 k; was a dashed [7, 5] ring crawling on the clock (byBoss: hazClock) at .35 + .35 k, 2 px (build_FIX_2026-11-03)
+          if (T.ntOn) {   // NT2-N8b 2026-11-07: with T.ntOn 1 the ring drawn as before FIX2 - the code of 5dddf4c9 (git show 996460d6^) L13584-13588: dashed [7, 5] crawling on the clock (byBoss: hazClock) at 24, the dark pass 5 px, the light pass .35 + .35 k at 2 px, the dash cleared after; FIX2's .25 ring and sweep arc not drawn; the inner fill below is the same in both (build_NT_2026-11-07 NT2)
+          ctx.setLineDash([7, 5]); ctx.lineDashOffset = -(ev.byBoss ? hazClock() : t) * 24   // NT2-N8b 2026-11-07: 5dddf4c9 L13584 (build_NT_2026-11-07 NT2)
+          ctx.beginPath(); ctx.arc(q.x, q.y, q.r, 0, TAU)   // NT2-N8b 2026-11-07: 5dddf4c9 L13585 (build_NT_2026-11-07 NT2)
+          ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 5; ctx.stroke()   // NT2-N8b 2026-11-07: 5dddf4c9 L13586 (build_NT_2026-11-07 NT2)
+          ctx.strokeStyle = `rgba(255,180,120,${.35 + .35 * k})`; ctx.lineWidth = 2; ctx.stroke()   // NT2-N8b 2026-11-07: 5dddf4c9 L13587 (build_NT_2026-11-07 NT2)
+          ctx.setLineDash([])   // NT2-N8b 2026-11-07: 5dddf4c9 L13588 (build_NT_2026-11-07 NT2)
+          } else {   // NT2-N8b 2026-11-07: with T.ntOn 0 the FIX2 drawing below, as it is (build_NT_2026-11-07 NT2)
           ctx.beginPath(); ctx.arc(q.x, q.y, q.r, 0, TAU)
           ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 5; ctx.stroke()
           ctx.strokeStyle = 'rgba(255,180,120,.25)'; ctx.lineWidth = 2; ctx.stroke()
           ctx.beginPath(); ctx.arc(q.x, q.y, q.r, -Math.PI / 2, -Math.PI / 2 + TAU * clamp(k, 0, 1))
           ctx.strokeStyle = `rgba(255,180,120,${.45 + .35 * k})`; ctx.lineWidth = 3.5; ctx.stroke()
+          }   // NT2-N8b 2026-11-07 (build_NT_2026-11-07 NT2)
           ctx.fillStyle = 'rgba(0,0,0,.30)'
           ctx.beginPath(); ctx.arc(q.x, q.y, q.r * (1 - k) * .9 + 3, 0, TAU); ctx.fill()
         } else if (!q.done) {
@@ -15524,12 +15719,19 @@ function drawEvents(layer) {
         ctx.beginPath(); ctx.moveTo(L.x1, L.y1); ctx.lineTo(L.x2, L.y2)
         if (warning) {
           // FIX2 2026-11-03: solid - the dark pass, the light line at half its pulsing alpha, and over it the light line at full pulse growing in from both ends to meet in the middle as the opening nears (k); was a dashed [12, 10] line crawling on the run clock (build_FIX_2026-11-03)
+          if (T.ntOn) {   // NT2-N8b 2026-11-07: with T.ntOn 1 the line drawn as before FIX2 - the code of 5dddf4c9 (git show 996460d6^) L13614-13617: dashed [12, 10] crawling on the run clock at 30, the dark pass 7 px, the light pass at the full pulse 3 px, the dash cleared after; FIX2's half-alpha pass and grow-in line not drawn (build_NT_2026-11-07 NT2)
+          ctx.setLineDash([12, 10]); ctx.lineDashOffset = -t * 30   // NT2-N8b 2026-11-07: 5dddf4c9 L13614 (build_NT_2026-11-07 NT2)
+          ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 7; ctx.stroke()   // NT2-N8b 2026-11-07: 5dddf4c9 L13615 (build_NT_2026-11-07 NT2)
+          ctx.strokeStyle = `rgba(190,160,110,${pulse})`; ctx.lineWidth = 3; ctx.stroke()   // NT2-N8b 2026-11-07: 5dddf4c9 L13616 (build_NT_2026-11-07 NT2)
+          ctx.setLineDash([])   // NT2-N8b 2026-11-07: 5dddf4c9 L13617 (build_NT_2026-11-07 NT2)
+          } else {   // NT2-N8b 2026-11-07: with T.ntOn 0 the FIX2 drawing below, as it is (build_NT_2026-11-07 NT2)
           const kl = clamp(1 - ev.tw / ev.warn, 0, 1) / 2
           ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 7; ctx.stroke()
           ctx.strokeStyle = `rgba(190,160,110,${pulse * .5})`; ctx.lineWidth = 3; ctx.stroke()
           ctx.beginPath(); ctx.moveTo(L.x1, L.y1); ctx.lineTo(L.x1 + (L.x2 - L.x1) * kl, L.y1 + (L.y2 - L.y1) * kl)
           ctx.moveTo(L.x2, L.y2); ctx.lineTo(L.x2 + (L.x1 - L.x2) * kl, L.y2 + (L.y1 - L.y2) * kl)
           ctx.strokeStyle = `rgba(190,160,110,${pulse})`; ctx.stroke()
+          }   // NT2-N8b 2026-11-07 (build_NT_2026-11-07 NT2)
         } else {
           // the trench is dark on dark ground, so its light pass is a rim either side of its full width - where it hurts
           ctx.strokeStyle = `rgba(${rgbOf(PAL.theirs.edge.trench)},.85)`; ctx.lineWidth = L.w + 4; ctx.stroke()
@@ -15555,12 +15757,20 @@ function drawEvents(layer) {
     if (warning) {
       const tw = rgbOf(PAL.theirs.tele.wall)
       // FIX2 2026-11-03: solid - the dark pass, the light line at half its pulsing alpha, and over it the light line at full pulse growing in from both ends to meet in the middle as the wall nears (k); was a dashed [26, 18] line crawling on the run clock (build_FIX_2026-11-03)
+      if (T.ntOn) {   // NT2-N8b 2026-11-07: with T.ntOn 1 the line drawn as before FIX2 - the code of 5dddf4c9 (git show 996460d6^) L13642-13646: dashed [26, 18] crawling on the run clock at 40, the dark pass 9 px, the light pass pulse + .2 at 5 px, the dash cleared after; FIX2's half-alpha pass and grow-in line not drawn; the arrows and wallEnds below are the same in both (5dddf4c9 L13647-13651) (build_NT_2026-11-07 NT2)
+      ctx.setLineDash([26, 18]); ctx.lineDashOffset = -t * 40   // NT2-N8b 2026-11-07: 5dddf4c9 L13642 (build_NT_2026-11-07 NT2)
+      ctx.beginPath(); ctx.moveTo(0, -h); ctx.lineTo(0, h)   // NT2-N8b 2026-11-07: 5dddf4c9 L13643 (build_NT_2026-11-07 NT2)
+      ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 9; ctx.stroke()   // NT2-N8b 2026-11-07: 5dddf4c9 L13644 (build_NT_2026-11-07 NT2)
+      ctx.strokeStyle = `rgba(${tw},${pulse + .2})`; ctx.lineWidth = 5; ctx.stroke()   // NT2-N8b 2026-11-07: 5dddf4c9 L13645 (build_NT_2026-11-07 NT2)
+      ctx.setLineDash([])   // NT2-N8b 2026-11-07: 5dddf4c9 L13646 (build_NT_2026-11-07 NT2)
+      } else {   // NT2-N8b 2026-11-07: with T.ntOn 0 the FIX2 drawing below, as it is (build_NT_2026-11-07 NT2)
       const kw = clamp(1 - ev.tw / ev.warn, 0, 1) * h
       ctx.beginPath(); ctx.moveTo(0, -h); ctx.lineTo(0, h)
       ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 9; ctx.stroke()
       ctx.strokeStyle = `rgba(${tw},${(pulse + .2) * .5})`; ctx.lineWidth = 5; ctx.stroke()
       ctx.beginPath(); ctx.moveTo(0, -h); ctx.lineTo(0, -h + kw); ctx.moveTo(0, h); ctx.lineTo(0, h - kw)
       ctx.strokeStyle = `rgba(${tw},${pulse + .2})`; ctx.stroke()
+      }   // NT2-N8b 2026-11-07 (build_NT_2026-11-07 NT2)
       ctx.beginPath()
       for (let i = -3; i <= 3; i++) { ctx.moveTo(58, i * 90); ctx.lineTo(14, i * 90 - 20); ctx.lineTo(14, i * 90 + 20); ctx.closePath() }
       ctx.strokeStyle = WALL_EDGE_DARK; ctx.lineWidth = 3; ctx.stroke()
@@ -15614,11 +15824,18 @@ function drawEvents(layer) {
       const k = 1 - B.tState / T.bossWarn
       artcTele(B.x, B.y, B.r + 40 * (1 - k), k)   // ART-C 2026-10-17: C1 - the EN50 ring inside the arrival ring, faint, under it (build_ART_2026-10-17)
       // FIX2 2026-11-03: solid - the ring at .6 of its pulsing alpha, 2 px wide (was 3), and over it a steady .8 arc from the top that sweeps clockwise round the ring as the body arrives (k); was a dashed [14, 12] ring crawling on the hazards' clock at the full pulsing alpha (build_FIX_2026-11-03)
+      if (T.ntOn) {   // NT2-N8b 2026-11-07: with T.ntOn 1 the ring drawn as before FIX2 - the code of 5dddf4c9 (git show 996460d6^) L13699-13702: the full pulsing alpha on the hazards' clock, 3 px, dashed [14, 12] crawling on the hazards' clock at 50, the dash cleared after; FIX2's .6 ring and sweep arc not drawn (build_NT_2026-11-07 NT2)
+      ctx.strokeStyle = `rgba(255,77,94,${.3 + .4 * Math.sin(hk * 14)})`   // NT2-N8b 2026-11-07: 5dddf4c9 L13699 (build_NT_2026-11-07 NT2)
+      ctx.lineWidth = 3; ctx.setLineDash([14, 12]); ctx.lineDashOffset = -hk * 50   // NT2-N8b 2026-11-07: 5dddf4c9 L13700 (build_NT_2026-11-07 NT2)
+      ctx.beginPath(); ctx.arc(B.x, B.y, B.r + 40 * (1 - k), 0, TAU); ctx.stroke()   // NT2-N8b 2026-11-07: 5dddf4c9 L13701 (build_NT_2026-11-07 NT2)
+      ctx.setLineDash([])   // NT2-N8b 2026-11-07: 5dddf4c9 L13702 (build_NT_2026-11-07 NT2)
+      } else {   // NT2-N8b 2026-11-07: with T.ntOn 0 the FIX2 drawing below, as it is (build_NT_2026-11-07 NT2)
       ctx.strokeStyle = `rgba(255,77,94,${(.3 + .4 * Math.sin(hk * 14)) * .6})`
       ctx.lineWidth = 2
       ctx.beginPath(); ctx.arc(B.x, B.y, B.r + 40 * (1 - k), 0, TAU); ctx.stroke()
       ctx.strokeStyle = 'rgba(255,77,94,.8)'; ctx.lineWidth = 3.5
       ctx.beginPath(); ctx.arc(B.x, B.y, B.r + 40 * (1 - k), -Math.PI / 2, -Math.PI / 2 + TAU * clamp(k, 0, 1)); ctx.stroke()
+      }   // NT2-N8b 2026-11-07 (build_NT_2026-11-07 NT2)
     }
     if (B.state === 'turn') {
       // B1-T 2026-11-05: the turn's warning - the arrival ring's steady red ring, closing in round the body as the turn runs (k from 0 to 1), no pulse (build_B1_2026-11-05)
@@ -15647,13 +15864,19 @@ function tbossLaneDraw(B, hk) {
   if (!L.live) {
     const k = clamp(L.t / L.warnT, 0, 1)   // B1-W 2026-11-05: reads the lane's own warning length; was `const k = clamp(L.t / T.tbLaneWarn, 0, 1)` (build_B1_2026-11-05)
     // FIX2 2026-11-03: solid - the arc it will sweep and the band's outline at the same alpha, 1.5 px wide (was 2), and over the arc a 3 px stroke from the band's start along the sweep that grows to the arc's end as the sweep nears (k); was a dashed [10, 10] arc and outline crawling on the hazards' clock (build_FIX_2026-11-03)
+    if (T.ntOn) {   // NT2-N8b 2026-11-07: with T.ntOn 1 the arc and outline drawn as before FIX2 - the code of 5dddf4c9 (git show 996460d6^) L13724-13729: 2 px, dashed [10, 10] crawling on the hazards' clock at 40, the dash cleared after the outline (the line after strokeRect below); FIX2's 1.5 px width and grow arc not drawn; k from L.warnT (B1-W, later than FIX2) kept (build_NT_2026-11-07 NT2)
+    ctx.strokeStyle = `rgba(255,77,94,${.25 + .2 * k})`; ctx.lineWidth = 2; ctx.setLineDash([10, 10]); ctx.lineDashOffset = -hk * 40   // NT2-N8b 2026-11-07: 5dddf4c9 L13724 (build_NT_2026-11-07 NT2)
+    ctx.beginPath(); ctx.arc(0, 0, len, L.a, L.a + B.laneDir * T.tbLaneArc, B.laneDir < 0); ctx.stroke()   // NT2-N8b 2026-11-07: 5dddf4c9 L13725 (build_NT_2026-11-07 NT2)
+    } else {   // NT2-N8b 2026-11-07: with T.ntOn 0 the FIX2 drawing below, as it is (build_NT_2026-11-07 NT2)
     ctx.strokeStyle = `rgba(255,77,94,${.25 + .2 * k})`; ctx.lineWidth = 1.5
     ctx.beginPath(); ctx.arc(0, 0, len, L.a, L.a + B.laneDir * T.tbLaneArc, B.laneDir < 0); ctx.stroke()
     ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, 0, len, L.a, L.a + B.laneDir * T.tbLaneArc * k, B.laneDir < 0); ctx.stroke()
     ctx.lineWidth = 1.5
+    }   // NT2-N8b 2026-11-07 (build_NT_2026-11-07 NT2)
     ctx.rotate(L.a)
     ctx.fillStyle = `rgba(255,77,94,${.08 + .14 * k})`; ctx.fillRect(0, -hw, len, hw * 2)
     ctx.strokeRect(0, -hw, len, hw * 2)
+    if (T.ntOn) ctx.setLineDash([])   // NT2-N8b 2026-11-07: 5dddf4c9 L13729, with T.ntOn 1 only (build_NT_2026-11-07 NT2)
   } else {
     ctx.rotate(L.a)
     ctx.fillStyle = 'rgba(255,77,94,.42)'; ctx.fillRect(0, -hw, len, hw * 2)
@@ -16403,7 +16626,7 @@ function draw() {
     let sl = smearCols.get(b.col); if (!sl) smearCols.set(b.col, sl = []); sl.push(b)
   }
   // SY-M3 2026-09-29: while any synergy is held, the aimed shots (src 'aim') draw a short trail in the colour of the synergy taken most recently (synTrailCol), under their smear and body - the body keeps its streak-tier colour, so the tier stays readable. One path, one stroke a frame: a line from the back of the shot, five radii long (PLAN_SY Y3) (build_SY_2026-09-29)
-  const trailCol = synTrailCol()
+  const trailCol = T.ntOn ? null : synTrailCol()   // NT-N3 2026-11-07: with T.ntOn 1 no synergy trail is drawn (the block below is skipped; synTrailCol reads only and changes nothing); was `const trailCol = synTrailCol()` (build_NT_2026-11-07)
   if (trailCol) {
     // GR-M6 2026-09-29: supersedes the SY-M3 line above on size - the trail is now twice as wide (2.5 -> 5) and 1.6x as long (five radii -> eight: from r to 9r) (PLAN_GR X6) (build_GR_2026-09-29)
     // G-M2 2026-10-13: the trail's length ripens with that synergy (synTrailId): 8 r + T.synTrailF x f r from the back of the shot (was 8 r: from r to 9 r); f is 1 for a synergy with nothing that ripens (PLAN_G G2) (build_G_2026-10-01)
@@ -16418,7 +16641,7 @@ function draw() {
   }
   // G-M4 2026-10-13: (a) an aimed shot's smear (src 'aim', small shots too) is 2.6 r x (1 + T.smearE x (through - 1)) long, at most T.smearCap r - `through` is the shot's pierce at launch (pierce0 = SHOT().through then), so Early warning Lv 2 / 4 / 6 and every Through level draw at once; the dart shape is not touched (DX1 stays); (c) its width (the 0.9 r radius across) grows T.smearW px per 0.2 of P.dmgMul over 1 (Resilient investment, and everything else on P.dmgMul). Every other shot's smear is as before (PLAN_G G4) (build_G_2026-10-01)
   const smearWide = T.smearW * Math.max(0, P.dmgMul - 1) / 0.2
-  for (const [col, list] of smearCols) {
+  for (const [col, list] of (T.ntOn ? [] : smearCols)) {   // NT-N2 2026-11-07: with T.ntOn 1 no smear is drawn - not the ellipse under any shot, not its R2-G gold edge (the loop runs over nothing); was `for (const [col, list] of smearCols) {` (build_NT_2026-11-07)
     ctx.fillStyle = `rgba(${rgbOf(col)},.22)`; ctx.beginPath()
     for (const b of list) {
       const ahead = b.look === 'pull' ? 1 : -1
