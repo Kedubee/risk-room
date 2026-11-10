@@ -1266,7 +1266,8 @@
   body.touch #endrun{position:fixed;top:102px;right:12px;height:42px;min-width:42px;padding:0 12px;font-weight:800}
   /* PT8-F2 2026-10-22: ADJUDICATION_strings_PT8.md, "Rulings on the phase-2 stop points", 2 - in a window 760 px wide or less the alarm strip (#alarm, z-index 7, over the top bar's 5) is centred and its rows can reach the right column, so there the touch button stays in the right column under #mute but starts below the strip's deepest reach. By the CSS: #alarm top 40 px and gap 3 px there; a row (.alm, and .alm.lostline) is its 1 px borders + 4 px paddings + one line of 10.5 px text at the body's line-height 1.4 (14.7 px; the arrow .dir is 14 px) = 24.7 px; the ruling's 5 rows (one lost line + one row per lifeline up; paintAlarm) end at 40 + 5 x 24.7 + 4 x 3 = 175.5 px; the button starts 8.5 px below, at 184 px, as it sat 8 px under #mute. Wider windows keep 102 px: there the rows are centred in a wider strip and the right column is clear of them (measured; build record). ptrFrame reads the button's box, so the edge pointers stay 22 px below its new bottom (build_PT8_2026-10-21) */
   /* BATCH-FIX 2026-10-26: K10 (review_batch_B F2) - the 184 px rule now applies only in a portrait window: a phone held sideways (812 x 375, 740 x 360) is 760 px wide or less too, but the alarm strip's reach that the rule answers is a portrait phone's, and at 740 x 360 the button sat on the flash line (measured 82 x 17 px on the pre-fix copy); in landscape the button keeps 102 px as on wider screens; portrait phones (375 x 812, 360 x 740) unchanged; was `@media (max-width:760px){ body.touch #endrun{top:184px} }` */
-  @media (max-width:760px) and (orientation: portrait){ body.touch #endrun{top:184px} }
+  /* S1-T17 2026-11-10: P3 T17 B - with the alarm names allowed to wrap (the 760 px rule below), END RUN starts 18 px lower on a portrait phone, 202 px, under body.s1; was `@media (max-width:760px) and (orientation: portrait){ body.t…` (build_S1_2026-11-10) */
+  @media (max-width:760px) and (orientation: portrait){ body.touch #endrun{top:184px} body.s1.touch #endrun{top:202px} }   /* S1-T17 2026-11-10 (build_S1_2026-11-10) */
   /* PT8-E1 2026-10-21: PLAN_PT8 E1 - the button is hidden from view and so from Tab while the start screen is up (as PT6-C O3a and PT7-S1 hide EVAC and #mute), while the level-up card screen is shown and while the report (with its debrief) is shown; visibility, not display, as there. A browser without :has() ignores the rule: the button is then under those screens (their z-index 20 to 23 over the top bar's 5) and still reached by Tab, and a press there does nothing (endLive, script) (build_PT8_2026-10-21) */
   body:has(#start:not(.gone)) #endrun, body:has(#cards.show) #endrun, body:has(#over.show) #endrun{visibility:hidden}
   /* PT8-E1 2026-10-21: PLAN_PT8 E1 - #endsay, the polite live region that speaks after a first press (endArm; its sentence is PT8-T D8a / D8b), kept off the screen by the same rule as #zoomsay (build_PT8_2026-10-21) */
@@ -1282,6 +1283,11 @@
     .alm > *{flex:none}
     .alm .r2bT, .alm.warn .st{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
     .alm .st{font-size:9.5px;letter-spacing:.02em}
+    /* S1-T17 2026-11-10: P3 T17 B - on a phone the row under attack drops its state word, and the threat's names (and an inbound row's word) may wrap to a second line inside the row instead of being cut; END RUN moves with it in the portrait rule above (build_S1_2026-11-10) */
+    body.s1 .alm.r2bU .st{display:none}   /* S1-T17 2026-11-10 (build_S1_2026-11-10) */
+    body.s1 .alm .r2bT, body.s1 .alm.warn .st{white-space:normal;text-overflow:clip;overflow:visible}   /* S1-T17 2026-11-10 (build_S1_2026-11-10) */
+    /* S1-T25 2026-11-10: P3 T25 A - on a phone the lost-lifelines line keeps its own 10.5 px (body.small .alm's 13 px outranked it) (build_S1_2026-11-10) */
+    body.s1.small .alm.lostline{font-size:10.5px}   /* S1-T25 2026-11-10 (build_S1_2026-11-10) */
     #clock{font-size:20px}
     #kills{font-size:11px}
     #lvl{font-size:11px}
@@ -1807,6 +1813,9 @@
   .p16hp[hidden]{display:none}
   .howart{position:relative}
   .p16ov{position:absolute;display:block;font-style:normal;background-size:100% 100%;background-repeat:no-repeat;image-rendering:pixelated;pointer-events:none}
+  /* S1-T10 2026-11-10: P3 T10 A - How to play page 1: under body.s1 the four hazard discs are hidden and their sprites (.s1hz) shown; without it the sprites are hidden and the discs drawn, as before (build_S1_2026-11-10) */
+  body.s1 #howart0 circle[fill="#8a6a4a"], body.s1 #howart0 circle[fill="#7f8ea3"], body.s1 #howart0 circle[fill="#4f86c6"], body.s1 #howart0 circle[fill="#e8763a"]{display:none}   /* S1-T10 2026-11-10 (build_S1_2026-11-10) */
+  body:not(.s1) .s1hz{display:none}   /* S1-T10 2026-11-10 (build_S1_2026-11-10) */
   /* P16B-6 2026-10-29: PLAN_P16B design 6 - pixel chrome, CSS only: square corners and 2 px borders on cards, panels and buttons; a 1 px inner light edge on panels and buttons; stepped corners (clip-path) on the How to play panel and the hint card only (a clip would hide a card's or a button's focus ring); fills and fonts unchanged (build_P16B_2026-10-28) */
   .card,.howpanel,.hintcard,.mbtn,.dbtn,.howbar button,#hint-ok,.howart svg,#credits .csa{border-radius:0}
   .card,.howpanel,.mbtn,.dbtn{border-width:2px}
@@ -2315,6 +2324,8 @@ html body #start.st3.stn #ntaxp section.r3x > div.r3mid{grid-column:1 / -1;grid-
         <path d="M478 96q20 18 30 54q4 16-10 20q-16 4-24-12l-20-42q-6-14 6-20q12-6 18 0z" fill="#d6b08c" opacity=".85"/>
       </svg>
       <i class="p16ov" data-ui="ov_robot" style="left:26.923%;top:48%"></i><!-- P16B-5 2026-10-29: the robot at the old disc's centre (140, 96) (build_P16B_2026-10-28) -->
+      <!-- S1-T10 2026-11-10: P3 T10 A - the four hazard discs above (quake, storm, flood, fire) shown as frame 0 of the field's own sprite strips mob_<kind>, pixelated, centred on each disc's point at T.s1HowK x its radius; placed by the script beside the P16B-5 one (after ARTB_META); shown only under body.s1, where the discs are hidden (build_S1_2026-11-10) -->
+      <i class="p16ov s1hz" data-s1="mob_quake" data-disc="#8a6a4a"></i><i class="p16ov s1hz" data-s1="mob_storm" data-disc="#7f8ea3"></i><i class="p16ov s1hz" data-s1="mob_flood" data-disc="#4f86c6"></i><i class="p16ov s1hz" data-s1="mob_fire" data-disc="#e8763a"></i><!-- S1-T10 2026-11-10 (build_S1_2026-11-10) -->
     </div>
     <div class="howart" id="howart1" hidden>
       <svg viewBox="0 0 520 200" aria-hidden="true" focusable="false">
@@ -3584,6 +3595,12 @@ const T = {
   kqAutoWrong: 0.33,               // KQP-B1 (B2) the test hook kqAuto 3 with kqAutoWrongN under 0: the chance that a quiz is answered wrong, 0-1, drawn from the quiz's own generator seeded by the store's n and kqAutoSeed (kqpAutoWrong) (build_KQP_2026-11-07)
   kqAutoWrongN: -1,                // KQP-B1 (B2) the test hook kqAuto 3 with this 0 or more: the first this many quizzes of the run are answered wrong, the rest right with kqAutoReward; kqAutoWrong and kqAutoSeed are then not read (build_KQP_2026-11-07)
   kqAutoSeed: 0,                   // KQP-B1 (B2, ruled) the test hook kqAuto 3 with kqAutoWrongN under 0: a per-run seed added to the hook's draw, so the bots' right / wrong pattern varies by run (the harness writes seed x 1000 + the place's index); 0 gives the prototype's draws (build_KQP_2026-11-07)
+  // KQ2-B1 / KQ2-B3 / KQ2-B7 2026-11-09: GUARD_KQ2_builder THE ITEMS - the quiz's pool of lines, the second question form, the pair rule, no repeats, one free pick (PLAN_KQ2 K2-1 to K2-8); kq2On 0 = round GH3's game in every respect; read where it acts (kqMoment, kqStore, kqClose, KQ-UI-R1T / R1D), so a value set after boot takes effect (build_KQ2_2026-11-09)
+  kq2On: 1,                        // KQ2-B1 2026-11-09: master switch: 1 as built; 0 = round GH3's quiz (build_KQ2_2026-11-09)
+  kq2Picks: 1,                     // KQ2-B7 2026-11-09: reward 1's picks with kq2On 1 (kqPicks 2 stays for kq2On 0) (build_KQ2_2026-11-09)
+  // S1-R1 / S1-T10 / S1-T17 / S1-T25 2026-11-10: GUARD_S1_builder THE ITEMS - step 1's four draw-only changes (ROUND_S1, the user's picks of 2026-11-10); s1On 0 = round KQ2's build in every respect, on screen too; the JS reads it where it acts (the ring loop and ringPath in draw()); the CSS and HTML parts hang on the body class s1, which s1Class() sets from it at boot (after this table) and at every run start (reset()) (build_S1_2026-11-10)
+  s1On: 1,                         // S1-R1 / S1-T10 / S1-T17 / S1-T25 2026-11-10: master switch: 1 as built; 0 = round KQ2's build (build_S1_2026-11-10)
+  s1HowK: 2.6,                     // S1-T10 2026-11-10: How to play page 1 - each hazard sprite's size, x its disc's radius (P3 T10 A) (build_S1_2026-11-10)
   // UIX-T 2026-11-06: GUARD_UIX_builder THE ITEMS - the round's numbers; uixOn 0 = the base game (dfa8b025) in every respect; a mechanic item is on only when uixOn and its own switch are both 1 (uixCut U1, uixHeat U2, uixUnch U3, uixOne U7); U4, U5, U6 and the text follow uixOn alone; every switch is read where it acts, so a value set after boot takes effect (build_UIX_2026-11-06)
   uixOn: 1,                        // UIX-T master switch: 1 as built; 0 = the base game (build_UIX_2026-11-06)
   uixCut: 1, uixHeat: 1, uixUnch: 1, uixOne: 1,   // UIX-T the sub-switches of U1, U2, U3, U7 (build_UIX_2026-11-06)
@@ -3594,6 +3611,8 @@ const T = {
   uixSignGap: 24, uixSignW: 240, uixSignDy: 12,   // UIX-U5 a sign's left edge this far right of the layout (px), its width at most uixSignW and at most the space less two gaps, its top this far below its block's top (as mock_uix.js drew them) (build_UIX_2026-11-06)
   uixBig: 1, uixBigPx: 2.5,        // UIX2-B1 2026-11-06: large shots switch to the large picked sprites, on only when uixOn and uixBig are both 1 (read in arBullets, so a value set after boot takes effect); uixBigPx: the most a pixel sprite is drawn, drawn height / its cell height AR_CELL[id].ch (build_UIX_2026-11-06 UIX2)
   ntOn: 1, ntVbDash: [16, 12],     // NT-N1..N8 2026-11-07: the round's master switch (1 as built; 0 = the base game in every respect), read where each item acts, so a value set after boot takes effect; ntVbDash: NT-N8 the Mountain valley band edges' dash, the FIX2 note's "was dashed [16, 12]" (build_NT_2026-11-07)
+  // GH-G1, GH-G2 2026-11-09: ROUND_GH (the user's picks of 2026-11-09 for PT-1 and PT-2; the Lead's rulings G1, G2) - ghOn: the round's master switch (1 as built; 0 = the base game in every respect), read where each item acts, so a value set after boot takes effect; ghGuideA: G1 the carry guide line's alpha (0.5 since fix round 2, the user's pick; first built equal to T.r2bGuideAlpha 0.25; a separate key so it can be tuned alone); ghM6Past: G1 how far past the middle of the firebreak, on the far side from the house, the Brush clearing line ends (px); ghHeatTries: G2 how many more placements an elite heat draw tries when the first is not clear of every lifeline (since fix round 2 G2 acts on elite draws only) (build_GH_2026-11-09)   // GH-H1, GH-H2 2026-11-09: the alpha's value and G2's scope in this comment; was `// GH-G1, GH-G2 2026-11-09: ROUND_GH (the user's picks of 20…` (build_GH_2026-11-09 fix round 2)
+  ghOn: 1, ghGuideA: 0.5, ghM6Past: 40, ghHeatTries: 8,   // GH-G1, GH-G2 2026-11-09 (build_GH_2026-11-09)   // GH-H1 2026-11-09: ghGuideA 0.5, the user's pick after the preview (was 0.25, equal to T.r2bGuideAlpha); was `ghOn: 1, ghGuideA: 0.25, ghM6Past: 40, ghHeatTries: 8,   // …` (build_GH_2026-11-09 fix round 2)
   // FIX1 2026-11-03: you clear a lifeline (fx1Clear). While you are within its repair reach (the `here` test of updateLifelines), every ordinary body attacking it - aimed at it (e.tgt) within fx1NearR px of its centre, or a flood front sitting on it (T.lifelineR + its radius) - is killed through hurtEnemy; an ordinary heat zone sitting on it shrinks away over fx1ZoneT s; an elite attacking it loses fx1EliteK of its maximum health a second, and a compound-event body or the true boss within fx1NearR + its radius fx1BossK, in ticks of fx1Tick s. fx1NearR 0 = off (today's game) (build_FIX_2026-11-03)
   fx1NearR: 180, fx1ZoneT: 1.0, fx1EliteK: 0.25, fx1BossK: 0.05, fx1Tick: 0.25,
   // FIX2 2026-11-03: the ranged body's mark - 'ring' (a thin solid ring SPLIT.ring.gap px out) or 'mark' (a small solid pale triangle above the body); drawing only (build_FIX_2026-11-03)
@@ -3611,6 +3630,9 @@ const T = {
   // LLC1 2026-11-03: GUARD_LLC LC-1 - C by default (the user's pick at the B build): the pack's building x1 with today's glyph as a half-size sign, arc 31; 'B', 'A' and 'off' draw as before; was `llArt: 'B',` (build_LL_2026-11-03)
   llArt: 'C',
 }
+// S1-T10 / S1-T17 / S1-T25 2026-11-10: the body class s1 follows T.s1On - set here at boot and again at every run start (reset()); a test that changes T.s1On calls it too (build_S1_2026-11-10)
+function s1Class() { document.body.classList.toggle('s1', !!T.s1On) }   // S1 2026-11-10 (build_S1_2026-11-10)
+s1Class()   // S1 2026-11-10: at boot (build_S1_2026-11-10)
 // PT5-R1a..R1f 2026-10-20: PLAN_PT5 R1 (the user's go-ahead relayed in record 3fc807d8; the approval of this round in PLAN_PT5.md) - the long-run numbers, one new table beside T (T itself is unchanged). Every number is from ../design_2026-10-20/curves_proposal.js (its P table and xpTable(80, 15, 72)) and DESIGN_long_runs.md; read by rampTimeAt, hpRampNow, hitRampNow (helpers), eliteShare, the spawn rate (step), the two P.need lines and rebuildLifeline (build_PT5_2026-10-20)
 const LONGRUN = {
   split: 240,                      // PT5-R1c: s of run clock; health and hits follow today's formulas up to here (PLAN_PT5 R1-c; DESIGN 6.1; curves_proposal.js P.split)
@@ -5937,6 +5959,7 @@ const banished = {}                       // measure id -> ruled out for this ru
 let rerollsUsed = 0, banishLeft = 0
 
 function reset(placeId) {
+  s1Class()   // S1 2026-11-10: the body class s1 follows T.s1On at every run start (build_S1_2026-11-10)
   hintClear()                                        // an open hint card never crosses into the next run
   kqReset()   // KQ-K2 2026-11-06: reset() closes an open in-run quiz and clears the run's quiz state (the moment-(a) flag, the boost and its HUD item, a waiting moment, the log) (build_KQ_2026-11-06)
   // B11 2026-09-22: nor does a flash line, shown or waiting (build_B_2026-09-22)
@@ -6394,7 +6417,8 @@ function hintClear() {                 // reset(): a card never crosses into the
 
 // KQ-K2 / KQ-K3 / KQ-K4 / KQ-K5 / KQ-K6 / KQ-K7 / KQ-K8 / KQ-K9 / KQ-K11 2026-11-06: GUARD_KQ_builder THE ITEMS, PART A - the in-run quiz (PLAN_KQ). One question about a measure the player holds, at up to three kinds of moment (kqMoment: 'a' when the first mid-boss is due, before it arrives; 'b' a mid-boss event absorbed whose arrival number is T.kqBFrom or more; 'c' the true boss absorbed); a right answer gives the choice of one reward (picks, a repair, a boost); a wrong one gives nothing and the measure is asked again first. With T.kqOn 0 nothing here acts: no quiz at any moment, GLOSS's own definitions, no HUD item, no store written (build_KQ_2026-11-06)
 // KQP-B12 2026-11-07: the KQ line above says a wrong answer gives nothing: with T.kqpOn 1 it also draws one penalty (the penalty block at the end of this quiz block, KQP-B3); with T.kqpOn 0 it gives nothing, as before; comment only (build_KQP_2026-11-07)
-// KQ-K9: every word of the quiz a player reads, keyed by its row id in design_2026-11-06_KQ/list_KQ_final2.tsv, new_text byte for byte. {card} and {other} are a measure's name (UPGRADES[id].name), put in when the line is drawn (kqT); a ${...} part reads its T value when the line is drawn. Bound by the list's notes, not by code: "Two" / "two" (KQ-UI-R1T, KQ-UI-R1D) say T.kqPicks 2 and "twice" (KQ-UI-R3D) says T.kqPowerDmg 2 - the words do not follow a changed value
+// KQ-K9: every word of the quiz a player reads, keyed by its row id in design_2026-11-06_KQ/list_KQ_final2.tsv, new_text byte for byte. {card} and {other} are a measure's name (UPGRADES[id].name), put in when the line is drawn (kqT); a ${...} part reads its T value when the line is drawn. Bound by the list's notes, not by code: "One" / "one" (KQ-UI-R1T, KQ-UI-R1D with T.kq2On 1, the rows of design_2026-11-09_KQ2/list_KQ2_ruled.tsv) say T.kq2Picks 1, "Two" / "two" (the same rows with T.kq2On 0) say T.kqPicks 2, and "twice" (KQ-UI-R3D) says T.kqPowerDmg 2 - the words do not follow a changed value   // KQ2-B1 2026-11-09: the binding updated to the one-pick words (PLAN_KQ2 K2-8); was `// KQ-K9: every word of the quiz a player reads, keyed by it…` (build_KQ2_2026-11-09)
+// KQ2-B1 2026-11-09: the rows of design_2026-11-09_KQ2/list_KQ2_ruled.tsv are added under their row_id, new_text byte for byte: the pool's new lines (KQ-A-<card>-<n>; the A rows already here keep their text), form 2's stem and wrong-screen rows (KQ2-*), and KQ-UI-R1T / KQ-UI-R1D, which read T.kq2On when drawn (kqT calls a row that is a function): 1 gives the ruled one-pick words, 0 the base's two-pick words, kept in the same row (build_KQ2_2026-11-09)
 // KQP-B12 2026-11-07: the KQ-K9 line above now reads: every word of the quiz a player reads but the penalty's and, with T.kqpOn 1, the row under the question - those are KQP_TEXT's rows (design_2026-11-07_KQP/list_KQP_ruled.tsv), in the penalty block below; comment only (build_KQP_2026-11-07)
 const KQ_TEXT = Object.freeze({
   'KQ-STEM': 'Which one shows {card} in real life?',
@@ -6407,12 +6431,34 @@ const KQ_TEXT = Object.freeze({
   'KQ-A-hp': 'You keep your house insurance up to date, because bad weather can damage your home.',
   'KQ-A-speed': 'A town can limit how much is built in areas that flood easily.',
   'KQ-A-rate': 'People do regular work on rivers and drains to keep them in good condition.',
+  'KQ-A-field-2': 'Rules say houses should not fall in a big earthquake or be badly damaged in a small one.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-pulse-2': 'Alerts can come in four colours, and you learn what each colour means.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-pulse-3': 'You learn what the emergency sirens sound like, so you will know them in a disaster.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-pulse-4': 'Volunteers watch their own area and tell their neighbours when a flood is likely.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-wave-3': 'With your family, you practise getting out of your home in a fire, at night too.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-ring-2': 'People bring back marshes and other wet ground to help reduce flooding.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-ring-3': 'Many forests help hold back the snow, rocks and mud that slide down slopes.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-ring-4': 'To slow streams in a natural way, people put in barriers that let some water through.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-armour-2': 'Before a flood, you fit your home with flood doors so the water does less damage.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-armour-3': 'In some places, experts check how well public schools would stand an earthquake, and some are made stronger.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-magnet-2': 'In some places, someone selling or renting out a home must tell you what hazards it may face.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-magnet-3': 'There is a record of past floods for the whole country, with reports and news stories.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-hp-2': 'You photograph your home before a flood. After it, you call your insurer as soon as you can.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-hp-3': 'If you rent, the owner’s insurance may not cover your things, so you can insure them yourself.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-hp-4': 'After a flood, you keep the damaged things, because your insurer may want to see them.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-speed-2': 'Some zones are closed to new homes, and in others new homes need extra protection first.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-rate-2': 'Before strong winds, you check your roof for loose tiles and clear leaves from the gutters.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-rate-3': 'If you see a blocked drain or a partly blocked stream, you report it to the town.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ-A-rate-4': 'In some places, large reservoirs that could put lives in danger are checked at least every 10 years.',   // KQ2-B1 2026-11-09 (build_KQ2_2026-11-09)
+  'KQ2-STEM2': 'Which card does this example show?',   // KQ2-B1 2026-11-09: form 2's stem (build_KQ2_2026-11-09)
+  'KQ2-UI-WRONG2B': 'The example does not show {other}.',   // KQ2-B1 2026-11-09: form 2's wrong screen, after KQ-UI-WRONG; {other} = the chosen card's name (build_KQ2_2026-11-09)
+  'KQ2-UI-WRONG3B': 'It shows {card}:',   // KQ2-B1 2026-11-09: form 2's wrong screen only, in place of KQ-UI-WRONG3; {card} = the asked card's name (build_KQ2_2026-11-09)
   'KQ-UI-TITLE': 'Quick question',
   'KQ-UI-HINT': 'Choose one. Get it right and you win a reward.',
   'KQ-UI-RIGHT': 'That is right.',
   'KQ-UI-RIGHT2': 'Choose your reward.',
-  'KQ-UI-R1T': 'Two free picks',
-  'KQ-UI-R1D': 'Pick two cards now, just like when you level up.',
+  'KQ-UI-R1T': () => T.kq2On ? 'One free pick' : 'Two free picks',   // KQ2-B1 / KQ2-B7 2026-11-09: the ruled row with T.kq2On 1, the base's with 0; was `'KQ-UI-R1T': 'Two free picks',` (build_KQ2_2026-11-09)
+  'KQ-UI-R1D': () => T.kq2On ? 'Pick one card now, just like when you level up.' : 'Pick two cards now, just like when you level up.',   // KQ2-B1 / KQ2-B7 2026-11-09: the ruled row with T.kq2On 1, the base's with 0; was `'KQ-UI-R1D': 'Pick two cards now, just like when you level u…` (build_KQ2_2026-11-09)
   'KQ-UI-R2T': 'A repair right now',
   'KQ-UI-R2D': 'You get all your capacity back. Every lifeline still standing is repaired too.',
   'KQ-UI-R3T': () => `A ${T.kqPowerS}-second boost`,
@@ -6448,12 +6494,13 @@ const kqPaired = (a, b) => KQ_PAIRS.some(p => (p[0] === a && p[1] === b) || (p[0
 // KQ-K4: the record across runs, in its own store beside POOL_STORE_KEY: { n, last: { id: n when last asked }, miss: { id: n of the open miss } }, n counting the questions answered. Read with defaults: a missing, malformed or hand-edited value reads as empty, and an entry that is not a number (or not a measure with a definition) is ignored. Written only when a question is answered (kqAnswer)
 const KQ_STORE_KEY = 'compoundKqV1'
 function kqStore() {
-  const o = { n: 0, last: {}, miss: {} }
+  const o = T.kq2On ? { n: 0, last: {}, miss: {}, seen: {} } : { n: 0, last: {}, miss: {} }   // KQ2-B5 2026-11-09: with T.kq2On 1 the store also has seen: { line id: the store's n when that line was last shown } (empty when the store has none, as the live game's); with 0 it is read as the base reads it; was `const o = { n: 0, last: {}, miss: {} }` (build_KQ2_2026-11-09)
   try {
     const s = JSON.parse(localStorage.getItem(KQ_STORE_KEY) || '{}')
     if (s && typeof s === 'object') {
       if (typeof s.n === 'number' && isFinite(s.n) && s.n >= 0) o.n = Math.floor(s.n)
       for (const f of ['last', 'miss']) if (s[f] && typeof s[f] === 'object') for (const id in GLOSS_MEASURE) if (typeof s[f][id] === 'number' && isFinite(s[f][id])) o[f][id] = s[f][id]
+      if (o.seen && s.seen && typeof s.seen === 'object') for (const x of KQ2_IDS) if (typeof s.seen[x] === 'number' && isFinite(s.seen[x])) o.seen[x] = s.seen[x]   // KQ2-B5 2026-11-09: seen read as last and miss are - only pool line ids with a finite number; any other entry dropped (build_KQ2_2026-11-09)
     }
   } catch (e) {}
   return o
@@ -6483,6 +6530,57 @@ function kqDraw(id, n) {
   for (let i = lines.length - 1; i > 0; i--) { const j = (rnd() * (i + 1)) | 0, x = lines[i]; lines[i] = lines[j]; lines[j] = x }
   return lines
 }
+// KQ2-B2 2026-11-09: the pool (PLAN_KQ2 K2-1) - card key -> its line ids (KQ_TEXT rows), in the ruled list's order, today's line first; only the list's A rows (build_KQ2_2026-11-09)
+const KQ2_POOL = Object.freeze({ field: Object.freeze(['KQ-A-field', 'KQ-A-field-2']), pulse: Object.freeze(['KQ-A-pulse', 'KQ-A-pulse-2', 'KQ-A-pulse-3', 'KQ-A-pulse-4']), wave: Object.freeze(['KQ-A-wave', 'KQ-A-wave-3']), ring: Object.freeze(['KQ-A-ring', 'KQ-A-ring-2', 'KQ-A-ring-3', 'KQ-A-ring-4']), armour: Object.freeze(['KQ-A-armour', 'KQ-A-armour-2', 'KQ-A-armour-3']), magnet: Object.freeze(['KQ-A-magnet', 'KQ-A-magnet-2', 'KQ-A-magnet-3']), hp: Object.freeze(['KQ-A-hp', 'KQ-A-hp-2', 'KQ-A-hp-3', 'KQ-A-hp-4']), speed: Object.freeze(['KQ-A-speed', 'KQ-A-speed-2']), rate: Object.freeze(['KQ-A-rate', 'KQ-A-rate-2', 'KQ-A-rate-3', 'KQ-A-rate-4']) })   // KQ2-B2 2026-11-09 (build_KQ2_2026-11-09)
+const KQ2_IDS = Object.freeze(Object.keys(KQ2_POOL).reduce((a, k) => a.concat(KQ2_POOL[k]), []))   // KQ2-B5 2026-11-09: every pool line id, in pool order (kqStore keeps seen entries for these only) (build_KQ2_2026-11-09)
+const KQ2_CARD = Object.freeze(Object.fromEntries(KQ2_IDS.map(x => [x, Object.keys(KQ2_POOL).find(k => KQ2_POOL[k].includes(x))])))   // KQ2-B4 2026-11-09: line id -> its card key (build_KQ2_2026-11-09)
+// KQ2-B3 2026-11-09: the lines the ruled list marks usable in form 2 (its form2 column "yes"); KQ-A-pulse-3, KQ-A-armour-3, KQ-A-rate-3 and KQ-A-rate-4 are "no" (build_KQ2_2026-11-09)
+const KQ2_FORM2 = Object.freeze(['KQ-A-field', 'KQ-A-field-2', 'KQ-A-pulse', 'KQ-A-pulse-2', 'KQ-A-pulse-4', 'KQ-A-wave', 'KQ-A-wave-3', 'KQ-A-ring', 'KQ-A-ring-2', 'KQ-A-ring-3', 'KQ-A-ring-4', 'KQ-A-armour', 'KQ-A-armour-2', 'KQ-A-magnet', 'KQ-A-magnet-2', 'KQ-A-magnet-3', 'KQ-A-hp', 'KQ-A-hp-2', 'KQ-A-hp-3', 'KQ-A-hp-4', 'KQ-A-speed', 'KQ-A-speed-2', 'KQ-A-rate', 'KQ-A-rate-2'])   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+// KQ2-B4 2026-11-09: the exclusion table (design_2026-11-09_KQ2/excl_KQ2.tsv, columns row_id and exclude): per line, the cards it must never share a screen with; a line not listed has none. Form 1: a wrong line whose list holds the asked card is never offered (one way: the right line's list does not limit the lines beside it); form 2: no card in the subject line's list is among the names (build_KQ2_2026-11-09)
+const KQ2_EXCL = Object.freeze({ 'KQ-A-field': Object.freeze(['speed']), 'KQ-A-pulse-3': Object.freeze(['rate', 'wave']), 'KQ-A-pulse-4': Object.freeze(['magnet']), 'KQ-A-ring-4': Object.freeze(['armour']), 'KQ-A-armour-2': Object.freeze(['pulse']), 'KQ-A-armour-3': Object.freeze(['magnet', 'rate', 'wave']), 'KQ-A-magnet-2': Object.freeze(['field', 'speed']), 'KQ-A-hp-2': Object.freeze(['magnet']), 'KQ-A-hp-4': Object.freeze(['magnet']), 'KQ-A-speed': Object.freeze(['field']), 'KQ-A-speed-2': Object.freeze(['armour', 'field']), 'KQ-A-rate': Object.freeze(['ring']), 'KQ-A-rate-2': Object.freeze(['armour', 'pulse']), 'KQ-A-rate-3': Object.freeze(['magnet', 'pulse']), 'KQ-A-rate-4': Object.freeze(['field', 'magnet']) })   // KQ2-B4 2026-11-09 (build_KQ2_2026-11-09)
+// KQ2-B3 / KQ2-B5 2026-11-09: the run's quiz-form state - kq2Want the form the next quiz is asked in (1 first; 1, 2, 1, 2 ...; a form-2 quiz asked in form 1 leaves it at 2); kq2N the quizzes drawn with kq2On 1; kq2Shown the line ids shown this run (right, wrong or subject); kq2Fb the fallbacks (f1: a form-2 quiz asked in form 1; part: a form-1 screen that could not be filled to T.kqChoices); all cleared by kqReset (build_KQ2_2026-11-09)
+let kq2Want = 1, kq2N = 0, kq2Shown = new Set(), kq2Fb = { f1: 0, part: 0 }   // KQ2-B3 / KQ2-B5 2026-11-09 (build_KQ2_2026-11-09)
+// KQ2-B5 2026-11-09: a line's rank - not shown this run first, then the least recently shown across runs (the store's seen n; never shown: -1); a stable sort on it keeps ties in list order (build_KQ2_2026-11-09)
+const kq2Rank = (x, sh, seen) => [sh.has(x) ? 1 : 0, typeof seen[x] === 'number' ? seen[x] : -1]   // KQ2-B5 2026-11-09 (build_KQ2_2026-11-09)
+const kq2Cmp = (a, b) => a[0] - b[0] || a[1] - b[1]   // KQ2-B5 2026-11-09 (build_KQ2_2026-11-09)
+// KQ2-B4 2026-11-09: the first set of n cards, in the order of cs, none of them a card of withC or in a KQ_PAIRS pair with a card of withC or with another of the set (depth-first, so the earliest in cs's order wins); null when there is none (build_KQ2_2026-11-09)
+function kq2Fill(cs, n, withC) {   // KQ2-B4 2026-11-09 (build_KQ2_2026-11-09)
+  const ok = cs.filter(c => !withC.some(w => w === c || kqPaired(w, c))), pick = []   // KQ2-B4 2026-11-09 (build_KQ2_2026-11-09)
+  const go = i => { if (pick.length === n) return true; for (let j = i; j < ok.length; j++) { if (pick.some(p => kqPaired(p, ok[j]))) continue; pick.push(ok[j]); if (go(j + 1)) return true; pick.pop() } return false }   // KQ2-B4 2026-11-09 (build_KQ2_2026-11-09)
+  return go(0) ? pick : null   // KQ2-B4 2026-11-09 (build_KQ2_2026-11-09)
+}   // KQ2-B4 2026-11-09 (build_KQ2_2026-11-09)
+// KQ2-B3 / KQ2-B4 / KQ2-B5 2026-11-09: one question for the asked card id, in form want (1 or 2), from the store's n, the run's shown set sh and the store's seen; no state is touched. The generator is kqDraw's (kqRng, the same seed of n and the card), so nothing comes from Math.random or the run's stream. Form 2: the subject is the first, by rank, of the card's form-2 lines for which T.kqChoices - 1 other cards can be named (none paired with the card or each other, none in the subject's exclusion list; the other cards in the generator's order); none: the quiz is asked in form 1 (fb 'f1'). Form 1: the right line is the card's first line by rank; each other card (not paired with the asked one) offers its first line by rank whose exclusion list does not hold the asked card; the cards are taken by the rank of that line (ties in the generator's order), no two paired; a screen that cannot be filled takes as many as it can (fb 'part'), never breaking the pair rule. The screen order is shuffled by the same generator. Returns { f, lines (card keys on screen, as kqDraw's), lids (the line id of each place on screen in form 1; [the subject] in form 2), subj, fb } (build_KQ2_2026-11-09)
+function kq2Build(id, n, want, sh, seen) {   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+  const ids = Object.keys(GLOSS_MEASURE), rnd = kqRng(Math.imul(n + 1, 2654435761) + ids.indexOf(id) * 40503), k = T.kqChoices - 1, others = ids.filter(c => c !== id)   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+  const mix = a => { for (let i = a.length - 1; i > 0; i--) { const j = (rnd() * (i + 1)) | 0, x = a[i]; a[i] = a[j]; a[j] = x } return a }   // KQ2-B3 2026-11-09: Fisher-Yates, as kqDraw (build_KQ2_2026-11-09)
+  const byRank = a => a.slice().sort((x, y) => kq2Cmp(kq2Rank(x, sh, seen), kq2Rank(y, sh, seen)))   // KQ2-B5 2026-11-09 (build_KQ2_2026-11-09)
+  let fb = null   // KQ2-B4 2026-11-09 (build_KQ2_2026-11-09)
+  if (want === 2) {   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+    const oc = mix(others.slice())   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+    for (const s of byRank(KQ2_POOL[id].filter(x => KQ2_FORM2.includes(x)))) {   // KQ2-B3 / KQ2-B5 2026-11-09 (build_KQ2_2026-11-09)
+      const ex = KQ2_EXCL[s] || [], f = kq2Fill(oc.filter(c => !ex.includes(c)), k, [id])   // KQ2-B4 2026-11-09 (build_KQ2_2026-11-09)
+      if (f) return { f: 2, lines: mix([id].concat(f)), lids: [s], subj: s, fb }   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+    }   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+    fb = 'f1'   // KQ2-B4 2026-11-09: no usable form-2 line - asked in form 1 (build_KQ2_2026-11-09)
+  }   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+  const right = byRank(KQ2_POOL[id])[0], best = {}   // KQ2-B5 2026-11-09 (build_KQ2_2026-11-09)
+  for (const c of others) { const ls = byRank(KQ2_POOL[c].filter(x => !(KQ2_EXCL[x] || []).includes(id))); if (ls.length) best[c] = ls[0] }   // KQ2-B4 / KQ2-B5 2026-11-09 (build_KQ2_2026-11-09)
+  const order = mix(Object.keys(best)).sort((a, b) => kq2Cmp(kq2Rank(best[a], sh, seen), kq2Rank(best[b], sh, seen)))   // KQ2-B5 2026-11-09 (build_KQ2_2026-11-09)
+  let f = kq2Fill(order, k, [id])   // KQ2-B4 2026-11-09 (build_KQ2_2026-11-09)
+  if (!f) { fb = fb ? fb + '+part' : 'part'; for (let m = k - 1; m >= 0 && !f; m--) f = kq2Fill(order, m, [id]) }   // KQ2-B4 2026-11-09 (build_KQ2_2026-11-09)
+  const lines = mix([id].concat(f))   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+  return { f: 1, lines, lids: lines.map(c => c === id ? right : best[c]), subj: null, fb }   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+}   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+// KQ2-B3 / KQ2-B5 2026-11-09: kqMoment's question with T.kq2On 1 - built in the run's next form, the form counter moved on (a form-2 quiz asked in form 1 leaves the next one form 2), its line ids added to the run's shown set (build_KQ2_2026-11-09)
+function kq2Draw(m, id, st) {   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+  const want = kq2Want, d = kq2Build(id, st.n, want, kq2Shown, st.seen || {})   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+  kq2N++; if (d.fb && d.fb.startsWith('f1')) kq2Fb.f1++; if (d.fb && d.fb.endsWith('part')) kq2Fb.part++   // KQ2-B4 2026-11-09 (build_KQ2_2026-11-09)
+  if (d.f === want) kq2Want = 3 - want   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+  for (const x of d.lids) kq2Shown.add(x)   // KQ2-B5 2026-11-09 (build_KQ2_2026-11-09)
+  return { m, id, lines: d.lines, phase: 'ask', pick: -1, rewards: [], f: d.f, lids: d.lids, subj: d.subj, fb: d.fb }   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+}   // KQ2-B3 2026-11-09 (build_KQ2_2026-11-09)
+// KQ2-B6 2026-11-09: the line id kqRender draws for card k of question Q - form 1 the line at k's place, form 2 the subject (k the asked card), a question drawn with kq2On 0 today's 'KQ-A-' + k (build_KQ2_2026-11-09)
+const kq2Lid = (Q, k) => Q.f === 1 ? Q.lids[Q.lines.indexOf(k)] : Q.f === 2 ? Q.subj : 'KQ-A-' + k   // KQ2-B6 2026-11-09 (build_KQ2_2026-11-09)
 // KQ-K2: a moment. Returns true only when the dialog is now up for it (so updateBoss holds the first mid-boss back until it has closed). Never when the run is over; 'a' at most once a run; 'b' only for an event whose arrival number (B.kqArr, set in spawnBoss) is T.kqBFrom or more. A moment that falls while a quiz is already up waits (kqPend) and is asked when that one closes. With T.kqAuto 1 or 2 (the test hook) no screen is drawn and the quiz is settled here, at once: 1 answers right and takes reward T.kqAutoReward (whether or not the dialog would show it), 2 answers wrong
 // KQP-B12 2026-11-07: the KQ-K2 line above now reads: with T.kqAuto 1, 2 or 3 (the test hook) no screen is drawn - 3 answers wrong by kqpAutoWrong (T.kqAutoWrong / T.kqAutoWrongN / T.kqAutoSeed) and otherwise right with reward T.kqAutoReward (KQP-B2); comment only (build_KQP_2026-11-07)
 function kqMoment(m, B) {
@@ -6493,8 +6591,8 @@ function kqMoment(m, B) {
   const st = kqStore(), id = kqNext(st)
   if (!id) return false
   if (m === 'a') kqUsedA = true
-  kqQ = { m, id, lines: kqDraw(id, st.n), phase: 'ask', pick: -1, rewards: [] }
-  kqLog.push({ t, m, id, lines: kqQ.lines.slice(), right: null, reward: 0, shown: [] })
+  kqQ = T.kq2On ? kq2Draw(m, id, st) : { m, id, lines: kqDraw(id, st.n), phase: 'ask', pick: -1, rewards: [] }   // KQ2-B3 2026-11-09: with T.kq2On 1 the question comes from the pool in the run's form (kq2Draw); with 0 as the base; was `kqQ = { m, id, lines: kqDraw(id, st.n), phase: 'ask', pick: …` (build_KQ2_2026-11-09)
+  kqLog.push(kqQ.f ? { t, m, id, lines: kqQ.lines.slice(), right: null, reward: 0, shown: [], form: kqQ.f, ids: Object.freeze(kqQ.lids.slice()), cards: Object.freeze(kqQ.lines.slice()), subj: kqQ.subj, fb: kqQ.fb } : { t, m, id, lines: kqQ.lines.slice(), right: null, reward: 0, shown: [] })   // KQ2-B8 2026-11-09: a kq2 question's entry also has its form, the line ids shown (ids), the cards on screen (cards; in form 2 the names), the subject (form 2) and the fallback (fb); with T.kq2On 0 the base's entry; was `kqLog.push({ t, m, id, lines: kqQ.lines.slice(), right: null…` (build_KQ2_2026-11-09)
   if (T.kqAuto === 1 || T.kqAuto === 2 || T.kqAuto === 3) {   // KQP-B2 2026-11-07: 3 - the bots' mixed hook: wrong by kqpAutoWrong, else right with kqAutoReward; no screen, settled at once, as 1 and 2 are; was `  if (T.kqAuto === 1 || T.kqAuto === 2) {` (build_KQP_2026-11-07)
     const kqpWr = T.kqAuto === 2 || (T.kqAuto === 3 && kqpAutoWrong(st.n))   // KQP-B2 2026-11-07: 2 always wrong; 3 by the hook's rule (the store's n before this answer and T.kqAutoSeed seed it) (build_KQP_2026-11-07)
     kqAnswer(kqpWr ? kqQ.lines.findIndex(k => k !== id) : kqQ.lines.indexOf(id))   // KQP-B2 2026-11-07: was `    kqAnswer(T.kqAuto === 1 ? kqQ.lines.indexOf(id) : kqQ.li…` (build_KQP_2026-11-07)
@@ -6522,6 +6620,7 @@ function kqAnswer(i) {
   if (!Q || Q.phase !== 'ask' || !(i >= 0 && i < Q.lines.length)) return false
   const right = Q.lines[i] === Q.id, st = kqStore()
   st.n++; st.last[Q.id] = st.n
+  if (Q.f && st.seen) for (const x of Q.lids) st.seen[x] = st.n   // KQ2-B5 2026-11-09: every line this question showed (form 1 its lines, form 2 its subject) is recorded as seen at the new n, in the same write as last and miss (build_KQ2_2026-11-09)
   if (right) delete st.miss[Q.id]
   else if (st.miss[Q.id] == null) st.miss[Q.id] = st.n
   kqSave(st)
@@ -6556,7 +6655,7 @@ function kqClose(k) {
   }
   const kqpN = k === 0 && kqQ && kqQ.pen ? kqQ.pen : null   // KQP-B8 2026-11-07: the penalty of the question now closing (a wrong answer, k 0), for the notice below; null when none was drawn (build_KQP_2026-11-07)
   kqQ = null
-  if (k === 1) { picksLeft += T.kqPicks; offerCards() }
+  if (k === 1) { picksLeft += T.kq2On ? T.kq2Picks : T.kqPicks; offerCards() }   // KQ2-B7 2026-11-09: T.kq2Picks (1) with T.kq2On 1, T.kqPicks (2) with 0; was `if (k === 1) { picksLeft += T.kqPicks; offerCards() }` (build_KQ2_2026-11-09)
   else if (k === 2) { healFull(); for (const L of lifelines) if (L.alive) { L.hp = llMax(); L.dipped = false } syncHud() }
   else if (k === 3) { kqBoost = T.kqPowerS; kqHudSync() }
   if (shown && !$('cards').classList.contains('show')) setPaused(false)
@@ -6568,6 +6667,7 @@ function kqReset() {
   kqPend.length = 0
   if (kqOpen) { kqOpen = false; $('kq').hidden = true }
   kqFocus = null; kqQ = null; kqUsedA = false; kqBoost = 0; kqLog = []
+  kq2Want = 1; kq2N = 0; kq2Shown = new Set(); kq2Fb = { f1: 0, part: 0 }   // KQ2-B3 / KQ2-B5 2026-11-09: the run's form counter (first quiz form 1), shown set and fallback counts cleared with the rest (build_KQ2_2026-11-09)
   kqpWrong = 0; kqpLast = null; kqpLog = []; kqpLockLeft = 0; kqpForce = null; kqpNoticeOpt = null; kqpNoticeT = 0   // KQP-B9 2026-11-07: the run's wrong count and penalty record live in the run's quiz state, cleared with it, never in the store (build_KQP_2026-11-07)   // KQP-FIX-F3 2026-11-07: the held notice object and its seconds cleared with the rest; was `  kqpWrong = 0; kqpLast = null; kqpLog = []; kqpLockLeft = 0…` (build_KQP_2026-11-07 fix round 3)
   kqHudSync()
 }
@@ -6583,14 +6683,15 @@ function kqHudSync() {
 function kqRender() {
   const Q = kqQ, res = $('kq-res'), act = $('kq-act'), name = k => UPGRADES[k].name, card = name(Q.id)
   $('kq-t').textContent = kqT('KQ-UI-TITLE')
-  $('kq-q').textContent = kqT('KQ-STEM', card)
+  $('kq-q').textContent = Q.f === 2 ? kqT('KQ2-STEM2') : kqT('KQ-STEM', card)   // KQ2-B3 2026-11-09: form 2's stem KQ2-STEM2; form 1 (and a question drawn with kq2On 0) KQ-STEM; was `$('kq-q').textContent = kqT('KQ-STEM', card)` (build_KQ2_2026-11-09)
+  { let s = $('kq-s'); if (Q.f === 2 && Q.phase === 'ask') { if (!s) { s = document.createElement('p'); s.id = 'kq-s'; $('kq-q').parentNode.insertBefore(s, $('kq-q')) } s.textContent = kqT(Q.subj) } else if (s) s.parentNode.removeChild(s) }   // KQ2-B3 2026-11-09: form 2's subject - the line as a paragraph (#kq-s, styled by #kq p, not a button) above the stem, while the cards can be picked; after a pick it gives way to the line marked right below (KQ2-B6); never made in form 1 or with kq2On 0 (build_KQ2_2026-11-09)
   $('kq-h').textContent = Q.phase === 'ask' ? (T.kqpOn ? KQP_TEXT['KQP-UI-HINT'] : kqT('KQ-UI-HINT')) : ''; $('kq-h').hidden = Q.phase !== 'ask'   // KQ-FIX-F3 2026-11-06: the row KQ-UI-HINT is on screen only while the lines can be picked; after a pick, right or wrong, its paragraph is empty and hidden (the comment above kqRender says the line under the question stays: since this fix round it does not); was `$('kq-h').textContent = kqT('KQ-UI-HINT')` (build_KQ_2026-11-06 fix round)   // KQP-B7 / KQP-B12 2026-11-07: the row under the question is KQP-UI-HINT (the ruled list) with T.kqpOn 1 and KQ-UI-HINT, as the base, with 0 - read at render time, so a switch set after boot counts; the F3 comment names KQ-UI-HINT as the one row: since this build it is one of two; was `  $('kq-h').textContent = Q.phase === 'ask' ? kqT('KQ-UI-HIN…` (build_KQP_2026-11-07)
   res.textContent = ''; act.textContent = ''
   const para = s => { const e = document.createElement('p'); e.textContent = s; res.appendChild(e) }
-  const line = (k, cls) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'opt ' + cls; b.disabled = true; b.textContent = kqT('KQ-A-' + k); res.appendChild(b) }
+  const line = (k, cls) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'opt ' + cls; b.disabled = true; b.textContent = Q.f === 2 && k !== Q.id ? name(k) : kqT(kq2Lid(Q, k)); res.appendChild(b) }   // KQ2-B6 2026-11-09: card k's line as drawn for this question (kq2Lid; with kq2On 0 'KQ-A-' + k as the base); in form 2 a chosen card other than the asked one is shown by its name; was `const line = (k, cls) => { const b = document.createElement(…` (build_KQ2_2026-11-09)
   const btn = fn => { const b = document.createElement('button'); b.type = 'button'; b.className = 'opt'; b.onclick = () => { if (!kqLocked()) fn() }; act.appendChild(b); return b }   // KQ-FIX-F2 2026-11-06: a press of a line, a reward or the one button (a click, a tap, Enter or a number key: each ends in this click) does nothing while the lock holds; the test surface calls kqAnswer, kqReward and kqClose itself and is not locked; was `const btn = fn => { const b = document.createElement('button…` (build_KQ_2026-11-06 fix round)
   const def = () => para(kqT('KQ-UI-DEF', card) + ' ' + kqGloss(GLOSS_MEASURE[Q.id]))
-  if (Q.phase === 'ask') { Q.lines.forEach((k, i) => { btn(() => kqAnswer(i)).textContent = kqT('KQ-A-' + k) }); return }
+  if (Q.phase === 'ask') { Q.lines.forEach((k, i) => { btn(() => kqAnswer(i)).textContent = Q.f === 2 ? name(k) : kqT(kq2Lid(Q, k)) }); return }   // KQ2-B3 2026-11-09: form 2's buttons are the card names (UPGRADES[k].name), form 1's the lines drawn; was `if (Q.phase === 'ask') { Q.lines.forEach((k, i) => { btn(() …` (build_KQ2_2026-11-09)
   if (Q.phase === 'right') {
     line(Q.id, 'right'); para(kqT('KQ-UI-RIGHT')); def(); para(kqT('KQ-UI-RIGHT2'))
     for (const r of Q.rewards) {
@@ -6600,7 +6701,7 @@ function kqRender() {
     }
   } else {
     const ch = Q.lines[Q.pick]
-    line(ch, 'wrong'); para(kqT('KQ-UI-WRONG') + ' ' + kqT('KQ-UI-WRONG2', card, name(ch))); para(kqT('KQ-UI-WRONG3', card)); line(Q.id, 'right'); def(); para(kqT('KQ-UI-WRONG4', card)); if (Q.pen && T.kqpOn) para(kqpLine(Q.pen))   // KQP-B7 2026-11-07: under KQ-UI-WRONG4 and above the one button, the penalty's own paragraph (its kind and size in words: KQP-UI-LL / HP / EVAC, then KQP-UI-NEXT while every kind's curve still climbs), in the live region as the rows above it; nothing with T.kqpOn 0; was `    line(ch, 'wrong'); para(kqT('KQ-UI-WRONG') + ' ' + kqT('…` (build_KQP_2026-11-07)
+    line(ch, 'wrong'); para(kqT('KQ-UI-WRONG') + ' ' + (Q.f === 2 ? kqT('KQ2-UI-WRONG2B', card, name(ch)) : kqT('KQ-UI-WRONG2', card, name(ch)))); para(kqT(Q.f === 2 ? 'KQ2-UI-WRONG3B' : 'KQ-UI-WRONG3', card)); line(Q.id, 'right'); def(); para(kqT('KQ-UI-WRONG4', card)); if (Q.pen && T.kqpOn) para(kqpLine(Q.pen))   // KQP-B7 2026-11-07: under KQ-UI-WRONG4 and above the one button, the penalty's own paragraph (its kind and size in words: KQP-UI-LL / HP / EVAC, then KQP-UI-NEXT while every kind's curve still climbs), in the live region as the rows above it; nothing with T.kqpOn 0; was `    line(ch, 'wrong'); para(kqT('KQ-UI-WRONG') + ' ' + kqT('…` (build_KQP_2026-11-07)   // KQ2-B6 2026-11-09: form 2's wrong screen - the chosen card's name marked wrong, KQ-UI-WRONG + ' ' + KQ2-UI-WRONG2B, then KQ2-UI-WRONG3B in place of KQ-UI-WRONG3, the subject marked right, the definition, KQ-UI-WRONG4 and the penalty line as today; form 1 (also when asked in form 1 by fallback) and kq2On 0 as the base; was `line(ch, 'wrong'); para(kqT('KQ-UI-WRONG') + ' ' + kqT('KQ-U…` (build_KQ2_2026-11-09)
     const b = btn(() => kqClose(0)); b.className = ''; b.id = 'kq-ok'; b.textContent = kqT('KQ-UI-OK')
   }
   const first = act.querySelector('button')
@@ -6617,6 +6718,7 @@ function kqTest() {
     open: (m, arr) => kqMoment(m, m === 'b' ? { kqArr: arr == null ? T.kqBFrom : arr } : null),
     pick: i => kqAnswer(i), reward: k => kqReward(k), ok: () => { if (kqQ && kqQ.phase === 'wrong') { kqClose(0); return true } return false },
     wrong: kqpWrong, last: kqpLast ? Object.assign({}, kqpLast) : null, pens: kqpLog.map(x => Object.assign({}, x)), lockLeft: kqpLockLeft, curve: w => ({ ll: kqpVal(T.kqpLL, w), hp: kqpVal(T.kqpHp, w), evac: kqpVal(T.kqpEvac, w) }), forcePen: k => { kqpForce = KQP_KINDS.includes(k) ? k : null; return kqpForce },   // KQP-B9 2026-11-07: the penalty's test surface - the run's wrong count, the last penalty and the log (copies), the Evacuate tint's seconds, the curve at a w, and a test-only way to force the next penalty's kind (once; anything else clears it); the existing entries unchanged (build_KQP_2026-11-07)
+    kq2: Object.freeze({ on: !!T.kq2On, want: kq2Want, n: kq2N, shown: Object.freeze(Array.from(kq2Shown)), fb: Object.freeze(Object.assign({}, kq2Fb)), q: kqQ && kqQ.f ? Object.freeze({ f: kqQ.f, lines: Object.freeze(kqQ.lines.slice()), lids: Object.freeze(kqQ.lids.slice()), subj: kqQ.subj, fb: kqQ.fb }) : null, pool: KQ2_POOL, form2: KQ2_FORM2, excl: KQ2_EXCL, card: KQ2_CARD, build: (id, n, want, shown, seen) => kq2Build(id, n, want, new Set(shown || []), Object.assign({}, seen || {})), setForm: f => { if (f === 1 || f === 2) kq2Want = f; return kq2Want } }),   // KQ2-B8 2026-11-09: read-only - the form the next quiz is asked in (want), the quizzes drawn (n), this run's shown line ids, the fallback counts, the open question's form and lines, the pool, the form-2 lines and the exclusion table (frozen), a pure build of one question (no state touched); and, for tests only, setForm(1 | 2) for the next quiz's form (build_KQ2_2026-11-09)
     noticeKeepLeft: kqpNoticeT,   // KQP-FIX-F3 2026-11-07: read-only - the seconds of run time the last notice stays kept (0 when none is held) (build_KQP_2026-11-07 fix round 3)
   })
 }
@@ -10624,6 +10726,17 @@ function spawn() {
 
   if (k.behaviour === 'zone') {
     if (uixHeatOn() && enemies.filter(q => q.behaviour === 'zone' && !q.gone).length >= T.uixHeatCap) return   // UIX-U2 2026-11-06: (a) with U2 on, a heat zone spawn is skipped while T.uixHeatCap or more heat zones are live (on you or on a lifeline alike), before any draw; off, nothing here (build_UIX_2026-11-06)
+    // GH-G2 2026-11-09: ROUND_GH G2 (the user's pick (c) for PT-2: heat zones never settle on a lifeline; since fix round 2 the user's new ruling: the fire slime - the ELITE Heatwave zone's sprite, art credit EN91 - never settles on a lifeline, an ordinary Heatwave zone may, as today, and standing in the lifeline's ring clears it, FIX1) - with T.ghOn, for an elite heat draw (el) only (an ordinary heat draw runs the base code below, exactly as today), natural play only (the dev panel's summons and the dev key J scene do not come here): pickTarget's call and its draw above are kept, but the zone never uses the lifeline it returns - it is placed as an untargeted zone is (its angle, then its distance T.uixHeatD with UIX-U2 on, else 90-300 px, from you; vbTurn in Mountain valley) and carries no lifeline target. Its centre must lie at least T.lifelineR + its largest radius (an elite's k.r x T.eliteSize x T.elitePulseMul, its pulse's peak; else k.r) + T.r2LlClear from the centre of every lifeline with L.alive; if the first place is not, up to T.ghHeatTries more are drawn by the same rule (two draws each, only then); none clear: the draw makes no zone and returns, as the cap's skip above does (spawnAcc as that skip leaves it). Nothing else about heat changes (build_GH_2026-11-09)   // GH-H2 2026-11-09: G2 for elite draws only; was `// GH-G2 2026-11-09: ROUND_GH G2 (the user's pick (c) for PT…` (build_GH_2026-11-09 fix round 2)
+    if (T.ghOn && el) {   // GH-G2 2026-11-09 (build_GH_2026-11-09)   // GH-H2 2026-11-09: an elite heat draw only; an ordinary one falls through to the base code; was `if (T.ghOn) {   // GH-G2 2026-11-09 (build_GH_2026-11-09)` (build_GH_2026-11-09 fix round 2)
+      const ghR = T.lifelineR + k.r * (el ? T.eliteSize * T.elitePulseMul : 1) + T.r2LlClear   // GH-G2 2026-11-09: the clearance; makeHazard gives a heat zone k.r, makeElite x T.eliteSize, the pulse at most x T.elitePulseMul (build_GH_2026-11-09)
+      const ghAt = () => { const a = Math.random() * TAU, dd = uixHeatOn() ? rand(T.uixHeatD[0], T.uixHeatD[1]) : rand(90, 300); return vbOn() ? vbTurn(P.x, P.y, a, dd) : { x: P.x + Math.cos(a) * dd, y: P.y + Math.sin(a) * dd } }   // GH-G2 2026-11-09: one placement, as an untargeted zone's (build_GH_2026-11-09)
+      const ghClear = q => lifelines.every(L2 => !L2.alive || dist2(L2, q) >= ghR * ghR)   // GH-G2 2026-11-09 (build_GH_2026-11-09)
+      let q = ghAt()   // GH-G2 2026-11-09 (build_GH_2026-11-09)
+      for (let i = 0; i < T.ghHeatTries && !ghClear(q); i++) q = ghAt()   // GH-G2 2026-11-09: the retries (build_GH_2026-11-09)
+      if (!ghClear(q)) return   // GH-G2 2026-11-09: no clear place - no zone (build_GH_2026-11-09)
+      enemies.push(mk(id, q.x, q.y))   // GH-G2 2026-11-09 (build_GH_2026-11-09)
+      return   // GH-G2 2026-11-09 (build_GH_2026-11-09)
+    }   // GH-G2 2026-11-09 (build_GH_2026-11-09)
     // Heat settles somewhere near you rather than walking in — or straight on top of a
     // lifeline, which is the version of a heatwave that actually empties a hospital.
     // UIX-U2 2026-11-06: with U2 on (T.uixOn && T.uixHeat), "near you" is T.uixHeatD (220-380 px) from you, never 90 px; a zone on a lifeline still lands 0-34 px from it; at most T.uixHeatCap zones live (build_UIX_2026-11-06)
@@ -14792,6 +14905,16 @@ const ARTB_META = {
   b_mecha: { cw: 48, ch: 47, n: 4, fps: 6, face: 0, f: 1.2 },
   b_gollux: { cw: 71, ch: 62, n: 8, fps: 10, face: 1, f: 1.2 },
 }   // cell px, frames, frames a second, facing (1 right, 0 none), size factor
+// S1-T10 2026-11-10: P3 T10 A, beside P16B-5's placing script (which runs before ARTB_SRC is defined) - each .s1hz element on How to play page 1 gets frame 0 of its strip (data-s1), centred on the point of the disc whose fill is data-disc, its longer side round(r x T.s1HowK) in the picture's own units, every length a share of the picture so it scales with it as the disc does (build_S1_2026-11-10)
+for (const el of document.querySelectorAll('.s1hz')) {   // S1-T10 2026-11-10 (build_S1_2026-11-10)
+  const id = el.getAttribute('data-s1'), M = ARTB_META[id], svg = el.parentNode.querySelector('svg'), c = svg && svg.querySelector('circle[fill="' + el.getAttribute('data-disc') + '"]')   // S1-T10 (build_S1_2026-11-10)
+  if (!M || !ARTB_SRC[id] || !c) continue   // S1-T10 (build_S1_2026-11-10)
+  const vb = svg.getAttribute('viewBox').split(' ').map(Number), vw = vb[2], vh = vb[3], cx = +c.getAttribute('cx'), cy = +c.getAttribute('cy')   // S1-T10 (build_S1_2026-11-10)
+  const D = Math.round(+c.getAttribute('r') * T.s1HowK), k = D / Math.max(M.cw, M.ch), w = M.cw * k, h = M.ch * k   // S1-T10: as P3's mock (make_var.js HOWA) (build_S1_2026-11-10)
+  el.style.left = cx / vw * 100 + '%'; el.style.top = cy / vh * 100 + '%'; el.style.width = w / vw * 100 + '%'; el.style.height = h / vh * 100 + '%'   // S1-T10 (build_S1_2026-11-10)
+  el.style.marginLeft = -w / 2 / vw * 100 + '%'; el.style.marginTop = -h / 2 / vw * 100 + '%'   // S1-T10: a vertical margin's % is of the box's width too (build_S1_2026-11-10)
+  el.style.backgroundImage = `url(${ARTB_SRC[id]})`; el.style.backgroundSize = M.n * 100 + '% 100%'; el.style.backgroundPosition = '0 0'   // S1-T10: frame 0 of the strip (build_S1_2026-11-10)
+}   // S1-T10 2026-11-10 (build_S1_2026-11-10)
 const ARTB = { img: {}, ok: {}, alt: {} }
 const ARTB_FACE = new WeakMap()
 for (const id of Object.keys(ARTB_SRC)) {
@@ -16091,7 +16214,7 @@ function ringPath(f) {
     return
   }
   if (s === 'square') { const h = f.r * 0.85; ctx.roundRect(f.x - h, f.y - h, h * 2, h * 2, 6); return }
-  ctx.moveTo(f.x + f.r, f.y); ctx.arc(f.x, f.y, f.r, 0, TAU)
+  if (!T.s1On) ctx.moveTo(f.x + f.r, f.y); ctx.arc(f.x, f.y, f.r, 0, TAU)   // S1-R1 2026-11-10: P2 R1 - with T.s1On 1 each ring is alone in its path (the ring loop), so a full ring's arc is not preceded by moveTo; 'double' keeps its inner circle's moveTo below; was `ctx.moveTo(f.x + f.r, f.y); ctx.arc(f.x, f.y, f.r, 0, TAU)` (build_S1_2026-11-10)
   if (s === 'double' && f.r > 10) { ctx.moveTo(f.x + f.r - 7, f.y); ctx.arc(f.x, f.y, f.r - 7, 0, TAU) }
 }
 
@@ -16481,13 +16604,15 @@ function draw() {
   ctx.lineDashOffset = 0
   for (const [key, list] of ringSteps) {
     const [style, col, q] = key.split('|'), S = RING_STYLE[style] || RING_STYLE.shock, a = q / 8
-    ctx.setLineDash(S.dash); ctx.beginPath()
-    for (const f of list) ringPath(f)
+    // S1-R1 2026-11-10: P2 R1 - with T.s1On 1 each ring is its own path (beginPath, ringPath, this style's strokes, per ring); with 0 one path per style, colour and alpha step, as before; was `ctx.setLineDash(S.dash); ctx.beginPath()` (build_S1_2026-11-10)
+    ctx.setLineDash(S.dash); for (const fl of (T.s1On ? list.map(x => [x]) : [list])) { ctx.beginPath()   // S1-R1 2026-11-10 (build_S1_2026-11-10)
+    for (const f of fl) ringPath(f)   // S1-R1 2026-11-10: was `for (const f of list) ringPath(f)` (build_S1_2026-11-10)
     ctx.strokeStyle = `rgba(8,10,13,${(a * .55).toFixed(3)})`; ctx.lineWidth = S.w + 3; ctx.stroke()
     if (r2G.wave && (style === 'shock' || style === 'echo')) { ctx.strokeStyle = r2Gc; ctx.lineWidth = S.w + 2 * r2E; ctx.stroke() }   // R2-G 2026-10-27: Drills Mainstreamed - the drill ring and its Volley echo take a gold pass between the dark pass and their colour, r2E px each side (build_R2_2026-10-27)
     ctx.strokeStyle = `rgba(${rgbOf(col)},${a})`; ctx.lineWidth = S.w; ctx.stroke()
     // GR-M6 2026-09-29: the synergy ring (and a grand programme's, which uses it) gets a light core down its middle (232,236,255: in the YOURS band, OKLCH C 0.026 H 276), so it reads brighter than its colour alone (PLAN_GR X6) (build_GR_2026-09-29)
     if (style === 'syn') { ctx.strokeStyle = `rgba(232,236,255,${(a * .75).toFixed(3)})`; ctx.lineWidth = 3; ctx.stroke() }
+    }   // S1-R1 2026-11-10: the end of the per-ring loop (build_S1_2026-11-10)
   }
   ctx.setLineDash([])
 
@@ -16855,6 +16980,24 @@ function draw() {
     }
     ctx.setLineDash([]); ctx.restore()
   }
+  // GH-G1 2026-11-09: ROUND_GH G1 (the user's pick for PT-1: a line like the lifeline guide line, once you pick it up) - the carry guide line: with T.ghOn, while a carry task's object is held (r5.obj.st 'held': M1, M2, M3, M6) or, for M4, while the residents follow you (r5.st 'carry'), one line in the lifeline guide's style above (2 px, solid, round caps), colour R5COL.ui, alpha T.ghGuideA, from T.r2bGuideGap screen px outside your disc toward where the task wants you (r5Goal). With that place on screen (the r2bOff test, 26 px in from the edge) it ends at a ring goal's near edge (M1's hospital, M2's siren, M3's next home, M4's open ground; no line while you stand inside the ring) or, for M6, at the point T.ghM6Past px past the middle of the firebreak on the far side from the house (no line once you are past the line within its length, r5Arrived's M6 test; past it but beside its ends, the line still shows); off screen, at the edge pointer's place in the frame (ptrFrame), as the lifeline guide ends. No line nearer the disc than its start. Drawn with the Effects switch off too, after the lifeline guides and before r5Marks; drawing only - no rule, timer, reward, text or sound, no random draw (build_GH_2026-11-09)   // GH-F1 2026-11-09: "past the line" now r5Arrived's whole M6 test; was `// GH-G1 2026-11-09: ROUND_GH G1 (the user's pick for PT-1: …` (build_GH_2026-11-09 fix round)
+  if (T.ghOn && r5 && (r5.id === 'M4' ? r5.st === 'carry' : !!r5.obj && r5.obj.st === 'held')) {   // GH-G1 2026-11-09 (build_GH_2026-11-09)
+    const gk = r5, gg = r5Goal(gk), gf = gk.fb, go = r2bOff(gg.x, gg.y)   // GH-G1 2026-11-09: the goal, M6's firebreak, the goal's screen point when off screen (build_GH_2026-11-09)
+    const gPast = gk.id === 'M6' && (P.x - gf.x) * gf.nx + (P.y - gf.y) * gf.ny > 0 && Math.abs((P.x - gf.x) * gf.mx + (P.y - gf.y) * gf.my) < T.r5M6LineHalf, gIn = gk.id !== 'M6' && dist2(P, gg) < gg.r * gg.r   // GH-G1 2026-11-09: past the firebreak line; inside the ring (build_GH_2026-11-09)   // GH-F1 2026-11-09: past the line within its length - r5Arrived's M6 test whole, so past the plane beside its ends the line still shows; was `const gPast = gk.id === 'M6' && (P.x - gf.x) * gf.nx + (P.y …` (build_GH_2026-11-09 fix round)
+    let gx = null, gy = null   // GH-G1 2026-11-09: the line's end in screen px (build_GH_2026-11-09)
+    if (!gPast && !gIn) {   // GH-G1 2026-11-09 (build_GH_2026-11-09)
+      if (go) { pf = pf || ptrFrame(); gx = clamp(go.lx, pf.l, pf.r); gy = clamp(go.ly, pf.t, pf.b) }   // GH-G1 2026-11-09: off screen - the edge pointer's place (build_GH_2026-11-09)
+      else if (gk.id === 'M6') { gx = (gf.x + gf.nx * T.ghM6Past - P.x) * z + W / 2; gy = (gf.y + gf.ny * T.ghM6Past - P.y) * z + H / 2 }   // GH-G1 2026-11-09: the point past the firebreak's middle (build_GH_2026-11-09)
+      else { const cx = (gg.x - P.x) * z, cy = (gg.y - P.y) * z, cd = Math.hypot(cx, cy), ce = cd - gg.r * z; if (ce > 0) { gx = W / 2 + cx / cd * ce; gy = H / 2 + cy / cd * ce } }   // GH-G1 2026-11-09: the ring's near edge (build_GH_2026-11-09)
+    }   // GH-G1 2026-11-09 (build_GH_2026-11-09)
+    if (gx !== null) {   // GH-G1 2026-11-09 (build_GH_2026-11-09)
+      const dx = gx - W / 2, dy = gy - H / 2, len = Math.hypot(dx, dy), g0 = P.r * z + T.r2bGuideGap   // GH-G1 2026-11-09: as the lifeline guide (build_GH_2026-11-09)
+      if (len > g0) {   // GH-G1 2026-11-09 (build_GH_2026-11-09)
+        ctx.save(); ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.globalAlpha = T.ghGuideA; ctx.strokeStyle = R5COL.ui   // GH-G1 2026-11-09 (build_GH_2026-11-09)
+        ctx.beginPath(); ctx.moveTo(W / 2 + dx / len * g0, H / 2 + dy / len * g0); ctx.lineTo(gx, gy); ctx.stroke(); ctx.restore()   // GH-G1 2026-11-09 (build_GH_2026-11-09)
+      }   // GH-G1 2026-11-09 (build_GH_2026-11-09)
+    }   // GH-G1 2026-11-09 (build_GH_2026-11-09)
+  }   // GH-G1 2026-11-09 (build_GH_2026-11-09)
   // R2b-2b 2026-10-27: PLAN_R2b 2 (b) - a lifeline under attack or inbound: the pointer's radius T.r2bPtrR (was 10) and its mark at x0.9 (was .6); the pulse and a cold lifeline's pointer as before. Was `mark(L.x, L.y, hot ? '#ff4d5e' : LIFELINES[L.kind].col, 10,` and `() => { ctx.scale(.6, .6); lifelineSprite(...) })` (build_R2b_2026-10-27)
   for (const L of lifelines) {
     if (!llUp(L)) continue   // LL-M3 2026-09-25: no edge pointer to a secured lifeline (build_LL_2026-09-25)
