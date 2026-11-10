@@ -492,7 +492,7 @@
       Page: https://karsiori.itch.io/free-pixel-art-gem-pack
       Licence: CC0, https://creativecommons.org/publicdomain/zero/1.0/
       Changed: one gem's 10 frames; one frame shown 2 times smaller in How to play
-      Used for: the blue gems that destroyed hazards drop; the gems in How to play
+      Used for: the blue gems dropped by destroyed hazards; the gems in How to play   EN-3 2026-11-10: the credits dialog row (list_EN_final_A.tsv F-001, EN-0382) mirrored, a comment edit only; was `Used for: the blue gems that destroyed hazards drop; the gem…` (build_EN_2026-11-10)
       P16B-F 2026-10-29: the two lines above reworded, the second to the dialog's words (ADJUDICATION_B2 F5) (build_P16B_2026-10-28 fix round)
     2D Health & Ammo Pickups (I6-94) by fightswithbears
       Page: https://fightswithbears.itch.io/2d-health-and-ammo-pickups
@@ -2838,7 +2838,7 @@ html body #start.st3.stn #ntaxp section.r3x > div.r3mid{grid-column:1 / -1;grid-
         <!-- P16B-F 2026-10-29: the "Changed" and "Used for" lines below reworded (ADJUDICATION_B2 F5) (build_P16B_2026-10-28 fix round) -->
         <p class="cl">Changed: one gem's 10 frames; one frame shown 2 times smaller in How to play</p>
         <!-- BATCH-FIX 2026-10-26: K5 (review_batch_A N1) - "blue dots" -> "blue gems", How to play's word for them; was `<p class="cl">Used for: the blue dots that destroyed hazards drop</p>` -->
-        <p class="cl">Used for: the blue gems that destroyed hazards drop; the gems in How to play</p>
+        <p class="cl">Used for: the blue gems dropped by destroyed hazards; the gems in How to play</p> <!-- EN-F-001 2026-11-10: list_EN_final_A.tsv row F-001 (EN-0382), new_src verbatim; was `Used for: the blue gems that destroyed hazards drop; the gem…` (build_EN_2026-11-10) -->
       </li>
       <li class="ca" data-id="I6-94">
         <h5 class="ct">2D Health &amp; Ammo Pickups</h5>
@@ -4215,7 +4215,7 @@ const UPGRADES = {
             src: 'UNDRR GAR 2025 estimates disaster costs at about US$2.3 trillion a year. That includes cascading and ecosystem costs.' },
   speed:  { name: 'Land-use planning', short: 'Land use', max: 5, kind: 'measure', col: '#7ee787',
             // CORRECTED 2026-09-15: unverifiable "cheapest measure" claim replaced by the in-game speed effect (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-            desc: () => 'Not building in the path of it. In this game, you move 10% faster each level.',   // GW-25 2026-11-04: list_GW.tsv row GW-25 (the literal), new_text verbatim; was `'Not building in the path of it. Each level, you move 10% fas…'` (build_GW_2026-11-04)
+            desc: () => 'Not building in the path of a hazard. In this game, you move 10% faster each level.',   // GW-25 2026-11-04: list_GW.tsv row GW-25 (the literal), new_text verbatim; was `'Not building in the path of it. Each level, you move 10% fas…'` (build_GW_2026-11-04)   // EN-F-002 2026-11-10: list_EN_final_A.tsv row F-002 (EN-0789), new_src verbatim; was `Not building in the path of it. In this game, you move 10% f…` (build_EN_2026-11-10)
             src: 'UNDRR names land-use planning alongside building codes as key to reducing vulnerability.' },
   rate:   { name: 'Maintenance',      short: 'Upkeep',   max: 6, kind: 'measure', col: '#ff7a2f',
             // LL-M1 2026-09-25: was "Everything you have already built, working when it is needed." - the card now states both lifeline effects, S-L1 verbatim (strings_LL.md, ruling RL1): repair +30% per level (updateLifelines) and the repair reach +10% per level (repairReach); still one text with no level branch, so every "Level N" card prints it (build_LL_2026-09-25)
@@ -4223,7 +4223,7 @@ const UPGRADES = {
             src: 'UNDRR: lifecycle resilience, maintenance and retrofit pathways for existing assets.' },
   dmg:    { name: 'Resilient investment', short: 'Invest', max: 6, kind: 'measure', col: '#ffa94d',
             // P16a-T 2026-10-22: S3-28 (strings_P16a.md) (build_P16a_2026-10-22)
-            desc: () => 'Money spent making things stronger first, not on rebuilding them after.',
+            desc: () => 'Money spent on making things stronger first, not on rebuilding them after.',   // EN-F-003 2026-11-10: list_EN_final_A.tsv row F-003 (EN-0797), new_src verbatim; was `Money spent making things stronger first, not on rebuilding …` (build_EN_2026-11-10)
             // CORRECTED 2026-09-15: attributed to the World Bank, developing countries, net benefit, "only 3%" (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
             src: 'A World Bank estimate, via UNDRR. In developing countries, building resilience into infrastructure adds only 3% to investment costs. It gives a net benefit of US$4 per US$1.' },
 }
@@ -4329,7 +4329,7 @@ const SYNERGIES = [
   { id: 'who', a: 'wave', b: 'magnet', name: 'Drills that reach everyone', col: '#b9d8ff',
     // G-M2 2026-10-13: strings_G.md S-G2a verbatim; the multipliers ripen (synRipen), the sent-on shot (SHOT().relay) arrives whole (RG1). Was: "Drills reach 25% further, you collect from 25% wider, and a shot that lands sends one on to the next thing." / P.synWave x 1.25; P.pickup x 1.25 (build_G_2026-10-01)
     // P16a-T 2026-10-22: S3-38 (strings_P16a.md; ADJUDICATION_P16a.md M1, m3) (build_P16a_2026-10-22)
-    gain: 'Drills reach up to 25% further and you collect from up to 25% wider. A shot that lands can send another to a nearby hazard. Your shots leave Heatwaves alone. Both 25% figures can start smaller and grow as you level Drills and Data.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - SY1, the text from ADJUDICATION_strings_PT6.md R3 (build_PT6_2026-10-21)
+    gain: 'Drills reach up to 25% further and you collect from up to 25% further. A shot that lands can send another to a nearby hazard. Your shots leave Heatwaves alone. Both 25% figures can start smaller and grow as you level Drills and Data.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - SY1, the text from ADJUDICATION_strings_PT6.md R3 (build_PT6_2026-10-21)   // EN-F-004 2026-11-10: list_EN_final_A.tsv row F-004 (EN-0874), new_src verbatim; was `Drills reach up to 25% further and you collect from up to 25…` (build_EN_2026-11-10)
     apply: P => synRipen(P, 'who'),
     q: 'A city runs drills every year and the same people are still the ones who die. What does the risk data add?',
     opts: ['It proves the drills happened',
@@ -4354,7 +4354,7 @@ const SYNERGIES = [
 
   { id: 'lane', a: 'speed', b: 'rate', name: 'A corridor kept open', col: '#9ff0d8',
     // P16a-T 2026-10-22: S3-41 (strings_P16a.md; ADJUDICATION_P16a.md m1) (build_P16a_2026-10-22)
-    gain: 'A cleared corridor runs through you the way you move. It wears down hazards in it, but not Heatwaves or the big events with a bar at the top of the screen.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ13, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+    gain: 'A cleared corridor runs through you in the direction you move. It wears down hazards in it, but not Heatwaves or the big events with a bar at the top of the screen.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ13, the text from strings_PT6_final.md (build_PT6_2026-10-21)   // EN-F-005 2026-11-10: list_EN_final_A.tsv row F-005 (EN-0890), new_src verbatim; was `A cleared corridor runs through you the way you move. It wea…` (build_EN_2026-11-10)
     apply: P => { P.synLane = true },
     q: 'A city zones a drainage corridor through the district and builds nothing in it. Ten years later the district floods anyway. What was missing?',
     opts: ['The corridor was zoned too narrow',
@@ -4511,7 +4511,7 @@ const POOL_Q = {
            'Only if a second storm follows'],
     correct: 2,
     whyShort: 'Indirect deaths come days, weeks, even months after a storm. Surviving the storm is not yet surviving the disaster. (NOAA)',   // TXT-B1 2026-10-30: P-delta-Q9-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-delta-Q9-short (list_Q_ruled.tsv); was `'Indirect deaths arrive days, weeks, even months after a sto…'` (build_KQ_2026-11-06)
-    why: 'Indirect deaths come days, weeks, even months after a storm. They come from generator accidents. They come from working too hard during cleanup, and from crashes. With generators, carbon monoxide, shock and fire are the most common hazards. Surviving the storm is not yet surviving the disaster. (NOAA)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-delta-Q9-why (list_Q_ruled.tsv); was `'Indirect deaths arrive days, weeks, even months after a sto…'` (build_KQ_2026-11-06)
+    why: 'Indirect deaths come days, weeks, even months after a storm. They come from generator accidents. They come from working too hard during clean-up, and from crashes. With generators, carbon monoxide, shock and fire are the most common hazards. Surviving the storm is not yet surviving the disaster. (NOAA)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-delta-Q9-why (list_Q_ruled.tsv); was `'Indirect deaths arrive days, weeks, even months after a sto…'` (build_KQ_2026-11-06)   // EN-F-006 2026-11-10: list_EN_final_A.tsv row F-006 (EN-0976), new_src verbatim; was `Indirect deaths come days, weeks, even months after a storm.…` (build_EN_2026-11-10)
   { id: 'Q55', form: 'warning-literacy', q: 'The forecast cone does not reach your town. What has the map actually told you?',
     opts: ['You are outside the storm’s reach — the cone is the danger area',
            'Only that the centre will probably not pass over you',
@@ -4528,8 +4528,8 @@ const POOL_Q = {
            'Half the usual chance',
            '100%, because the cycle has started'],
     correct: 0,
-    whyShort: 'A “100-year flood” means a 1-percent chance in ANY year. USGS: such floods can happen two years in a row. (USGS)',   // TXT-B1 2026-10-30: P-basin-Q11-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
-    why: 'A “100-year flood” means a 1-percent chance in ANY year. USGS states plainly that such floods can happen two years in a row. USGS adds that a rare flood does not reduce the chances of another soon after. Last year’s flood did not lower this year’s chance. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-basin-Q11-why (list_Q_ruled.tsv); was `'A “100-year flood” means a 1-percent chance in ANY year — U…'` (build_KQ_2026-11-06)
+    whyShort: 'A “100-year flood” means a 1 per cent chance in ANY year. USGS: such floods can happen two years in a row. (USGS)',   // TXT-B1 2026-10-30: P-basin-Q11-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // EN-F-007 2026-11-10: list_EN_final_A.tsv row F-007 (EN-0989), new_src verbatim; was `A “100-year flood” means a 1-percent chance in ANY year. USG…` (build_EN_2026-11-10)
+    why: 'A “100-year flood” means a 1 per cent chance in ANY year. USGS states plainly that such floods can happen two years in a row. USGS adds that a rare flood does not reduce the chances of another soon after. Last year’s flood did not lower this year’s chance. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-basin-Q11-why (list_Q_ruled.tsv); was `'A “100-year flood” means a 1-percent chance in ANY year — U…'` (build_KQ_2026-11-06)   // EN-F-008 2026-11-10: list_EN_final_A.tsv row F-008 (EN-0990), new_src verbatim; was `A “100-year flood” means a 1-percent chance in ANY year. USG…` (build_EN_2026-11-10)
   { id: 'Q12', form: 'judgment', q: 'Water covers the road ahead; it looks shallow, and your SUV is heavy. What is the rule?',   // KQ-Q 2026-11-06: P-basin-Q12-q (list_Q_ruled.tsv); was `'Water covers the road ahead. It looks shallow and your SUV …'` (build_KQ_2026-11-06)
     opts: ['Cross slowly in low gear',
            'Cross fast so your speed carries you through',   // KQ-Q 2026-11-06: P-basin-Q12-opt1 (list_Q_ruled.tsv); was `'Cross fast to carry momentum'` (build_KQ_2026-11-06)
@@ -4546,7 +4546,7 @@ const POOL_Q = {
     correct: 1,
     whyShort: 'Nearly half of flash-flood deaths involve vehicles. NWS warns most about night, because flood dangers are harder to see then. (NOAA NWS)',   // TXT-B1 2026-10-30: P-basin-Q13-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-basin-Q13-short (list_Q_ruled.tsv); was `'Nearly half of flash-flood fatalities are vehicle-related. …'` (build_KQ_2026-11-06)
     why: 'Nearly half of flash-flood deaths involve vehicles. NWS warns most about night, because flood dangers are harder to see then. After dark, respond more strictly to the same warning: stop somewhere high and wait. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-basin-Q13-why (list_Q_ruled.tsv); was `'Nearly half of flash-flood fatalities are vehicle-related, …'` (build_KQ_2026-11-06)
-  { id: 'Q14', form: 'mechanism', q: 'Sunny afternoon in a narrow gorge: the creek turns muddy and rises with sticks. What is happening?',   // TXT-B4 2026-10-30: P-basin-Q14-q (list_TXT_B_final.tsv); was `'Sunny afternoon in a narrow gorge. The creek turns muddy and starts rising with sticks in it. What is happening?'` (build_TXT_B_2026-10-30)
+  { id: 'Q14', form: 'mechanism', q: 'Sunny afternoon in a narrow gorge: the creek turns muddy, rises and carries sticks. What is happening?',   // TXT-B4 2026-10-30: P-basin-Q14-q (list_TXT_B_final.tsv); was `'Sunny afternoon in a narrow gorge. The creek turns muddy and starts rising with sticks in it. What is happening?'` (build_TXT_B_2026-10-30)   // EN-F-009 2026-11-10: list_EN_final_A.tsv row F-009 (EN-1005), new_src verbatim; was `Sunny afternoon in a narrow gorge: the creek turns muddy and…` (build_EN_2026-11-10)
     opts: ['Nothing — no rain here means no flood here',
            'The tide is coming in',
            'Rain far upstream is arriving',   // TXT-B4 2026-10-30: P-basin-Q14-opt2 (list_TXT_B_final.tsv); was `'Rain far upstream is arriving where you stand — your position in the drainage sets your risk, not the sky above you'` (build_TXT_B_2026-10-30)
@@ -4590,7 +4590,7 @@ const POOL_Q = {
     opts: ['Barely — the storm’s lower label means the danger has passed',   // KQ-Q 2026-11-06: P-basin-Q19-opt0 (list_Q_ruled.tsv); was `'Barely — the label downgrade means the danger has passed'` (build_KQ_2026-11-06)
            'Deadly: record-rate rain killed dozens in Ida’s remnants',   // TXT-B4 2026-10-30: P-basin-Q19-opt1 (list_TXT_B_final.tsv); was `'Deadly: record-rate rain on a drained-by-design city killed dozens in Ida’s remnants, most far from the coast'` (build_TXT_B_2026-10-30)
            'Dangerous only on the coast',
-           'Dangerous only if the eye reforms'],
+           'Dangerous only if the eye re-forms'],   // EN-F-010 2026-11-10: list_EN_final_A.tsv row F-010 (EN-1044), new_src verbatim; was `Dangerous only if the eye reforms` (build_EN_2026-11-10)
     correct: 1,
     whyShort: 'Ida’s post-tropical remnants dropped rain at three inches or more per hour. The flash flooding killed 49 people across the Northeast, 13 in New York City. (NWS Service Assessment)',   // TXT-B1 2026-10-30: P-basin-Q19-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-basin-Q19-short (list_Q_ruled.tsv); was `'Ida’s post-tropical remnants dropped rain at three-plus inc…'` (build_KQ_2026-11-06)
     why: 'Ida’s post-tropical remnants dropped rain at three inches or more per hour. Central Park logged 3.15 inches in a single hour. The flash flooding killed 49 people across the Northeast. Of those, 13 died in New York City. Drainage has a built-in limit, and rain at a record rate reaches it. (NWS Service Assessment)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-basin-Q19-why (list_Q_ruled.tsv); was `'Ida’s post-tropical remnants dropped rain at three-plus inc…'` (build_KQ_2026-11-06)
@@ -4619,7 +4619,7 @@ const POOL_Q = {
            'Homes and bodies are meant to recover at night',   // TXT-B4 2026-10-30: P-metro-Q20-opt2 (list_TXT_B_final.tsv); was `'The city’s built surfaces hold heat into the night, and the cool-down hours are where homes and bodies were supposed to recover'` (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-metro-Q20-opt2 (list_Q_ruled.tsv); was `'Homes and bodies were supposed to recover at night'` (build_KQ_2026-11-06)
            'Night heat only matters for crops'],
     correct: 2,
-    whyShort: 'The urban heat island keeps city nights roughly 2–5°F warmer than the surroundings (EPA). A hot night takes away the cooler air WHO advises for cooling a home. (EPA / WHO)',   // TXT-B1 2026-10-30: P-metro-Q20-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
+    whyShort: 'The urban heat island keeps city nights roughly 2–5°F warmer than the surroundings (EPA). A hot night takes away the cooler air that WHO advises for cooling a home. (EPA / WHO)',   // TXT-B1 2026-10-30: P-metro-Q20-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // EN-F-011 2026-11-10: list_EN_final_A.tsv row F-011 (EN-1066), new_src verbatim; was `The urban heat island keeps city nights roughly 2–5°F warmer…` (build_EN_2026-11-10)
     why: 'The urban heat island keeps city nights roughly 2–5°F warmer than the surroundings (EPA). The standard advice for cooling a home is to use the cooler night air (WHO). A night that stays hot takes that recovery away, day after day. (EPA / WHO)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-metro-Q20-why (list_Q_ruled.tsv); was `'The urban heat island keeps city nights roughly 2–5°F warme…'` (build_KQ_2026-11-06)
   { id: 'Q21', form: 'mechanism', q: 'Two districts show the same thermometer reading: one is dry, one very humid. Where is heat illness more likely, and why?',   // KQ-Q 2026-11-06: P-metro-Q21-q (list_Q_ruled.tsv); was `'Same thermometer reading in two districts — one dry, one ve…'` (build_KQ_2026-11-06)
     opts: ['The humid one: sweat cannot dry there',   // TXT-B4 2026-10-30: P-metro-Q21-opt0 (list_TXT_B_final.tsv); was `'The humid one: near body temperature, sweating is the only cooling left, and humid air blocks the evaporation it depends on'` (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-metro-Q21-opt0 (list_Q_ruled.tsv); was `'The humid one: humid air blocks evaporation'` (build_KQ_2026-11-06)
@@ -4631,7 +4631,7 @@ const POOL_Q = {
     why: 'When the air reaches about 95°F (35°C), heat loss by radiation and convection nearly stops. Then sweating matters most of all. But sweat only cools you when it evaporates, and high humidity makes that very slow. That is the whole reason the heat index exists. (NOAA JetStream)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-metro-Q21-why (list_Q_ruled.tsv); was `'Once air temperature reaches about 95°F (35°C), heat loss b…'` (build_KQ_2026-11-06)
   { id: 'Q22', form: 'misconception', q: 'Power is strained, your flat is at 36°C, and the fan is your only cooling. What is true?',
     opts: ['More airflow is always safer in heat',
-           'Past roughly the high 90s °F / 40 °C, a fan blows heat INTO you',   // TXT-B4 2026-10-30: P-metro-Q22-opt1 (list_TXT_B_final.tsv); was `'Past roughly the high 90s °F / 40 °C, a fan blows heat INTO you — water on the skin and a cooler place beat a bigger fan'` (build_TXT_B_2026-10-30)
+           'Past roughly the high 90s °F / 40°C, a fan blows heat INTO you',   // TXT-B4 2026-10-30: P-metro-Q22-opt1 (list_TXT_B_final.tsv); was `'Past roughly the high 90s °F / 40 °C, a fan blows heat INTO you — water on the skin and a cooler place beat a bigger fan'` (build_TXT_B_2026-10-30)   // EN-F-012 2026-11-10: list_EN_final_A.tsv row F-012 (EN-1077), new_src verbatim; was `Past roughly the high 90s °F / 40 °C, a fan blows heat INTO …` (build_EN_2026-11-10)
            'Fans work best pointed at the ceiling',
            'A fan plus coffee keeps you alert and safe'],
     correct: 1,
@@ -4653,7 +4653,7 @@ const POOL_Q = {
     correct: 1,
     whyShort: 'Confusion with hot skin — dry or damp — is heat stroke, a severe medical emergency. NWS first aid: emergency call, aggressive cooling, and do NOT give fluids to someone confused. (NOAA NWS)',   // TXT-B1 2026-10-30: P-metro-Q24-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
     why: 'Heavy sweating with cool, clammy skin is heat exhaustion. Confusion with hot skin, dry or damp, is heat stroke. Heat stroke is a severe medical emergency where delay can be fatal. NWS first aid: emergency call and aggressive cooling. It also says: do NOT give fluids to someone with altered consciousness. The “drying out” looks like recovery, but it is a sign of getting worse. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-metro-Q24-why (list_Q_ruled.tsv); was `'Heavy sweating with cool clammy skin is heat exhaustion; co…'` (build_KQ_2026-11-06)
-  { id: 'Q25', form: 'compound', q: 'Why is a blackout DURING a heatwave worse than having them in separate weeks?',   // TXT-B4 2026-10-30: P-metro-Q25-q (list_TXT_B_final.tsv); was `'Why is a blackout DURING a heatwave worse than a blackout plus a heatwave on separate weeks?'` (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-metro-Q25-q (list_Q_ruled.tsv); was `'Why is a blackout DURING a heatwave worse than the two in s…'` (build_KQ_2026-11-06)
+  { id: 'Q25', form: 'compound', q: 'Why is a blackout DURING a heatwave worse than having the two in separate weeks?',   // TXT-B4 2026-10-30: P-metro-Q25-q (list_TXT_B_final.tsv); was `'Why is a blackout DURING a heatwave worse than a blackout plus a heatwave on separate weeks?'` (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-metro-Q25-q (list_Q_ruled.tsv); was `'Why is a blackout DURING a heatwave worse than the two in s…'` (build_KQ_2026-11-06)   // EN-F-013 2026-11-10: list_EN_final_A.tsv row F-013 (EN-1096), new_src verbatim; was `Why is a blackout DURING a heatwave worse than having them i…` (build_EN_2026-11-10)
     opts: ['It is not — the risks simply add up',   // KQ-Q 2026-11-06: P-metro-Q25-opt0 (list_Q_ruled.tsv); was `'It is not — risks simply add'` (build_KQ_2026-11-06)
            'Because the power fails when cooling is vital',   // TXT-B4 2026-10-30: P-metro-Q25-opt1 (list_TXT_B_final.tsv); was `'Because the same hours that make cooling a matter of life also strip the power that cooling, hospitals and water systems run on'` (build_TXT_B_2026-10-30)
            'Because blackouts make the air hotter',
@@ -4667,8 +4667,8 @@ const POOL_Q = {
            'A concrete office lobby on ground level, doors shut',
            'A footbridge over the avenue'],   // KQ-Q 2026-11-06: P-metro-Q26-opt3 (list_Q_ruled.tsv); was `'A pedestrian bridge over the avenue'` (build_KQ_2026-11-06)
     correct: 0,
-    whyShort: 'Japan’s ministry lists underground places among those most at risk from water in a cloudburst. Go down for wind, never for water.',   // TXT-B1 2026-10-30: P-metro-Q26-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-metro-Q26-short (list_Q_ruled.tsv); was `'Japan’s ministry lists underground facilities among the mos…'` (build_KQ_2026-11-06)
-    why: 'Sheltering has a direction, and for water it is UP. Japan’s record of city floods includes flooded underground malls (Fukuoka 1999). Its ministry lists underground places among those most at risk from water in a cloudburst. NWS adds the danger of electricity in basements. Go down for wind, never for water. (MLIT / NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-metro-Q26-why (list_Q_ruled.tsv); was `'Sheltering has a direction, and for water it is UP: Japan’s…'` (build_KQ_2026-11-06)
+    whyShort: 'Japan’s ministry names underground malls among places at risk from water. Go down for wind, never for water.',   // TXT-B1 2026-10-30: P-metro-Q26-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-metro-Q26-short (list_Q_ruled.tsv); was `'Japan’s ministry lists underground facilities among the mos…'` (build_KQ_2026-11-06)   // EN-F-014 2026-11-10: list_EN_final_A.tsv row F-014 (EN-1108), new_src verbatim; was `Japan’s ministry lists underground places among those most a…` (build_EN_2026-11-10)
+    why: 'Sheltering has a direction, and for water it is UP. Japan’s record of city floods includes flooded underground malls (Fukuoka 1999). Its ministry names underground malls among places at risk from water. NWS adds the danger of electricity in basements. Go down for wind, never for water. (MLIT / NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-metro-Q26-why (list_Q_ruled.tsv); was `'Sheltering has a direction, and for water it is UP: Japan’s…'` (build_KQ_2026-11-06)   // EN-F-015 2026-11-10: list_EN_final_A.tsv row F-015 (EN-1109), new_src verbatim; was `Sheltering has a direction, and for water it is UP. Japan’s …` (build_EN_2026-11-10)
   { id: 'Q27', form: 'judgment', q: 'The city has three days’ notice of extreme heat, with nowhere to evacuate to. What are the three days FOR?',   // TXT-B4 2026-10-30: P-metro-Q27-q (list_TXT_B_final.tsv); was `'The met office gives the city three days’ notice of extreme heat. There is nowhere to evacuate a heatwave to. What are the three days FOR?'` (build_TXT_B_2026-10-30)
     opts: ['Nothing — if no one can leave, no one can prepare',   // KQ-Q 2026-11-06: P-metro-Q27-opt0 (list_Q_ruled.tsv); was `'Nothing — un-evacuatable means un-preparable'` (build_KQ_2026-11-06)
            'Repainting the roofs white in time',
@@ -4774,9 +4774,9 @@ const POOL_Q = {
            'Only government buildings'],
     correct: 2,
     // CORRECTED 2026-09-16: placeholder tag became a FEMA source note; explanation rewritten to carry FEMA's exception (renovation / alteration / change of use, as examples) and enforcement; Lead terminal fix restored the hedge (sweep 2, sweep2_2026-09-15/ADJUDICATION_predeploy_2026-09-16.md, F1 resolution)
-    whyShort: 'A code protects what is built once the city adopts and enforces it. A standing building keeps its old code unless, for example, it has a big renovation. (FEMA, Seismic Building Codes)',   // TXT-B1 2026-10-30: P-fault-Q38-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-fault-Q38-short (list_Q_ruled.tsv); was `'A code protects what is built after the city adopts and enf…'` (build_KQ_2026-11-06)
-    why: 'A code protects what is built once the city adopts and enforces it. A building that already stands keeps the code it was designed and built under. That changes if, for example, it has a big renovation or alteration. A change of use does the same. That is why codes and retrofitting are two different measures in this game. Codes govern future buildings. Retrofitting reaches the buildings that already exist. (FEMA, Seismic Building Codes)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-fault-Q38-why (list_Q_ruled.tsv); was `'A code protects what is built after the city adopts and enf…'` (build_KQ_2026-11-06)
-  { id: 'Q39', form: 'mechanism', q: 'Two schools teach the same earthquake safety, but one also drills each term. In a real quake, why does the drilling school do better?',   // TXT-B4 2026-10-30: P-fault-Q39-q (list_TXT_B_final.tsv); was `'Two schools teach identical earthquake safety. One also physically drills each term. In a real quake, why does the drilling school fare better?'` (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-fault-Q39-q (list_Q_ruled.tsv); was `'Two schools teach the same earthquake safety, but one also …'` (build_KQ_2026-11-06)
+    whyShort: 'A code protects what is built after the city adopts and enforces it. A standing building keeps its old code unless, for example, it has a big renovation. (FEMA, Seismic Building Codes)',   // TXT-B1 2026-10-30: P-fault-Q38-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-fault-Q38-short (list_Q_ruled.tsv); was `'A code protects what is built after the city adopts and enf…'` (build_KQ_2026-11-06)   // EN-F-016 2026-11-10: list_EN_final_A.tsv row F-016 (EN-1199), new_src verbatim; was `A code protects what is built once the city adopts and enfor…` (build_EN_2026-11-10)
+    why: 'A code protects what is built after the city adopts and enforces it. A building that already stands keeps the code it was designed and built under. That changes if, for example, it has a big renovation or alteration. A change of use does the same. That is why codes and retrofitting are two different measures in this game. Codes govern future buildings. Retrofitting reaches the buildings that already exist. (FEMA, Seismic Building Codes)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-fault-Q38-why (list_Q_ruled.tsv); was `'A code protects what is built after the city adopts and enf…'` (build_KQ_2026-11-06)   // EN-F-017 2026-11-10: list_EN_final_A.tsv row F-017 (EN-1200), new_src verbatim; was `A code protects what is built once the city adopts and enfor…` (build_EN_2026-11-10)
+  { id: 'Q39', form: 'mechanism', q: 'Two schools teach the same earthquake safety, but one also drills each term. In a real quake, why does the school that drills do better?',   // TXT-B4 2026-10-30: P-fault-Q39-q (list_TXT_B_final.tsv); was `'Two schools teach identical earthquake safety. One also physically drills each term. In a real quake, why does the drilling school fare better?'` (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-fault-Q39-q (list_Q_ruled.tsv); was `'Two schools teach the same earthquake safety, but one also …'` (build_KQ_2026-11-06)   // EN-F-018 2026-11-10: list_EN_final_A.tsv row F-018 (EN-1201), new_src verbatim; was `Two schools teach the same earthquake safety, but one also d…` (build_EN_2026-11-10)
     opts: ['Drills scare students into caution',
            'It does not — knowing and doing are the same thing',
            'Drills are mostly for the teachers',
@@ -4801,7 +4801,7 @@ const POOL_Q = {
            'Heat radiating from the burned ground'],
     correct: 2,
     whyShort: 'NIST: ember ignitions may occur hours after the flame front has passed. The fire is not over when the front is. (NIST)',   // TXT-B1 2026-10-30: P-wui-Q41-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
-    why: 'NIST states it plainly: ember ignitions may occur hours after the flame front has passed. Material stuck in decks, vehicles, sheds and structures smolders toward ignition. It does so long after the visible danger moves on. The fire is not over when the front is. (NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-wui-Q41-why (list_Q_ruled.tsv); was `'NIST states it flatly: ember ignitions may occur hours afte…'` (build_KQ_2026-11-06)
+    why: 'NIST states it plainly: ember ignitions may occur hours after the flame front has passed. Material stuck in decks, vehicles, sheds and structures smoulders toward ignition. It does so long after the visible danger moves on. The fire is not over when the front is. (NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-wui-Q41-why (list_Q_ruled.tsv); was `'NIST states it flatly: ember ignitions may occur hours afte…'` (build_KQ_2026-11-06)   // EN-F-019 2026-11-10: list_EN_final_A.tsv row F-019 (EN-1221), new_src verbatim; was `NIST states it plainly: ember ignitions may occur hours afte…` (build_EN_2026-11-10)
   { id: 'Q42', form: 'mechanism', q: 'A homeowner clears perfect defensible space, and does nothing to the building. What does the vegetation work not help with?',   // KQ-Q 2026-11-06: P-wui-Q42-q (list_Q_ruled.tsv); was `'A homeowner clears perfect defensible space — and does noth…'` (build_KQ_2026-11-06)
     opts: ['Anything at all — clearing is wasted effort',
            'Protection from the flame front, which is all that matters',
@@ -4809,7 +4809,7 @@ const POOL_Q = {
            'Insurance discounts'],
     correct: 2,
     whyShort: 'NIST: ALL structures must be hardened against embers. Nothing around the house can stop them landing, or reliably reduce them. (NIST)',   // TXT-B1 2026-10-30: P-wui-Q42-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-wui-Q42-short (list_Q_ruled.tsv); was `'NIST: ALL structures must be hardened for ember exposures. …'` (build_KQ_2026-11-06)
-    why: 'NIST’s rule has no exceptions: ALL structures must be hardened against embers. The reason: nothing around the house can stop embers landing or reliably reduce them. Vegetation work and structure hardening work as a pair. You need both, not either one alone. (NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-wui-Q42-why (list_Q_ruled.tsv); was `'NIST’s rule is unconditional: ALL structures must be harden…'` (build_KQ_2026-11-06)
+    why: 'NIST’s rule has no exceptions: ALL structures must be hardened against embers. The reason: nothing around the house can stop embers landing or reliably reduce them. Vegetation work and structure hardening act as a pair. You need both, not either one alone. (NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-wui-Q42-why (list_Q_ruled.tsv); was `'NIST’s rule is unconditional: ALL structures must be harden…'` (build_KQ_2026-11-06)   // EN-F-020 2026-11-10: list_EN_final_A.tsv row F-020 (EN-1228), new_src verbatim; was `NIST’s rule has no exceptions: ALL structures must be harden…` (build_EN_2026-11-10)
   { id: 'Q43', form: 'judgment', q: 'Catastrophic fire danger is forecast for tomorrow; tonight no fire is near you. What does “Leave early” mean?',   // KQ-Q 2026-11-06: P-wui-Q43-q (list_Q_ruled.tsv); was `'Catastrophic fire danger is forecast for tomorrow. No fire …'` (build_KQ_2026-11-06)
     opts: ['Leave when you smell smoke',
            'Leave when you see flames on the ridge',
@@ -4824,8 +4824,8 @@ const POOL_Q = {
            'Visible flames on your own ridge',
            'The neighbours leaving first'],
     correct: 0,
-    whyShort: 'With four hundred fires in one day, a warning for each fire cannot cover everyone. That is why the forecast rating itself is the trigger. (AIDR / CFA Victoria)',   // TXT-B1 2026-10-30: P-wui-Q44-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-wui-Q44-short (list_Q_ruled.tsv); was `'When four hundred fires ignite in one day, per-fire warning…'` (build_KQ_2026-11-06)
-    why: 'With four hundred fires on one day forecast as catastrophic, fire-by-fire warnings cannot cover everyone. That is why the rating itself is the trigger. The record: 173 lives and over two thousand homes in a single day. (AIDR / CFA Victoria)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-wui-Q44-why (list_Q_ruled.tsv); was `'When four hundred fires ignite across one forecast-catastro…'` (build_KQ_2026-11-06)
+    whyShort: 'With about four hundred fires in one day, a warning for each fire cannot cover everyone. That is why the forecast rating itself is the trigger. (AIDR / CFA Victoria)',   // TXT-B1 2026-10-30: P-wui-Q44-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-wui-Q44-short (list_Q_ruled.tsv); was `'When four hundred fires ignite in one day, per-fire warning…'` (build_KQ_2026-11-06)   // EN-F-021 2026-11-10: list_EN_final_A.tsv row F-021 (EN-1241), new_src verbatim; was `With four hundred fires in one day, a warning for each fire …` (build_EN_2026-11-10)
+    why: 'With about four hundred fires on one day forecast as catastrophic, fire-by-fire warnings cannot cover everyone. That is why the rating itself is the trigger. The record: 173 lives and over two thousand homes in a single day. (AIDR / CFA Victoria)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-wui-Q44-why (list_Q_ruled.tsv); was `'When four hundred fires ignite across one forecast-catastro…'` (build_KQ_2026-11-06)   // EN-F-022 2026-11-10: list_EN_final_A.tsv row F-022 (EN-1242), new_src verbatim; was `With four hundred fires on one day forecast as catastrophic,…` (build_EN_2026-11-10)
   { id: 'Q45', form: 'judgment', q: 'Worst case: you are caught on a road as the front approaches. What is the least-bad option?',   // KQ-Q 2026-11-06: P-wui-Q45-q (list_Q_ruled.tsv); was `'Worst case: you are caught on a road as the front approache…'` (build_KQ_2026-11-06)
     opts: ['Drive fast through the smoke',
            'Abandon the car and run',
@@ -4848,7 +4848,7 @@ const POOL_Q = {
            'A cold windy day after rain',
            'Any day above 30°C'],
     correct: 0,
-    whyShort: 'Red Flag days COMBINE dry fuels, low humidity, warmth, sustained wind of 15 mph or more. Wind and dryness, not the peak temperature, turn a new fire into a catastrophe. (NOAA NWS glossary)',   // TXT-B1 2026-10-30: P-wui-Q47-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-wui-Q47-short (list_Q_ruled.tsv); was `'Red Flag days COMBINE dry fuels, low humidity, warmth, sust…'` (build_KQ_2026-11-06)
+    whyShort: 'Red Flag days COMBINE dry fuels, low humidity, warmth and sustained wind of 15 mph or more. Wind and dryness, not the peak temperature, turn a new fire into a catastrophe. (NOAA NWS glossary)',   // TXT-B1 2026-10-30: P-wui-Q47-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-wui-Q47-short (list_Q_ruled.tsv); was `'Red Flag days COMBINE dry fuels, low humidity, warmth, sust…'` (build_KQ_2026-11-06)   // EN-F-023 2026-11-10: list_EN_final_A.tsv row F-023 (EN-1262), new_src verbatim; was `Red Flag days COMBINE dry fuels, low humidity, warmth, susta…` (build_EN_2026-11-10)
     why: 'A Red Flag day is a COMBINATION. A dry spell has dried out the fuels. The forecast then adds sustained wind of 15 mph or more. It adds relative humidity of 25% or less, and warmth. Wind and dryness, not the peak temperature, turn a new fire into a catastrophe. (NOAA NWS glossary)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-wui-Q47-why (list_Q_ruled.tsv); was `'A Red Flag day is a COMBINATION: a dry spell has cured the …'` (build_KQ_2026-11-06)
   { id: 'Q59', form: 'judgment', q: 'You have one weekend to cut fuel around the house. Where do you start?',
     opts: ['At the property line, working inward',
@@ -4886,7 +4886,7 @@ const POOL_Q = {
     why: 'The Sendai Framework has seven global targets. Some reduce deaths, people affected, economic loss and disruption to infrastructure and services. The others increase strategies, cooperation and early-warning access. Success is measured in reduced losses and increased capability. It is never measured in hazards prevented. No one can promise to prevent a hazard. (Sendai Framework ¶18)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: P-any-Q49-why (list_Q_ruled.tsv); was `'The Sendai Framework’s seven global targets reduce mortalit…'` (build_KQ_2026-11-06)
   { id: 'Q50', form: 'recovery', q: 'A flood flattened the riverside district. Which rebuild follows the framework the world signed?',   // KQ-Q 2026-11-06: P-any-Q50-q (list_Q_ruled.tsv); was `'A flood levelled the riverside district. Which reconstructi…'` (build_KQ_2026-11-06)
     opts: ['Rebuild the same as before, fast — back to normal comes first',   // KQ-Q 2026-11-06: P-any-Q50-opt0 (list_Q_ruled.tsv); was `'Fastest identical rebuild — restore normal above all'` (build_KQ_2026-11-06)
-           'No rebuild for a decade, until the data are perfect',   // KQ-Q 2026-11-06: P-any-Q50-opt1 (list_Q_ruled.tsv); was `'No rebuild for a decade, pending perfect data'` (build_KQ_2026-11-06)
+           'No rebuild for a decade, until the data is perfect',   // KQ-Q 2026-11-06: P-any-Q50-opt1 (list_Q_ruled.tsv); was `'No rebuild for a decade, pending perfect data'` (build_KQ_2026-11-06)   // EN-F-024 2026-11-10: list_EN_final_A.tsv row F-024 (EN-1294), new_src verbatim; was `No rebuild for a decade, until the data are perfect` (build_EN_2026-11-10)
            'Rebuild so that the design itself lowers the risk',   // TXT-B4 2026-10-30: P-any-Q50-opt2 (list_TXT_B_final.tsv); was `'Rebuild with reduced risk designed in — the recovery phase is named in the framework as the moment to prevent the next disaster'` (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: P-any-Q50-opt2 (list_Q_ruled.tsv); was `'Rebuild with reduced risk designed in'` (build_KQ_2026-11-06)
            'Rebuild somewhere else and do not ask the residents'],   // KQ-Q 2026-11-06: P-any-Q50-opt3 (list_Q_ruled.tsv); was `'Rebuild elsewhere without asking the residents'` (build_KQ_2026-11-06)
     correct: 2,
@@ -4953,7 +4953,7 @@ const EVENT_Q = {
     whyShort: 'The plan is to reach high ground or go inland before the wave arrives. Some strong, tall buildings may be able to provide protection — a fallback, not the plan. (NOAA NWS)',   // QZ1 2026-11-03: E-tsunami-whyShort (final/list_QZ_final.tsv), verbatim; was `'In the game, no measure stops an event. In real life, reach …'`; this replaces the line's earlier comment (TXT-B1 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
     gameLine: 'No card stops a tsunami; its warning gives you time to move away.',   // QZ2 2026-11-03: E-tsunami-gameLine (final/list_QZ_final.tsv), verbatim; a new property: the game line the debrief shows under the answer line (QZ4, mountDebrief) (build_QZ_2026-11-03)
     // QZ2-2 2026-11-04: F-tsunami-why (design_2026-11-03_QUIZ/list_QZ2.tsv), verbatim; was `'In the game, no measure stops an event. Armour only cuts the…'` (build_QZ2_2026-11-04)
-    why: 'In the game, no measure stops an event. Retrofitting only cuts the damage. Early warning gives you more time to get out of the path. In real life, the plan is to act before the wave arrives. Reach high ground, or go inland away from the water. If you worry that you will not reach a safe place in time, plan ahead. Ask your local emergency office about going up high in a building instead. Some strong, tall buildings may be able to provide protection. That is a fallback, not the plan. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: E-tsunami-why (list_Q_ruled.tsv); was `'In the game, no measure stops an event. Retrofitting only c…'` (build_KQ_2026-11-06)
+    why: 'In the game, no card stops a tsunami. Retrofitting only cuts the damage. Early warning gives you more time to get out of the path. In real life, the plan is to act before the wave arrives. Reach high ground, or go inland away from the water. If you worry that you will not reach a safe place in time, plan ahead. Ask your local emergency office about going up high in a building instead. Some strong, tall buildings may be able to provide protection. That is a fallback, not the plan. (NOAA NWS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: E-tsunami-why (list_Q_ruled.tsv); was `'In the game, no measure stops an event. Retrofitting only c…'` (build_KQ_2026-11-06)   // EN-F-025 2026-11-10: list_EN_final_A.tsv row F-025 (EN-1334), new_src verbatim; was `In the game, no measure stops an event. Retrofitting only cu…` (build_EN_2026-11-10)
   debris: {
     q: 'Your run had a debris flow warning. In real life, what protects people from debris flows best?',   // QZ1 2026-11-03: E-debris-q (final/list_QZ_final.tsv), verbatim; was `'The debris flow came down the channel and through the villag…'` (build_QZ_2026-11-03)
     opts: ['Building stronger homes in steep gullies',   // QZ1 2026-11-03: E-debris-opt0 (final/list_QZ_final.tsv), verbatim; was `'The channel was built too narrow for it'` (build_QZ_2026-11-03)
@@ -4966,7 +4966,7 @@ const EVENT_Q = {
     whyShort: 'Leaving, staying away and moving homes are the best ways to protect people. Basins can be built to hold a debris flow, but must be emptied regularly. (USGS)',   // QZ1 2026-11-03: E-debris-whyShort (final/list_QZ_final.tsv), verbatim; was `'In the game, a debris flow has no health bar to shoot at. In…'`; this replaces the line's earlier comment (TXT-B1 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
     gameLine: 'No card or shot can stop a debris flow.',   // QZ2 2026-11-03: E-debris-gameLine (final/list_QZ_final.tsv), verbatim; a new property: the game line the debrief shows under the answer line (QZ4, mountDebrief) (build_QZ_2026-11-03)
     // QZ2-2 2026-11-04: F-debris-why (design_2026-11-03_QUIZ/list_QZ2.tsv), verbatim; was `'A debris flow is a fast type of landslide: soil, rock and wa…'` (build_QZ2_2026-11-04)
-    why: 'A debris flow is a fast type of landslide. It is soil, rock and water mixed into one moving mass. Like every event in the game, it has no health bar to shoot at. The warning is what gets you out of its path. In real life, basins can be built to hold a debris flow. They should be big enough for the largest flows in the area. Over time they fill up. They must be emptied regularly, or they will overflow. Leaving, staying away and moving homes off the path protect people best. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: E-debris-why (list_Q_ruled.tsv); was `'A debris flow is a fast type of landslide: soil, rock and w…'` (build_KQ_2026-11-06)
+    why: 'A debris flow is a fast type of landslide. It is soil, rock and water mixed into one moving mass. In the game, a debris flow has no health bar to shoot at. The warning is what gets you out of its path. In real life, basins can be built to hold a debris flow. They should be big enough for the largest flows in the area. Over time they fill up. They must be emptied regularly, or they will overflow. Leaving, staying away and moving homes off the path protect people best. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: E-debris-why (list_Q_ruled.tsv); was `'A debris flow is a fast type of landslide: soil, rock and w…'` (build_KQ_2026-11-06)   // EN-F-026 2026-11-10: list_EN_final_A.tsv row F-026 (EN-1342), new_src verbatim; was `A debris flow is a fast type of landslide. It is soil, rock …` (build_EN_2026-11-10)
   rockfall: {
     q: 'Your run had a rockfall warning. In real life, what can reduce the risk from rockfall?',   // QZ1 2026-11-03: E-rockfall-q (final/list_QZ_final.tsv), verbatim; was `'A rockfall just landed. What decided whether it caught you?'` (build_QZ_2026-11-03)
     opts: ['Standing close to the outer walls of buildings',   // QZ1 2026-11-03: E-rockfall-opt0 (final/list_QZ_final.tsv), verbatim; was `'Your armour and capacity'` (build_QZ_2026-11-03)
@@ -4994,7 +4994,7 @@ const EVENT_Q = {
     whyShort: 'In steep terrain, some kinds of landslide can travel kilometres from where they start. (USGS)',   // QZ1 2026-11-03: E-landslide-whyShort (final/list_QZ_final.tsv), verbatim; was `'In the game, the lane was fixed at the warning and never fol…'`; this replaces the line's earlier comment (TXT-B1 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
     gameLine: 'A landslide never turns to follow you; its path is set at the warning.',   // QZ2 2026-11-03: E-landslide-gameLine (final/list_QZ_final.tsv), verbatim; a new property: the game line the debrief shows under the answer line (QZ4, mountDebrief) (build_QZ_2026-11-03)
     // QZ2-2 2026-11-04: F-landslide-why (design_2026-11-03_QUIZ/list_QZ2.tsv), verbatim; was `'The lane was fixed at the moment of the warning and never tu…'` (build_QZ2_2026-11-04)
-    why: 'The path was fixed at the moment of the warning. It never turned to follow you. In the game, a warning you can outrun is the whole mechanic. Moving out of the way is how you avoid being hit. That is why evacuation has its own control. In real life, some kinds of landslide can travel kilometres from where they start. This happens in steep terrain, and debris flows are one such kind. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: E-landslide-why (list_Q_ruled.tsv); was `'The path was fixed at the moment of the warning and never t…'` (build_KQ_2026-11-06)
+    why: 'The path was fixed at the moment of the warning. It never turned to follow you. In the game, a warning you can outrun is the whole mechanic. Moving out of the way is how you usually avoid being hit. That is why evacuation has its own control. In real life, some kinds of landslide can travel kilometres from where they start. This happens in steep terrain, and debris flows are one such kind. (USGS)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: E-landslide-why (list_Q_ruled.tsv); was `'The path was fixed at the moment of the warning and never t…'` (build_KQ_2026-11-06)   // EN-F-027 2026-11-10: list_EN_final_A.tsv row F-027 (EN-1358), new_src verbatim; was `The path was fixed at the moment of the warning. It never tu…` (build_EN_2026-11-10)
   fissure: {
     // CORRECTED 2026-09-22: q was false to the code ("your armour did not help"; armour cuts event damage) (sweep 3, sweep3_2026-09-22/source_verification.md E5b; Lead F8)
     q: 'Your run had a ground failure warning. In real life, what can reduce the risk from loose, soaked ground in strong shaking?',   // QZ1 2026-11-03: E-fissure-q (final/list_QZ_final.tsv), verbatim; was `'Ground failure opened under the district. Why can armour not…'` (build_QZ_2026-11-03)
@@ -5009,7 +5009,7 @@ const EVENT_Q = {
     whyShort: 'Loose, water-soaked ground near the surface can lose strength for a while in strong shaking. Packing the ground tighter, draining it or not building on it can reduce the risk. (USGS / NIST)',   // QZ1 2026-11-03: E-fissure-whyShort (final/list_QZ_final.tsv), verbatim; was `'In the game, armour cuts the damage but never to zero. In re…'`; this replaces the line's earlier comment (TXT-B1 2026-10-30, build_TXT_B_2026-10-30) (build_QZ_2026-11-03)
     gameLine: 'Retrofitting cuts the harm from ground failure, but never down to zero.',   // QZ2 2026-11-03: E-fissure-gameLine (final/list_QZ_final.tsv), verbatim; a new property: the game line the debrief shows under the answer line (QZ4, mountDebrief) (build_QZ_2026-11-03)
     // QZ2-2 2026-11-04: F-fissure-why (design_2026-11-03_QUIZ/list_QZ2.tsv), verbatim; was `'In the game, armour cuts the damage but never to zero, and g…'` (build_QZ2_2026-11-04)
-    why: 'In the game, Retrofitting cuts the damage but never to zero. Ground failure keeps hurting you while you stand on it. In real life, liquefaction works like this. Loose, water-soaked ground near the surface loses its strength for a while in strong shaking. Packing the ground tighter, draining it or not building on it can reduce the risk. (USGS / NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: E-fissure-why (list_Q_ruled.tsv); was `'In the game, Retrofitting cuts the damage but never to zero…'` (build_KQ_2026-11-06)
+    why: 'In the game, Retrofitting cuts the harm but never to zero. Ground failure usually keeps hurting you while you stand on it. In real life, liquefaction works like this. Loose, water-soaked ground near the surface can lose strength for a while in strong shaking. Packing the ground tighter, draining it or not building on it can reduce the risk. (USGS / NIST)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // KQ-Q 2026-11-06: E-fissure-why (list_Q_ruled.tsv); was `'In the game, Retrofitting cuts the damage but never to zero…'` (build_KQ_2026-11-06)   // EN-F-028 2026-11-10: list_EN_final_A.tsv row F-028 (EN-1366-r2), new_src verbatim; was `In the game, Retrofitting cuts the damage but never to zero.…` (build_EN_2026-11-10)
 }
 
 // ---------------------------------------------------------------- fusion
@@ -5021,7 +5021,7 @@ const EVENT_Q = {
 // SY-M4 2026-09-29: each programme's level needs are a data field, `needs` (measure id -> level, in the order the old closure tested them), and every `need()` is derived from it by fuseReady (ruling RS7) - so the Combos panel and the card offer read one source and cannot drift. fuseReady returns what the old closures returned, value for value: `syn[id]` itself when the synergy is not held, else whether every level is met (build_SY_2026-09-29 tests: sy_test.js, RS7 proof). The old closures, for the record: act `syn.act && lv.pulse >= 3 && lv.wave >= 3`; see `syn.see && lv.magnet >= 2 && lv.pulse >= 3`; buffer `syn.buffer && lv.ring >= 3 && lv.speed >= 2` (build_SY_2026-09-29)
 const fuseReady = f => syn[f.id] && Object.keys(f.needs).every(k => lv[k] >= f.needs[k])
 const FUSIONS = [
-  { id: 'act', name: 'Practiced evacuation', col: '#8fe3ff',
+  { id: 'act', name: 'Practised evacuation', col: '#8fe3ff',   // EN-F-029 2026-11-10: list_EN_final_A.tsv row F-029 (EN-1367), new_src verbatim; was `Practiced evacuation` (build_EN_2026-11-10)
     needs: { pulse: 3, wave: 3 }, need () { return fuseReady(this) },
     // P16a-T 2026-10-22: S3-45 (strings_P16a.md; ADJUDICATION_P16a.md m1) (build_P16a_2026-10-22)
     desc: 'Warning and drills run as one programme. Every 9s, hazards near you are pushed back, but not Heatwaves or the big events with a bar at the top of the screen.',
@@ -5038,7 +5038,7 @@ const FUSIONS = [
     needs: { ring: 3, speed: 2 }, need () { return fuseReady(this) },
     // P16a-T 2026-10-22: S3-53 (strings_P16a.md; ADJUDICATION_P16a.md n2, m1) (build_P16a_2026-10-22)
     desc: 'A planned, planted, defended buffer: wider and denser. It pushes back hazards that touch it, except Heatwaves and the big events with a bar at the top of the screen.',
-    gain: 'The green belt gains two shards, reaches 25% further, and throws back what it strikes.' },
+    gain: 'The green belt gains two leaves, reaches 25% further, and throws back what it strikes.' },   // EN-F-030 2026-11-10: list_EN_final_A.tsv row F-030 (EN-1375), new_src verbatim; was `The green belt gains two shards, reaches 25% further, and th…` (build_EN_2026-11-10)
 ]
 const fused = {}      // fusion id -> taken
 // GR-M1 2026-09-29: the grand programmes (PLAN_GR X1-X4; strings_GR.md S-G1 verbatim as ruled, RG3 names; B5: a list of its own, never appended to FUSIONS). Each needs two synergies held (`needs`, synergy ids) and no levels; taken from the special card slot, at most T.grandCap a run (grandReady). `take` is the banner line on taking (RG2), which goes through pendingGist; `desc` and `gain` have Learning entries (PLAIN 'GRD.<id>.desc' / '.gain'). Colours are in the YOURS band (PAL, above: cool, chroma >= 0.025); `arc` is the lightning's own paint (build_GR_2026-09-29)
@@ -5048,7 +5048,7 @@ const GRANDS = [
     // G-M3 2026-10-13: desc and gain say the jumps and the first jump's share can start smaller and grow, strings_G.md S-G3a verbatim. Were: desc "...to others close by, up to 4 times."; gain "...The first jump deals 60% of the shot\'s damage; each later jump deals 20% less than the one before." (build_G_2026-10-01)
     // P16a-T 2026-10-22: S3-57 (strings_P16a.md) (build_P16a_2026-10-22)
     desc: 'Your aimed shots and the wide sweep can set off lightning that jumps between nearby hazards, up to 4 times.',
-    gain: 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not struck, up to 4 times. It leaves Heatwaves alone. The first jump deals up to 60% of the shot\'s damage; each later jump deals 20% less than the one before. The number of jumps and the 60% can start smaller and grow as you level Drills, Data and Warning.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ9, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+    gain: 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not struck, up to 4 times. It leaves Heatwaves alone. The first jump deals up to 60% of the shot’s damage; each later jump deals 20% less than the one before. The number of jumps and the 60% can start smaller and grow as you level Drills, Data and Warning.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ9, the text from strings_PT6_final.md (build_PT6_2026-10-21)   // EN-F-031 2026-11-10: list_EN_final_A.tsv row F-031 (EN-1378), new_src verbatim; was `Your aimed shots and the wide sweep can set off lightning. I…` (build_EN_2026-11-10)
     take: 'Lightning now jumps from hazard to hazard.' },
   { id: 'laser', name: 'Line of sight', col: '#7fe0ff', needs: ['see', 'act'],
     // G-M3 2026-10-13: "up to 50%" and the grow sentence, strings_G.md S-G3a verbatim. Were: desc "...It hits 50% harder and aims at one more target."; gain "Your held beam becomes a laser: it hits 50% harder and aims at one more target. You get the beam if you lack it. Your aimed shots are unchanged." (build_G_2026-10-01)
@@ -5073,7 +5073,7 @@ const GRANDS = [
     // G-M3 2026-10-13: "up to 35%" and the grow sentence, strings_G.md S-G3a verbatim. Were: desc "...This can happen twice in a row, but not more."; gain "...It does 35% of the burst\'s damage. ...but not a third time." (build_G_2026-10-01)
     // P16a-T 2026-10-22: S3-65 (strings_P16a.md) (build_P16a_2026-10-22)
     desc: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump to another nearby. This can happen up to twice in a row.',
-    gain: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it to the nearest hazard close by. The lightning leaves Heatwaves alone. It does up to 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, the burst that follows can send lightning once more, but not a third time. The 35% can start smaller and grow as you level Invest, Upkeep, Codes and Retrofit.',   // GR2-FIX 2026-09-30: first sentence split (ADJUDICATION_GR2 F8): was "... to the nearest hazard close by, for 35% of the burst\'s damage."; the new second sentence is the Learning gain's own (build_GR2_2026-09-30 fix round) (PT6-T1 2026-10-21: R5 - since HZ11 it is the third, after "The lightning leaves Heatwaves alone.", and in the Learning gain it follows "It leaves Heatwaves alone." (build_PT6_2026-10-21))   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ11, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+    gain: 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it to the nearest hazard close by. The lightning leaves Heatwaves alone. It does up to 35% of the burst’s damage. It starts at most 8 times a second. If the lightning kills, the burst that follows can send lightning once more, but not a third time. The 35% can start smaller and grow as you level Invest, Upkeep, Codes and Retrofit.',   // GR2-FIX 2026-09-30: first sentence split (ADJUDICATION_GR2 F8): was "... to the nearest hazard close by, for 35% of the burst\'s damage."; the new second sentence is the Learning gain's own (build_GR2_2026-09-30 fix round) (PT6-T1 2026-10-21: R5 - since HZ11 it is the third, after "The lightning leaves Heatwaves alone.", and in the Learning gain it follows "It leaves Heatwaves alone." (build_PT6_2026-10-21))   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ11, the text from strings_PT6_final.md (build_PT6_2026-10-21)   // EN-F-032 2026-11-10: list_EN_final_A.tsv row F-032 (EN-1394), new_src verbatim; was `When a Fragmenting or Residual burst kills a hazard, lightni…` (build_EN_2026-11-10)
     take: 'A burst that kills can now set off lightning.' },
   { id: 'orbit', name: 'Ground kept clear', col: '#62e89a', needs: ['plan', 'lane'],
     // GR2-FIX 2026-09-30: the orbit's desc, gain and take reworded (ADJUDICATION_GR2 F2, F4, F5, with F3's code): every surface says heat is left alone, in one form, "They leave heat alone." (PT6-T1 2026-10-21: R5 - now "They leave Heatwaves alone." on all five surfaces, strings_PT6_final.md OR1-OR5 (build_PT6_2026-10-21)) (grOrbit skips heat zones: no hit, no push); the damage is stated per hit - 9 (T.grOrbitDps x T.grOrbitCd x P.dmgMul), at most once every 0.3s on the same hazard (T.grOrbitCd, the hazard's own clock orbT) - not as a rate a second. Were: desc "Three pieces circle close around you. A hazard they touch is hurt and pushed away, but not heat. They do not block thrown things."; gain "Three pieces circle close around you, once every 2.4s. A hazard they touch takes 30 damage a second, more with Resilient investment, and is pushed away from you. They do not block thrown things."; take "Three pieces now circle you and push hazards away." (build_GR2_2026-09-30 fix round)
@@ -5159,7 +5159,7 @@ const MODS = {
              desc: l => l === 0 ? 'It turns around halfway and comes back through everything it passed.'
                                 : 'It turns later, so it goes further out first (Lv 2).' },
   gather:  { name: 'Gathering',   max: 3, col: '#e8c7ff',
-             desc: l => l === 0 ? 'What you hit is pulled toward the impact instead of thrown away from it.'
+             desc: l => l === 0 ? 'What you hit is pulled toward the impact instead of pushed away from it.'   // EN-F-033 2026-11-10: list_EN_final_A.tsv row F-033 (EN-1428), new_src verbatim; was `What you hit is pulled toward the impact instead of thrown a…` (build_EN_2026-11-10)
                                 : `It pulls harder (Lv ${l + 1}).` },
 
   // --- what is laid ON TOP of the emitter. Both are additions, and a build may hold both
@@ -5578,8 +5578,8 @@ const PLACE_Q = {
                     'Insures the buildings and leaves the slope alone'],
              correct: 2,
              whyShort: 'With limited money, barriers could not be built in every area at risk. So passive measures came in, hazard zone maps among them.',   // TXT-B1 2026-10-30: L-concrete-alpine-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
-             why: 'This is where Alpine hazard zoning came from. The 1950s and 1960s brought extreme avalanches and debris flows. After them, the structures needed a lot of money. With limited money, they could not be built in every endangered area. So passive measures were introduced, hazard zone maps among them. Zoning is what a place does when it cannot pay for concrete.' },   // KQ-Q 2026-11-06: L-concrete-alpine-why (list_Q_ruled.tsv); was `'This is where Alpine hazard zoning came from. After the ext…'` (build_KQ_2026-11-06)
-    delta: { q: 'Raising the houses is agreed to be the right measure. Why is so little raised?',
+             why: 'This is where Alpine hazard zoning came from. The 1950s and 1960s brought extreme avalanches and debris flows. After them, the barriers needed a lot of money. With limited money, they could not be built in every endangered area. So passive measures were introduced, hazard zone maps among them. Zoning is what a place does when it cannot pay for concrete.' },   // KQ-Q 2026-11-06: L-concrete-alpine-why (list_Q_ruled.tsv); was `'This is where Alpine hazard zoning came from. After the ext…'` (build_KQ_2026-11-06)   // EN-F-034 2026-11-10: list_EN_final_A.tsv row F-034 (EN-1615), new_src verbatim; was `This is where Alpine hazard zoning came from. The 1950s and …` (build_EN_2026-11-10)
+    delta: { q: 'Raising the houses is agreed to be the right measure. Why are so few raised?',   // EN-F-035 2026-11-10: list_EN_final_A.tsv row F-035 (EN-1616), new_src verbatim; was `Raising the houses is agreed to be the right measure. Why is…` (build_EN_2026-11-10)
              opts: ['It does not work in a real flood',
                     'It costs more than most owners have',
                     'The planners refuse permission to raise them',
@@ -5646,13 +5646,13 @@ const PLACE_Q = {
                     'People in tall buildings'],   // TXT-B5 2026-10-30: RC-02 (list_TXT_B_final.tsv); was `'Visitors'` (build_TXT_B_2026-10-30)
              correct: 1,
              why: 'The plan works for the people it can picture. Data on who is really there — age, mobility, floor level — brings the rest in.' },   // KQ-Q 2026-11-06: L-who-basin-why (list_Q_ruled.tsv); was `'The plan works for the people it can picture. Data on who i…'` (build_KQ_2026-11-06)
-    metro: { q: 'A city drills every year and the same people die every time. What is the data for?',
+    metro: { q: 'A city drills every year and the same groups die every time. What is the data for?',   // EN-F-036 2026-11-10: list_EN_final_A.tsv row F-036 (EN-1670), new_src verbatim; was `A city drills every year and the same people die every time.…` (build_EN_2026-11-10)
              opts: ['Proving that the drill happened every year',
                     'Showing who the drill never reaches',
                     'Reducing the cost of drills',
                     'Choosing the best date for the drill'],
              correct: 1,
-             why: 'An average is not a plan. Disaggregated data is what turns "we ran a drill" into "we know who it missed".' },
+             why: 'An average is not a plan. Disaggregated data is what turns “we ran a drill” into “we know who it missed”.' },   // EN-F-037 2026-11-10: list_EN_final_A.tsv row F-037 (EN-1675), new_src verbatim; was `An average is not a plan. Disaggregated data is what turns "…` (build_EN_2026-11-10)
     wui:   { q: 'Everyone in the valley has been told the evacuation route. Who is still likely to be left?',
              opts: ['Nobody, once it is announced',
                     'Whoever cannot drive it alone',
@@ -5669,7 +5669,7 @@ const PLACE_Q = {
                     'The event that goes past the line'],
              correct: 3,
              whyShort: 'The building rules apply only inside the legally binding zones. At Galtür in 1999 the snow reached areas the hazard maps had shown as safe.',   // TXT-B1 2026-10-30: L-plan-alpine-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: L-plan-alpine-short (list_Q_ruled.tsv); was `'The construction requirements apply only inside the legally…'` (build_KQ_2026-11-06)
-             why: 'The building rules apply only inside the legally binding zones. So a building outside them can be exposed to the modelled pressures. Nothing is required of it. At Galtür in 1999 the snow reached areas the hazard maps had shown as safe. The pressure limits were changed afterwards. The zones were to be extended when the maps were revised. The code is only ever as good as the line somebody drew.' },   // KQ-Q 2026-11-06: L-plan-alpine-why (list_Q_ruled.tsv); was `'The construction requirements apply only inside the legally…'` (build_KQ_2026-11-06)
+             why: 'The building rules apply only inside the legally binding zones. So a building outside them can be exposed to the modelled avalanche pressures. Nothing is required of it. At Galtür in 1999 the snow reached areas the hazard maps had shown as safe. The pressure limits were changed afterwards. The zones were to be extended when the maps were revised. The code is only ever as good as the line somebody drew.' },   // KQ-Q 2026-11-06: L-plan-alpine-why (list_Q_ruled.tsv); was `'The construction requirements apply only inside the legally…'` (build_KQ_2026-11-06)   // EN-F-038 2026-11-10: list_EN_final_A.tsv row F-038 (EN-1688), new_src verbatim; was `The building rules apply only inside the legally binding zon…` (build_EN_2026-11-10)
     fault: { q: 'Every building in the district meets the seismic code. What can still be wrong?',
              opts: ['Nothing, if every building meets the code',
                     'Some of them are on ground that liquefies',
@@ -5724,15 +5724,15 @@ const PLACE_Q = {
              correct: 2,
              whyShort: 'Italy\u2019s emergency-limit-condition survey checks which buildings could fall and block the road for rescue. A road is only as clear as what stands next to it.',   // TXT-B1 2026-10-30: L-lane-fault-why (list_TXT_B_final.tsv), a short answer line; the why below is unchanged; was no whyShort (build_TXT_B_2026-10-30)
              why: 'Italy’s emergency-limit-condition survey asks if a building is interfering with the emergency route. It is, when its damage or collapse could block the road for rescue vehicles. The test is geometry. Measure a building’s front up to the roof edge. It interferes when that height is more than the distance to the road’s far side. Tokyo works the same problem from the other side. It removes utility poles and gives seismic support to buildings along its chosen routes. The route is only as clear as what stands beside it.' },   // KQ-Q 2026-11-06: L-lane-fault-why (list_Q_ruled.tsv); was `'Italy\u2019s emergency-limit-condition survey counts a buil…'` (build_KQ_2026-11-06)
-    wui:   { q: 'The ridge town had planned its routes out, with evacuation zones, one-way roads and drills. Where did people still burn?',   // KQ-Q 2026-11-06: L-lane-wui-q (list_Q_ruled.tsv); was `'The routes out of the ridge town were planned, zoned one-wa…'` (build_KQ_2026-11-06)
-             opts: ['On the planned routes, stuck in traffic beside verges full of roadside fuel',   // KQ-Q 2026-11-06: L-lane-wui-opt0 (list_Q_ruled.tsv); was `'On the planned routes, stalled in traffic beside verges thi…'` (build_KQ_2026-11-06)
+    wui:   { q: 'The ridge town had planned its routes out, with evacuation zones, one-way roads and drills. Where were the biggest groups of abandoned and burned cars found on the roads?',   // KQ-Q 2026-11-06: L-lane-wui-q (list_Q_ruled.tsv); was `'The routes out of the ridge town were planned, zoned one-wa…'` (build_KQ_2026-11-06)   // EN-F-039 2026-11-10: list_EN_final_A.tsv row F-039 (EN-1733-A), new_src verbatim; was `The ridge town had planned its routes out, with evacuation z…` (build_EN_2026-11-10)
+             opts: ['On main roads, in traffic by roadside fuel',   // KQ-Q 2026-11-06: L-lane-wui-opt0 (list_Q_ruled.tsv); was `'On the planned routes, stalled in traffic beside verges thi…'` (build_KQ_2026-11-06)   // EN-F-040 2026-11-10: list_EN_final_A.tsv row F-040 (EN-1734-A), new_src verbatim; was `On the planned routes, stuck in traffic beside verges full o…` (build_EN_2026-11-10)
                     'On back roads that were never in the plan',
                     'In the town, before they ever reached a route',
                     'At the assembly areas the plan sent them to'],
              correct: 0,
-             whyShort: 'The Camp Fire investigation says people burned on the planned routes, the main roads. They were stuck in heavy traffic beside verges full of roadside fuel.',   // KQ-Q 2026-11-06: L-lane-wui-short (add_Q_ruled.tsv), a short answer line, new_text verbatim; the why below is unchanged but for what the list placed; was no whyShort (build_KQ_2026-11-06)
-             why: 'The Camp Fire investigation puts the burnovers on the main roads. Those were places with significant traffic gridlock. The roadside fuel was dense. There was little or no clear space between the vegetation and the road. There were few open areas to use as refuge. The town had learned from an earlier fire. It had one-way routes out and evacuation by zones. The half that was missing was the verge.' },   // KQ-Q 2026-11-06: L-lane-wui-why (list_Q_ruled.tsv); was `'The Camp Fire investigation puts the burnovers on the main …'` (build_KQ_2026-11-06)
-    basin: { q: 'A river was given room, and the flood level dropped. Vegetation has grown in the flood plain since: who must keep the flood level down?',   // TXT-B4 2026-10-30: L-lane-basin-q (list_TXT_B_final.tsv); was `'A river was given room, the flood level dropped, and vegetation has been growing in the flood plain ever since. Who holds the gain?'` (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: L-lane-basin-q (list_Q_ruled.tsv); was `'A river was given room, and the flood level dropped. Vegeta…'` (build_KQ_2026-11-06)
+             whyShort: 'The Camp Fire investigation found the most abandoned cars on a stretch of Skyway. It is a main road, where traffic was stuck beside verges full of roadside fuel.',   // KQ-Q 2026-11-06: L-lane-wui-short (add_Q_ruled.tsv), a short answer line, new_text verbatim; the why below is unchanged but for what the list placed; was no whyShort (build_KQ_2026-11-06)   // EN-F-041 2026-11-10: list_EN_final_A.tsv row F-041 (EN-1738-A), new_src verbatim; was `The Camp Fire investigation says people burned on the planne…` (build_EN_2026-11-10)
+             why: 'The Camp Fire investigation found many abandoned and burned cars on five main roads. Those were places with significant traffic gridlock. The roadside fuel was dense. There was little or no clear space between the vegetation and the road. There were few open areas to use as refuge. The investigation’s count left out cars further off the road, likely parked ones. The town had learned from an earlier fire. It had one-way routes out and evacuation by zones. The half that was missing was the verge.' },   // KQ-Q 2026-11-06: L-lane-wui-why (list_Q_ruled.tsv); was `'The Camp Fire investigation puts the burnovers on the main …'` (build_KQ_2026-11-06)   // EN-F-042 2026-11-10: list_EN_final_A.tsv row F-042 (EN-1739-A), new_src verbatim; was `The Camp Fire investigation puts the burnovers on the main r…` (build_EN_2026-11-10)
+    basin: { q: 'A river was given room, and the flood level dropped. Vegetation has grown in the floodplain since: who must keep the flood level down?',   // TXT-B4 2026-10-30: L-lane-basin-q (list_TXT_B_final.tsv); was `'A river was given room, the flood level dropped, and vegetation has been growing in the flood plain ever since. Who holds the gain?'` (build_TXT_B_2026-10-30)   // KQ-Q 2026-11-06: L-lane-basin-q (list_Q_ruled.tsv); was `'A river was given room, and the flood level dropped. Vegeta…'` (build_KQ_2026-11-06)   // EN-F-043 2026-11-10: list_EN_final_A.tsv row F-043 (EN-1740), new_src verbatim; was `A river was given room, and the flood level dropped. Vegetat…` (build_EN_2026-11-10)
              opts: ['Nobody needs to \u2014 a widened channel stays wide',
                     'The landowners, because the water law makes them maintain it',   // KQ-Q 2026-11-06: L-lane-basin-opt1 (list_Q_ruled.tsv); was `'The landowners, under a maintenance duty in the water law'` (build_KQ_2026-11-06)
                     'The towns, each for its own stretch',   // KQ-Q 2026-11-06: L-lane-basin-opt2 (list_Q_ruled.tsv); was `'The municipalities, each for its own stretch'` (build_KQ_2026-11-06)
@@ -6144,7 +6144,7 @@ const HAZARDS = {
            r: 78, hp: 1, spd: 0, dmg: 13, xp: 4, life: 11,
            // TXT-A5 2026-10-30: ADJUDICATION_TXT_A section 4 S-5, strings_TXT_A.md A2-03 - a new field, first: the line of the hazard's first-seen flash (makeHazard reads it, through say() as HAZ.heat.first); src below is unchanged and still feeds the report's hazard row (build_TXT_A_2026-10-30)
            first: 'It stays in one place, and your shots leave it alone.',
-           src: 'It does not come to you. It settles over a place and stays, which is why it kills more people than it looks like it should.' },
+           src: 'It does not come to you. It settles over a place and stays, which is why it kills more people than it seems it should.' },   // EN-F-044 2026-11-10: list_EN_final_A.tsv row F-044 (EN-1825), new_src verbatim; was `It does not come to you. It settles over a place and stays, …` (build_EN_2026-11-10)
   fire:  { name: 'Wildfire',   col: PAL.theirs.body.fire, behaviour: 'chase', at: 160,
            r: 10, hp: 12, spd: 92, dmg: 10, xp: 3, spread: 0.45,
            // Spotting: embers thrown ahead of the front, which is how a fire crosses ground
@@ -6152,7 +6152,7 @@ const HAZARDS = {
            shoot: { every: 3.7, n: 1, spread: 0, spd: 170, dmg: 6, range: 380, r: 5.5, life: 2.6, ember: 0.18 },
            // TXT-A10 2026-10-30: ADJUDICATION_TXT_A section 6 B4 (strings_TXT_A2.md B4; A2-05/A2-06) - the first-seen flash's line (the S-5 field, read by makeHazard); no PLAIN key, so say() returns this line with Plain English on too; src below is unchanged and still feeds the report's hazard row; was no first field (build_TXT_A_2026-10-30)
            first: 'Some Wildfires throw embers. An ember that lands can start a new fire.',
-           src: 'It multiplies. Some fires throw embers ahead of themselves onto ground that was not burning, and every one of those fires you leave standing is the source of the next.' },   // PT6-T1 2026-10-21: PLAN_PT6 T1 - FR1, the text from strings_PT6_final.md + R4 (build_PT6_2026-10-21)
+           src: 'It multiplies. Some fires throw embers ahead of themselves onto ground that was not burning. In this game, every one of those fires you leave standing starts the next.' },   // PT6-T1 2026-10-21: PLAN_PT6 T1 - FR1, the text from strings_PT6_final.md + R4 (build_PT6_2026-10-21)   // EN-F-045 2026-11-10: list_EN_final_A.tsv row F-045 (EN-1828-r2), new_src verbatim; was `It multiplies. Some fires throw embers ahead of themselves o…` (build_EN_2026-11-10)
 }
 const HAZARD_IDS = Object.keys(HAZARDS)
 // SP-M1 / SP-M3 / SP-M4 / SP-M5 2026-10-19: PLAN_SPLIT S1-S5 - every number the melee / ranged split adds, in one table beside HAZARDS (which stays as it was). kinds: the three that split (S1: Earthquake, Storm, Wildfire; flood fronts, heat zones, bosses and elites do not). melee / ranged: multipliers on today's body (health, touch damage, speed, size - size is the hit radius e.r, and the drawn sprite follows it). hold / holdBand / sideW / side: a ranged body comes to `hold` px from what it is after, at full speed when it is more than holdBand px off that distance, and sidesteps at that distance (sin(age x sideW + phase) x side of its speed). chip: the ranged Earthquake's rock chip, read by enemyFire as a storm's or a fire's shoot entry is (r and life are the Builder's: r = the storm shard's 4.5; life 2.5 s, so it flies about 1.19 x its range, as the storm's and the fire's do). ring: the ranged mark (S5), a thin pale steady dashed ring `gap` px out from the body, two-tone (a dark wider pass under it). Every value a first guess for the measurement (build_SPLIT_2026-10-18)
@@ -6219,7 +6219,7 @@ const DIFFS = {
     // DL-FIX 2026-10-15: FX7 (check_DIAL.md F8) - the line above said "so T's numbers run unscaled"; len 1.25 is not 1, so it now names the five factors that are 1 and the knee that len moves; comment only (build_DIAL_2026-10-14 fix round)
     name: 'Growing', short: 'Growing', col: '#57c7ff',
     // DL-FIX 2026-10-15: FX5 (check_DIAL.md F6) - "The tuned run." -> "The standard run." ("tuned" is jargon for this reader); "at the game's normal level" kept, true as above (build_DIAL_2026-10-14 fix round)
-    blurb: 'The standard run. Hazards, hits and warnings are at the game\'s normal level.',
+    blurb: 'The standard run. Hazards, hits and warnings are at the game’s normal level.',   // EN-F-046 2026-11-10: list_EN_final_A.tsv row F-046 (EN-1834), new_src verbatim; was `The standard run. Hazards, hits and warnings are at the game…` (build_EN_2026-11-10)
     ramp: 1, dmg: 0.85, spawn: 1, warn: 1, len: 1.25, pay: 1.3,   // R2b-1 2026-10-27: PLAN_R2b 1 - enemy damage per step; was `dmg: 1` (build_R2b_2026-10-27)
     fail: 3, llDmg: 1,
     levelHeal: 0.05, tbossAt: 210,   // BS-M4 / BS-M3 2026-09-30 (build_BS_2026-09-30)
@@ -6290,13 +6290,13 @@ let plainOn = plainStore()               // the switch under the dial: true show
 const ONBOARD_COPY = {
   // P16a-T 2026-10-22: S5-02 (strings_P16a.md) (build_P16a_2026-10-22)
   // P16B-UI4 2026-10-29: ADJUDICATION_UI F1 - in the line below "your red bar" -> "your orange bar" (#hpbar is now the UI-05 orange fill, #df7126) (build_P16B_2026-10-28)
-  'S3.1': { title: 'You move. You never aim.', body: 'Move with WASD or the arrow keys, or drag on a touch screen. Space or EVAC makes you dash, with a wait between dashes. Touching hazards takes capacity, your orange bar.' },
+  'S3.1': { title: 'You move. You never aim.', body: 'Move with WASD or the arrow keys, or drag on a touch screen. Space or EVAC makes you evacuate: a quick dash, then a wait before the next. Touching hazards takes capacity, your orange bar.' },   // EN-F-047 2026-11-10: list_EN_final_A.tsv row F-047 (EN-1842), new_src verbatim; was `Move with WASD or the arrow keys, or drag on a touch screen.…` (build_EN_2026-11-10)
   // P16a-T 2026-10-22: S5-04 (strings_P16a.md; ADJUDICATION_P16a.md m7) (build_P16a_2026-10-22)
   'S3.2': { title: 'Level up: pick a card', body: 'Destroyed hazards drop blue gems: walk near them to fill the blue bar. At each level the game pauses and you pick one card.' },
   // XL-M3 2026-10-13: S3.3 and S4.3 - "it repairs once nothing sits on it" -> "it repairs fastest once nothing sits on it", strings_XL.md S-R1 verbatim (ruling RX1): under R1 it also repairs, more slowly, while something sits on it (build_XP_2026-10-13)
   // P16a-T 2026-10-22: S5-06 (strings_P16a.md) (build_P16a_2026-10-22)
   // FIXF2 2026-11-03: S3.3's body - "a dashed ring" -> "a site's ring" (the works ring is solid since FIX2), strings_FIXT.md row 1 verbatim (the Lead's ruling: accepted); was `'S3.3': { title: 'The map: defend, dodge, build', body: "Lifelines are services like hospitals. Stand in a hurt one's ring to repair it. Ground marks warn of events: move away. Stand in a dashed ring to build a bonus." },` (build_FIX_2026-11-03)
-  'S3.3': { title: 'The map: defend, dodge, build', body: "Lifelines are services like hospitals. Stand in a hurt one's ring to repair it. Ground marks warn of events: move away. Stand in a site's ring to build a bonus." },
+  'S3.3': { title: 'The map: defend, dodge, build', body: "Lifelines are services like hospitals. Stand in a hurt one’s ring to repair it. Ground marks warn of events: move away. Stand in a site’s ring to build a bonus." },   // EN-F-048 2026-11-10: list_EN_final_A.tsv row F-048 (EN-1846), new_src verbatim; was `Lifelines are services like hospitals. Stand in a hurt one's…` (build_EN_2026-11-10)
   // P16a-T 2026-10-22: S5-08 (strings_P16a.md) (build_P16a_2026-10-22)
   'S3.4': { title: 'After the run: questions', body: 'You can answer questions. Right answers keep budget for permanent upgrades and grow your streak; wrong answers lose both. A streak of two or more powers up your next run.' },
   'S3.5': { next: 'Next', back: 'Back', skip: 'Skip', start: 'Start playing' },
@@ -6308,10 +6308,10 @@ const ONBOARD_COPY = {
   // P16a-T 2026-10-22: S5-15 (strings_P16a.md) (build_P16a_2026-10-22)
   'S4.3': { title: 'A lifeline is under attack', body: 'Go to it and stand inside its ring. You hit harder there, and it repairs fastest once nothing sits on it. Losing it costs you.', ok: 'Got it' },
   // P16a-T 2026-10-22: S5-17 (strings_P16a.md) (build_P16a_2026-10-22)
-  'S4.4': { title: 'Get out of the way', body: "Marks show where it will hit. It cannot be shot: move away, or press Space or EVAC. Some marks keep hurting after they land.", ok: 'Got it' },
+  'S4.4': { title: 'Get out of the way', body: "Marks show where an event will hit. It cannot be shot: move away, or press Space or EVAC. Some marks keep hurting after they land.", ok: 'Got it' },   // EN-F-049 2026-11-10: list_EN_final_A.tsv row F-049 (EN-1863), new_src verbatim; was `Marks show where it will hit. It cannot be shot: move away, …` (build_EN_2026-11-10)
   // P16a-T 2026-10-22: S5-19 (strings_P16a.md) (build_P16a_2026-10-22)
   // FIXF2 2026-11-03: S4.5's body - "the dashed ring" -> "the site's ring", strings_FIXT.md row 2 verbatim (the Lead's ruling: accepted), the body now in double quotes for the apostrophe; was `'S4.5': { title: 'Build a bonus here', body: 'Stand in the dashed ring for a few seconds to build it. Its bonus lasts the whole run. Unbuilt sites disappear after 15 seconds.', ok: 'Got it' },` (build_FIX_2026-11-03)
-  'S4.5': { title: 'Build a bonus here', body: "Stand in the site's ring for a few seconds to build it. Its bonus lasts the whole run. Unbuilt sites disappear after 15 seconds.", ok: 'Got it' },
+  'S4.5': { title: 'Build a bonus here', body: "Stand in the site’s ring for a few seconds to build it. Its bonus lasts the whole run. Unbuilt sites disappear after 15 seconds.", ok: 'Got it' },   // EN-F-050 2026-11-10: list_EN_final_A.tsv row F-050 (EN-1866), new_src verbatim; was `Stand in the site's ring for a few seconds to build it. Its …` (build_EN_2026-11-10)
   // CORRECTED 2026-09-23: "Questions are skippable." now says what Skip does - finish() ends every question left, releaseFunds pays right answers only, learnAnswer is not called (section C, section_C_2026-09-22)
   // P6-B2 2026-09-25: F1 (a) - a right answer's share is now banked when it is shown (bankShare), not by releaseFunds at finish(); the words of S3.4 and S4.6 stay true, and "Only the right answers you already gave keep their share" now also holds for leaving by the end buttons (build_P6_2026-09-25)
   // P16a-T 2026-10-22: S5-21 (strings_P16a.md) (build_P16a_2026-10-22)
@@ -6831,7 +6831,7 @@ const HOW_STEPS = ['S3.1', 'S3.2', 'S3.3', 'S3.4']
 // The one action each step teaches, bolded where the body carries it word for word. A substring, not a
 // sentence index, so a revised row that drops it loses the bold instead of bolding the wrong words.
 const HOW_ACT = { 'S3.1': 'Move with WASD or the arrow keys, or drag on a touch screen.',
-                  'S3.2': 'you pick one card', 'S3.3': "Stand in a hurt one's ring", 'S3.4': 'You can answer questions.' }
+                  'S3.2': 'you pick one card', 'S3.3': "Stand in a hurt one’s ring", 'S3.4': 'You can answer questions.' }   // EN-F-051 2026-11-10: list_EN_final_A.tsv row F-051 (EN-2058), new_src verbatim; was `Stand in a hurt one's ring` (build_EN_2026-11-10)
 let howStep = 0, howMandatory = false
 function howOpen(mandatory) {
   howMandatory = mandatory; howStep = 0
@@ -7112,10 +7112,10 @@ const CARD_FACES = {
   'FC-S3-11': "Regular rings knock nearby hazards back.",
   'FC-S3-13': "More often, and further out.",
   'FC-S3-14': "A belt around you can block thrown things.",
-  'FC-S3-16': "A wider belt, with one more shard.",
+  'FC-S3-16': "A wider belt, with one more leaf.",   // EN-F-052 2026-11-10: list_EN_final_A.tsv row F-052 (EN-2108), new_src verbatim; was `A wider belt, with one more shard.` (build_EN_2026-11-10)
   'FC-S3-17': "Each level, hits on you are 12% smaller.",
   'FC-S3-20': "You collect from 40% further.",
-  'FC-S3-19': "Shots turn toward targets; you collect 40% further.",
+  'FC-S3-19': "Shots turn toward targets; you collect from 40% further.",   // EN-F-053 2026-11-10: list_EN_final_A.tsv row F-053 (EN-2111), new_src verbatim; was `Shots turn toward targets; you collect 40% further.` (build_EN_2026-11-10)
   'FC-S3-23': "This level, +25 capacity.",   // R2-FX-7 2026-10-27: the Lead's addendum to the Fixer guard (14:1x) - faceId returns this face for Risk financing at every level below max0 (Lv 1-5); "Each level" is untrue once a tier adds T.r2FinTier (40) in place of a level's 25 (apply), so the face takes the tier face's form with the live face's own "+25 capacity"; was `'FC-S3-23': "Each level, +25 capacity.",` (build_R2_2026-10-27 fix round)
   'FC-R2-HP': 'This level, +40 capacity.',   // R2-2a-3 2026-10-27: the placeholder face of a Risk financing tier card (faceId routes hp at a level at or past max0 here); the Drafter's face replaces it (build_R2_2026-10-27)   // R2-FX-6 2026-10-27: strings_R2.md D5 F1 - the Finance tier face as drafted (the Lead's provisional ruling); was `'FC-R2-HP': 'R2PROV hp tierface',   // R2-2a-3 2026-10-27: the placeholder face of a Risk financing tier card (faceId routes hp at a level at or past max0 here); the Drafter's face replaces it (build_R2_2026-10-27)` (build_R2_2026-10-27 fix round)
   'FC-S3-25': "Each level, you move 10% faster.",
@@ -7167,7 +7167,7 @@ const CARD_FACES = {
   'FC-S3-115': "It pulls harder.",
   'FC-S3-116': "Adds a held beam; your shots keep firing.",
   'FC-S3-118': "Adds a wide sweep of many lighter shots.",
-  'FC-S5-02': "Move: WASD or drag. Dash: Space or EVAC.",
+  'FC-S5-02': "Move: WASD or drag. Evacuate: Space or EVAC.",   // EN-F-054 2026-11-10: list_EN_final_A.tsv row F-054 (EN-2164), new_src verbatim; was `Move: WASD or drag. Dash: Space or EVAC.` (build_EN_2026-11-10)
   'FC-S5-04': "Collect blue gems, level up, pick one card.",
   // FIXF2 2026-11-03: the face of S3.3, strings_FIXT.md row 3 verbatim (the Lead's ruling: accepted); was `'FC-S5-06': "Repair lifelines, dodge marks, build in dashed rings.",` (build_FIX_2026-11-03)
   'FC-S5-06': "Repair lifelines, dodge marks, build at sites.",
@@ -7176,16 +7176,16 @@ const CARD_FACES = {
   // SYN-T 2026-10-23: R2 (ADJUDICATION_SYN; review_SYN.md F1 face) - the hint S4.2 face under T.synLv; was `'FC-S5-13': "An extra effect from two measures you own.",` (build_SYN_2026-10-22)
   'FC-S5-13': "An extra effect from two measures at Lv 2.",
   'FC-S5-15': "Stand in its ring to repair it.",
-  'FC-S5-17': "This event cannot be shot: move away or dash.",
+  'FC-S5-17': "This event cannot be shot: move away or evacuate.",   // EN-F-055 2026-11-10: list_EN_final_A.tsv row F-055 (EN-2171), new_src verbatim; was `This event cannot be shot: move away or dash.` (build_EN_2026-11-10)
   // FIXF2 2026-11-03: the face of S4.5, strings_FIXT.md row 4 verbatim (the Lead's ruling: accepted); was `'FC-S5-19': "Stand in the dashed ring to build it.",` (build_FIX_2026-11-03)
-  'FC-S5-19': "Stand in the site's ring to build it.",
+  'FC-S5-19': "Stand in the site’s ring to build it.",   // EN-F-056 2026-11-10: list_EN_final_A.tsv row F-056 (EN-2172), new_src verbatim; was `Stand in the site's ring to build it.` (build_EN_2026-11-10)
   'FC-S5-21': "Right answers keep budget; wrong answers lose it.",
   'FC-S5-23': "Full repair from 65% or less secures a lifeline.",
   // HF-1 2026-11-05: the faces of S4.8 and S4.9, the next free odd numbers after FC-S5-23; list_HF.tsv rows HF-A1f and HF-A2f verbatim (build_HF_2026-11-05)
   'FC-S5-25': "Find the green triangle, then do what the task says.",
   'FC-S5-27': "Hazards sitting on your other lifelines now wear them down faster.",
   // U1-B7 / U1-B8 2026-11-05: the two lifeline cards' faces by level, list U1-C2-face1..3 and U1-C5-face1..3 verbatim (build_U1_2026-11-05)
-  'FC-U1-def1': "Away from you, lifelines also hit ordinary attackers.",
+  'FC-U1-def1': "While you are away, lifelines also hit ordinary attackers.",   // EN-F-057 2026-11-10: list_EN_final_A.tsv row F-057 (EN-2178), new_src verbatim; was `Away from you, lifelines also hit ordinary attackers.` (build_EN_2026-11-10)
   'FC-U1-def2': "Lifelines hit back more often.",
   'FC-U1-def3': "Lifelines hit back even more often.",
   'FC-U1-green1': "Greenery at a lifeline: slower Floods, less wear.",
@@ -7295,7 +7295,7 @@ function facePage(p, fb, fd, rid, body, act) {
 $('hint-fd').onclick = () => foldToggle($('hint-fd'))
 $('howto-fd').onclick = () => foldToggle($('howto-fd'))
 // P16a-F 2026-10-22: the META node lines FC-S3-144 and FC-S3-149 (faces_P16a.md F2), shown on a bought node in place of now(l) (build_P16a_2026-10-22)
-const META_FACES = { reserves: l => `+${8 * l} starting capacity, every run.`, office: l => `+${l} to your rerolls each run.`,
+const META_FACES = { reserves: l => `+${8 * l} starting capacity, every run (less with Concrete).`, office: l => `+${l} to your rerolls each run.`,   // EN-F-058 2026-11-10: list_EN_final_A.tsv row F-058 (EN-2389-twin1), new_src verbatim; was `+${8 * l} starting capacity, every run.` (build_EN_2026-11-10)
   spare: l => `A lost lifeline’s cost waits ${T.u1SpareT * l}s.`,   // U1-B2 2026-11-05: list U1-B3-face (build_U1_2026-11-05)
   follow: l => `Secure a lifeline: two teams follow you for ${T.u1CrewT0 + T.u1CrewT * l}s.` }   // U1-B2 2026-11-05: list U1-B6-face (build_U1_2026-11-05); was `const META_FACES = { reserves: l => …, office: l => `+${l} to your rerolls each run.` }`
 // UPGW-W2 2026-11-06: list UPGW-B-face - the shield node's line META_FACES.shield, there only with T.upgwOn 1 (a getter, read at each draw, so it follows
@@ -7340,7 +7340,7 @@ const PLAIN = {
   'UPG.hp.tier2': 'Capacity up by 40 again (Lv 7).',
   // LL-M1 2026-09-25: was "All you have built, working when it is needed." - replaced where it stands, never deleted (deleted, Learning would fall through to the Steady text); S-L1's Learning text verbatim (strings_LL.md) (build_LL_2026-09-25)
   'UPG.rate.desc0': 'Each level, lifelines repair 30% faster. You can stand in a ring 10% wider and still repair them.',
-  'UPG.dmg.desc0': 'Money spent making things stronger first, not on rebuilding them after.',
+  'UPG.dmg.desc0': 'Money spent on making things stronger first, not on rebuilding them after.',   // EN-F-059 2026-11-10: list_EN_final_A.tsv row F-059 (EN-2215), new_src verbatim; was `Money spent making things stronger first, not on rebuilding …` (build_EN_2026-11-10)
   // R2-FX-4 2026-10-27: strings_R2.md D3-L - the Learning twin of the Mainstreamed teaching line R2_T1, read by say('UPG.T1', R2_T1) in the measure card builder (build_R2_2026-10-27 fix round)
   'UPG.T1': 'The Sendai Framework is a UN plan to cut disaster risk. It asks countries to make this part of all sectors.',
   // G-M2 2026-10-13: the Learning gains of act, stock, concrete, who (and keep, below) say "up to" and which parts grow, strings_G.md S-G2a verbatim. Were: "Warning fires 25% faster. Drills reach 30% further. And one more shot goes out each time." / "Codes cover 35% more ground. Retrofitting stops 10% more. What you stop bursts where it falls." / "+60 capacity. Retrofitting also stops 8% more." / "Drills reach 25% further. You collect from 25% further away. A shot that lands sends another on to the next thing." (build_G_2026-10-01)
@@ -7381,13 +7381,13 @@ const PLAIN = {
   'FUS.see.gain': 'A monitoring beam circles you. It wears down hazards a long way out, but not Heatwaves or the big events with a bar at the top of the screen.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ4, the text from strings_PT6_final.md (build_PT6_2026-10-21)
   // P16a-T 2026-10-22: S3-54 (strings_P16a.md; ADJUDICATION_P16a.md n2, m1) (build_P16a_2026-10-22)
   'FUS.buffer.desc': 'A buffer that is planned, planted and defended. It is wider and thicker. It pushes back hazards that touch it, except Heatwaves and the big events with a bar at the top of the screen.',
-  'FUS.buffer.gain': 'The green belt gets two more shards and reaches 25% further. It throws back what it hits.',
+  'FUS.buffer.gain': 'The green belt gets two more leaves and reaches 25% further. It throws back what it hits.',   // EN-F-060 2026-11-10: list_EN_final_A.tsv row F-060 (EN-1375-twin), new_src verbatim; was `The green belt gets two more shards and reaches 25% further.…` (build_EN_2026-11-10)
   // GR-M1 2026-09-29: the grand programmes' Learning desc and gain, strings_GR.md S-G1 verbatim (keys GRD.<id>.desc / .gain, the FUS pattern); names and the banner's `take` have none, so they fall through to the Steady text (build_GR_2026-09-29)
   // CB-M4 2026-09-30: GRD.chain.desc / .gain and GRD.shield.gain reworded, strings_CB.md S-C4 C4-3, C4-4, C4-6 verbatim (ADJUDICATION_GR F1, F2) (build_CB_2026-09-30)
   // G-M3 2026-10-13: the Learning desc and gain of chain, laser, veil, aftershock and orbit, strings_G.md S-G3a verbatim ("up to" on the number that ripens, and the grow sentences); the old texts are quoted in the GRANDS lines' G-M3 notes and differ by those additions (build_G_2026-10-01)
   // P16a-T 2026-10-22: S3-58 (strings_P16a.md) (build_P16a_2026-10-22)
   'GRD.chain.desc': 'Your aimed shots and the wide sweep can set off lightning. It jumps to nearby hazards, up to 4 times.',
-  'GRD.chain.gain': 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not hit yet. It leaves Heatwaves alone. It can jump up to 4 times. The first jump does up to 60% of the shot\'s damage. Each jump after that does 20% less than the one before. The number of jumps and the 60% can start smaller. They grow as you level Drills, Data and Warning.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ10, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+  'GRD.chain.gain': 'Your aimed shots and the wide sweep can set off lightning. It starts at most 12 times a second. It jumps to the nearest hazard close by that it has not hit yet. It leaves Heatwaves alone. It can jump up to 4 times. The first jump does up to 60% of the shot’s damage. Each jump after that does 20% less than the one before. The number of jumps and the 60% can start smaller. They grow as you level Drills, Data and Warning.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ10, the text from strings_PT6_final.md (build_PT6_2026-10-21)   // EN-F-061 2026-11-10: list_EN_final_A.tsv row F-061 (EN-2240), new_src verbatim; was `Your aimed shots and the wide sweep can set off lightning. I…` (build_EN_2026-11-10)
   // P16a-T 2026-10-22: S3-60 (strings_P16a.md) (build_P16a_2026-10-22)
   'GRD.laser.desc': 'Your beam becomes a laser. It hits up to 50% harder and aims at one more target. If you have no beam, you get one.',
   'GRD.laser.gain': 'Your beam becomes a laser. It hits up to 50% harder and aims at one more target. If you have no beam, you get one. Your aimed shots stay the same. The 50% can start smaller. It grows as you level Data, Warning and Drills.',
@@ -7400,7 +7400,7 @@ const PLAIN = {
   'GRD.veil.gain': 'There is a ring around you. Inside it, thrown things fly 40% slower. Hazards move 25% slower. So does the event that arrives with the words \u201cSeveral hazards, arriving together.\u201d Nothing outside the ring is slowed. Your own shots are not slowed. Events marked on the ground are not slowed. The ring can start smaller. It grows as you level Warning, Drills, Nature and Land use.',
   // P16a-T 2026-10-22: S3-66 (strings_P16a.md) (build_P16a_2026-10-22)
   'GRD.aftershock.desc': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump to another hazard close by. This can happen up to twice in a row.',
-  'GRD.aftershock.gain': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it. It goes to the nearest hazard close by. It leaves Heatwaves alone. It does up to 35% of the burst\'s damage. It starts at most 8 times a second. If the lightning kills, there can be another burst. That burst can send lightning once more. It does not go on after that. The 35% can start smaller. It grows as you level Invest, Upkeep, Codes and Retrofit.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ12, the text from strings_PT6_final.md (build_PT6_2026-10-21)
+  'GRD.aftershock.gain': 'When a Fragmenting or Residual burst kills a hazard, lightning can jump from it. It goes to the nearest hazard close by. It leaves Heatwaves alone. It does up to 35% of the burst’s damage. It starts at most 8 times a second. If the lightning kills, there can be another burst. That burst can send lightning once more. It does not go on after that. The 35% can start smaller. It grows as you level Invest, Upkeep, Codes and Retrofit.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ12, the text from strings_PT6_final.md (build_PT6_2026-10-21)   // EN-F-062 2026-11-10: list_EN_final_A.tsv row F-062 (EN-2248), new_src verbatim; was `When a Fragmenting or Residual burst kills a hazard, lightni…` (build_EN_2026-11-10)
   // GR2-FIX 2026-09-30: the orbit's Learning desc and gain reworded as the Steady ones (ADJUDICATION_GR2 F2, F5): "They leave heat alone." (PT6-T1 2026-10-21: R5 - now "They leave Heatwaves alone.", strings_PT6_final.md OR4, OR5 (build_PT6_2026-10-21)); 9 damage a hit, at most once every 0.3s on the same hazard. Were: desc "Three pieces go round close to you. They hurt any hazard they touch and push it away. They do not stop thrown things."; gain "Three pieces circle close around you. They go round once every 2.4s. A hazard they touch takes 30 damage a second. Resilient investment makes it more. The pieces push the hazard away from you. They do not stop thrown things." (build_GR2_2026-09-30 fix round)
   // G-FIX 2026-10-13: F8 - orbit's Learning desc and gain: "More come as you level Codes, Land use and Upkeep." became "The number grows as you level Codes, Land use and Upkeep.", as the Steady texts (ADJUDICATION_G F8) (build_G_2026-10-01 fix round)
   // P16a-T 2026-10-22: S3-68 (strings_P16a.md) (build_P16a_2026-10-22)
@@ -7419,17 +7419,17 @@ const PLAIN = {
   'MOD.calibre.desc0': 'What you fire is bigger and hits harder, but it is slower.',
   'MOD.grow.desc0': 'It gets wider as it travels. It is thin near you and broad where it lands.',
   'MOD.grow.descN': l => `It gets wider faster (Lv ${l + 1}).`,
-  'MOD.gather.desc0': 'What you hit is pulled toward where it was hit. It is not thrown away from it.',
+  'MOD.gather.desc0': 'What you hit is pulled toward where it was hit. It is not pushed away from it.',   // EN-F-063 2026-11-10: list_EN_final_A.tsv row F-063 (EN-2259), new_src verbatim; was `What you hit is pulled toward where it was hit. It is not th…` (build_EN_2026-11-10)
   // P16a-T 2026-10-22: S3-117 (strings_P16a.md) (build_P16a_2026-10-22)
   'MOD.beam.desc0': 'A beam that stays on burns what it crosses, out to where you can see. It leaves Heatwaves alone. Your aimed shots keep firing. Through, Volley, Calibre, Relay and Gathering also work on the beam.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - HZ8, the text from strings_PT6_final.md (build_PT6_2026-10-21)
   // P16a-T 2026-10-22: S3-119 (strings_P16a.md) (build_P16a_2026-10-22)
   'MOD.fan.desc0': 'A wide sweep, added to your aimed shots. Many more shots spread across the front. Each is lighter and does not go as far.',
   'HAZ.quake.src': 'It is sudden, with little warning, and over in seconds. That is why the only thing that works is what was already in place.',
   'HAZ.flood.src': 'In this game, it is a front, not an event. It comes from one direction and keeps coming.',   // GW-09 2026-11-04: list_GW.tsv row GW-09 (the literal), new_text verbatim; was `'A front, not an event. It comes from one direction and keeps…'` (build_GW_2026-11-04)
-  'HAZ.heat.src': 'It does not come to you. It settles over a place and stays. That is why it kills more people than it looks like it should.',
+  'HAZ.heat.src': 'It does not come to you. It settles over a place and stays. That is why it kills more people than it seems it should.',   // EN-F-064 2026-11-10: list_EN_final_A.tsv row F-064 (EN-2264), new_src verbatim; was `It does not come to you. It settles over a place and stays. …` (build_EN_2026-11-10)
   // TXT-A5 2026-10-30: ADJUDICATION_TXT_A section 4 S-5, strings_TXT_A.md A2-04 - the plain twin of HAZARDS.heat.first, a new key; HAZ.heat.src above is kept, since the report's hazard row reads it (verify_TXT_A F05: no PLAIN entry removed) (build_TXT_A_2026-10-30)
   'HAZ.heat.first': 'It stays in one place, and your shots leave it alone.',
-  'HAZ.fire.src': 'It multiplies. Some fires throw embers ahead of themselves, onto ground that was not burning. Every one of those fires you leave standing starts the next.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - FR2, the text from strings_PT6_final.md + R4 (build_PT6_2026-10-21)
+  'HAZ.fire.src': 'It multiplies. Some fires throw embers ahead of themselves, onto ground that was not burning. In this game, every one of those fires you leave standing starts the next.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - FR2, the text from strings_PT6_final.md + R4 (build_PT6_2026-10-21)   // EN-F-065 2026-11-10: list_EN_final_A.tsv row F-065 (EN-1828-twin), new_src verbatim; was `It multiplies. Some fires throw embers ahead of themselves, …` (build_EN_2026-11-10)
   // R4-F1 2026-10-25: ADJUDICATION_R4 final list - the Learning twins of the new elites' lines, which r4First reads through say() as ELT.<id>.first and ELT.<id>.src; the list gives none for E3 (first and src) or for E9's src, so those show their Steady text in both modes (build_R4_2026-10-25)
   'ELT.E1.first': 'When you destroy it, circles fill, then hit. Do it far from you and your lifelines.',
   'ELT.E1.src': 'USGS (US): most big earthquakes have aftershocks. These can still do damage or kill.',
@@ -7462,22 +7462,22 @@ const PLAIN = {
   'CRY.M4.src': 'Ready.gov (US): if you are in a damaged building, get out and move away fast. Do not go back in.',
   'CRY.M6.banner': 'Dry plants are around the house. Carry them past the firebreak line.',
   // TXT-A7 2026-10-30: strings_TXT_A.md A2-30 and A2-31 (ADJUDICATION_TXT_A section 3, applied); was `'CRY.M6.pick': 'You have the brush. Take it past the firebreak line. EVAC drops it.',` and `'CRY.M6.done': 'The ring is clear. For 30s, fire spreads into it at half its rate. It can still burn.',` (build_TXT_A_2026-10-30)
-  'CRY.M6.pick': 'You have the brush: take it past the firebreak line. EVAC drops it.',
+  'CRY.M6.pick': 'You have the dry plants: take them past the firebreak line. EVAC drops them.',   // EN-F-066 2026-11-10: list_EN_final_A.tsv row F-066 (EN-2292), new_src verbatim; was `You have the brush: take it past the firebreak line. EVAC dr…` (build_EN_2026-11-10)
   'CRY.M6.done': 'The ring is clear: for 30s, fire spreads into it at half its rate. It can still burn.',
-  'CRY.M6.fail': 'The dry plants stayed. Small new fires start.',
+  'CRY.M6.fail': 'The dry plants stayed. In this game, small new fires start.',   // EN-F-067 2026-11-10: list_EN_final_A.tsv row F-067 (EN-2294), new_src verbatim; was `The dry plants stayed. Small new fires start.` (build_EN_2026-11-10)
   'CRY.M6.src': 'UNEP: clearing plants around buildings can cut fire risk. But it does not necessarily stop fires.',
-  'WRK.backup.gain': 'If power is lost, the hospital\'s backup power starts by itself. You do not carry a generator.',
+  'WRK.backup.gain': 'If power is lost, the hospital’s backup power starts by itself. You do not carry a generator.',   // EN-F-068 2026-11-10: list_EN_final_A.tsv row F-068 (EN-2296), new_src verbatim; was `If power is lost, the hospital\'s backup power starts by its…` (build_EN_2026-11-10)
   'EVT.inbound.warned': warn => `Your warning system gives you ${(warn).toFixed(1)}s.`,
   'LL.lost.more': left => ` If you lose ${left} more, the run ends here.`,
   'LL.hospital.gain': 'Your capacity comes back slowly while it stands.',
-  'LL.school.cost': 'And 15% less than normal once it is gone.',
+  'LL.school.cost': 'With no school, what you collect is worth 15% less than normal.',   // EN-F-069 2026-11-10: list_EN_final_A.tsv row F-069 (EN-2300), new_src verbatim; was `And 15% less than normal once it is gone.` (build_EN_2026-11-10)
   // P16a-T 2026-10-22: S2-19 (strings_P16a.md) (build_P16a_2026-10-22)
   // TXT-A7 2026-10-30: strings_TXT_A.md A2-15 (ADJUDICATION_TXT_A section 3, applied); was `'LL.power.cost': 'And 12% slower after. The other lifelines also fail faster.',` (build_TXT_A_2026-10-30)
-  'LL.power.cost': 'And 12% slower after, and the other lifelines now fail faster.',
+  'LL.power.cost': 'With no power, you fire 12% slower, and the other lifelines now fail faster.',   // EN-F-070 2026-11-10: list_EN_final_A.tsv row F-070 (EN-2301), new_src verbatim; was `And 12% slower after, and the other lifelines now fail faste…` (build_EN_2026-11-10)
   'LL.water.gain': 'Heat hurts you 40% less.',
   // P16a-T 2026-10-22: S2-21 (strings_P16a.md) (build_P16a_2026-10-22)
   // TXT-A7 2026-10-30: strings_TXT_A.md A2-16 (ADJUDICATION_TXT_A section 3, applied); was `'LL.road.cost': 'And 10% slower after. Works take longer.',` (build_TXT_A_2026-10-30)
-  'LL.road.cost': 'And 10% slower after, and works take longer.',
+  'LL.road.cost': 'With no road, you move 10% slower and sites take longer to build.',   // EN-F-071 2026-11-10: list_EN_final_A.tsv row F-071 (EN-2303), new_src verbatim; was `And 10% slower after, and works take longer.` (build_EN_2026-11-10)
   // P16a-T 2026-10-22: S2-37 (strings_P16a.md) (build_P16a_2026-10-22)
   'SVC.hospital.line': 'Casualties clear. You get 30% back now, and more for 8s.',
   // P16a-T 2026-10-22: S2-38 (strings_P16a.md) (build_P16a_2026-10-22)
@@ -7494,7 +7494,7 @@ const PLAIN = {
   // CORRECTED 2026-09-23: was "Everything is pushed back, and you get a moment to move." - take() pushes only the enemies that are not heat (not events, the compound event or thrown things); now the room the push makes and the moment of P.inv (at least 1.3 s), in which only heat's damage still lands (section C round 3, section_C_2026-09-22)
   // UIX-T 2026-11-06: list UIX-B1-01 - with U2 on (uixHeatOn(): T.uixOn && T.uixHeat) heat also respects P.inv, so "in which only heat's damage still lands" above holds only with U2 off; the line follows U2: new_text with it on, the current line byte for byte with it off (say() calls a function entry) (build_UIX_2026-11-06)
   'PICK.evac.flash': () => uixHeatOn() ? 'You get room to move, and for a moment nothing can hurt you.' : 'You get room to move, and for a moment only heat can hurt you.',   // UIX-T list UIX-B1-01; was `'PICK.evac.flash': 'You get room to move, and for a moment o…` (build_UIX_2026-11-06)
-  'WRK.station.gain': 'You collect from 20% further. What you collect is worth 8% more.',
+  'WRK.station.gain': 'You collect from 20% further away. What you collect is worth 8% more.',   // EN-F-072 2026-11-10: list_EN_final_A.tsv row F-072 (EN-2315), new_src verbatim; was `You collect from 20% further. What you collect is worth 8% m…` (build_EN_2026-11-10)
   // CORRECTED 2026-09-15: Learning plain line no longer says storms are the only warned hazard (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
   'SEA.storm.note': 'A hazard you can be warned about ahead of time.',
   'SEA.wet.note': 'It comes as a front, and it keeps coming.',
@@ -7528,9 +7528,9 @@ const PLAIN = {
   'BOSS.turn.siege': 'It marks circles near you, then they hit. It also rushes at you.',
   // B2-C / B2-D / B2-E 2026-11-05: B2's Plain English twins, list_B2_v2.tsv column plain verbatim - B2-D2 (BOSS.soft), B2-E1 (BOSS.plate), B2-C2 and B2-C3 (SW.hard.note), B2-S3 (BOSS.true.arriveHard), B2-S5 (BOSS.true.phase1Hard); the rows whose plain is 'same' have none (build_B2_2026-11-05)
   'BOSS.soft': 'Where its circles hit, soft ground slows you, then fades. Step out.',
-  'BOSS.plate': 'Hitting the plate does less. Go to its side or back.',
+  'BOSS.plate': 'Hitting the plate does less. Go to its side or behind it.',   // EN-F-073 2026-11-10: list_EN_final_A.tsv row F-073 (EN-2337), new_src verbatim; was `Hitting the plate does less. Go to its side or back.` (build_EN_2026-11-10)
   'SW.hard.note': 'All compound events shoot in rings, and the boss starts its ring sooner. Beating one gives you more.',
-  'BOSS.true.arriveHard': 'Several hazards, arriving together: the boss, shooting in a ring. Beat it or outlast it.',
+  'BOSS.true.arriveHard': 'Several hazards, arriving together: the boss, shooting in a ring. Beat it or survive it.',   // EN-F-074 2026-11-10: list_EN_final_A.tsv row F-074 (EN-2339), new_src verbatim; was `Several hazards, arriving together: the boss, shooting in a …` (build_EN_2026-11-10)
   'BOSS.true.phase1Hard': 'The boss called them in. It still shoots in a ring around itself.',
   // BS-M3 2026-09-30: the true boss's Learning lines, strings_BS.md S-B1 (c)-(g) verbatim; its warning and the "still on the field" row have no Learning variant (the same text) (build_BS_2026-09-30)
   // TXT-A7 2026-10-30: strings_TXT_A.md A2-17 (ADJUDICATION_TXT_A section 3, applied); was `'BOSS.true.arrive': 'Several hazards, arriving together. This is the boss. Beat it, or last until it passes.',` (build_TXT_A_2026-10-30)
@@ -7558,11 +7558,11 @@ const PLAIN = {
   // U1-B1 2026-11-05: F10 - the R3 Learning twins: strings_R3.md D2-01 L, D4-05 L, D4-06 L; list U1-E7-D4-01L, U1-E7-D4-02L, U1-E4-L, U1-E7-D4-04L, U1-E5-L (build_U1_2026-11-05)
   'AX.grey.face': 'You hit harder, but the most capacity you can have is lower.',
   'AX.grey.src': 'Sea walls and dikes, or mangroves, can cut flooding from the sea in storms. But walls and dikes can cost a lot, now and later (IPBES 2019, page 22).',
-  'AX.green.src': 'Forests and mangroves make hazards less harmful, by being there and by what they do. A restored one needs time to take hold (UNDRR, UNEP and PEDRR, pages 12 and 33).',
+  'AX.green.src': 'Forests and mangroves make hazards less harmful, by being there and by what they do. A restored ecosystem needs time to take hold (UNDRR, UNEP and PEDRR, pages 12 and 33).',   // EN-F-075 2026-11-10: list_EN_final_A.tsv row F-075 (EN-2353), new_src verbatim; was `Forests and mangroves make hazards less harmful, by being th…` (build_EN_2026-11-10)
   'AX.hybrid.src': 'In many cases, a mix of ecosystems and concrete defences will cut risk best. How well ecosystems work depends on the context (UNDRR, UNEP and PEDRR, page 15).',
   'AX.fast.src': 'The Sendai Framework names fast, unplanned city growth as one cause of disaster risk (¶6). UNDRR says city growth adds to disaster risk now, but it does not have to.',
   'AX.planned.src': `One UN example of prevention: rules that let no one live in high-risk zones. The Sendai Framework asks countries to push for risk checks in plans for land use (${U1CH.pil}30(f)).`,
-  'AX.transfer.src': `With insurance, someone else pays you after a disaster. A UN plan backs it where it fits, to cut the money harm of disasters (Sendai ${U1CH.pil}30(b)).`,
+  'AX.transfer.src': `With insurance, someone else pays you after a disaster. A UN plan backs it where it fits, to cut the money cost of disasters (Sendai ${U1CH.pil}30(b)).`,   // EN-F-076 2026-11-10: list_EN_final_A.tsv row F-076 (EN-2357), new_src verbatim; was `With insurance, someone else pays you after a disaster. A UN…` (build_EN_2026-11-10)
   'AX.reduce.src': 'Sendai Framework: tackling the causes of risk with public and private money gives better value. Relying mainly on help and rebuilding later gives less (¶19(j)).',
   // U1-B2 2026-11-05: the lifeline nodes' Learning twins, list U1-B3-srcL, U1-B4-srcL, U1-B6-srcL (build_U1_2026-11-05)
   'META.spare.src': 'Cabinet Office (UK): spare capacity lets a service switch to another part of the network. Some services would still work less well at first.',
@@ -7572,7 +7572,7 @@ const PLAIN = {
   // UPGW-W2 2026-11-06: list UPGW-B-srcL - the twin follows T.upgwOn (say() and sayPlain call a function entry); with 0 the base's string, byte for byte (build_UPGW_2026-11-06)
   'META.shield.src': () => T.upgwOn ? 'European Commission: 2026 advice, not a rule, says to guard key services’ sites and networks. In this game, events, boss strikes and what sits on lifelines hurt them less.' : 'European Commission: 2026 advice, not a rule, says to guard key services’ sites and networks. In this game, events and boss strikes hurt lifelines less.',   // UPGW-W2 (build_UPGW_2026-11-06); was `'META.shield.src': 'European Commission: 2026 advice, not a …`
   // U1-B7 2026-11-05: the Lifelines fight back card's level-1 face, Learning twin, list U1-C2-face1L (build_U1_2026-11-05)
-  'FC-U1-def1': 'When you go, lifelines also hit attackers with no crown.',
+  'FC-U1-def1': 'While you are away, lifelines also hit attackers with no crown.',   // EN-F-077 2026-11-10: list_EN_final_A.tsv row F-077 (EN-2365), new_src verbatim; was `When you go, lifelines also hit attackers with no crown.` (build_EN_2026-11-10)
 }
 // DL-M3 2026-10-14: say() and glossHtml() gate on the plain-language switch (plainOn) instead of DIFF.id === 'learn' (PLAN_DIAL D4); the comments above that say "Learning" describe the gate before this build; PLAIN and GLOSS are unchanged (build_DIAL_2026-10-14)
 function say(id, cur, arg) {
@@ -7604,7 +7604,7 @@ const GLOSS = {
   'S7.A9': 'Care of infrastructure. Regular upkeep based on checks helps it work better and last longer.',
   'S7.B1': 'Something in nature or done by people that may cause harm. Harm can mean death, injury, damage or disruption.',
   'S7.B4': 'Conditions making people, places or systems easier for hazards to harm. They come from physical, social, economic and environmental factors.',
-  'S7.B5': "Being able to resist, absorb, adjust to and adapt to a hazard's effects. And to transform and recover from them.",
+  'S7.B5': "Being able to resist, absorb, adjust to and adapt to a hazard’s effects. And to transform and recover from them.",   // EN-F-078 2026-11-10: list_EN_final_A.tsv row F-078 (EN-2378), new_src verbatim; was `Being able to resist, absorb, adjust to and adapt to a hazar…` (build_EN_2026-11-10)
   'S7.B8': 'Moving people and property to safer places for a time. It is done before, during or after a hazard happens.',
   'S7.B10c': 'A chain reaction. One hazard or failure sets off linked impacts that may spread across systems and sectors.',
   // TXT-A7 2026-10-30: strings_TXT_A.md A3-39 (ADJUDICATION_TXT_A section 3, applied); was `'S7.LL': 'Services that help you: three at random from hospital, school, power, water, road. One place has four. Losing one hurts.',` (build_TXT_A_2026-10-30)
@@ -7672,18 +7672,18 @@ const healLine = (row, cur) => (P && P.healMul === 0.3) ? HOSPITAL_LOST[row] : c
 // no-memory session, the same contract as the question scheduler.
 const META = [
   { id: 'reserves', name: 'Contingency reserves', max: 3, cost: l => 6 + l * 5,
-    fx: '+8 starting capacity per level.',
+    fx: '+8 starting capacity per level (less with Concrete).',   // EN-F-079 2026-11-10: list_EN_final_A.tsv row F-079 (EN-2389), new_src verbatim; was `+8 starting capacity per level.` (build_EN_2026-11-10)
     src: 'Reserves and insurance. In this game, they give you capacity to take a hit.',   // GW-16 2026-11-04: list_GW.tsv row GW-16 (src), new_text verbatim; was `'Reserves and insurance: capacity to take a hit and still be …'` (build_GW_2026-11-04)
-    now: l => `+${8 * l} starting capacity, from the first second of every run.`,
+    now: l => `+${8 * l} starting capacity, from the first second of every run (less with Concrete).`,   // EN-F-080 2026-11-10: list_EN_final_A.tsv row F-080 (EN-2389-twin2), new_src verbatim; was `+${8 * l} starting capacity, from the first second of every …` (build_EN_2026-11-10)
     of: 'hp' },
-  { id: 'routes', name: 'Practiced routes', max: 3, cost: l => 6 + l * 5,
+  { id: 'routes', name: 'Practised routes', max: 3, cost: l => 6 + l * 5,   // EN-F-081 2026-11-10: list_EN_final_A.tsv row F-081 (EN-2392), new_src verbatim; was `Practiced routes` (build_EN_2026-11-10)
     fx: 'Move 4% faster per level.',
     src: 'A route people have walked once in daylight is a route they can walk in the dark.',
     now: l => `You move ${4 * l}% faster, every run.`,
     of: 'wave' },
   { id: 'dissem', name: 'Warning dissemination', max: 3, cost: l => 6 + l * 5,
     fx: 'What Warning fires travels 8% faster per level.',
-    src: 'In this game, it detects what is closest and answers it before it arrives. Dissemination is the speed of the answer. Your shots leave Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - DS, the text from ADJUDICATION_strings_PT6.md R1 (build_PT6_2026-10-21)   // GW-14 2026-11-04: list_GW.tsv row GW-14 (src), new_text verbatim; was `'It detects what is closest and answers it before it arrives.…'` (build_GW_2026-11-04)
+    src: 'In this game, it detects what is closest and answers it before it arrives. Spreading the warning is the speed of the answer. Your shots leave Heatwaves alone.',   // PT6-T1 2026-10-21: PLAN_PT6 T1 - DS, the text from ADJUDICATION_strings_PT6.md R1 (build_PT6_2026-10-21)   // GW-14 2026-11-04: list_GW.tsv row GW-14 (src), new_text verbatim; was `'It detects what is closest and answers it before it arrives.…'` (build_GW_2026-11-04)   // EN-F-082 2026-11-10: list_EN_final_A.tsv row F-082 (EN-2398), new_src verbatim; was `In this game, it detects what is closest and answers it befo…` (build_EN_2026-11-10)
     now: l => `What Warning fires travels ${8 * l}% faster.`,
     of: 'pulse' },
   { id: 'enforce', name: 'Enforcement capacity', max: 3, cost: l => 6 + l * 5,
@@ -7699,13 +7699,13 @@ const META = [
     of: 'magnet' },
   { id: 'office', name: 'Standing assessment office', max: 2, cost: l => 8 + l * 6,
     fx: '+1 reroll charge per level.',
-    src: 'In this game, commissioning a study is paying to change your option menu.',   // GW-30 2026-11-04: list_GW.tsv row GW-30 (src), new_text verbatim; was `'Commissioning a study is paying to change your option menu.'` (build_GW_2026-11-04)
+    src: 'In this game, ordering a study is paying to draw new cards.',   // GW-30 2026-11-04: list_GW.tsv row GW-30 (src), new_text verbatim; was `'Commissioning a study is paying to change your option menu.'` (build_GW_2026-11-04)   // EN-F-083 2026-11-10: list_EN_final_A.tsv row F-083 (EN-2410), new_src verbatim; was `In this game, commissioning a study is paying to change your…` (build_EN_2026-11-10)
     now: l => `+${l} to the reroll charges you get each run.`,   // S5.7.27: one pool per run, not per screen
     of: 'magnet' },
   { id: 'telegraph', name: 'Warning culture', max: 3, cost: l => 6 + l * 5,
-    fx: 'Event telegraphs last 6% longer per level.',
-    src: 'In this game, how long the telegraph lasts is what early warning buys.',   // GW-28 2026-11-04: list_GW.tsv row GW-28 (src), new_text verbatim; was `'How long the telegraph lasts is what early warning buys.'` (build_GW_2026-11-04)
-    now: l => `Event telegraphs last ${6 * l}% longer.`,
+    fx: 'Event warnings last 6% longer per level.',   // EN-F-084 2026-11-10: list_EN_final_A.tsv row F-084 (EN-2413), new_src verbatim; was `Event telegraphs last 6% longer per level.` (build_EN_2026-11-10)
+    src: 'In this game, how long the warning lasts is what early warning buys.',   // GW-28 2026-11-04: list_GW.tsv row GW-28 (src), new_text verbatim; was `'How long the telegraph lasts is what early warning buys.'` (build_GW_2026-11-04)   // EN-F-085 2026-11-10: list_EN_final_A.tsv row F-085 (EN-2414), new_src verbatim; was `In this game, how long the telegraph lasts is what early war…` (build_EN_2026-11-10)
+    now: l => `Event warnings last ${6 * l}% longer.`,   // EN-F-086 2026-11-10: list_EN_final_A.tsv row F-086 (EN-2415), new_src verbatim; was `Event telegraphs last ${6 * l}% longer.` (build_EN_2026-11-10)
     of: 'pulse' },
   { id: 'drills0', name: 'Institutionalised drills', max: 3, cost: l => 6 + l * 5,
     get fx() { return T.upgsOn ? 'Evacuate comes back 5% faster per level.' : 'Evacuate comes back 5% sooner per level.' },   // UPGS-P5 2026-11-05: list UPGS-C2-drills0-fx with T.upgsOn 1, today's line with 0 (build_UPGS_2026-11-05); was `fx: 'Evacuate comes back 5% sooner per level.',`
@@ -8401,7 +8401,7 @@ function offerLearn() {
   const earned = MASTERY.filter(m => st.right >= m.at)
   const nextM = MASTERY.find(m => st.right < m.at)
   el.innerHTML = `Understanding — <b>${st.right} right</b> across your runs · ` +
-    (tier.at > 0 ? `you start firing <i>${tier.name}</i> (streak ${st.streak})` : 'no streak carried') + ' · ' +
+    (tier.at > 0 ? `your shots start at <i>${tier.name}</i> (streak ${st.streak})` : 'no streak carried') + ' · ' +   // EN-F-087 2026-11-10: list_EN_final_A.tsv row F-087 (EN-2541), new_src verbatim; was `you start firing <i>${tier.name}</i> (streak ${st.streak})` (build_EN_2026-11-10)
     (earned.length ? earned.map(m => `<i>${m.name}</i>`).join(', ') + ' active' : 'no mastery tier yet') +
     (nextM ? ` · ${nextM.at - st.right} more for ${nextM.name}` : '')
 }
@@ -8453,7 +8453,7 @@ const PLACES = {
     events: ['rockfall', 'rockfall', 'fissure', 'landslide'],
     boon: { text: 'The code has been enforced here for a generation.', grant: ['field'] },
     // P16a-T 2026-10-22: S1-24 (strings_P16a.md) (build_P16a_2026-10-22)
-    bite: { text: 'Everything that arrives takes a third more stopping. The surges are aftershocks.', surgeMul: 1.45, rateMul: 1.15, hpMul: 1.35 },
+    bite: { text: 'Everything that arrives is a third harder to stop. The surges are aftershocks.', surgeMul: 1.45, rateMul: 1.15, hpMul: 1.35 },   // EN-F-088 2026-11-10: list_EN_final_A.tsv row F-088 (EN-2552), new_src verbatim; was `Everything that arrives takes a third more stopping. The sur…` (build_EN_2026-11-10)
   },
   wui: {
     name: 'Wildland edge', col: '#e8763a',
@@ -8464,9 +8464,9 @@ const PLACES = {
     seasons: ['dry', 'quiet', 'dry', 'storm'],
     // F3c 2026-09-23: the repeated landslide removed (part 3 N1 half (a), its second array element) - a five-event run now expects 2.5 of each kind, not 3.3 and 1.7 (build_F_2026-09-23)
     events: ['landslide', 'rockfall'],
-    boon: { text: 'You can see the whole valley - you collect from further.', mod: P => { P.pickup *= 1.2 } },
+    boon: { text: 'You can see the whole valley — you collect from further.', mod: P => { P.pickup *= 1.2 } },   // EN-F-089 2026-11-10: list_EN_final_A.tsv row F-089 (EN-2555), new_src verbatim; was `You can see the whole valley - you collect from further.` (build_EN_2026-11-10)
     // P16a-T 2026-10-22: S1-26 (strings_P16a.md; ADJUDICATION_P16a.md m10) (build_P16a_2026-10-22)
-    bite: { text: 'Fire spreads half again as readily. The dry makes hazards hit harder.', spreadMul: 1.5, dmgMul: 1.08 },
+    bite: { text: 'Fire spreads one and a half times as easily. The dryness makes hazards hit harder.', spreadMul: 1.5, dmgMul: 1.08 },   // EN-F-090 2026-11-10: list_EN_final_A.tsv row F-090 (EN-2556), new_src verbatim; was `Fire spreads half again as readily. The dry makes hazards hi…` (build_EN_2026-11-10)
   },
   basin: {
     name: 'River basin', col: '#57c7ff',
@@ -8499,7 +8499,7 @@ const PLACES = {
     roster: { flood: { at: 0, w: 3 }, storm: { at: 0, w: 2 }, heat: { at: 40, w: 2 }, quake: { at: 62, w: 1 } },
     seasons: ['wet', 'storm', 'swarm', 'wet', 'quiet'],
     events: ['rockfall', 'rockfall', 'landslide', 'debris'],
-    boon: { text: 'The hazard zone plan here has legal force: nothing new goes up in the red.', grant: ['speed'] },
+    boon: { text: 'The hazard zone plan here has legal force. Nothing new goes up in the red zone.', grant: ['speed'] },   // EN-F-091 2026-11-10: list_EN_final_A.tsv row F-091 (EN-2567), new_src verbatim; was `The hazard zone plan here has legal force: nothing new goes …` (build_EN_2026-11-10)
     // P16a-T 2026-10-22: S1-32 (strings_P16a.md) (build_P16a_2026-10-22)
     bite: { text: 'Warning is measured in minutes, not hours, and nothing arrives alone.', warnMul: 0.55, surgeMul: 1.30 },
   },
@@ -8620,7 +8620,7 @@ const SEASONS = {
   // D2 2026-09-22: the season banner is the place's (X01 (a)), so every season's title draws in the place's neutral; five of the six hues it had were hazard and measure colours (build_D_2026-09-22)
   // DX9 2026-09-23: "five of" - the quiet season's old #8ab4c8 was neither a hazard nor a measure colour (review F13; build_D_2026-09-22/fix/check_x9.js, read from index_before_D.html); comment only (build_D_2026-09-22 fix round)
   // CORRECTED 2026-09-15: storms are no longer "the one hazard" with warning; "can" added (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-  storm: { name: 'Storm season', note: 'A hazard you can get told about in advance.',
+  storm: { name: 'Storm season', note: 'A hazard you can be warned about in advance.',   // EN-F-092 2026-11-10: list_EN_final_A.tsv row F-092 (EN-2570), new_src verbatim; was `A hazard you can get told about in advance.` (build_EN_2026-11-10)
            col: PAL.place.season, rate: 1.10, bias: { storm: 3.2, flood: 1.5 } },
   wet:   { name: 'Wet season', note: 'It arrives as a front, and it keeps arriving.',
            col: PAL.place.season, rate: 1.00, bias: { flood: 3.4, storm: 1.3 } },
@@ -8673,7 +8673,7 @@ const LIFELINES = {
               gone: 'Surge capacity is the first thing a disaster spends. Once the hospital is gone the injuries that were survivable stop being survivable — which is why Sendai names health facilities in the target itself.' },   // GW-31 2026-11-04: list_GW.tsv row GW-31 (gone), new_text verbatim; was `'Surge capacity is the first thing a disaster spends. Once th…'` (build_GW_2026-11-04)
   school:   { name: 'School', col: PAL.place.lifeline.school, tag: '+15% collect',
               gain: 'Everything you collect is worth 15% more.',
-              cost: 'And 15% less than baseline once it is gone.',
+              cost: 'With no school, what you collect is worth 15% less than normal.',   // EN-F-093 2026-11-10: list_EN_final_A.tsv row F-093 (EN-2588), new_src verbatim; was `And 15% less than baseline once it is gone.` (build_EN_2026-11-10)
               on: P => { P.xpMul = (P.xpMul || 1) * 1.15 }, off: P => { P.xpMul /= 1.15 },
               lost: P => { P.xpMul *= 0.85 },
               note: 'Where the drills are run and where the next generation of this decision gets made. It is also a shelter on the day.',
@@ -8684,23 +8684,23 @@ const LIFELINES = {
               gain: 'Aimed shots, the wide sweep, Drills and Codes fire 12% faster.',
               // P16a-T 2026-10-22: S2-12 (strings_P16a.md) (build_P16a_2026-10-22)
               // TXT-A7 2026-10-30: strings_TXT_A.md A2-14 (ADJUDICATION_TXT_A section 3, applied); was `cost: 'And 12% slower after. The other lifelines now fail faster.',` (build_TXT_A_2026-10-30)
-              cost: 'And 12% slower after, and the other lifelines now fail faster.',
+              cost: 'With no power, you fire 12% slower, and the other lifelines now fail faster.',   // EN-F-094 2026-11-10: list_EN_final_A.tsv row F-094 (EN-2593), new_src verbatim; was `And 12% slower after, and the other lifelines now fail faste…` (build_EN_2026-11-10)
               on: P => { P.rateMul *= 1.12 }, off: P => { P.rateMul /= 1.12 },
               lost: P => { P.rateMul *= 0.88; P.cascade = true },
               // R5-FX 2026-10-26: ADJUDICATION_R5 F5 (K3) - c3 of strings_R5_final.md: true with and without a Backup power site or a delivered generator; was `note: 'Nothing else on this list works without it — warning systems and hospitals first.',` (build_R5_2026-10-26 fix round)
               note: 'Little else on this list works without it — warning systems first, and hospitals with no backup.',
-              gone: 'This is the cascade. The pumps, the signals, the cold chain and the hospital\u2019s own equipment all run on it, so losing power does not subtract one service — it starts taking the others with it. Every remaining lifeline now degrades faster.' },
+              gone: 'This is the cascade. The pumps, the signals, the cold chain and the hospital\u2019s own equipment all run on it, so losing power does not subtract one service — it starts taking the others with it. In this game, every remaining lifeline now degrades faster.' },   // EN-F-095 2026-11-10: list_EN_final_A.tsv row F-095 (EN-2595), new_src verbatim; was `This is the cascade. The pumps, the signals, the cold chain …` (build_EN_2026-11-10)
   water:    { name: 'Water', col: PAL.place.lifeline.water, tag: 'heat −40%',
               gain: 'Heat takes 40% less off you.',
-              cost: 'And 50% more once it is gone.',
+              cost: 'With no water, heat takes 50% more off you.',   // EN-F-096 2026-11-10: list_EN_final_A.tsv row F-096 (EN-2598), new_src verbatim; was `And 50% more once it is gone.` (build_EN_2026-11-10)
               on: P => { P.heatRes = 0.6 }, off: P => { P.heatRes = 1 },
               lost: P => { P.heatRes = 1.5 },
               note: 'The service that fails quietly, and the one a heatwave is actually fought with.',
-              gone: 'Heat is fought with water, shade and rest, and the first of those arrives through a pipe. A heatwave during a water outage is not two problems, it is one much worse one.' },
+              gone: 'Heat is fought with water, shade and rest, and the first of those arrives through a pipe. A heatwave during a water outage is not two problems; it is one much worse problem.' },   // EN-F-097 2026-11-10: list_EN_final_A.tsv row F-097 (EN-2600), new_src verbatim; was `Heat is fought with water, shade and rest, and the first of …` (build_EN_2026-11-10)
   road:     { name: 'Road link', col: PAL.place.lifeline.road, tag: '+10% move',
               gain: 'You move 10% faster.',
               // P16a-T 2026-10-22: S2-16 (strings_P16a.md) (build_P16a_2026-10-22)
-              cost: 'And 10% slower after; works take longer.',
+              cost: 'With no road, you move 10% slower and sites take longer to build.',   // EN-F-098 2026-11-10: list_EN_final_A.tsv row F-098 (EN-2603), new_src verbatim; was `And 10% slower after; works take longer.` (build_EN_2026-11-10)
               on: P => { P.spd *= 1.10 }, off: P => { P.spd /= 1.10 },
               lost: P => { P.spd *= 0.90; P.slowWorks = true },
               note: 'Worth nothing by itself. Everything that responds has to travel on it.',
@@ -8815,7 +8815,7 @@ const BOSSES = {
     { name: 'Storm surge on a spring tide', col: PAL.theirs.boss.water, ramp: 'water', how: 'volley',
       note: 'The surge is survivable and the tide is survivable. Arriving together is what drowns a delta, and neither forecast on its own would have told you.' },
     { name: 'Cyclone landfall at high water', col: PAL.theirs.boss.storm, ramp: 'cold', how: 'spiral',
-      note: 'Wind, rain and sea arriving on the same six hours. The wind takes the roofs, the rain has nowhere to drain, and the sea is already sitting on the outfalls.' },
+      note: 'Wind, rain and sea arriving in the same six hours. The wind takes the roofs, the rain has nowhere to drain, and the sea is already sitting on the outfalls.' },   // EN-F-099 2026-11-10: list_EN_final_A.tsv row F-099 (EN-2621), new_src verbatim; was `Wind, rain and sea arriving on the same six hours. The wind …` (build_EN_2026-11-10)
     { name: 'Backflow through the drains', col: PAL.theirs.boss.waterLight, ramp: 'water', how: 'swarm',
       note: 'The water does not come over the defence. It comes up through the system built to take it away, which is why a place can flood on a day the river never topped its bank.' },
   ],
@@ -8949,7 +8949,7 @@ function b2Tick(B, dt) {
   if (B.plate) {   // B2-E: the plate turns toward you; the first time this boss stands plated in a run, row B2-E1 (title template and sub verbatim; its plain twin PLAIN 'BOSS.plate')
     const d0 = Math.atan2(P.y - B.y, P.x - B.x) - B.face, d = Math.atan2(Math.sin(d0), Math.cos(d0)), mx = T.b2PlateTurn * dt
     B.face += clamp(d, -mx, mx)
-    b2First('plate', B, `${B.name}: plated front`, say('BOSS.plate', 'Hits on the plate do less. Get to its side or back.'))
+    b2First('plate', B, `${B.name}: plated front`, say('BOSS.plate', 'Hits on the plate do less. Get to its side or behind it.'))   // EN-F-100 2026-11-10: list_EN_final_A.tsv row F-100 (EN-2657), new_src verbatim; was `Hits on the plate do less. Get to its side or back.` (build_EN_2026-11-10)
   }
   if (B.ev && B === boss && boss2) b2TwinHeal(dt)   // B2-B
   if (B.state === 'turn') return
@@ -9696,7 +9696,7 @@ function fireEvent() {
   // BF1 2026-09-23: shown at once, never queued behind another line - it states how many seconds the warning buys, and a wait of up to 2.2 s or a drop would make that false; the line it displaces waits once or is dropped (flash) (build_B_2026-09-22)
   flash(K.name + ' inbound', lv.pulse > 1
     ? say('EVT.inbound.warned', `Your warning system is buying you ${(warn).toFixed(1)}s.`, warn)
-    : 'Get out of the way of it.', K.col, { now: true, evt: true })   // UX-M2 2026-09-30: an event warning - keeps 2.2 s (FLASH_EVT_T) (build_UX_2026-09-30)
+    : 'Get out of its way.', K.col, { now: true, evt: true })   // UX-M2 2026-09-30: an event warning - keeps 2.2 s (FLASH_EVT_T) (build_UX_2026-09-30)   // EN-F-101 2026-11-10: list_EN_final_A.tsv row F-101 (EN-2715), new_src verbatim; was `Get out of the way of it.` (build_EN_2026-11-10)
   AU.play('warn')
   shake = Math.max(shake, 6)
   // First telegraph (S4.4). Siege rockfalls skip fireEvent and never raise this (8.6); the pause freezes
@@ -9920,7 +9920,7 @@ const WORKS = {
               note: 'Strengthening a building that is still being used, which is most of them. It is slower and more expensive than building it right, and it is the only option for anything already standing.',
               apply: () => { P.armour = 1 - (1 - P.armour) * 0.92 } },
   station:  { name: 'Monitoring station', col: PAL.place.works.station, need: 4.0,
-              gain: 'You collect from 20% further, and 8% more of it.',
+              gain: 'You collect from 20% further, and it is worth 8% more.',   // EN-F-102 2026-11-10: list_EN_final_A.tsv row F-102 (EN-2731), new_src verbatim; was `You collect from 20% further, and 8% more of it.` (build_EN_2026-11-10)
               note: 'A gauge installed, and somebody paid to read it. The second half is the half that quietly lapses.',
               apply: () => { P.pickup *= 1.20; P.xpMul *= 1.08 } },
   muster:   { name: 'Muster point', col: PAL.place.works.muster, need: 4.0,
@@ -9938,8 +9938,8 @@ const WORKS = {
               apply: () => { P.max += 24; P.hp = Math.min(P.max, P.hp + 24) } },
   // R5-M1 2026-10-26: PLAN_R5 (ADJUDICATION_d24 MN-2) - the Backup power site, occupied like the others: in the rotation only from T.r5From, in a run with both the hospital and the power lifeline (r5WorksOk, spawnWorks). Built, the hospital keeps working by itself when power falls and nothing needs carrying (r5BackupBuilt, r5M1Watch). Phase-1 placeholders: gain reaches the screen through say() as WRK.backup.gain (the built flash); name and note reach it through the lines every works site uses, which do not call say() (build_R5_2026-10-26)   // R5-FX 2026-10-26: K1 - the placeholders replaced by the Steady lines of strings_R5_final.md, byte for byte; the gain line's Learning twin sits in PLAIN under WRK.backup.gain (build_R5_2026-10-26 fix round)
   backup:   { name: 'Backup power', col: PAL.place.lifeline.power, need: T.r5BackupNeed,
-              gain: 'When power is lost, the hospital\'s backup starts by itself. Nothing to carry.',
-              note: 'A generator that starts by itself the moment the power goes. Backup that can only be started by hand is rated Low in WHO and PAHO\'s hospital guide.',
+              gain: 'When power is lost, the hospital’s backup starts by itself. Nothing to carry.',   // EN-F-103 2026-11-10: list_EN_final_A.tsv row F-103 (EN-2743), new_src verbatim; was `When power is lost, the hospital\'s backup starts by itself.…` (build_EN_2026-11-10)
+              note: 'A generator that starts by itself the moment the power goes. Backup that can only be started by hand is rated Low in WHO and PAHO’s hospital guide.',   // EN-F-104 2026-11-10: list_EN_final_A.tsv row F-104 (EN-2744), new_src verbatim; was `A generator that starts by itself the moment the power goes.…` (build_EN_2026-11-10)
               apply: () => { r5BackupBuilt() } },
 }
 const WORKS_IDS = Object.keys(WORKS)
@@ -10034,8 +10034,8 @@ const TRADEOFFS = [
     // CORRECTED 2026-09-23: the Missouri development figure removed - a load-bearing figure resting on one tier-3 source that had drifted (pre-deploy check F1); the floodplain sentence now given as Mallea's view ("Mallea writes that ..."), with Mallea's "this trend quickly reversed" (capture P03 L382) and no figure; game half unchanged; tag unchanged but the re-read date (capture re-read 2026-09-23) (pre-deploy text, predeploy_2026-09-23)
     src: 'In this game, hard defences cut every hit by 40%, but a flood sitting on a lifeline wears it down twice as fast. Mallea writes that after the 1993 Midwest floods some communities were moved off the floodplain, but that this trend quickly reversed. (Mallea 2019, on UNDRR’s PreventionWeb; a hosted article, not UNDRR’s own analysis.)' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
   { id: 'growth', name: 'Rapid development', short: 'Growth', col: '#ffa94d', from: 4,   // G-M5 2026-10-13: was 3 (build_G_2026-10-01)
-    desc: 'More gets built, faster. Everything you collect is worth 70% more.',
-    cost: 'None of it waited for the plan. Every hazard now takes 20% more off you.',
+    desc: 'More gets built, faster. In this game, everything you collect is worth 70% more.',   // EN-F-105 2026-11-10: list_EN_final_A.tsv row F-105 (EN-2754), new_src verbatim; was `More gets built, faster. Everything you collect is worth 70%…` (build_EN_2026-11-10)
+    cost: 'None of it waited for the plan. In this game, every hazard now takes 20% more off you.',   // EN-F-106 2026-11-10: list_EN_final_A.tsv row F-106 (EN-2755), new_src verbatim; was `None of it waited for the plan. Every hazard now takes 20% m…` (build_EN_2026-11-10)
     apply: P => { P.xpMul = (P.xpMul || 1) * 1.7; P.exposure = (P.exposure || 1) * 1.20 },
     // CORRECTED 2026-09-15: opener gives GAR 2025's cause; GEM projection scoped to the Dominican Republic (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
     src: 'GAR 2025: earthquake risk rises mainly because human action, such as unsafe housing construction in seismic zones, puts more people and assets in harm’s way, not because the hazard is getting stronger. Global Earthquake Model analysts project the Dominican Republic’s earthquake death rate rising without stepped-up risk reduction, “mainly due to demographic growth, urbanization and policy choices”.' },   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text
@@ -10046,7 +10046,7 @@ const TRADEOFFS = [
     cost: 'It only gives back what you have already lost. Everything you collect is worth 25% less.',
     apply: P => { P.relief = (P.relief || 0) + 0.30; P.xpMul = (P.xpMul || 1) * 0.75 },
     // CORRECTED 2026-09-15: US$4 scoped to low- and middle-income countries; "back" became "in benefit" (UNDRR sweep, sweep_2026-09-14/CORRECTION_2026-09-15.md)
-    src: 'Money spent rebuilding is money not spent making the thing stronger first - the inverse of the measure UNDRR prices at US$4 in benefit per US$1 in low- and middle-income countries.' },
+    src: 'Money spent rebuilding is money not spent making the thing stronger first — the inverse of the measure UNDRR prices at US$4 in benefit per US$1 in low- and middle-income countries.' },   // EN-F-107 2026-11-10: list_EN_final_A.tsv row F-107 (EN-2761), new_src verbatim; was `Money spent rebuilding is money not spent making the thing s…` (build_EN_2026-11-10)
 ]
 // LL-M2 2026-09-25: the rebuild trade-off card's two fixed lines, S-L2 verbatim (strings_LL.md). Not a TRADEOFFS row: it is offered at every level-up while a lifeline is lost, can be taken again, and names the most recently lost lifeline (offerCards); it carries no source line - it is game-only (PLAN_LL D2). On Learning, TRD.rebuild.cost has a plain entry and the desc falls through (build_LL_2026-09-25)
 const REBUILD = {
@@ -10349,7 +10349,7 @@ function hitLifeline(L, amount) {
     // D10 2026-09-22: the BF8 line above said the warn sound is spent only with the line; since BF11 it is not (section B review 2, N4); comment only (build_D_2026-09-22)
     // BF11 2026-09-23: the warn sound no longer waits for the line - under BF8 a full flash row delayed it; the sound and its own 9 s throttle (L.warnCd) are spent at the first hit whatever the row holds, as before BF8, and only the line retries: it keeps BF8's retry under a 9 s throttle of its own (L.warnLineCd, spent only when the line is shown or queued), and a retry does not replay the sound; the hint call is unchanged (Lead's ruling on BF8's sound) (build_B_2026-09-22)
     if ((L.warnCd || 0) <= 0) { L.warnCd = 9; AU.play('warn') }
-    if ((L.warnLineCd || 0) <= 0 && flash(LIFELINES[L.kind].name + ' under attack', U1C.def ? say('LL.u1.attack', 'It hits ordinary hazards when you are away. Being there does more.') : 'No measure defends it. Being there does the most.', '#ff9d9d') !== 'dropped') L.warnLineCd = 9   // PT6-T1 2026-10-21: PLAN_PT6 T1 - AL, the text from strings_PT6_final.md (build_PT6_2026-10-21)   // U1-B7 2026-11-05: list U1-D1 while Lifelines fight back is held, else the line as before (U1-D5-04) (build_U1_2026-11-05); was `... ' under attack', 'No measure defends it. Being there does the most.', '#ff9d9d') …`
+    if ((L.warnLineCd || 0) <= 0 && flash(LIFELINES[L.kind].name + ' under attack', U1C.def ? say('LL.u1.attack', 'It hits ordinary hazards when you are away. Being there does more.') : 'Not much defends it when you are away. Being there does the most.', '#ff9d9d') !== 'dropped') L.warnLineCd = 9   // PT6-T1 2026-10-21: PLAN_PT6 T1 - AL, the text from strings_PT6_final.md (build_PT6_2026-10-21)   // U1-B7 2026-11-05: list U1-D1 while Lifelines fight back is held, else the line as before (U1-D5-04) (build_U1_2026-11-05); was `... ' under attack', 'No measure defends it. Being there does the most.', '#ff9d9d') …`   // EN-F-108 2026-11-10: list_EN_final_A.tsv row F-108 (EN-2781), new_src verbatim; was `No measure defends it. Being there does the most.` (build_EN_2026-11-10)
     p16bPic.lifeline = 'ic_ll_' + L.kind   // P16B-5 2026-10-29: the S4.3 card's picture, the building of the lifeline under attack (build_P16B_2026-10-28)
     hint('lifeline')   // first lifeline under attack (S4.3); the flash waits behind the card, its timer frozen
   }
@@ -11381,7 +11381,7 @@ const CARRY = {
   M2: { name: 'Flood gauge', banner: 'Take the gauge reading to the warning siren.', pick: 'Reading taken: get it to the siren. EVAC drops it.', done: 'Warning issued. In this game, floods slow, and the next front comes later.', fail: 'No warning went out. In this game, the next front comes in wider.', src: 'UNDRR: if one part of an early warning system fails, the whole system could fail.' },   // GW-10, GW-11 2026-11-04: list_GW.tsv rows GW-10 (done) and GW-11 (fail), new_text verbatim; was `'Warning issued. Floods slow, and the next front comes later.'` and `'No warning went out. The next front comes in wider.'` (build_GW_2026-11-04)
   M3: { name: 'Warning round', banner: 'Take the warning from the mast to three homes, one at a time.', pick: 'Warning in hand: take it to the marked home. EVAC drops it.', done: 'All three homes warned. You get XP, and hits hurt less for a few seconds.', fail: 'Not every home was warned. In this game, one more ring of storms comes in.', src: 'Studies in Bangladesh: volunteers spread cyclone warnings with megaphones. In one survey, many got them door to door.', next: 'Home warned. Back to the mast for the next home.' },   // R5-T phase 2a: next - after homes 1 and 2, back to the mast (CRY.M3.next)   // GW-01, GW-12 2026-11-04: list_GW.tsv rows GW-01 (done) and GW-12 (fail), new_text verbatim; was `'All three homes warned. You get XP, and armour for a few sec…'` and `'Not every home was warned. One more ring of storms comes in.'` (build_GW_2026-11-04)
   M4: { name: 'Lead them out', banner: 'Lead them out of the damaged building, away from all buildings.', pick: 'They are following you. Keep away from buildings.', done: 'Clear of the buildings. You get XP and capacity.', fail: 'They walk to open ground on their own. No reward.', src: 'Ready.gov (US): in a damaged building, go outside and quickly move away. Do not enter damaged buildings.', count: '{n} reached open ground' },
-  M6: { name: 'Brush clearing', banner: 'Carry the brush from around the house past the firebreak.', pick: 'Brush picked up: get it past the firebreak. EVAC drops it.', done: 'Ring cleared: for 30s, fire spreads into it at half its rate. It is not stopped.', fail: 'The brush stayed. Spot fires start.', src: 'UNEP: managing plants around buildings is one way to cut fire risk. Fuel treatments do not necessarily stop fires.' },
+  M6: { name: 'Brush clearing', banner: 'Carry the brush from around the house past the firebreak.', pick: 'Brush picked up: get it past the firebreak. EVAC drops it.', done: 'Ring cleared: for 30s, fire spreads into it at half its rate. It is not stopped.', fail: 'The brush stayed. In this game, spot fires start.', src: 'UNEP: managing plants around buildings is one way to cut fire risk. Fuel treatments do not necessarily stop fires.' },   // EN-F-109 2026-11-10: list_EN_final_A.tsv row F-109 (EN-2841), new_src verbatim; was `The brush stayed. Spot fires start.` (build_EN_2026-11-10)
 }
 // R5-F 2026-10-26: PLAN_R5's table (DESIGN_long_runs.md 8.3) - per place, carry A (from T.r5From) and carry B (from T.r5FromB); null where carry B is M5, which is out of R5. M1 is in every place, on its own trigger (r5M1Watch) (build_R5_2026-10-26)
 const R5PLAN = { delta: ['M3', 'M2'], fault: ['M4', 'M6'], wui: ['M6', null], basin: ['M2', 'M3'], metro: ['M4', null], alpine: ['M2', 'M3'] }
@@ -12873,7 +12873,7 @@ function offerCards(fromLevelUp) {
   const rb = document.createElement('button')
   rb.textContent = `Reroll (${Math.max(0, rLeft)})`
   rb.disabled = rLeft <= 0
-  rb.title = 'Commission a fresh assessment: draw this choice again. Risk data adds charges.'
+  rb.title = 'Order a new study: draw new cards. Risk data adds charges.'   // EN-F-110 2026-11-10: list_EN_final_A.tsv row F-110 (EN-2899), new_src verbatim; was `Commission a fresh assessment: draw this choice again. Risk …` (build_EN_2026-11-10)
   rb.onclick = () => { if (rerollsUsed < rTot) { rerollsUsed++; AU.play('offer'); offerCards() } }
   bar.appendChild(rb)
   const bb = document.createElement('button')
@@ -13280,7 +13280,7 @@ function mountDebrief() {
     // P6-B2 2026-09-25: F1 (a) - no banking here: `releaseFunds(debrief.right, list.length)` stood on this line, and each share is now banked at its answer (bankShare), so banking here too would bank twice (build_P6_2026-09-25)
     if (debrief.ix >= list.length)
       box.insertAdjacentHTML('beforeend',
-        `<p class="redo-done">${debrief.right} of ${list.length} right. What you just read is the run's lesson; your answers set the next run's start.</p>`)   // KQ-Q 2026-11-06: U-03 (list_Q_ruled.tsv), new_text verbatim, every ${...} part as it was; was ``<p class="redo-done">${debrief.right} of ${list.length} rig…` (build_KQ_2026-11-06)
+        `<p class="redo-done">${debrief.right} of ${list.length} right. What you just read is the run’s lesson; your answers set the next run’s start.</p>`)   // KQ-Q 2026-11-06: U-03 (list_Q_ruled.tsv), new_text verbatim, every ${...} part as it was; was ``<p class="redo-done">${debrief.right} of ${list.length} rig…` (build_KQ_2026-11-06)   // EN-F-111 2026-11-10: list_EN_final_A.tsv row F-111 (EN-2907), new_src verbatim; was `<p class="redo-done">${debrief.right} of ${list.length} righ…` (build_EN_2026-11-10)
     else {
       // Skipped with a question still on screen (2026-09-02). Its option buttons stayed
       // live: the handler has no done-guard, so a click after this point still recorded to
@@ -14247,7 +14247,7 @@ function renderReport() {
     stat(`${gotSyn.length}/${SYNERGIES.length}`, 'compounds') +
     (lifelines.length ? stat(`${standing.length}/${lifelines.length}`, 'lifelines stood') : '') +
     (bossSeen.length ? stat(bossesKilled + '·' + bossesSurvived, 'absorbed · passed') : '') +
-    ((worksDone.length || worksMissed.length) ? stat(worksDone.length, 'works built') : '') +
+    ((worksDone.length || worksMissed.length) ? stat(worksDone.length, 'sites built') : '') +   // EN-F-112 2026-11-10: list_EN_final_A.tsv row F-112 (EN-2954), new_src verbatim; was `works built` (build_EN_2026-11-10)
     (runFunds > 0 ? stat(`${learnFunds}/${runFunds}`, 'budget released') : '') +
     `</div>`
 
@@ -14326,13 +14326,13 @@ function renderReport() {
       // P16a-T 2026-10-22: S4-26 (strings_P16a.md) (build_P16a_2026-10-22)
       'In this game the belt works every second, with no wait between blocks.'))
   if (hls.length < 3 && worksMissed.length >= 2)
-    hls.push(row('#3a3f47', `${worksMissed.length} works never built`,
+    hls.push(row('#3a3f47', `${worksMissed.length} sites never built`,   // EN-F-113 2026-11-10: list_EN_final_A.tsv row F-113 (EN-2981), new_src verbatim; was `${worksMissed.length} works never built` (build_EN_2026-11-10)
       // CORRECTED 2026-09-23: was "Each needed four seconds of standing still, and you were somewhere else." - need is 4.0 to 5.0 s at base and moves with Maintenance and after a Road loss (w.prog += dt * (1 + lv.rate * 0.18) * (P.slowWorks ? 0.7 : 1)), and w.life runs down wherever the player is, so a site can expire with the player inside it; what every missed site shares is that its life ran out before its progress reached need (section C round 2, section_C_2026-09-22)
       // P16a-T 2026-10-22: S4-28 (strings_P16a.md) (build_P16a_2026-10-22)
       'Each ran out of time before you stayed in its ring long enough. The measure that exists is the one somebody stayed for.'))
   if (hls.length < 3 && emberFires)
     hls.push(row('#e8763a', `${emberFires} fires started where embers landed`,
-      'Fire crosses ground nothing was burning on. A green belt damps it; open distance does not.'))
+      'Fire crosses ground nothing was burning on. In this game, a green belt damps it.'))   // EN-F-114 2026-11-10: list_EN_final_A.tsv row F-114 (EN-2984), new_src verbatim; was `Fire crosses ground nothing was burning on. A green belt dam…` (build_EN_2026-11-10)
   if (hls.length) html += `<div class="rhl">${hls.join('')}</div>`
 
   html += sec('Where you were',
@@ -14400,7 +14400,7 @@ function renderReport() {
   if (worksDone.length || worksMissed.length || picked.length) {
     const ptally = {}
     for (const k of picked) ptally[k] = (ptally[k] || 0) + 1
-    html += sec(`Works & pickups — ${worksDone.length} built, ${picked.length} collected`,
+    html += sec(`Sites & pickups — ${worksDone.length} built, ${picked.length} collected`,   // EN-F-115 2026-11-10: list_EN_final_A.tsv row F-115 (EN-3003), new_src verbatim; was `Works & pickups — ${worksDone.length} built, ${picked.length…` (build_EN_2026-11-10)
       worksDone.map(k => row(WORKS[k].col, WORKS[k].name, WORKS[k].note)).join('') +
       worksMissed.map(k => row('#3a3f47', WORKS[k].name + ' — not built',
         // CORRECTED 2026-09-23: was "You were somewhere else for the four seconds it needed." - the same two faults as the works highlight: need is not always four seconds, and a site can expire with the player inside it (section C round 2, section_C_2026-09-22)
@@ -14446,10 +14446,10 @@ function renderReport() {
   const faced = Object.entries(hazardTally).sort((a, b) => b[1] - a[1])
   html += sec('The run itself',
     (seasonLog.length
-      ? row('#8ab4c8', `${seasonLog.length} seasons`,
+      ? row('#8ab4c8', `${seasonLog.length} season${seasonLog.length === 1 ? '' : 's'}`,   // EN-2 2026-11-10: the row title in the singular for one season, the pattern of renderReport's kill count (`hazard${kills === 1 ? '' : 's'}`); was `${seasonLog.length} seasons` (build_EN_2026-11-10)
           seasonLog.map(k => SEASONS[k].name).join(' → ') +
           (seasonLog.includes('quiet')
-            ? ' — the quiet stretch is the one that decides the rest. Nothing arrives, the ramp keeps climbing, and what you did with it is the run.'
+            ? ' — the quiet stretch is the one that decides the rest. Little arrives, hazards still build up, and what you did with it is the run.'   // EN-F-116 2026-11-10: list_EN_final_A.tsv row F-116 (EN-3020), new_src verbatim; was ` — the quiet stretch is the one that decides the rest. Nothi…` (build_EN_2026-11-10)
             : ''))
       : '') +
     faced.map(([k, n]) => {
@@ -14471,7 +14471,7 @@ function renderReport() {
             // BS-M5 2026-09-30: a fifth term, the true boss's bonus (strings_BS.md S-B4 rewrite #1 verbatim); it read "Time held, lifelines still standing, works built and compound events absorbed set the SIZE of it" (build_BS_2026-09-30)
             // PL-FIX 2026-10-15: FX-F (check_POLISH.md F8) - the next line's "7.97 on both scorers" and "6.88" are the Drafting Builder's two scorers (r4_fk.py's counting and fx_score.py's; strings_POLISH.md PL-M2 S1). The Checker's c3_fk.py gives 7.97 -> 6.88 on its HEUR method and 7.35 -> 6.14 on its DICT method (check_POLISH.md C3); comment only (build_POLISH_2026-10-15 fix round)
             // PL-M2 2026-10-15: P2 (rereview_DIAL.md N2) - this sentence graded 7.97 on both scorers alone (as on the Planned step, where DIFF.pay is 1); the least change to grade 6.88: one "absorbed" dropped (it still covers both: compound events and the boss) and "the SIZE of it" -> "its SIZE". The same five runFunds terms (die()); it read "Time held, lifelines still standing, works built, compound events absorbed and the boss absorbed set the SIZE of it" (build_POLISH_2026-10-15)
-            `Time held, lifelines still standing, works built, compound events and the boss absorbed set its SIZE` +
+            `Time held, lifelines still standing, sites built, compound events and the boss absorbed set its SIZE` +   // EN-F-117 2026-11-10: list_EN_final_A.tsv row F-117 (EN-3025), new_src verbatim; was `Time held, lifelines still standing, works built, compound e…` (build_EN_2026-11-10)
             (DIFF.pay && DIFF.pay !== 1 ? `. The ${DIFF.name} step pays ${DIFF.pay} times that: <b>${runFunds}</b>. ` : `: <b>${runFunds}</b>. `) +   // DL-FIX2 2026-10-15: FX9, see the title above (build_DIAL_2026-10-14 fix round 2)
             (dN && quizRight
               ? `What you keep is what you could explain — <b>${quizRight} of ${dN}</b> right released <b>${learnFunds}</b>. `
@@ -14482,7 +14482,7 @@ function renderReport() {
             // PL-M2 2026-10-15: P2 - the closing sentences, each now grade 7 or below on both scorers (they graded 15.64 and 8.01). What is released goes to the recovery budget on the start screen (bankShare / releaseFunds -> metaStore().funds, shown by offerMeta), where it buys META nodes, "held permanently" (METALV, every run). The paraphrase stays inside Sendai para. 19(k) (prevent the creation of and reduce disaster risk by "Building Back Better", in recovery); the term and the citation are unchanged. It read "It becomes standing capacity on the start screen: recovery spent reducing the next disaster rather than restoring the last one’s vulnerability. That loop is the framework’s own recovery clause: Building Back Better." (build_POLISH_2026-10-15)
             // PL-FIX 2026-10-15: FX-A (check_POLISH.md F1, F4) - the last two sentences replaced by two that say only what Sendai para. 19(k) says: in the post-disaster recovery phase "it is critical to prevent the creation of and to reduce disaster risk by" Building Back Better. "do this" is the sentence before it (recovery cuts the risk of the next disaster: "to reduce disaster risk"); "prevent new risk" is "prevent the creation of ... disaster risk"; "do both by" is "by". Nothing about putting an old risk back, and no claim that the framework names this loop. The first two sentences, the term and the citation are unchanged; each new sentence is grade 7 or below on both of c3_fk.py's methods. It read "It does not put the old risk back. That loop is what the framework calls Building Back Better." (build_POLISH_2026-10-15 fix round)
             // PL-FIX2 2026-10-15: FX-G (review_POLISH.md M1) - one sentence added before the citation, the same words as the start-screen meta note ($('metanote')): Sendai para. 19(k) names two means, "by "Building Back Better" and increasing public education and awareness of disaster risk"; "It says to do both by Building Back Better." alone read as the whole method. "It also says to do both by" is the source's "by ... and"; "helping people learn and know more about disaster risk" is "increasing public education and awareness of disaster risk" (learn = education, know = awareness, more = increasing, people = public). It follows all three branches above, like the rest of this literal; every other word, the term and the citation are unchanged; the new sentence grades 6.88 on c3_fk.py (DICT and HEUR), r4_text.py (V3 and VG) and quiz_audit.py's fk() (6.9) (build_POLISH_2026-10-15 fix round 2)
-            'In this game, what is released buys measures on the start screen for every run. That way, recovery cuts the risk of the next disaster. The Sendai Framework says it is critical to do this, and to prevent new risk. It says to do both by Building Back Better. It also says to do both by helping people learn and know more about disaster risk. (Sendai Framework ¶19(k))')   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // GW-33 2026-11-04: list_GW.tsv row GW-33 (the literal), new_text verbatim; was `'You can spend what is released on the start screen, on measu…'` (build_GW_2026-11-04)
+            'In this game, what is released buys upgrades on the start screen for every run. That way, recovery cuts the risk of the next disaster. The Sendai Framework says it is critical to do this, and to prevent new risk. It says to do both by Building Back Better. It also says to do both by helping people learn and know more about disaster risk. (Sendai Framework ¶19(k))')   // BATCH-FIX 2026-10-26: K4 (review_batch_A F7) - the read date deleted from this line's text   // GW-33 2026-11-04: list_GW.tsv row GW-33 (the literal), new_text verbatim; was `'You can spend what is released on the start screen, on measu…'` (build_GW_2026-11-04)   // EN-F-118 2026-11-10: list_EN_final_A.tsv row F-118 (EN-3030), new_src verbatim; was `In this game, what is released buys measures on the start sc…` (build_EN_2026-11-10)
         })()
       : '') +
     row('#8fe3ff', 'Evacuate',
@@ -17122,7 +17122,7 @@ function offerSrc() {
   // PL-FIX 2026-10-15: FX-C (check_POLISH.md F2) - the first sentence is now true of every card kind: the rebuild card's tier line says "Trade-off" but it has no source line (offerCards, rbKind), and only measure cards and the TRADEOFFS cards print div.src. The second sentence is unchanged. It read "Shows the source line on measure and trade-off cards." (build_POLISH_2026-10-15 fix round)
   // PL-FIX2 2026-10-15: FX-H (review_POLISH.md N2) - "some key-word explanations" -> "some explanations of key words", the Plain English note's two words (offerPlain(): "Some key words get short explanations."); "some" still counts the explanations (only the glosses marked withsrc go with the Sources switch, CSS #cards:not(.srcon) .card .gloss.withsrc, and glosses print only with Plain English on, glossHtml()); the first sentence is unchanged; 7.19 -> 5.81 on quiz_audit.py's counter, 5.86 -> 5.81 on c3_fk.py (build_POLISH_2026-10-15 fix round 2)
   // P16a-T 2026-10-22: S1-08 (strings_P16a.md) (build_P16a_2026-10-22)
-  $('srcnote').textContent = 'Shows the source line on cards that have one.'
+  $('srcnote').textContent = 'Shows source lines on cards, in Trade-offs and in some messages.'   // EN-F-119 2026-11-10: list_EN_final_A.tsv row F-119 (EN-3049), new_src verbatim; was `Shows the source line on cards that have one.` (build_EN_2026-11-10)
 }
 // ZOOMTOG 2026-10-18: T2 / T3 / T5 - the players' Zoom switch, on the start screen (offerZoom, under Sources) and on the card bar (offerCards).
 // zoomStep is the one action of a press: the next of ZOOM_STEPS above the zoom now (from the table's value when nothing is chosen), after x2
