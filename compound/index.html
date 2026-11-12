@@ -3821,7 +3821,7 @@ const POOL_Q = {
            'A few hundred metres, before the water spreads out',
            'Only as far as the next bend in the river'],
     correct: 1,
-    whyShort: 'Floods from glaciers include those from burst glacier lakes. They are among the glacier hazards that reach the farthest. Past events affected areas tens to hundreds of kilometres downstream. (IPCC SROCC)',
+    whyShort: 'Glacier floods include those from burst glacier lakes. Few glacier hazards reach farther. Past events affected areas tens to hundreds of kilometres downstream. (IPCC SROCC)',
     why: 'Floods from glaciers, including burst glacier lakes, are recorded in most mountain ranges with glaciers. They are among the glacier hazards that reach the farthest. Past events affected areas tens to hundreds of kilometres downstream. The IPCC has high confidence that glacier lakes will keep growing in number and area in most regions in the coming decades. New lakes will form closer to steep and possibly unstable mountain walls. There, the impact of a landslide can more easily set off an outburst. (IPCC SROCC)' },
   { id: 'Q67', form: 'warning-literacy', q: 'On the Swiss warning scale, your valley has level 3 (orange) for rain and level 3 for floods. What does the same number tell you?',
     opts: ['The two dangers are exactly as bad as each other',
@@ -3830,15 +3830,15 @@ const POOL_Q = {
            'Level 3 is the top level, so everyone must leave now'],
     correct: 2,
     whyShort: 'The levels are made as alike as possible for all hazards. Still, the same level for two hazards cannot be compared directly. (Swiss Natural Hazards Portal)',
-    why: 'The Swiss scale has five levels, from 1 (green), no or low danger, to 5 (dark red), very high danger. Level 3 (orange) means considerable danger. The meanings are made as alike as possible for all hazards. Still, the same level for two hazards cannot be compared directly. If something happens near you, you should always follow the advice of the local authorities. The Swiss number to dial in an emergency is 112. (Swiss Natural Hazards Portal)' },
+    why: 'The Swiss scale has five levels, from 1 (green), no or low danger, to 5 (dark red), very high danger. Level 3 (orange) means considerable danger. The meanings are made as alike as possible for all hazards. Still, the same level for two hazards cannot be compared directly. If something happens near you, you should always follow the advice of the local authorities. In Switzerland, you dial 112 in an emergency. (Swiss Natural Hazards Portal)' },
   { id: 'Q68', form: 'warning-literacy', q: 'On a Swiss avalanche hazard map, your home is in the blue zone. What does blue mean for you?',
     opts: ['Avalanches never reach any part of the blue zone',
            'Your home must stay empty for the whole winter',
            'Blue marks the most dangerous zone on the map',
            'Hardly at risk inside buildings, but at risk outside'],
     correct: 3,
-    whyShort: 'In the blue zone, rare avalanches come with lower pressures than in the red zone. People are hardly at risk inside buildings, but outside them they are. (SLF)',
-    why: 'Swiss avalanche hazard maps use four colours: red, blue, yellow and white. In the blue zone, rare avalanches come with average pressures below 30 kN/m², lower than in the red zone. People are hardly at risk inside buildings, but outside them they are. Building permits there come with conditions. Exposed parts of buildings must be protected, and residents need evacuation plans. You can find the hazards where you live and work on the cantonal hazard maps. (SLF / Swiss Natural Hazards Portal)' },
+    whyShort: 'In the blue zone, rare avalanches come with lower pressures than in the red zone. People are hardly at risk inside buildings, but at risk outside. (SLF)',
+    why: 'Swiss avalanche hazard maps use four colours: red, blue, yellow and white. In the blue zone, rare avalanches come with lower average pressures than in the red zone. People are hardly at risk inside buildings, but outside them they are. Building permits there come with conditions. Exposed parts of buildings must be protected, and residents need evacuation plans. You can find the hazards where you live and work on the cantonal hazard maps. (SLF / Swiss Natural Hazards Portal)' },
   { id: 'Q69', form: 'recovery', q: 'The flood has gone, and the ground floor of your home in Switzerland is wrecked. What should you do before throwing out the damaged furniture?',
     opts: ['Report it, and wait for the insurance experts',
            'Clear it out at once so that mould cannot spread',
@@ -4509,7 +4509,7 @@ const PLACE_Q = {
              why: 'The two answer different questions. UNDRR names both building codes and land-use planning as key to cutting vulnerability. Alone, each leaves half of the choice open. (UNDRR, Earthquake Day calls to action)' },
   },
   lane: {
-    delta: { q: 'The canal is on every map. Yet moderate storms waterlog and flood about 87 per cent of the district. The water is one to three metres deep. What is wrong with the canal?',
+    delta: { q: 'Every map shows the canal. Yet moderate storms waterlog and flood about 87% of the district, one to three metres deep. What is wrong with the canal?',
              opts: ['It was dug too narrow for the city that grew around it',
                     'It is clogged by building on it and by waste',
                     'It lies higher than the streets that flood',
@@ -4556,7 +4556,7 @@ const PLACE_Q = {
                     'Both, until an event larger than the one they were designed for arrives'],
              correct: 1,
              whyShort: 'A service decides whether the road may be open. At Bondo the debris flows filled the basin.',
-             why: 'A local safety service decides whether the road may be open. It goes by the weather and the avalanche situation. It can close a road at acute risk. Closing a road is an organisational or temporary avalanche measure. The main ones are warning, closure, evacuation and artificial triggering. They are used at short notice, when the avalanche situation calls for it. At Bondo the basin filled. All the debris flows together left approximately 500,000 to 800,000 cubic metres in the area of Bondo. Less than half of it was caught in the basin. In a valley the corridor is a job in both directions. (SLF / Mergili et al. 2020)' },
+             why: 'A local safety service decides whether the road may be open. It goes by the weather and the avalanche situation. It can close a road at acute risk. Closing a road is a short-term safety step. The main ones are warning, closure, evacuation and artificial triggering. They are used at short notice, when the avalanche situation calls for it. At Bondo the basin filled. All the debris flows together left approximately 500,000 to 800,000 cubic metres in the area of Bondo. Less than half of it was caught in the basin. In a valley the corridor is a job in both directions. (SLF / Mergili et al. 2020)' },
   },
   keep: {
     alpine: { q: 'A staircase of check dams has held the torrent above the village for a century. How does it fail?',
@@ -4761,7 +4761,7 @@ function reset(placeId) {
   applyMastery()
   runFunds = 0; learnFunds = 0; runLog = null; endReason = null
   endArm(false)
-  alarmSig = ''; alarmSaid = new Set(); hudEnd(); hudSaid.clear(); hudSubs.clear(); hudLL.clear(); hudWin.length = 0; hudAt = -1e9
+  alarmSig = ''; alarmSaid = new Map(); hudEnd(); hudSaid.clear(); hudSubs.clear(); hudLL.clear(); hudWin.length = 0; hudAt = -1e9
   if (PLACE.boon.grant) for (const id of PLACE.boon.grant) apply(id)
   if (PLACE.boon.mod) PLACE.boon.mod(P)
   placeLifelines()
@@ -7817,7 +7817,7 @@ const holdOn = () => holdLeft > 0
 const hazClock = () => holdLeft > 0 ? holdFrom : t
 const HOLD_COL = '#cfe3ff'
 const llUp = L => L.alive && !(L.away > 0)
-let alarmSig = '', alarmSaid = new Set()
+let alarmSig = '', alarmSaid = new Map()
 function r2bThreat(L, st) {
   const m = st === 'under attack' ? L.underKinds : st === 'inbound' ? L.inKinds : null
   if (!m) return ''
@@ -7859,6 +7859,7 @@ const FLASH_T = 3.3, FLASH_EVT_T = 2.2, SEASON_BANNER_T = 4.2
 const flashQ = [], FLASH_WAIT_MAX = 1
 let flashCur = null
 function flash(title, sub, col, opt) {
+  if (opt && opt.lost && !opt.said) { opt.said = true; hudSay(title, sub, { pri: 0, src: 'ban' }) }
   if (flashT > 0) {
     if (opt && opt.now && opt.keep && !opt.evt && flashCur && flashCur[3] && flashCur[3].evt) {
       for (let i = flashQ.length - 1; i >= 0; i--) if (!(flashQ[i][3] && flashQ[i][3].keep)) flashQ.splice(i, 1)
@@ -7883,8 +7884,8 @@ function flash(title, sub, col, opt) {
   const longLine = !!(opt && opt.two) || ((title || '') + ' ' + (sub || '')).trim().split(/\s+/).length > 20
   flashT = longLine ? 2 * FLASH_T : (opt && opt.evt ? FLASH_EVT_T : FLASH_T)
   flashCur = [title, sub, col, opt]
-  { const cur = flashCur, hw = opt && opt.hw, a = String(title || '').trim(), gone = !!(opt && opt.lost)
-    hudSay(title, sub, { pri: (hw && opt.hs) || gone ? 0 : 1, src: 'ban', till: hw ? t + +hw.toFixed(1) - 0.1 : null, ok: gone ? null : () => flashT > 0 && flashCur === cur, fact: / under attack$/.test(a) ? a : null }) }
+  if (!(opt && opt.lost)) { const cur = flashCur, hw = opt && opt.hw, a = String(title || '').trim()
+    hudSay(title, sub, { pri: hw && opt.hs ? 0 : 1, src: 'ban', till: hw ? t + +hw.toFixed(1) - 0.1 : null, ok: () => flashT > 0 && flashCur === cur, fact: / under attack$/.test(a) ? a : null }) }
   return 'shown'
 }
 function flashNext() {
@@ -7901,7 +7902,7 @@ const hudQ = [], hudSaid = new Map(), hudSubs = new Set(), hudLL = new Map(), hu
 let hudAt = -1e9, hudTm = 0, hudGap = 1500
 const hudWords = s => (s.match(/[A-Za-z0-9%]+/g) || []).length
 const hudText = q => q.b && !hudSubs.has(q.b) ? q.a + (/[.!?:]$/.test(q.a) ? ' ' : '. ') + q.b : q.a
-const hudTwice = (q, now) => { const f = q.fact && hudLL.get(q.fact); return !!f && f[1] !== q.src && now - f[0] < 4000 }
+const hudTwice = (q, now) => { const f = q.fact && hudLL.get(q.fact); return !!f && f[1] !== q.src && Math.round(now - f[0]) <= 4000 }
 function hudSay(a, b, o) {
   a = String(a || '').replace(/\s+/g, ' ').trim(); b = String(b || '').replace(/\s+/g, ' ').trim()
   if (!a) { a = b; b = '' }
@@ -7921,7 +7922,7 @@ function hudPump() {
   const el = $('hudsay'), now = performance.now()
   for (const [k, at] of hudSaid) if (now - at >= 20000) hudSaid.delete(k)
   while (hudWin.length && now - hudWin[0][0] >= 10000) hudWin.shift()
-  for (let i = hudQ.length - 1; i >= 0; i--) { const x = hudQ[i]; if ((x.till != null && t >= x.till) || (x.ok && !x.ok()) || hudSaid.has(hudText(x)) || hudTwice(x, now)) hudQ.splice(i, 1) }
+  for (let i = hudQ.length - 1; i >= 0; i--) { const x = hudQ[i]; if (x.cur && x.cur()) x.a = x.cur(); if ((x.till != null && t >= x.till) || (x.ok && !x.ok()) || hudSaid.has(hudText(x)) || hudTwice(x, now)) hudQ.splice(i, 1) }
   let wait = hudGap - (now - hudAt), pick = -1
   if (wait <= 0 && hudQ.length) { const all = hudWin.reduce((n, x) => n + x[1], 0)
     wait = Infinity
@@ -10729,9 +10730,9 @@ function paintAlarm() {
     threat.forEach((L, i) => { L.alm = rows[i] || null })
     const said = new Map([...box.children].map(r => { const x = [...r.children].filter(c => !c.classList.contains('dir')).map(c => c.textContent.trim()).filter(Boolean).join(', ') || r.textContent.trim(); return [r.classList.contains('r2bMore') ? x.replace(/\d+/g, '') : x.replace(/ \u00d7\d+/g, ''), [x, r]] }))
     const was = alarmSaid
-    alarmSaid = new Set(said.keys())
+    alarmSaid = new Map([...said].map(([k, [x]]) => [k, x]))
     for (const [k, [x, r]] of said) if (x && !was.has(k)) { const L = threat.find(q => q.alm === r), st = L ? state(L) : ''
-      hudSay(x, '', { pri: st === 'inbound' ? 0 : 1, src: 'alm', ok: () => alarmSaid.has(k), fact: st === 'under attack' ? LIFELINES[L.kind].name + ' under attack' : null }) }
+      hudSay(x, '', { pri: st === 'inbound' ? 0 : 1, src: 'alm', ok: () => alarmSaid.has(k), cur: () => alarmSaid.get(k), fact: st === 'under attack' ? LIFELINES[L.kind].name + ' under attack' : null }) }
   }
   for (const L of threat) {
     if (!L.alm) continue
