@@ -109,7 +109,7 @@
       Page: https://camacebra.itch.io/kingslime
       Licence: CC BY 3.0, as the note that comes with the pack says, https://creativecommons.org/licenses/by/3.0/
       Changed: frames cropped, body recoloured in three shades of blue
-      Used for: six compound events: Storm surge on a spring tide; Backflow through the drains; Wet season on saturated ground; Flash flood down the tributary; Release on a full channel; Underground inundation
+      Used for: seven compound events: Storm surge on a spring tide; Backflow through the drains; Wet season on saturated ground; Flash flood down the tributary; Release on a full channel; Underground inundation; Lake wave from a rockslide
       Credit: Attribution: "Camacebra Games"
     Quake Spell by Clint Bellanger
       Page: https://opengameart.org/content/quake-spell
@@ -137,7 +137,7 @@
       Page: https://grinnch.itch.io/pixel-sun
       Licence: CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
       Changed: 8 of 32 frames used
-      Used for: the compound event Heat dome over the valley
+      Used for: two compound events: Heat dome over the valley; Heatwave, and water in the cracks
     [LPC] Animated water and fire by Sharm and Curt
       Page: https://opengameart.org/content/lpc-animated-water-and-fire
       Licence: CC BY 3.0, https://creativecommons.org/licenses/by/3.0/
@@ -171,7 +171,7 @@
       Page: https://darkpixel-kronovi.itch.io/mecha-golem-free
       Licence: its own terms, on its page
       Changed: frames cropped; for Cascading failure the same frames recoloured; two laser frames cropped
-      Used for: the compound events Aftershock sequence and Cascading failure; the held beam of Continuous and the laser of Line of sight
+      Used for: the compound events Aftershock sequence, Cascading failure and Rockslide onto the glacier; the held beam of Continuous and the laser of Line of sight
     Bosses - Gollux by Admurin
       Page: https://admurin.itch.io/bosses-gollux
       Licence: its own terms, on its page
@@ -885,7 +885,7 @@
   body.touch #endrun{position:fixed;top:102px;right:12px;height:42px;min-width:42px;padding:0 12px;font-weight:800}
   @media (max-width:760px) and (orientation: portrait){ body.touch #endrun{top:184px} body.s1.touch #endrun{top:202px} }
   body:has(#start:not(.gone)) #endrun, body:has(#cards.show) #endrun, body:has(#over.show) #endrun{visibility:hidden}
-  #endsay{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+  #endsay,#hudsay{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
 
   @media (max-width:760px){
     #topbar{padding:8px 10px;gap:9px}
@@ -1644,7 +1644,7 @@ html body #start.st3.stn #ntaxp section.r3x > div.r3mid{grid-column:1 / -1;grid-
 <div id="svc"></div>
 
 <div id="zoomsay" aria-live="polite" aria-atomic="true"></div>
-<div id="endsay" aria-live="polite" aria-atomic="true"></div>
+<div id="endsay" aria-live="polite" aria-atomic="true"></div><div id="hudsay" role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="cards"><div id="cardwrap"></div></div>
 <div id="lvlup">Level up</div>
 
@@ -2027,7 +2027,7 @@ html body #start.st3.stn #ntaxp section.r3x > div.r3mid{grid-column:1 / -1;grid-
         <p class="cl">Page: <a href="https://camacebra.itch.io/kingslime" target="_blank" rel="noopener noreferrer">https://camacebra.itch.io/kingslime</a></p>
         <p class="cl">Licence: CC BY 3.0, as the note that comes with the pack says, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer">https://creativecommons.org/licenses/by/3.0/</a></p>
         <p class="cl">Changed: frames cropped, body recoloured in three shades of blue</p>
-        <p class="cl">Used for: six compound events: Storm surge on a spring tide; Backflow through the drains; Wet season on saturated ground; Flash flood down the tributary; Release on a full channel; Underground inundation</p>
+        <p class="cl">Used for: seven compound events: Storm surge on a spring tide; Backflow through the drains; Wet season on saturated ground; Flash flood down the tributary; Release on a full channel; Underground inundation; Lake wave from a rockslide</p>
         <p class="cl">Credit: Attribution: "Camacebra Games"</p>
       </li>
       <li class="ca">
@@ -2070,7 +2070,7 @@ html body #start.st3.stn #ntaxp section.r3x > div.r3mid{grid-column:1 / -1;grid-
         <p class="cl">Page: <a href="https://grinnch.itch.io/pixel-sun" target="_blank" rel="noopener noreferrer">https://grinnch.itch.io/pixel-sun</a></p>
         <p class="cl">Licence: CC BY 4.0, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">https://creativecommons.org/licenses/by/4.0/</a></p>
         <p class="cl">Changed: 8 of 32 frames used</p>
-        <p class="cl">Used for: the compound event Heat dome over the valley</p>
+        <p class="cl">Used for: two compound events: Heat dome over the valley; Heatwave, and water in the cracks</p>
       </li>
       <li class="ca">
         <h5 class="ct">[LPC] Animated water and fire</h5>
@@ -2124,7 +2124,7 @@ html body #start.st3.stn #ntaxp section.r3x > div.r3mid{grid-column:1 / -1;grid-
         <p class="cl">Page: <a href="https://darkpixel-kronovi.itch.io/mecha-golem-free" target="_blank" rel="noopener noreferrer">https://darkpixel-kronovi.itch.io/mecha-golem-free</a></p>
         <p class="cl">Licence: its own terms, on its page (linked above)</p>
         <p class="cl">Changed: frames cropped; for Cascading failure the same frames recoloured; two laser frames cropped</p>
-        <p class="cl">Used for: the compound events Aftershock sequence and Cascading failure; the held beam of Continuous and the laser of Line of sight</p>
+        <p class="cl">Used for: the compound events Aftershock sequence, Cascading failure and Rockslide onto the glacier; the held beam of Continuous and the laser of Line of sight</p>
       </li>
       <li class="ca">
         <h5 class="ct">Bosses - Gollux</h5>
@@ -3774,6 +3774,88 @@ const POOL_Q = {
     whyShort: 'Fire typically moves more quickly uphill than downhill or across flat ground. The rising hot air preheats fuel the fire has not reached yet. (US National Park Service, Wildland Fire Behavior)',
     why: 'Fire typically moves more quickly uphill than downhill or across flat ground. A fire that starts at the foot of a steep slope spreads much faster upward. One reason: the rising hot air preheats fuel the fire has not reached yet. Another: the upward draft makes spot fires ahead of the front more likely. Slope sits in the fire behaviour triangle, beside fuels and weather. It is not a detail of the terrain. It is one of the three things that set how a fire moves. (US National Park Service, Wildland Fire Behavior)' },
   ],
+  alpine: [
+  { id: 'Q61', form: 'judgment', q: 'The heavy rain has just stopped. When can you walk the path beside the steep mountain stream again?',
+    opts: ['Right away, since the danger stops with the rain',
+           'Once the high water in the stream has dropped',
+           'Right away, if you keep to the higher bank',
+           'After one hour without rain, whatever the stream does'],
+    correct: 1,
+    whyShort: 'Streams stay very high even after the rain stops. Steep mountain streams should be avoided until the high water has gone down. (Swiss Natural Hazards Portal)',
+    why: 'Even after the rain stops, streams and rivers stay very high. Mudslides are still possible along steep mountain streams. Those places should be avoided until the high water has gone down. During heavy rain, stay away from water, even dry river beds, and from steep slopes. A mudslide can come very suddenly and without warning. (Swiss Natural Hazards Portal)' },
+  { id: 'Q62', form: 'judgment', q: 'Your path crosses open ground below a rock wall, and you see fresh marks where stones hit. What do you do?',
+    opts: ['Stop for a rest there and watch the rock wall',
+           'Walk slowly, so you can watch the wall',
+           'Keep moving quickly until you are past it',
+           'Sit close under the wall, where falling stones miss you'],
+    correct: 2,
+    whyShort: 'Fresh impact marks are a sign of danger. On an exposed path, hikers are advised not to stop there but to keep moving quickly. (SLF)',
+    why: 'Fresh impact marks, rock deposits and scars where rock broke away are signs of danger. Generally, the higher up and the more exposed the path, the greater the risk. On an exposed stretch, hikers are advised not to stop but to keep moving quickly. In heavy rain or when snow is melting, they should avoid steep slopes and exposed paths. Normally, the risk on hiking trails in the Alps is low, but some risk always remains. (SLF)' },
+  { id: 'Q63', form: 'judgment', q: 'Your valley in Switzerland has one road, and a landslide could block it for days. How much food should your home keep?',
+    opts: ['Enough to last for about a week',
+           'Enough for one day, since help comes fast',
+           'Enough for several months, to be really safe',
+           'None, since the valley shop will stay open'],
+    correct: 0,
+    whyShort: 'A blocked road can hold up supplies for several days. The Swiss federal supply office recommends enough for about a week. (FONES)',
+    why: 'If roads are blocked, remote places can quickly be cut off from food supplies. Supplies are not expected to be held up for months, but they could be for several days. So the Swiss federal supply office recommends keeping enough for about a week. Include some food that needs no cooking, in case the power goes off. For water, it recommends at least nine litres per person. That should cover drinking and cooking for three days. (FONES)' },
+  { id: 'Q64', form: 'mechanism', q: 'Avalanches have their own warning bulletin. Why is there no bulletin like it for rockslides?',
+    opts: ['Rockslides are too rare for a bulletin to be worth it',
+           'The same bulletin covers rockslides as well',
+           'Nobody yet measures whether the slopes are moving at all',
+           'One slope can be unstable and the next one stable'],
+    correct: 3,
+    whyShort: 'Avalanche danger is often much the same across a region. Rockslides are local: one slope may be unstable and the next one stable. (SLF)',
+    why: 'Natural avalanches usually come straight from the weather, such as snow or sun. So their danger can, as a rule, be foreseen. It is often much the same across a region. Debris flows and rockslides are local. One slope or rock may be unstable while the next one is stable. That makes one report for a whole region almost impossible. (SLF)' },
+  { id: 'Q65', form: 'mechanism', q: 'High in the cold Alps, small rockfalls tend to come in summer. When can the large ones come?',
+    opts: ['At any time of year, winter included',
+           'Only in summer, like the small ones',
+           'Only in spring, when the snow melts',
+           'Only after an earthquake has shaken the rock'],
+    correct: 0,
+    whyShort: 'In high, cold regions, small and medium rockfalls tend to come mainly in summer. The large ones can come at any time of year. (SLF)',
+    why: 'The rockfall records of the SLF, an institute for snow and avalanche research, show a pattern for high, cold regions. Small and medium events tend to come mainly in the summer months. The large ones can come at any time of year. In February 2014, a rock pillar of 150,000 cubic metres collapsed at Piz Kesch. That fall was mainly controlled by the structure of the rock mass. It is possible that other such large events may come in winter, as large rock masses react late to temperature changes. (SLF)' },
+  { id: 'Q66', form: 'mechanism', q: 'A glacier lake lies high above the valley, far from your town. If it bursts, how far can the flood reach?',
+    opts: ['Only to the first village right below the lake',
+           'Tens to hundreds of kilometres down the river',
+           'A few hundred metres, before the water spreads out',
+           'Only as far as the next bend in the river'],
+    correct: 1,
+    whyShort: 'Floods from glaciers include those from burst glacier lakes. They are among the glacier hazards that reach the farthest. Past events affected areas tens to hundreds of kilometres downstream. (IPCC SROCC)',
+    why: 'Floods from glaciers, including burst glacier lakes, are recorded in most mountain ranges with glaciers. They are among the glacier hazards that reach the farthest. Past events affected areas tens to hundreds of kilometres downstream. The IPCC has high confidence that glacier lakes will keep growing in number and area in most regions in the coming decades. New lakes will form closer to steep and possibly unstable mountain walls. There, the impact of a landslide can more easily set off an outburst. (IPCC SROCC)' },
+  { id: 'Q67', form: 'warning-literacy', q: 'On the Swiss warning scale, your valley has level 3 (orange) for rain and level 3 for floods. What does the same number tell you?',
+    opts: ['The two dangers are exactly as bad as each other',
+           'Floods are always worse than rain at the same level',
+           'Both are real dangers, but you cannot compare them directly',
+           'Level 3 is the top level, so everyone must leave now'],
+    correct: 2,
+    whyShort: 'The levels are made as alike as possible for all hazards. Still, the same level for two hazards cannot be compared directly. (Swiss Natural Hazards Portal)',
+    why: 'The Swiss scale has five levels, from 1 (green), no or low danger, to 5 (dark red), very high danger. Level 3 (orange) means considerable danger. The meanings are made as alike as possible for all hazards. Still, the same level for two hazards cannot be compared directly. If something happens near you, you should always follow the advice of the local authorities. The Swiss number to dial in an emergency is 112. (Swiss Natural Hazards Portal)' },
+  { id: 'Q68', form: 'warning-literacy', q: 'On a Swiss avalanche hazard map, your home is in the blue zone. What does blue mean for you?',
+    opts: ['Avalanches never reach any part of the blue zone',
+           'Your home must stay empty for the whole winter',
+           'Blue marks the most dangerous zone on the map',
+           'Hardly at risk inside buildings, but at risk outside'],
+    correct: 3,
+    whyShort: 'In the blue zone, rare avalanches come with lower pressures than in the red zone. People are hardly at risk inside buildings, but outside them they are. (SLF)',
+    why: 'Swiss avalanche hazard maps use four colours: red, blue, yellow and white. In the blue zone, rare avalanches come with average pressures below 30 kN/m², lower than in the red zone. People are hardly at risk inside buildings, but outside them they are. Building permits there come with conditions. Exposed parts of buildings must be protected, and residents need evacuation plans. You can find the hazards where you live and work on the cantonal hazard maps. (SLF / Swiss Natural Hazards Portal)' },
+  { id: 'Q69', form: 'recovery', q: 'The flood has gone, and the ground floor of your home in Switzerland is wrecked. What should you do before throwing out the damaged furniture?',
+    opts: ['Report it, and wait for the insurance experts',
+           'Clear it out at once so that mould cannot spread',
+           'Put it back in place once it has dried out',
+           'Throw it out, but keep the receipts for later'],
+    correct: 0,
+    whyShort: 'Report the damage to the building insurer. Do not remove damaged parts or furniture until its experts have checked them. (Swiss Natural Hazards Portal)',
+    why: 'Do not reconnect power or gas until an expert has checked the lines and appliances. Flush the drinking water pipes well, and boil water if in doubt. Do not pump out the basement until the groundwater is lower than its floor. Report the damage to the building insurer. Do not remove damaged parts of the building, fittings or furniture until its experts have checked them. (Swiss Natural Hazards Portal)' },
+  { id: 'Q70', form: 'compound', q: 'Last month a rockfall filled the stream channel above the village with loose rock. Ordinary rain is forecast. What has changed?',
+    opts: ['Nothing, since rain like this was always safe here',
+           'Less danger, since the loose rock now holds the water back',
+           'The danger ended for good once the rocks stopped falling',
+           'A debris flow is more likely when it next rains'],
+    correct: 3,
+    whyShort: 'A lot of loose debris in a channel makes a debris flow more likely the next time it rains. (SLF)',
+    why: 'In most cases, the channels where debris flows happen are known. If a lot of loose debris has built up in a channel, a debris flow is more likely the next time it rains. At Bondo in 2017, the material left behind in the valley was partly set moving again by later surges. One of them, on 31 August, was triggered by rain. Short, intense bursts of rain may be especially dangerous after long spells of heavy rain and damp weather. (SLF / Mergili et al. 2020 / USGS)' },
+  ],
   any: [
   { id: 'Q48', form: 'mechanism', q: 'A country runs world-class sensors and forecast models, but people keep dying with no alert. Which part most likely failed?',
     opts: ['The sensor count',
@@ -4209,7 +4291,7 @@ const PLACE_Q = {
                     'Very little — such falls also happen where there is no record'],
              correct: 3,
              whyShort: 'No record does not mean no hazard. It only means nothing was measured.',
-             why: 'The IPCC states it for mountains: as glaciers retreat and permafrost thaws, the resulting landslides, floods and cascading events “will also emerge where there is no record of previous events” (high confidence). At Bondo in 2017 the village had a warning. That was because the slope had been fitted with instruments for years. The slope’s movement had been measured from 2012. The rock came away at 09:31. The debris-flow alarm went off at 09:34. No record does not mean no hazard. It only means nothing was measured.' },
+             why: 'The IPCC states it for mountains: as glaciers retreat and permafrost thaws, the resulting landslides, floods and cascading events “will also emerge where there is no record of previous events” (high confidence). At Bondo in 2017 the village had a warning. An early warning system had been installed and later extended. Radar and laser scans measured the scarp, where the rock later came away. Between 2012 and 2015 it moved a few centimetres a year. The rock came away at 09:31. A warning system for debris flows stood about 1 km upstream of Bondo. It detected the flow at 09:34. No record does not mean no hazard. It only means nothing was measured. (IPCC SROCC / Bondo: Mergili et al. 2020)' },
     delta: { q: 'What has to exist before a surge warning has any meaning?',
              opts: ['A siren network',
                     'Tide and surge records',
@@ -4247,14 +4329,14 @@ const PLACE_Q = {
              why: 'You cannot warn about a hazard that no one is measuring. UNDRR lists finding and watching the hazard as one part of a warning system. (UNDRR terminology)' },
   },
   buffer: {
-    alpine: { q: 'The forest above the village stops avalanches and rockfall, and costs nothing. What is the weak point?',
+    alpine: { q: 'The forest above the village is protection against avalanches and rockfall. It is cost-effective. What is the weak point?',
              opts: ['It protects only while it is looked after',
                     'It works against rockfall but not against avalanches',
                     'It stops working once the trees are fully mature',
                     'It has to be replanted after every hard winter'],
              correct: 0,
              whyShort: 'About half of the Swiss forest area protects against natural hazards. To keep doing that, it has to be managed for the long term. (BAFU)',
-             why: 'About half of the Swiss forest area protects against natural hazards. To keep doing that, the forest has to be managed for the long term. In Austria, hazard maps come at the same problem from the other end. Their blue areas mark land to be kept for future protection works. (BAFU / Holub and Fuchs 2009)' },
+             why: 'About half of the Swiss forest area protects against natural hazards. To keep doing that, the forest has to be managed for the long term. In Austria, hazard maps come at the same problem from the other end. Their blue areas mark land to be kept for future protection works. (BAFU / SLF / Holub and Fuchs 2009)' },
     fault: { q: 'What is open ground worth to a city on a fault?',
              opts: ['Nothing — earthquakes are not stopped by parks, so the land is better built on',
                     'Somewhere to be when the buildings are the hazard',
@@ -4269,7 +4351,7 @@ const PLACE_Q = {
                     'Council policy'],
              correct: 1,
              why: 'Defensible space is a state, not a structure: it lasts only while someone keeps it. NIST describes it as the removal and maintenance of plant fuel and other things that burn. (NIST TN 2205)' },
-    metro: { q: 'Parks can create cooler areas within a city. Why do they shrink?',
+    metro: { q: 'Parks can create cooler areas within a city. Why are green spaces being lost?',
              opts: ['Their maintenance costs more than the city can pay',
                     'Cities are not being designed to keep heat down',
                     'People stop using them once the city grows around them',
@@ -4427,7 +4509,7 @@ const PLACE_Q = {
              why: 'The two answer different questions. UNDRR names both building codes and land-use planning as key to cutting vulnerability. Alone, each leaves half of the choice open. (UNDRR, Earthquake Day calls to action)' },
   },
   lane: {
-    delta: { q: 'The drainage canal is on every map, but the district still floods one to three metres deep. What is wrong with the canal?',
+    delta: { q: 'The canal is on every map. Yet moderate storms waterlog and flood about 87 per cent of the district. The water is one to three metres deep. What is wrong with the canal?',
              opts: ['It was dug too narrow for the city that grew around it',
                     'It is clogged by building on it and by waste',
                     'It lies higher than the streets that flood',
@@ -4450,7 +4532,7 @@ const PLACE_Q = {
                     'At the assembly areas the plan sent them to'],
              correct: 0,
              whyShort: 'The Camp Fire investigation found the most abandoned cars on a stretch of Skyway. It is a main road, where traffic was stuck beside verges full of roadside fuel.',
-             why: 'The Camp Fire investigation found many abandoned and burned cars on five main roads. The most were along a stretch of Skyway. Those were places with significant traffic gridlock. The roadside fuel was dense. There was little or no clear space between the vegetation and the road. There were few open areas to use as refuge. The investigation’s count left out cars further off the road, likely parked ones. The town had learned from an earlier fire. It had one-way routes out and evacuation by zones. The half that was missing was the verge.' },
+             why: 'The Camp Fire investigation found many abandoned and burned cars on five main roads. The most were along a stretch of Skyway. Those were places with significant traffic gridlock. The roadside fuel was dense. There was little or no clear space between the vegetation and the road. There were few open areas to use as refuge. The investigation’s count left out cars further off the road, likely parked ones. The town had learned from an earlier fire. It had one-way routes out and evacuation by zones. The half that was missing was the verge. (NIST TN 2252)' },
     basin: { q: 'A river was given room, and the flood level dropped. Vegetation has grown in the floodplain since: who must keep the flood level down?',
              opts: ['Nobody needs to \u2014 a widened channel stays wide',
                     'The landowners, because the water law makes them maintain it',
@@ -4474,7 +4556,7 @@ const PLACE_Q = {
                     'Both, until an event larger than the one they were designed for arrives'],
              correct: 1,
              whyShort: 'A service decides whether the road may be open. At Bondo the debris flows filled the basin.',
-             why: 'On a mountain road, the standing avalanche measures are warning, closure, evacuation and artificial triggering. The road is open because a service decides it may be. It decides from the day’s weather and snow. And a basin is storage, not a solution. At Bondo the debris flows filled the basin. Between 500,000 and 800,000 cubic metres reached the village. Less than half of that was captured. In a valley the corridor is a job in both directions.' },
+             why: 'A local safety service decides whether the road may be open. It goes by the weather and the avalanche situation. It can close a road at acute risk. Closing a road is an organisational or temporary avalanche measure. The main ones are warning, closure, evacuation and artificial triggering. They are used at short notice, when the avalanche situation calls for it. At Bondo the basin filled. All the debris flows together left approximately 500,000 to 800,000 cubic metres in the area of Bondo. Less than half of it was caught in the basin. In a valley the corridor is a job in both directions. (SLF / Mergili et al. 2020)' },
   },
   keep: {
     alpine: { q: 'A staircase of check dams has held the torrent above the village for a century. How does it fail?',
@@ -4679,7 +4761,7 @@ function reset(placeId) {
   applyMastery()
   runFunds = 0; learnFunds = 0; runLog = null; endReason = null
   endArm(false)
-  alarmSig = ''
+  alarmSig = ''; alarmSaid = new Set(); hudEnd(); hudSaid.clear(); hudSubs.clear(); hudLL.clear(); hudWin.length = 0; hudAt = -1e9
   if (PLACE.boon.grant) for (const id of PLACE.boon.grant) apply(id)
   if (PLACE.boon.mod) PLACE.boon.mod(P)
   placeLifelines()
@@ -5594,7 +5676,7 @@ function cardFold(el) {
     if (f) { const c = x.closest('.fold-t, button, a, [role="button"]'), ft = f.querySelector('.fold-t'); if ((c && f.contains(c)) || !ft || ft.getAttribute('aria-expanded') !== 'true') return }
     takeIt.call(el, e)
   }
-  const parts = [...el.children].filter(c => c.matches('.ctext, .cost, .src, .gloss'))
+  const parts = [...el.children].filter(c => c.matches('.ctext, .cost, .src, .gloss, .res'))
   if (!parts.length) return
   const n = ++foldN, w = document.createElement('div'), b = document.createElement('button'), body = document.createElement('div')
   w.className = 'fold'
@@ -6732,6 +6814,14 @@ const BOSSES = {
     { name: 'Underground inundation', col: PAL.theirs.boss.waterLight, ramp: 'water', how: 'swarm',
       note: 'Everything a dense city put below ground to save space \u2014 transport, power, data \u2014 is downhill from everything else, and water is patient about finding it.' },
   ],
+  alpine: [
+    { name: 'Rockslide onto the glacier', col: PAL.theirs.event.rockfall, ramp: 'rock', how: 'volley',
+      note: 'In glacier areas, rock avalanches were often recorded taking in snow and ice that turned fluid. That made them much bigger and let them reach much farther. (IPCC SROCC)' },
+    { name: 'Heatwave, and water in the cracks', col: PAL.theirs.body.heat, ramp: 'fire', how: 'siege',
+      note: 'Heat warms the rock and the ice in its cracks, and water that seeps in now and then adds pressure. In summer 2015, far more rock slopes than usual were reported failing in the Swiss Alps, probably from both together. (SLF)' },
+    { name: 'Lake wave from a rockslide', col: PAL.theirs.boss.water, ramp: 'water', how: 'swarm',
+      note: 'A rockslide that falls into a lake or reservoir can raise huge, destructive waves. In 1963, such a wave at the Vaiont Dam in Italy killed about 2000 people downstream. (Harbitz et al. 2014)' },
+  ],
 }
 const B1_TURNS = { volley: ['spiral', 'volley'], spiral: ['volley', 'spiral'], siege: ['volley', 'siege'], swarm: ['volley', 'swarm'] }
 const B1_TURN_SUB = {
@@ -6761,6 +6851,7 @@ const B2_PLAN = {
   [BOSSES.wui[0].name]: { burn: true },
   [BOSSES.wui[1].name]: { call: 'fire', burn: true },
   [BOSSES.metro[1].name]: { twin: ['Heat island', 'Blackout'] },
+  [BOSSES.alpine[2].name]: { call: 'flood' },
 }
 let b2Marks = [], b2Sparks = [], b2Seen = {}, b2Slow = 1, b2HardRun = false
 let bossArrN = 0
@@ -7421,7 +7512,7 @@ function fireEvent() {
   eventsSeen.push(id)
   flash(K.name + ' inbound', lv.pulse > 1
     ? say('EVT.inbound.warned', `Your warning system is buying you ${(warn).toFixed(1)}s.`, warn)
-    : 'Get out of its way.', K.col, { now: true, evt: true })
+    : 'Get out of its way.', K.col, { now: true, evt: true, hw: warn, hs: lv.pulse > 1 })
   AU.play('warn')
   shake = Math.max(shake, 6)
   p16bPic.event = { tsunami: 'hz_flood', fissure: 'hz_quake' }[id] || null
@@ -7726,7 +7817,7 @@ const holdOn = () => holdLeft > 0
 const hazClock = () => holdLeft > 0 ? holdFrom : t
 const HOLD_COL = '#cfe3ff'
 const llUp = L => L.alive && !(L.away > 0)
-let alarmSig = ''
+let alarmSig = '', alarmSaid = new Set()
 function r2bThreat(L, st) {
   const m = st === 'under attack' ? L.underKinds : st === 'inbound' ? L.inKinds : null
   if (!m) return ''
@@ -7792,6 +7883,8 @@ function flash(title, sub, col, opt) {
   const longLine = !!(opt && opt.two) || ((title || '') + ' ' + (sub || '')).trim().split(/\s+/).length > 20
   flashT = longLine ? 2 * FLASH_T : (opt && opt.evt ? FLASH_EVT_T : FLASH_T)
   flashCur = [title, sub, col, opt]
+  { const cur = flashCur, hw = opt && opt.hw, a = String(title || '').trim(), gone = !!(opt && opt.lost)
+    hudSay(title, sub, { pri: (hw && opt.hs) || gone ? 0 : 1, src: 'ban', till: hw ? t + +hw.toFixed(1) - 0.1 : null, ok: gone ? null : () => flashT > 0 && flashCur === cur, fact: / under attack$/.test(a) ? a : null }) }
   return 'shown'
 }
 function flashNext() {
@@ -7803,6 +7896,52 @@ function flashDropPhases() { for (let i = flashQ.length - 1; i >= 0; i--) if (fl
 function flashEndBan() {
   for (let i = flashQ.length - 1; i >= 0; i--) if (flashQ[i][3] && flashQ[i][3].ban) flashQ.splice(i, 1)
   if (flashT > 0 && flashCur && flashCur[3] && flashCur[3].ban) { flashT = 0; flashNext() }
+}
+const hudQ = [], hudSaid = new Map(), hudSubs = new Set(), hudLL = new Map(), hudWin = []
+let hudAt = -1e9, hudTm = 0, hudGap = 1500
+const hudWords = s => (s.match(/[A-Za-z0-9%]+/g) || []).length
+const hudText = q => q.b && !hudSubs.has(q.b) ? q.a + (/[.!?:]$/.test(q.a) ? ' ' : '. ') + q.b : q.a
+const hudTwice = (q, now) => { const f = q.fact && hudLL.get(q.fact); return !!f && f[1] !== q.src && now - f[0] < 4000 }
+function hudSay(a, b, o) {
+  a = String(a || '').replace(/\s+/g, ' ').trim(); b = String(b || '').replace(/\s+/g, ' ').trim()
+  if (!a) { a = b; b = '' }
+  if (!a || over) return
+  const now = performance.now(), q = Object.assign({ a, b, pri: 1 }, o), s = hudText(q)
+  for (const [k, at] of hudSaid) if (now - at >= 20000) hudSaid.delete(k)
+  if (hudSaid.has(s) || hudQ.some(x => hudText(x) === s) || hudTwice(q, now)) return
+  if (q.fact) hudLL.set(q.fact, [now, q.src])
+  let i = hudQ.length
+  while (i > 0 && hudQ[i - 1].pri > q.pri) i--
+  hudQ.splice(i, 0, q)
+  if (hudTm) { clearTimeout(hudTm); hudTm = 0 }
+  hudPump()
+}
+function hudPump() {
+  if (hudTm) return
+  const el = $('hudsay'), now = performance.now()
+  for (const [k, at] of hudSaid) if (now - at >= 20000) hudSaid.delete(k)
+  while (hudWin.length && now - hudWin[0][0] >= 10000) hudWin.shift()
+  for (let i = hudQ.length - 1; i >= 0; i--) { const x = hudQ[i]; if ((x.till != null && t >= x.till) || (x.ok && !x.ok()) || hudSaid.has(hudText(x)) || hudTwice(x, now)) hudQ.splice(i, 1) }
+  let wait = hudGap - (now - hudAt), pick = -1
+  if (wait <= 0 && hudQ.length) { const all = hudWin.reduce((n, x) => n + x[1], 0)
+    wait = Infinity
+    for (let i = 0; i < hudQ.length && pick < 0; i++) { let hold = 0, sum = all
+      if (hudQ[i].pri > 0) { const n = hudWords(hudText(hudQ[i])); for (const x of hudWin) { if (sum + n <= 30) break; hold = x[0] + 10000 - now; sum -= x[1] } }
+      if (hold <= 0) pick = i; else wait = Math.min(wait, hold) } }
+  if (pick < 0 && wait > 0) { hudTm = setTimeout(() => { hudTm = 0; hudPump() }, wait); return }
+  if (pick < 0) { if (el && el.textContent) el.textContent = ''; return }
+  const q = hudQ.splice(pick, 1)[0], s = hudText(q), w = hudWords(s)
+  hudAt = now; hudGap = Math.max(1500, w * 400); hudSaid.set(s, now); hudWin.push([now, w])
+  if (q.b && s !== q.a) hudSubs.add(q.b)
+  if (q.fact) hudLL.set(q.fact, [now, q.src])
+  if (el) el.textContent = s
+  hudTm = setTimeout(() => { hudTm = 0; hudPump() }, hudGap)
+}
+function hudEnd() {
+  hudQ.length = 0
+  if (hudTm) { clearTimeout(hudTm); hudTm = 0 }
+  const el = $('hudsay')
+  if (el && el.textContent) el.textContent = ''
 }
 
 function startSeason(id, silent) {
@@ -7822,6 +7961,7 @@ function seasonBanner(id, dur, sound) {
   el.classList.add('show')
   if (sound) AU.play('season')
   bannerT = dur
+  hudSay(S.name, '', { pri: 2, src: 'sea', ok: () => bannerT > 0 && el.firstElementChild.textContent === S.name })
 }
 
 function startHold() {
@@ -7834,6 +7974,7 @@ function startHold() {
   el.classList.add('show')
   AU.play('evolve')
   bannerT = T.holdT
+  hudSay('Hazards stop', '', { pri: 2, src: 'sea', ok: () => bannerT > 0 && el.firstElementChild.textContent === 'Hazards stop' })
 }
 function endHold() {
   if (seasonPend) seasonBanner(seasonPend, SEASON_BANNER_T, true)
@@ -7947,7 +8088,7 @@ function hitLifeline(L, amount) {
   const left = cap - lifelinesLost.length
   flash(K.name + ' lost', (u1w ? say('LL.u1.wait', `Its cost waits ${u1SpareT()}s.`) : say('LL.' + L.kind + '.cost', K.cost) + (L.kind === 'power' ? r5BkNote() : '')) + (left > 0
     ? say('LL.lost.more', ` ${left} more and the run ends here.`, left)
-    : ' That was the last one this place could lose.'), '#ff9d9d')
+    : ' That was the last one this place could lose.'), '#ff9d9d', { lost: true })
   if (L.kind === 'power' && left > 0 && !u1w) hint('power')
   syncHud()
   if (lifelinesLost.length >= cap) { endReason = 'services'; die() }
@@ -10586,6 +10727,11 @@ function paintAlarm() {
       (threat.length > shown.length ? `<div class="alm r2bMore">+${threat.length - shown.length} more</div>` : '')
     const rows = [...box.querySelectorAll('.alm:not(.lostline):not(.r2bMore)')]
     threat.forEach((L, i) => { L.alm = rows[i] || null })
+    const said = new Map([...box.children].map(r => { const x = [...r.children].filter(c => !c.classList.contains('dir')).map(c => c.textContent.trim()).filter(Boolean).join(', ') || r.textContent.trim(); return [r.classList.contains('r2bMore') ? x.replace(/\d+/g, '') : x.replace(/ \u00d7\d+/g, ''), [x, r]] }))
+    const was = alarmSaid
+    alarmSaid = new Set(said.keys())
+    for (const [k, [x, r]] of said) if (x && !was.has(k)) { const L = threat.find(q => q.alm === r), st = L ? state(L) : ''
+      hudSay(x, '', { pri: st === 'inbound' ? 0 : 1, src: 'alm', ok: () => alarmSaid.has(k), fact: st === 'under attack' ? LIFELINES[L.kind].name + ' under attack' : null }) }
   }
   for (const L of threat) {
     if (!L.alm) continue
@@ -10940,6 +11086,7 @@ function step(dt) {
 function die() {
   if (dev.on && dev.god) { P.hp = P.max; return }
   over = true
+  hudEnd()
   kqDie()
   for (const w of U1W.slice()) u1Land(w, true)
   endArm(false)
@@ -10947,8 +11094,8 @@ function die() {
   AU.play('die')
   MU.end(endReason)
   burst(P.x, P.y, '#ff4d5e', 40, 380)
-  runFunds = Math.round((Math.round(t / 15) + lifelines.filter(L => L.alive).length * 3 +
-                         worksDone.length * 2 + bossesKilled * 2) * (DIFF.pay || 1))
+  runFunds = Math.round((Math.round(t / 15) + (lifelines.filter(L => L.alive).length * 3 +
+                         worksDone.length * 2) * Math.min(1, t / 120) + bossesKilled * 2) * (DIFF.pay || 1))
     + (tbossState === 'absorbed' ? tbossBonus : 0)
   learnFunds = 0
   runLog = runsRecord()
@@ -11048,6 +11195,8 @@ function renderReport() {
   if (hls.length < 3 && emberFires)
     hls.push(row('#e8763a', `${emberFires} fires started where embers landed`,
       'Fire crosses ground nothing was burning on. In this game, a green belt damps it.'))
+  if (t < 120) { const i = hls.findIndex(h => h.includes('<b>Recovery budget '))
+    hls.splice(i < 0 ? hls.length : i + 1, 0, row('#ffd166', 'Recovery budget — run ended before 2:00', 'Lifelines still standing and sites built count in full only from two minutes.')) }
   if (hls.length) html += `<div class="rhl">${hls.join('')}</div>`
 
   html += sec('Where you were',
@@ -11588,7 +11737,7 @@ function artZone(e, hld, tk, fade) {
 }
 function artBoss(B, hld) {
   if (arBoss(B, hld)) return true
-  const id = B.tb ? null : B.name === BOSSES.wui[2].name ? 'b_sun' : B.name === BOSSES.fault[1].name ? 'b_mecha'
+  const id = B.tb ? null : B.name === BOSSES.wui[2].name || B.name === BOSSES.alpine[1].name ? 'b_sun' : B.name === BOSSES.fault[1].name || B.name === BOSSES.alpine[0].name ? 'b_mecha'
     : B.name === BOSSES.fault[2].name ? 'b_gollux' : B.ramp === 'cold' ? 'b_cold' : B.ramp === 'fire' ? 'b_fire'
     : B.ramp === 'water' ? 'b_water_' + String(B.col).slice(1) : null
   if (!id || !ARTB.ok[id]) return false
